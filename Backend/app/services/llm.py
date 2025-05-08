@@ -29,7 +29,7 @@ settings = get_settings()
 
 openai_client = None
 if settings.openai_api_key:
-   openai_client = OpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url or "https://api.openai.com/v1")
+   openai_client = OpenAI(api_key="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", base_url=settings.openai_base_url or "https://api.openai.com/v1")
 
 
 class LLMService:
