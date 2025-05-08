@@ -1,0 +1,267 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 50,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Learn the purpose and primary motivations behind using Docker.",
+      "image_prompt": "graph TD; A[Docker] --> B[Virtualization]; A --> C[Containerization];",
+      "url": "http://localhost:9000/mermaid-images/c052d886-7588-40d6-b4d5-73fef40d89d5.png"
+    },
+    {
+      "text": "Understanding Containers: Discover how containers isolate applications and their dependencies.",
+      "image_prompt": "graph TD; A[Application] --> B[Containers]; B --> C[Isolation];",
+      "url": "http://localhost:9000/mermaid-images/e701ea60-8037-440e-83d5-b60be30bae86.png"
+    },
+    {
+      "text": "Docker Architecture: Explore the three main components of Docker - the Docker Daemon, Docker Client, and Docker Hub.",
+      "image_prompt": "graph TD; A[Docker Daemon] --> B[Docker Client]; A --> C[Docker Hub];",
+      "url": "http://localhost:9000/mermaid-images/44de5fa5-fac9-4700-b17d-ef2b7e177371.png"
+    },
+    {
+      "text": "Installing Docker: Step-by-step guide on installing Docker on various platforms.",
+      "image_prompt": "flowchart TD; A[Windows] --> B[Installation]; A --> C[Linux]; A --> D[MacOS];",
+      "url": "http://localhost:9000/mermaid-images/2f5f64f5-e2fe-46a1-a7db-e83a9c4219cd.png"
+    },
+    {
+      "text": "Docker Images: Learn what Docker images are and how to create them.",
+      "image_prompt": "graph TD; A[Docker Images] --> B[Base Image]; A --> C[Custom Image];",
+      "url": "http://localhost:9000/mermaid-images/4f77c53f-6c9c-4cbd-9049-f8629fe13a6d.png"
+    },
+    {
+      "text": "Docker Containers: Understand how to run, stop, and manage containers.",
+      "image_prompt": "graph TD; A[Docker Containers] --> B[Run]; B --> C[Stop];",
+      "url": "http://localhost:9000/mermaid-images/f001a626-78da-4480-9099-25f0ee12e7b6.png"
+    },
+    {
+      "text": "Docker Networking: See how Docker manages networking in containers.",
+      "image_prompt": "graph TD; A[Containers] --> B[Bridged Network]; A --> C[Host Network];",
+      "url": "http://localhost:9000/mermaid-images/6e8c90ce-93c7-488c-b8cf-6822bba06ad5.png"
+    },
+    {
+      "text": "Docker Volumes: Explore how to persist data in Docker using volumes.",
+      "image_prompt": "graph TD; A[Containers] --> B[Mount Volume]; B --> C[Persistent Data];",
+      "url": "http://localhost:9000/mermaid-images/a964d924-d284-4ac8-ad79-90500a498a45.png"
+    },
+    {
+      "text": "Using Docker Hub: Learn how to use Docker Hub for container storage and sharing.",
+      "image_prompt": "graph TD; A[Local Repository] --> B[Docker Hub]; B --> C[Pull Images];",
+      "url": "http://localhost:9000/mermaid-images/213666b4-982a-43c2-8d2a-61f42554d840.png"
+    },
+    {
+      "text": "Docker Compose: An introduction to Docker Compose and its benefits.",
+      "image_prompt": "graph TD; A[Multi-Container Applications] --> B[Docker Compose];",
+      "url": "http://localhost:9000/mermaid-images/28d6134b-a923-432e-95be-9601ffa1e295.png"
+    },
+    {
+      "text": "Writing a Dockerfile: Understand the process of writing Dockerfiles for building images.",
+      "image_prompt": "graph TD; A[Dockerfile Instructions] --> B[FROM]; B --> C[COPY]; B --> D[CMD];",
+      "url": "http://localhost:9000/mermaid-images/479f6434-ccd0-432d-a15f-1d8b6baa834f.png"
+    },
+    {
+      "text": "Building Docker Images: Learn the steps involved in building images from a Dockerfile.",
+      "image_prompt": "graph TD; A[Dockerfile] --> B[Build Command]; B --> C[Image Repository];",
+      "url": "http://localhost:9000/mermaid-images/47a4cf95-6889-4840-88f2-97cda07c7ddf.png"
+    },
+    {
+      "text": "Running Multi-container Docker Applications: Explore multi-container orchestration using Docker Compose.",
+      "image_prompt": "graph TD; A[Docker Compose] --> B[docker-compose.yml]; B --> C[Multiple Services];",
+      "url": "http://localhost:9000/mermaid-images/71529a5d-504b-458c-9eff-1fbc4a71e8b6.png"
+    },
+    {
+      "text": "Environment Variables in Docker: Discover how to manage configurations using environment variables.",
+      "image_prompt": "graph TD; A[Environment Variables] --> B[Configuration]; B --> C[Dynamic Values];",
+      "url": "http://localhost:9000/mermaid-images/003d0978-8946-4827-a84a-5a1870b35acc.png"
+    },
+    {
+      "text": "Docker Swarm: Introduction to Docker's native clustering and orchestration tool.",
+      "image_prompt": "graph TD; A[Docker Nodes] --> B[Swarm Manager]; B --> C[Worker Nodes];",
+      "url": "http://localhost:9000/mermaid-images/bc7471dd-17a8-41b0-b91b-eacbec81f8e5.png"
+    },
+    {
+      "text": "Scaling with Docker Swarm: Learn how to scale applications with Docker Swarm.",
+      "image_prompt": "graph TD; A[Docker Swarm] --> B[Scale Command]; B --> C[Increased Instances];",
+      "url": "http://localhost:9000/mermaid-images/05f9b031-79fb-43af-9912-bdfacf33c8e9.png"
+    },
+    {
+      "text": "Docker Security: Best practices to secure Docker deployments.",
+      "image_prompt": "graph TD; A[Docker Security] --> B[Secure Images]; B --> C[Access Control];",
+      "url": "http://localhost:9000/mermaid-images/a8979b7e-f7c1-48c8-a862-35cc4144a9bc.png"
+    },
+    {
+      "text": "Managing Resources in Docker: Understand how to manage CPU and memory resources.",
+      "image_prompt": "graph TD; A[Resource Management] --> B[CPU Caps]; B --> C[Memory Limits];",
+      "url": "http://localhost:9000/mermaid-images/eff950c7-76c7-46ed-8ac1-698558d6da07.png"
+    },
+    {
+      "text": "Docker Logs: Learn about logging features and how to access container logs.",
+      "image_prompt": "graph TD; A[Containers] --> B[Logging Driver]; B --> C[Log Files];",
+      "url": "http://localhost:9000/mermaid-images/7c0c9675-1bef-4e70-9dd1-4ee88a845dd5.png"
+    },
+    {
+      "text": "Troubleshooting Docker Containers: Common troubleshooting techniques for containers.",
+      "image_prompt": "graph TD; A[Issues] --> B[Debugging Steps]; B --> C[Resolution];",
+      "url": "http://localhost:9000/mermaid-images/bb90bd2d-905f-4559-9644-2d1fa9744d4d.png"
+    },
+    {
+      "text": "Docker vs Virtual Machines: Explore the differences between Docker containers and virtual machines.",
+      "image_prompt": "graph TD; A[Docker] --> B[Lightweight]; A --> C[VMs]; C --> D[Heavyweight];",
+      "url": "http://localhost:9000/mermaid-images/43637079-501a-4f00-9da4-fc8fb89fb88c.png"
+    },
+    {
+      "text": "Automating Docker Builds: Learn about continuous integration and deployment pipelines using Docker.",
+      "image_prompt": "graph TD; A[CI/CD] --> B[Automated Builds]; B --> C[Image Deployment];",
+      "url": "http://localhost:9000/mermaid-images/5279712f-ee5c-40b7-8f4f-cf52677e8c8d.png"
+    },
+    {
+      "text": "Monitoring Docker Containers: Explore various tools and methods for container monitoring.",
+      "image_prompt": "graph TD; A[Monitoring Tools] --> B[Metrics Collection]; B --> C[Alerts];",
+      "url": "http://localhost:9000/mermaid-images/5b86c687-0ce3-492d-ac26-d8fae60dc179.png"
+    },
+    {
+      "text": "Docker Compose vs Docker Swarm: Understanding the differences in orchestration strategies.",
+      "image_prompt": "graph TD; A[Compose] --> B[Local Development]; A --> C[Swarm]; C --> D[Production];",
+      "url": "http://localhost:9000/mermaid-images/155c1721-2e66-4709-9a37-7d22f6c7696c.png"
+    },
+    {
+      "text": "Using Docker with Kubernetes: Learn how Docker integrates with Kubernetes for container orchestration.",
+      "image_prompt": "graph TD; A[Docker] --> B[Kubernetes]; B --> C[Pods]; C --> D[Clusters];",
+      "url": "http://localhost:9000/mermaid-images/9077df3f-73d6-4cd0-974d-7537c335489f.png"
+    },
+    {
+      "text": "Docker and Microservices: Understand the role of Docker in building microservices architectures.",
+      "image_prompt": "graph TD; A[Microservices] --> B[Small Containers]; B --> C[Scalable Services];",
+      "url": "http://localhost:9000/mermaid-images/697b0e22-4d2b-4a6d-8850-398acdd416b0.png"
+    },
+    {
+      "text": "Best Practices for Docker Images: Guidelines for optimizing Docker images.",
+      "image_prompt": "graph TD; A[Docker Images] --> B[Minimized Size]; B --> C[Efficient Layers];",
+      "url": "http://localhost:9000/mermaid-images/a5f96509-b112-415a-b789-53bbc8fdef35.png"
+    },
+    {
+      "text": "Introduction to Docker Registries: Discover the purpose and functionality of Docker registries.",
+      "image_prompt": "graph TD; A[Local Registry] --> B[Service Integration]; A --> C[Global Registry];",
+      "url": "http://localhost:9000/mermaid-images/776195cd-fc47-4f2f-a1f7-261f917445c4.png"
+    },
+    {
+      "text": "Creating Private Docker Registries: Steps to set up and secure a private Docker registry.",
+      "image_prompt": "graph TD; A[Private Registry] --> B[Secure Access]; B --> C[Image Storage];",
+      "url": "http://localhost:9000/mermaid-images/068de66c-9f13-4d23-9287-b53b0a94d4b7.png"
+    },
+    {
+      "text": "Tagging Docker Images: Importance and methodology behind tagging Docker images.",
+      "image_prompt": "graph TD; A[Docker Image] --> B[Version Tagging]; B --> C[Release Management];",
+      "url": "http://localhost:9000/mermaid-images/07953069-0e27-4816-ae65-63637a4d0693.png"
+    },
+    {
+      "text": "Updating Docker Containers: How to efficiently update containers with minimum downtime.",
+      "image_prompt": "graph TD; A[Containers] --> B[Update Image]; B --> C[Redeployment];",
+      "url": "http://localhost:9000/mermaid-images/652b7b81-07c1-4ee0-b458-f024a0624339.png"
+    },
+    {
+      "text": "Exploring Docker CLI: An overview of essential Docker command-line interface commands.",
+      "image_prompt": "graph TD; A[docker run] --> B[Create Container]; A --> C[docker ps];",
+      "url": "http://localhost:9000/mermaid-images/75690cdb-3505-4ef5-a239-6e67dd9c3733.png"
+    },
+    {
+      "text": "The Future of Docker: Anticipate emerging trends and future developments in Docker technology.",
+      "image_prompt": "graph TD; A[Current Tech] --> B[Innovation]; B --> C[Future Trends];",
+      "url": "http://localhost:9000/mermaid-images/e5b79e2b-a039-482d-b94f-088ce7c835e4.png"
+    },
+    {
+      "text": "Docker's Role in DevOps: Examining Docker's influence on modern DevOps practices.",
+      "image_prompt": "graph TD; A[DevOps] --> B[Continuous Integration]; B --> C[Docker Integration];",
+      "url": "http://localhost:9000/mermaid-images/0df22203-7432-4ea4-abfc-c30b46ff4005.png"
+    },
+    {
+      "text": "Setting Up Docker for Continuous Deployment: Steps to integrate Docker into a CI/CD pipeline.",
+      "image_prompt": "graph TD; A[CI/CD Pipeline] --> B[Docker Steps]; B --> C[Deployment];",
+      "url": "http://localhost:9000/mermaid-images/2023f1b3-c677-48ad-9983-2299762d8e39.png"
+    },
+    {
+      "text": "Working with Docker Plugins: How plugins can extend the functionality of Docker.",
+      "image_prompt": "graph TD; A[Docker Engine] --> B[Plugins]; B --> C[Extended Features];",
+      "url": "http://localhost:9000/mermaid-images/9491d75b-1cea-4b69-b2df-65bdc93fddd2.png"
+    },
+    {
+      "text": "Docker and Data Science: The benefits of Docker for data science environments and reproducibility.",
+      "image_prompt": "graph TD; A[Data Science] --> B[Dockerized Environments]; B --> C[Reproducibility];",
+      "url": "http://localhost:9000/mermaid-images/21193013-9af7-425e-8e65-ac34174d40f1.png"
+    },
+    {
+      "text": "Interacting with Docker API: Explore how to use the Docker API for automation and integration.",
+      "image_prompt": "graph TD; A[Applications] --> B[Docker API]; B --> C[Automation];",
+      "url": "http://localhost:9000/mermaid-images/5d7a1288-3ef0-45ba-b996-c154b2974144.png"
+    },
+    {
+      "text": "Docker and Legacy Systems: How Docker can help modernize legacy systems.",
+      "image_prompt": "graph TD; A[Legacy Systems] --> B[Container Migration]; B --> C[Docker];",
+      "url": "http://localhost:9000/mermaid-images/26d078cd-7007-4f0e-ba10-69318cb23120.png"
+    },
+    {
+      "text": "Understanding Docker's Layered File System: Learn about the layered file system architecture in Docker.",
+      "image_prompt": "graph TD; A[Docker Image] --> B[Base Layers]; B --> C[Custom Layers];",
+      "url": "http://localhost:9000/mermaid-images/2afa7258-aec9-4140-853d-4a18a9d6f63c.png"
+    },
+    {
+      "text": "Collaborating with Docker: Using Docker for team collaboration and consistency.",
+      "image_prompt": "graph TD; A[Teams] --> B[Shared Repositories]; B --> C[Docker Networks];",
+      "url": "http://localhost:9000/mermaid-images/7fa02ce4-92cf-4c25-a201-6664e9af1e21.png"
+    },
+    {
+      "text": "Customizing Docker Execution Environments: Steps to tailor execution environments to specific needs.",
+      "image_prompt": "graph TD; A[Docker Execution] --> B[Custom Configurations]; B --> C[Environment Setup];",
+      "url": "http://localhost:9000/mermaid-images/805aba23-dfc8-408f-95bd-6f4ab6fba4e9.png"
+    },
+    {
+      "text": "Docker's Impact on Software Delivery: Analyze how Docker has transformed software delivery processes.",
+      "image_prompt": "graph TD; A[Software Delivery] --> B[Continuous Deployment]; B --> C[Containerization];",
+      "url": "http://localhost:9000/mermaid-images/20d181d2-e66c-4282-8544-b74bfaf7b6d7.png"
+    },
+    {
+      "text": "Exploring the Docker Ecosystem: An overview of tools and platforms complementing Docker.",
+      "image_prompt": "graph TD; A[Docker Ecosystem] --> B[Compose]; A --> C[Swarm]; A --> D[Kubernetes];",
+      "url": "http://localhost:9000/mermaid-images/dc493f15-4724-4c7a-8a37-24f52a6fb492.png"
+    },
+    {
+      "text": "Docker for Testing Environments: Advantages of using Docker for setting up isolated testing environments.",
+      "image_prompt": "graph TD; A[Testing] --> B[Docker Isolation]; B --> C[Consistent Results];",
+      "url": "http://localhost:9000/mermaid-images/2f7ecfd7-8859-440c-8d28-57dffc618f81.png"
+    },
+    {
+      "text": "Using Docker for Continuous Testing: How to leverage Docker in continuous testing strategies.",
+      "image_prompt": "graph TD; A[Continuous Testing] --> B[Docker Integration]; B --> C[Automated Suites];",
+      "url": "http://localhost:9000/mermaid-images/ec1e9d01-47eb-482f-befc-e15ed7e88410.png"
+    },
+    {
+      "text": "Docker for Web Development: Using Docker to streamline web application development.",
+      "image_prompt": "graph TD; A[Web Development] --> B[Docker Setup]; B --> C[Deployment];",
+      "url": "http://localhost:9000/mermaid-images/fa0b47f0-6e94-4c42-870b-efa3f029dec5.png"
+    },
+    {
+      "text": "Orchestrating Large Scale Applications with Docker: Techniques for managing large applications.",
+      "image_prompt": "graph TD; A[Large Applications] --> B[Docker Orchestration]; B --> C[Resource Allocation];",
+      "url": "http://localhost:9000/mermaid-images/05b64ad0-5ebc-4482-a212-7e36978e88b3.png"
+    },
+    {
+      "text": "Docker's Integration with Cloud Services: Advantages of aligning Docker with cloud platforms.",
+      "image_prompt": "graph TD; A[Cloud Services] --> B[Seamless Integration]; B --> C[Scalability];",
+      "url": "http://localhost:9000/mermaid-images/041c9dbb-5f36-4dd7-8e11-688f649105db.png"
+    },
+    {
+      "text": "Conclusion: Recap of Docker's transformative role in modern IT ecosystems.",
+      "image_prompt": "graph TD; A[Docker Technologies] --> B[Transformation]; A --> C[Future Opportunities];",
+      "url": "http://localhost:9000/mermaid-images/43ebdc51-5072-4e32-b006-724cb0eca2e2.png"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Docker is an open-source platform that automates the deployment, scaling, and management of applications with containerization. It helps developers and system administrators build, ship, and run distributed applications.",
+      "image_prompt": "graph TD; A[Docker] --> B[Enhances deployment]; A --> C[Facilitates scaling]; A --> D[Manages applications];",
+      "url": "http://localhost:9000/mermaid-images/83ab98b7-29b7-439a-a61b-0ac1064ec952.png"
+    },
+    {
+      "text": "Docker Architecture: Docker uses a client-server architecture. The Docker client communicates with the Docker daemon, which is responsible for building, running, and managing Docker containers.",
+      "image_prompt": "graph TD; A[Docker Client] --> B[Docker Daemon]; B --> C[Builds]; B --> D[Runs]; B --> E[Manages Containers];",
+      "url": "http://localhost:9000/mermaid-images/b0cbb3b0-8c96-4c2e-8b27-7861178434fb.png"
+    },
+    {
+      "text": "Docker Images: Docker images are read-only templates used to create containers. They include everything needed to run an application, ensuring consistency across environments.",
+      "image_prompt": "graph TD; A[Docker Images] --> B[Read-only templates]; B --> C[Create Containers]; B --> D[Ensure Consistency];",
+      "url": "http://localhost:9000/mermaid-images/19bac7fd-0c43-4c6c-b2c9-016d677cdcab.png"
+    },
+    {
+      "text": "Docker Containers: Containers are lightweight and portable encapsulations of environments where applications are executed. They are isolated but can share OS and resources.",
+      "image_prompt": "graph TD; A[Docker Containers] --> B[Lightweight]; B --> C[Portable Environments]; B --> D[Isolated yet Share OS];",
+      "url": "http://localhost:9000/mermaid-images/8f0a8c06-7dcc-4eae-bc0a-da151ce58f17.png"
+    },
+    {
+      "text": "Docker Registry: Docker Registry is a service for storing and distributing Docker images. Docker Hub is a public registry, but private registries can be set up, too.",
+      "image_prompt": "graph TD; A[Docker Registry] --> B[Stores Images]; B --> C[Distributes Images]; C --> D[Docker Hub]; C --> E[Private Registries];",
+      "url": "http://localhost:9000/mermaid-images/bc4da611-ada9-4270-85c7-1f6c6e4b21d6.png"
+    },
+    {
+      "text": "Dockerfile: A Dockerfile is a text document that contains instructions for Docker to build an image. It automates repetitive tasks and ensures a consistent environment.",
+      "image_prompt": "graph TD; A[Dockerfile] --> B[Instructions to Build]; B --> C[Automates Tasks]; C --> D[Ensures Consistency];",
+      "url": "http://localhost:9000/mermaid-images/efcc6b88-3aa7-4a7b-a561-f314686d9711.png"
+    },
+    {
+      "text": "Docker Compose: Docker Compose is a tool for defining and running multi-container Docker applications. It uses a YAML file to configure application services.",
+      "image_prompt": "graph TD; A[Docker Compose] --> B[Defines Multi-container Apps]; B --> C[Uses YAML File]; C --> D[Configures Services];",
+      "url": "http://localhost:9000/mermaid-images/a79f2dbf-fe21-4d5c-ab4a-dad8d405de9e.png"
+    },
+    {
+      "text": "Docker Networking: Docker provides various network drivers to connect containers. These include bridge, host, overlay, and macvlan drivers, allowing efficient communication.",
+      "image_prompt": "graph TD; A[Docker Networking] --> B[Connects Containers]; B --> C[Bridge Driver]; C --> D[Host Driver]; D --> E[Overlay Driver]; E --> F[Macvlan Driver];",
+      "url": "http://localhost:9000/mermaid-images/baf6b192-83b4-4d2c-b557-b002bdd8cbfb.png"
+    },
+    {
+      "text": "Docker Swarm: Docker Swarm is a native clustering and orchestration tool for Docker containers. It turns a group of Docker engines into a single virtual Docker engine.",
+      "image_prompt": "graph TD; A[Docker Swarm] --> B[Clustering Tool]; B --> C[Orchestrates Containers]; C --> D[Single Virtual Engine];",
+      "url": "http://localhost:9000/mermaid-images/0b478ba0-ea4b-492a-83da-f699db3c5cc3.png"
+    },
+    {
+      "text": "Conclusion and Benefits: Docker streamlines the development lifecycle, increases efficiency, and enhances collaboration. It solves the 'it works on my machine' problem.",
+      "image_prompt": "graph TD; A[Conclusion] --> B[Streamlines Development]; B --> C[Increases Efficiency]; C --> D[Enhances Collaboration]; D --> E[Solves Compatibility Issues];",
+      "url": "http://localhost:9000/mermaid-images/2e240de8-0da2-4615-b58e-e76efa58427e.png"
+    }
+  ]
+}

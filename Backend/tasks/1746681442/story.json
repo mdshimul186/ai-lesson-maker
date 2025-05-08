@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In JavaScript, classes act as templates for creating objects. They encapsulate data with code to work on that data. Although JavaScript is prototype-based, classes give a more intuitive, object-oriented syntax, which resembles class-based code structures in other programming languages like Java or C#. This makes code more readable and maintainable, thus allowing developers to easily implement inheritance and encapsulation, crucial for software design patterns.",
+      "image_prompt": "# Class Definition in JavaScript\n\n```javascript\nclass Vehicle {\n    constructor(brand, model) {\n        this.brand = brand;\n        this.model = model;\n    }\n}\n\n// Instantiation\nconst myCar = new Vehicle('Toyota', 'Corolla');\nconsole.log(myCar);\n```\n",
+      "url": "http://localhost:9000/mermaid-images/10473606-bb5d-491a-a269-00af72c0ab4f.png"
+    },
+    {
+      "text": "JavaScript's class syntax supports inheritance, allowing one class to inherit properties and methods from another. This inheritance is implemented using the 'extends' keyword, providing a way to create a hierarchy of classes and reuse code efficiently. This feature is essential for creating complex applications efficiently, as it enables developers to build on existing code without duplication.",
+      "image_prompt": "# Class Inheritance in JavaScript\n\n```javascript\nclass Car extends Vehicle {\n    constructor(brand, model, year) {\n        super(brand, model);\n        this.year = year;\n    }\n}\n\n// Usage\nconst myCar = new Car('Honda', 'Accord', 2020);\nconsole.log(myCar);\n```\n",
+      "url": "http://localhost:9000/mermaid-images/ab45bc4f-9bd5-45ab-91d0-453f60624683.png"
+    },
+    {
+      "text": "JavaScript classes include methods that define actions the objects created from the class can perform. The use of static methods and getters/setters further enhances class functionality. Static methods are called on the class itself, whereas getters and setters offer a way to intercept property access and assignments, making class usage more intuitive and safer by providing controlled access to properties.",
+      "image_prompt": "# Class Methods and Properties\n\n```javascript\nclass Rectangle {\n    constructor(width, height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    // Static method\n    static description() {\n        return 'Rectangles have four sides and four right angles.';\n    }\n\n    // Getter\n    get area() {\n        return this.width * this.height;\n    }\n}\n\n// Usage\nconst myRectangle = new Rectangle(7, 5);\nconsole.log(Rectangle.description());\nconsole.log(myRectangle.area);\n```\n",
+      "url": "http://localhost:9000/mermaid-images/966281ed-e618-46eb-94cf-55536b555d8f.png"
+    }
+  ]
+}

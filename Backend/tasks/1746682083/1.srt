@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:03,562
+JavaScript classes are templates for creating objects
+
+2
+00:00:03,962 --> 00:00:08,838
+They provide a more convenient syntax to create object and deal with inheritance
+
+3
+00:00:09,225 --> 00:00:10,925
+similar to class-based languages
+
+4
+00:00:11,300 --> 00:00:16,725
+A class encapsulates data and functions that can be shared among the objects created from it
+
+5
+00:00:17,150 --> 00:00:19,400
+improving code structure and readability
+
+6
+00:00:19,788 --> 00:00:26,350
+This class-based approach is especially useful in larger applications with a need for organized and reusable code
+
+7
+00:00:26,775 --> 00:00:28,012
+making maintenance easier
+

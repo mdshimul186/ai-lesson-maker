@@ -1,0 +1,36 @@
+1
+00:00:00,050 --> 00:00:02,462
+In our exploration of JavaScript functions
+
+2
+00:00:02,737 --> 00:00:07,088
+we will begin by understanding the syntax and use of function declarations
+
+3
+00:00:07,487 --> 00:00:10,738
+Functions in JavaScript are first-class objects
+
+4
+00:00:11,000 --> 00:00:13,275
+they can take inputs in the form of parameters
+
+5
+00:00:13,537 --> 00:00:17,238
+process these inputs by encapsulating reusable code logic
+
+6
+00:00:17,625 --> 00:00:18,688
+and then return output
+
+7
+00:00:19,087 --> 00:00:22,325
+We'll delve into the two primary types of function creation
+
+8
+00:00:22,688 --> 00:00:25,275
+function declarations and function expressions
+
+9
+00:00:25,675 --> 00:00:31,200
+This lecture will provide a solid grounding in how functions operate at a fundamental level
+

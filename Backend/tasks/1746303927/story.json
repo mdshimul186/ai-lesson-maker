@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Scene 1: Introduction to Docker - Docker is a platform designed to make it easier to create, deploy, and run applications by using containers. Containers allow a developer to package up an application with all parts it needs, such as libraries and other dependencies, and deploy it as one package. Understanding Docker's role in modern software development is crucial for any IT professional.",
+      "image_prompt": "graph TD; A[Developer] --> B[Docker CLI]; B --> C[Docker Daemon]; C --> D[Container]; D --> E[Application]",
+      "url": ""
+    },
+    {
+      "text": "Scene 2: Docker Architecture - At a high level, Docker Architecture comprises the Docker Client, Docker Host, Network and Storage components, and Docker Registry/Hub. The client communicates with the Docker Daemon, which performs the heavy lifting of building, running, and distributing your Docker containers. This architecture promotes the ease of managing containerized applications.",
+      "image_prompt": "graph TD; A[Docker Client] --> B[Docker Daemon]; B --> C[Docker Host]; B --> D[Docker Network]; B --> E[Docker Storage]; B --> F[Docker Registry/Hub]",
+      "url": ""
+    },
+    {
+      "text": "Scene 3: Key Docker Commands - Docker is operated primarily through the command line interface. Key commands include 'docker run', 'docker ps', 'docker pull', and 'docker build', which are used for initiating containers, listing running containers, downloading images, and creating images respectively. Mastery of these commands is essential for efficient management of Docker environments.",
+      "image_prompt": "graph TD; A[Docker CLI] --> B['docker run']; A --> C['docker ps']; A --> D['docker pull']; A --> E['docker build']",
+      "url": ""
+    }
+  ]
+}

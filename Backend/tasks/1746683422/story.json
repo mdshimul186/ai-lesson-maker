@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript classes provide a blueprint for creating objects, encapsulating data with code to work on that data. They are an essential aspect of JavaScript programming, allowing developers to implement object-oriented principles. Classes enhance code reusability, maintainability, and the overall structure of applications by allowing the declaration of methods specific to a particular object type.",
+      "image_prompt": "# JavaScript Class Basics\n\n```javascript\n// Define a class\nclass Rectangle {\n    constructor(height, width) {\n        this.height = height;\n        this.width = width;\n    }\n\n    // Method to calculate area\n    calculateArea() {\n        return this.height * this.width;\n    }\n}\n\n// Create an instance of the class\nconst rectangle = new Rectangle(10, 5);\nconsole.log('Area:', rectangle.calculateArea()); // Output: Area: 50\n```\n\n### Class Breakdown:\n\n| Term | Description |\n|------|-------------|\n| Class | Template for creating objects |\n| Constructor | Method for initializing an object |\n| Method | Function associated with an object |\n",
+      "url": "http://localhost:9000/mermaid-images/1c885686-f65e-4708-b742-7b3af09e81be.png"
+    },
+    {
+      "text": "JavaScript classes also support inheritance, allowing one class to extend the functionality of another. This provides a powerful mechanism for code reuse and is essential for implementing polymorphic behavior. By inheriting properties and methods from a parent class, a child class can override or extend functionalities, allowing for more sophisticated program architectures.",
+      "image_prompt": "# Class Inheritance Example\n\n```javascript\n// Base class\nclass Animal {\n    constructor(name) {\n        this.name = name;\n    }\n    speak() {\n        console.log(`${this.name} makes a noise.`);\n    }\n}\n\n// Derived class\nclass Dog extends Animal {\n    speak() {\n        console.log(`${this.name} barks.`);\n    }\n}\n\nconst dog = new Dog('Rex');\ndog.speak(); // Output: Rex barks.\n```\n\n### Inheritance Diagram:\n\n```mermaid\nclassDiagram\n    class Animal {\n        +String name\n        +speak()\n    }\n    class Dog {\n        +speak()\n    }\n    Animal <|-- Dog\n```\n",
+      "url": "http://localhost:9000/mermaid-images/2a3f6167-2f6e-4dbd-b919-339f91f2e2b8.png"
+    }
+  ]
+}

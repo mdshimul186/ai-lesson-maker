@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:01,275
+Introduction to Docker
+
+2
+00:00:01,762 --> 00:00:05,088
+Docker is an open-source platform that automates the deployment
+
+3
+00:00:05,362 --> 00:00:05,975
+scaling
+
+4
+00:00:06,200 --> 00:00:08,625
+and management of applications with containerization
+
+5
+00:00:09,025 --> 00:00:11,825
+It helps developers and system administrators build
+
+6
+00:00:12,100 --> 00:00:12,512
+ship
+
+7
+00:00:12,787 --> 00:00:14,625
+and run distributed applications
+

@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-NabanitaNeural",
+  "voice_rate": 1.0,
+  "resolution": "720*1280",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্টের ফাংশন হলো কোডের একটি টুকরা যা নির্দিষ্ট কাজ সম্পন্ন করতে ব্যবহৃত হয়। ফাংশনকে প্রোগ্রামিংয়ে পুনর্ব্যবহারযোগ্য এবং সুগঠিত কোড তৈরির জন্য ডিজাইন করা হয়েছে। এটি প্রোগ্রামারদের বার বার একই কাজ করার সময় সাশ্রয় করে এবং কোডের পুনরায় ব্যবহারের প্রয়োজনীয়তা দূর করে।",
+      "image_prompt": "# ফাংশন ডিক্লারেশন ও ব্যবহার\n\n```javascript\n// Function declaration\nfunction greet(name) {\n    return `Hello, ${name}!`;\n}\n\n// Function usage\nconst message = greet('World');\nconsole.log(message);\n```\n\n### ফাংশন কি করে:\n| পদক্ষেপ | বর্ণনা |\n|---------|--------|\n| ডিক্লারেশন | ফাংশন সংজ্ঞায়িত করে |\n| ব্যবহার | ফাংশন আহ্বান করানো হয় |\n| রিটার্ন | বিশেষ ফলাফলের জন্য একটি মান প্রদান করে |",
+      "url": "http://localhost:9000/mermaid-images/e185682d-b371-4211-9392-10de546d6681.png"
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টের ফাংশন বিভিন্ন প্যারামিটার গ্রহণ করতে পারে এবং বিভিন্ন মান ফেরত দিতে পারে। প্যারামিটার হলো ইনপুট যা ফাংশনকে তার কাজ সম্পন্ন করতে প্রয়োজন হতে পারে। এর মাধ্যমে ফাংশনকে আরও নমনীয় এবং কার্যকর করা যায়।",
+      "image_prompt": "## ফাংশনের প্যারামিটার ও রিটার্ন মান\n\n```javascript\n// Function with parameters and return value\nfunction add(a, b) {\n    return a + b;\n}\n\n// Using the function\nlet sum = add(5, 3);\nconsole.log(sum); // Output: 8\n```\n\n### ফ্লোচার্ট:\n```mermaid\nflowchart TD\n    A[Start] --> B[Function Call]\n    B --> C{Params: a, b}\n    C --> D[Calculate a + b]\n    D --> E[Return Sum]\n    E --> F[End]\n```",
+      "url": "http://localhost:9000/mermaid-images/97e7ca46-2579-419d-b4b9-50b320191500.png"
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টে ফাংশন আক্ষরিকও হতে পারে যেখানে একটি মান সরাসরি ফাংশন হিসেবে সংজ্ঞায়িত করা হয়। এটি প্রায়ই অ্যারো ফাংশনের জন্য ব্যবহৃত হয় যা ES6-এ পরিচিত হয় এবং এটি আরও সংক্ষিপ্ত এবং সহজতর ফাংশন প্রস্তুত করে। এটি আরও সাধারণ ক্ষেত্রে যথেষ্ট সহায়ক হতে পারে যেখানে ফাংশন খুব ছোট।",
+      "image_prompt": "## অ্যারো ফাংশন\n\n```javascript\n// Arrow function example\nconst multiply = (a, b) => a * b;\n\n// Using the arrow function\nconsole.log(multiply(4, 5)); // Output: 20\n```\n\n### অ্যারো ফাংশনের চিত্র:\n```mermaid\nflowchart TD\n    A[Start] --> B[Arrow Function Definition]\n    B --> C[Compute a * b]\n    C --> D[Return Product]\n    D --> E[End]\n```",
+      "url": "http://localhost:9000/mermaid-images/0c6cc9a0-94cb-4953-b05f-aebb92ba7ce8.png"
+    }
+  ]
+}

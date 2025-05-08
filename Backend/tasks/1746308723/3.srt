@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:04,225
+Function expressions allow you to define a function as part of an expression
+
+2
+00:00:04,625 --> 00:00:07,500
+These can be anonymous and are often used with callbacks
+

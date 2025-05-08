@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:01,425
+Understanding Containers
+
+2
+00:00:01,675 --> 00:00:05,662
+Containers encapsulate an application with all its dependencies
+
+3
+00:00:06,025 --> 00:00:09,325
+ensuring consistent environments across different systems
+

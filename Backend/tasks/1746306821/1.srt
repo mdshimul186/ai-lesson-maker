@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:02,250
+Introduction to JavaScript Functions
+
+2
+00:00:02,663 --> 00:00:05,750
+Understanding the basic concept of functions in JavaScript
+
+3
+00:00:06,025 --> 00:00:10,125
+which are reusable blocks of code designed to perform a specific task
+

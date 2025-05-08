@@ -1,0 +1,28 @@
+1
+00:00:00,075 --> 00:00:00,950
+In JavaScript
+
+2
+00:00:01,200 --> 00:00:05,688
+a function is a reusable block of code that performs a particular task
+
+3
+00:00:06,075 --> 00:00:11,175
+Functions make the code modular and assist in keeping it DRY  Don't Repeat Yourself
+
+4
+00:00:11,575 --> 00:00:13,950
+You declare a function with the 'function' keyword
+
+5
+00:00:14,312 --> 00:00:15,375
+followed by a name
+
+6
+00:00:15,588 --> 00:00:16,438
+parentheses
+
+7
+00:00:16,650 --> 00:00:19,462
+and the function body contained within curly braces
+

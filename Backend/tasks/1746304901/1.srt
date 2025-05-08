@@ -1,0 +1,48 @@
+1
+00:00:00,087 --> 00:00:00,850
+In this lecture
+
+2
+00:00:01,275 --> 00:00:04,075
+we will explore the fundamental concepts of Docker
+
+3
+00:00:04,475 --> 00:00:06,275
+a prominent platform for developing
+
+4
+00:00:06,525 --> 00:00:07,125
+shipping
+
+5
+00:00:07,388 --> 00:00:09,150
+and running applications with ease
+
+6
+00:00:09,537 --> 00:00:14,787
+Docker enables the management of application processes within isolated containers
+
+7
+00:00:15,012 --> 00:00:20,363
+providing a lightweight and portable environment that simplifies software development and deployment
+
+8
+00:00:20,762 --> 00:00:23,212
+We'll delve into the core components of Docker
+
+9
+00:00:23,613 --> 00:00:24,700
+including images
+
+10
+00:00:24,750 --> 00:00:25,550
+containers
+
+11
+00:00:25,575 --> 00:00:26,488
+and the Docker engine
+
+12
+00:00:26,925 --> 00:00:31,863
+understanding how they interrelate to facilitate efficient application lifecycle management
+

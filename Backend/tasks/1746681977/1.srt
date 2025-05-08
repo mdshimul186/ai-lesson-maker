@@ -1,0 +1,20 @@
+1
+00:00:00,050 --> 00:00:00,912
+In JavaScript
+
+2
+00:00:01,337 --> 00:00:08,275
+a class is a special type of function that serves as a blueprint for creating objects with pre-defined properties and methods
+
+3
+00:00:08,662 --> 00:00:12,025
+allowing developers to use object-oriented programming concepts
+
+4
+00:00:12,412 --> 00:00:20,462
+The class syntax introduced in ECMAScript 6 provides a more straightforward and cleaner way to create objects and handle inheritance
+
+5
+00:00:20,863 --> 00:00:23,738
+making code easier to write and understand
+

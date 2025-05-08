@@ -1,0 +1,32 @@
+1
+00:00:00,087 --> 00:00:03,562
+Functions in JavaScript can be expressed in numerous ways
+
+2
+00:00:03,800 --> 00:00:07,662
+with arrow functions being one of the most concise and modern formats
+
+3
+00:00:08,037 --> 00:00:09,850
+Introduced in ES6
+
+4
+00:00:10,213 --> 00:00:13,050
+arrow functions allow for a shorter syntax
+
+5
+00:00:13,450 --> 00:00:16,800
+especially when dealing with single-return expression functions
+
+6
+00:00:17,175 --> 00:00:19,312
+Unlike traditional function expressions
+
+7
+00:00:19,688 --> 00:00:23,962
+arrow functions also handle the context of 'this' differently
+
+8
+00:00:24,400 --> 00:00:27,538
+which can be particularly beneficial in certain scenarios
+

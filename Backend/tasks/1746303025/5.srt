@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:01,175
+Working with Docker Hub
+
+2
+00:00:01,700 --> 00:00:02,962
+Explore Docker Hub
+
+3
+00:00:03,362 --> 00:00:06,900
+the cloud-based repository where Docker images are stored and shared
+

@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:01,462
+Tools and Techniques
+
+2
+00:00:01,900 --> 00:00:03,913
+Overview of methodologies like Agile
+
+3
+00:00:04,338 --> 00:00:04,950
+Waterfall
+
+4
+00:00:05,338 --> 00:00:06,650
+and tools like Gantt Charts
+

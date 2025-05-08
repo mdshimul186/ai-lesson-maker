@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:01,087
+Function Invocation
+
+2
+00:00:01,500 --> 00:00:05,950
+Functions need to be called or invoked to execute the code inside them
+
+3
+00:00:06,338 --> 00:00:10,900
+We will explore different ways to invoke functions and what happens when they are called
+

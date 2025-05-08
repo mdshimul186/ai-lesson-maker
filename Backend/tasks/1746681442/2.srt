@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:03,112
+JavaScript's class syntax supports inheritance
+
+2
+00:00:03,487 --> 00:00:07,575
+allowing one class to inherit properties and methods from another
+
+3
+00:00:07,975 --> 00:00:12,075
+This inheritance is implemented using the 'extends' keyword
+
+4
+00:00:12,463 --> 00:00:17,225
+providing a way to create a hierarchy of classes and reuse code efficiently
+
+5
+00:00:17,625 --> 00:00:21,750
+This feature is essential for creating complex applications efficiently
+
+6
+00:00:22,200 --> 00:00:26,725
+as it enables developers to build on existing code without duplication
+

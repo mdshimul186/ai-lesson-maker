@@ -1,0 +1,48 @@
+1
+00:00:00,075 --> 00:00:00,750
+In this scene
+
+2
+00:00:01,012 --> 00:00:02,975
+we will explore the basics of Docker
+
+3
+00:00:03,375 --> 00:00:06,075
+a powerful platform that enables developers to build
+
+4
+00:00:06,338 --> 00:00:06,737
+ship
+
+5
+00:00:07,013 --> 00:00:10,050
+and run applications efficiently inside containers
+
+6
+00:00:10,438 --> 00:00:12,050
+We'll cover Docker's architecture
+
+7
+00:00:12,438 --> 00:00:15,137
+including core components such as Docker Engine
+
+8
+00:00:15,550 --> 00:00:16,087
+Images
+
+9
+00:00:16,125 --> 00:00:16,850
+Containers
+
+10
+00:00:17,012 --> 00:00:17,688
+Docker Hub
+
+11
+00:00:17,962 --> 00:00:19,038
+and Docker Compose
+
+12
+00:00:19,425 --> 00:00:27,575
+Understanding these components is crucial for deploying scalable and isolated applications seamlessly across various environments
+

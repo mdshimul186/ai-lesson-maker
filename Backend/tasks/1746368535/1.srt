@@ -1,0 +1,40 @@
+1
+00:00:00,075 --> 00:00:00,750
+In this scene
+
+2
+00:00:01,212 --> 00:00:07,438
+we will introduce a basic JavaScript function that demonstrates the creation and invocation of functions
+
+3
+00:00:07,825 --> 00:00:15,312
+Understanding functions is critical because they allow you to reuse code efficiently and organize your scripts better
+
+4
+00:00:15,700 --> 00:00:18,600
+We'll define a simple function that takes two numbers
+
+5
+00:00:18,962 --> 00:00:19,525
+adds them
+
+6
+00:00:19,962 --> 00:00:20,900
+and returns the result
+
+7
+00:00:21,288 --> 00:00:25,738
+This function illustrates fundamental programming constructs including parameters
+
+8
+00:00:25,988 --> 00:00:26,925
+return values
+
+9
+00:00:27,137 --> 00:00:28,012
+and the `console
+
+10
+00:00:28,225 --> 00:00:29,025
+log` method
+

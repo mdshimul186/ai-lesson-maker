@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,113
+Docker Installation
+
+2
+00:00:01,525 --> 00:00:08,225
+Installing Docker involves downloading the Docker software suitable for your operating system from the official Docker website
+

@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:05,600
+Arrow functions are a shorthand form of function expressions introduced in ES6
+
+2
+00:00:06,000 --> 00:00:11,062
+They provide a more concise syntax and handle the 'this' keyword differently
+

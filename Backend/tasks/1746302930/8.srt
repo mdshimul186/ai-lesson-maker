@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:01,363
+Docker Storage Management
+
+2
+00:00:01,637 --> 00:00:07,388
+Docker volumes and bind mounts help manage persistent data separately from the container's filesystem
+

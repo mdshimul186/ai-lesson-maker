@@ -1,0 +1,44 @@
+1
+00:00:00,087 --> 00:00:02,000
+Welcome to the lecture on Docker
+
+2
+00:00:02,462 --> 00:00:07,412
+a platform that simplifies application development and deployment by using containers
+
+3
+00:00:07,812 --> 00:00:09,863
+We'll explore the core components of Docker
+
+4
+00:00:10,262 --> 00:00:11,150
+its architecture
+
+5
+00:00:11,575 --> 00:00:13,150
+and how it helps developers create
+
+6
+00:00:13,588 --> 00:00:14,238
+deploy
+
+7
+00:00:14,250 --> 00:00:16,562
+and run applications in a more efficient manner
+
+8
+00:00:16,962 --> 00:00:22,075
+Docker containers allow applications to be packaged with all their dependencies
+
+9
+00:00:22,450 --> 00:00:25,600
+ensuring consistent environments from development to production
+
+10
+00:00:25,988 --> 00:00:28,725
+This eliminates the 'it works on my machine' problem
+
+11
+00:00:29,075 --> 00:00:32,625
+providing portability and scalability for applications
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we introduce the concept of JavaScript functions. Functions are reusable blocks of code that perform a specific task. They can be defined once and used multiple times throughout a program. This concept is crucial for writing efficient and maintainable code, allowing programmers to avoid repetition and update functionality with ease.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Defining a function\function add(a, b) {\n    return a + b;\n}\n\n// Using the function\nlet sum = add(5, 10);\nconsole.log(sum); // Outputs: 15\n```",
+      "url": ""
+    },
+    {
+      "text": "The second scene explores control flow in programming through the lens of state diagrams. State diagrams visually represent the different states of a process and how transitions occur between states based on certain conditions or events. Understanding state diagrams can help in designing systems with varied states and comprehending how a system should react under different scenarios.",
+      "image_prompt": "stateDiagram-v2\n    [*] --> Uninitialized\n    Uninitialized --> Initialized\n    Initialized --> Processing\n    Processing --> Paused\n    Paused --> Processing\n    Processing --> Completed\n    Completed --> [*]",
+      "url": ""
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:00,762
+In this scene
+
+2
+00:00:01,012 --> 00:00:04,638
+the focus is on how inheritance works in JavaScript classes
+
+3
+00:00:05,037 --> 00:00:08,412
+Inheritance allows one class to extend another
+
+4
+00:00:08,850 --> 00:00:11,225
+inheriting its properties and methods
+

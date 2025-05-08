@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:04,575
+JavaScript functions are a fundamental building block used in web development
+
+2
+00:00:04,950 --> 00:00:10,787
+Functions allow developers to encapsulate code for reusability and modular design
+
+3
+00:00:11,175 --> 00:00:12,700
+Understanding how to declare
+
+4
+00:00:12,963 --> 00:00:13,537
+invoke
+
+5
+00:00:13,812 --> 00:00:19,775
+and utilize parameters and return values is crucial for creating effective JavaScript applications
+

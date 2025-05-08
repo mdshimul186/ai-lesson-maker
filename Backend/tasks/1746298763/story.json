@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Docker is a platform that allows developers to automate the deployment of applications inside lightweight, portable containers. These containers bundle together the application code, libraries, and other dependencies, making it easy to ensure that software runs consistently across different environments. Docker containers can be run on any system that supports Docker, whether on a developer's laptop or in a large-scale production environment on cloud infrastructure.",
+      "image_prompt": "graph TD; A[Docker] --> B[Container]; A --> C[Image]; B --> D[Application]; C --> D;",
+      "url": ""
+    }
+  ]
+}

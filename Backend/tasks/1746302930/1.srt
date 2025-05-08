@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:01,300
+Introduction to Docker
+
+2
+00:00:01,775 --> 00:00:04,650
+Docker is a platform designed to help developers create
+
+3
+00:00:04,862 --> 00:00:05,525
+deploy
+
+4
+00:00:05,763 --> 00:00:08,738
+and run applications inside lightweight containers
+
+5
+00:00:09,125 --> 00:00:14,425
+It's revolutionizing software development by solving application delivery challenges
+

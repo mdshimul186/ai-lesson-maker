@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In the first scene, we will introduce the concept of JavaScript functions, an essential building block in programming. Functions allow us to encapsulate a task and execute it multiple times throughout a program. They help in reducing code redundancy and improving readability. We will start by understanding how to declare a function using the 'function' keyword and invoke it by name, which forms the foundation of modular code development.",
+      "image_prompt": "# JavaScript Function Declaration and Invocation\n\n```javascript\n// Function declaration\nfunction sayHello(name) {\n    return `Hello, ${name}!`;\n}\n\n// Function invocation\nconst greeting = sayHello('Alice');\nconsole.log(greeting);  // Outputs: Hello, Alice!\n```",
+      "url": ""
+    },
+    {
+      "text": "In the second scene, we delve into different types of functions available in JavaScript, focusing on function expressions and arrow functions. Function expressions are stored as variables, enabling anonymous functions, while arrow functions offer a concise syntax to write functions with lexical binding of 'this'. These variations offer flexibility and cleaner syntax for specific use cases, like callback functions or methods inside classes.",
+      "image_prompt": "# JavaScript Function Expressions and Arrow Functions\n\n```javascript\n// Function expression\nconst add = function(x, y) {\n    return x + y;\n};\n\n// Arrow function\nconst subtract = (x, y) => x - y;\n\n// Example usage\nconst sum = add(5, 3);\nconsole.log(sum);  // Outputs: 8\nconst difference = subtract(5, 3);\nconsole.log(difference);  // Outputs: 2\n```",
+      "url": ""
+    }
+  ]
+}

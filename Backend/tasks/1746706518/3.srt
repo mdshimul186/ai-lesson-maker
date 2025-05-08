@@ -1,0 +1,16 @@
+1
+00:00:00,100 --> 00:00:09,600
+Closures in JavaScript are a fundamental concept where an inner function has access to the variables of its outer function even after the outer function has executed
+
+2
+00:00:10,550 --> 00:00:15,912
+This allows for data encapsulation and is essential for callbacks and functional programming
+
+3
+00:00:16,925 --> 00:00:19,800
+Closures are powerful and allow for avoiding global state
+
+4
+00:00:20,212 --> 00:00:22,900
+thus keeping your code organized and maintainable
+

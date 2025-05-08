@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": true,
+  "scenes": [
+    {
+      "text": "JavaScript functions are a fundamental building block for writing reusable pieces of code. They allow developers to write a block of code once and reuse it whenever needed throughout the program. This ability promotes DRY (Don't Repeat Yourself) principles, making codebase more maintainable and organized. Furthermore, functions are first-class citizens in JavaScript, meaning they can be assigned to variables, passed as arguments to other functions, and returned from other functions, providing great flexibility in coding.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function declaration\nfunction square(number) {\n    return number * number;\n}\n\n// Function usage\nconst result = square(5);\nconsole.log(result); // Outputs: 25\n```\n\n### Function Declaration Example\n\n```mermaid\nflowchart TD\n    A[Call Function] --> B[Execute Function Body]\n    B --> C[Return Value]\n    C --> D[Receive Result]\n```",
+      "url": ""
+    },
+    {
+      "text": "JavaScript offers multiple ways to define functions, each providing unique advantages in various coding scenarios. Traditional function declarations and expressions have been standard since the early days of JavaScript. In more recent years, arrow functions have become popular because of their concise syntax and automatic binding of the `this` variable in the surrounding scope, making them ideal for inline functions and callbacks. Understanding when and how to use different function definitions is key to writing efficient and effective JavaScript code.",
+      "image_prompt": "# Function Expressions and Arrow Functions\n\n```javascript\n// Function expression\nconst greet = function(name) {\n    return `Hello, ${name}!`;\n};\n\n// Arrow function\nconst add = (a, b) => a + b;\n\n// Usage\nconsole.log(greet('Alice')); // Outputs: Hello, Alice!\nconsole.log(add(2, 3)); // Outputs: 5\n```\n\n### Comparison of Function Types\n\n| Type | Syntax | `this` Binding | Suitable For |\n|------|--------|----------------|--------------|\n| Function Declaration | Standard | Dynamic | Hoisting |\n| Function Expression | Standard | Dynamic | More control |\n| Arrow Function | Concise | Lexical | Inline callbacks |",
+      "url": ""
+    },
+    {
+      "text": "Functions in JavaScript come with several powerful features like closures and higher-order functions, which significantly enhance their functionality and application scope. Closures allow a function to retain access to its parent scope, providing the ability to encapsulate data. Higher-order functions, capable of taking functions as arguments or returning functions as results, facilitate functional programming style, enabling more abstract operations like map, filter, and reduce, enhancing the declarative style of writing code.",
+      "image_prompt": "# Advanced Function Concepts\n\n```javascript\n// Closure\nfunction outerFunction(outerVariable) {\n    return function innerFunction(innerVariable) {\n        console.log('Outer:', outerVariable);\n        console.log('Inner:', innerVariable);\n    };\n}\n\nconst newFunction = outerFunction('outside');\nnewFunction('inside'); // Outputs: Outer: outside, Inner: inside\n\n// Higher-order function\nconst numbers = [1, 2, 3];\nconst doubled = numbers.map(num => num * 2);\nconsole.log(doubled); // Outputs: [2, 4, 6]\n```\n\n### Closure and Higher-Order Function\n\n```mermaid\nflowchart LR\n    A[Define Outer Function] --> B[Return Inner Function]\n    B --> C[Invoke Inner Function with Closure]\n    A -- Higher-order Function--> D[Map Operation on Array]\n    D --> E[Return Transformed Array]\n```",
+      "url": ""
+    }
+  ]
+}

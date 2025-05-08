@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,413
+Understanding Containers
+
+2
+00:00:01,663 --> 00:00:05,550
+Discover how containers isolate applications and their dependencies
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this first scene, we explore a simple JavaScript function designed to handle basic mathematical operations. We introduce a function that can add, subtract, multiply, and divide two numbers provided by the user. This function is vital as it provides the foundational understanding of how functions operate under the hood, enabling developers to perform tasks efficiently.",
+      "image_prompt": "# JavaScript Math Operations Function\n\n```javascript\n// Function to perform basic math operations\nfunction calculate(operation, a, b) {\n    switch(operation) {\n        case 'add':\n            return a + b;\n        case 'subtract':\n            return a - b;\n        case 'multiply':\n            return a * b;\n        case 'divide':\n            if (b !== 0) return a / b;\n            else return 'Error: Division by zero';\n        default:\n            return 'Invalid operation';\n    }\n}\n\n// Example usage\nconsole.log(calculate('add', 5, 3));  // Output: 8\nconsole.log(calculate('divide', 10, 2)); // Output: 5\n```",
+      "url": ""
+    },
+    {
+      "text": "The second scene shifts focus to the more complex structure of a flowchart that visually maps the logic of a decision-making process. This flowchart illustrates how a program can evaluate conditions and choose different paths based on certain criteria, thus reinforcing the importance of control flow in programming.",
+      "image_prompt": "flowchart TD\n    A[Start] --> B{User inputs operation}\n    B -->|Add| C[Calculate addition]\n    B -->|Subtract| D[Calculate subtraction]\n    B -->|Multiply| E[Calculate multiplication]\n    B -->|Divide| F{Check if divisor is zero}\n    F -->|Yes| G[Display error]\n    F -->|No| H[Calculate division]\n    C --> I[Display result]\n    D --> I\n    E --> I\n    G --> I\n    I --> J[End]",
+      "url": ""
+    }
+  ]
+}

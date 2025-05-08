@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Welcome to the lecture on Docker, a platform that simplifies application development and deployment by using containers. We'll explore the core components of Docker, its architecture, and how it helps developers create, deploy, and run applications in a more efficient manner. Docker containers allow applications to be packaged with all their dependencies, ensuring consistent environments from development to production. This eliminates the 'it works on my machine' problem, providing portability and scalability for applications.",
+      "image_prompt": "graph TD; A[Docker] --> B[Containers]; A --> C[Images]; A --> D[Docker Engine]; B --> E[Portable]; B --> F[Isolated]; C --> G[Layered]; C --> H[Versioned]; D --> I[Client]; D --> J[Daemon]; D --> K[REST API];",
+      "url": "http://localhost:9000/mermaid-images/64bef5a5-5a4d-4673-81f9-2258ee326f0a.png"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In every JavaScript function, the creation process starts by defining a function name followed by parentheses. Parameters can be defined within these parentheses, acting as placeholders for values passed to the function. This foundational step encapsulates a series of instructions to form the complete function body, effectively making it a reusable code block for performing specific tasks within applications.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function usage\nconst sum = add(5, 7);\nconsole.log(sum); // Outputs: 12\n```\n",
+      "url": "http://localhost:9000/mermaid-images/b1571035-a31b-4e5d-b561-24417473629d.png"
+    },
+    {
+      "text": "Functions in JavaScript can be expressed in numerous ways, with arrow functions being one of the most concise and modern formats. Introduced in ES6, arrow functions allow for a shorter syntax, especially when dealing with single-return expression functions. Unlike traditional function expressions, arrow functions also handle the context of 'this' differently, which can be particularly beneficial in certain scenarios.",
+      "image_prompt": "# Arrow Functions in JavaScript\n\n```javascript\n// Arrow function\nconst multiply = (x, y) => x * y;\n\n// Function invocation\nconst result = multiply(4, 5);\nconsole.log(result); // Outputs: 20\n```\n",
+      "url": "http://localhost:9000/mermaid-images/a04cee7b-005d-45ab-b4a4-a8c2af585464.png"
+    },
+    {
+      "text": "Besides basic functions, JavaScript allows for the utilization of higher-order functions which can either take other functions as arguments or return a function as a result. This advanced technique is pivotal for operations like filtering, mapping, and reducing data collections, helping developers write more flexible and reusable code components. Mastering them opens the door to functional programming paradigms.",
+      "image_prompt": "# Higher-Order Functions\n\n```mermaid\nflowchart TD\n    A[Begin] --> B[Define Function]\n    B --> C{Is Higher-Order?}\n    C -->|Yes| D[Take/Return Function]\n    C -->|No| E[Regular Function]\n    D --> F[End]\n    E --> F\n```\n",
+      "url": "http://localhost:9000/mermaid-images/fdb4d2a6-b693-4e24-8c84-68013c442733.png"
+    },
+    {
+      "text": "Error handling in JavaScript functions is an essential skill to ensure robust and fault-tolerant applications. Using try-catch statements allows developers to gracefully handle unexpected issues within function operations. By anticipating possible errors and catching them, the code can respond appropriately, providing fallback operations or informative messages to users, thereby ensuring seamless execution flow.",
+      "image_prompt": "# Error Handling in Functions\n\n```javascript\nfunction safeDivide(a, b) {\n    try {\n        if (b === 0) throw new Error('Division by zero');\n        return a / b;\n    } catch (error) {\n        console.error('Error:', error.message);\n        return null;\n    }\n}\n\nconst quotient = safeDivide(10, 0);\nconsole.log(quotient); // Outputs: Error: Division by zero\n```\n",
+      "url": "http://localhost:9000/mermaid-images/7ac6e62e-72e9-4947-8f8f-5e681e144efc.png"
+    },
+    {
+      "text": "Incorporating async and await in JavaScript functions handles asynchronous tasks with ease. They provide a cleaner way to work with promises, making asynchronous code appear synchronous. By using async keyword before a function, it always returns a promise. The await keyword within the function pauses its execution until the promise settles, yielding more readable and manageable asynchronous operations.",
+      "image_prompt": "# Async/Await in JavaScript\n\n```javascript\nasync function fetchData(url) {\n    const response = await fetch(url);\n    const data = await response.json();\n    return data;\n}\n\n// Usage\nfetchData('https://api.example.com/data')\n    .then(data => console.log(data))\n    .catch(error => console.error('Error:', error));\n```\n",
+      "url": "http://localhost:9000/mermaid-images/518c78d7-f2f3-40b1-91cb-508a5aa5407b.png"
+    }
+  ]
+}

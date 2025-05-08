@@ -1,0 +1,36 @@
+1
+00:00:00,100 --> 00:00:05,400
+JavaScript functions can be applied in various real-world applications such as handling events
+
+2
+00:00:05,875 --> 00:00:07,312
+performing AJAX requests
+
+3
+00:00:07,625 --> 00:00:09,800
+and manipulating DOM elements
+
+4
+00:00:10,900 --> 00:00:18,837
+Understanding how to implement functions effectively can significantly enhance the interactivity and functionality of web applications
+
+5
+00:00:19,962 --> 00:00:22,000
+By using functions to separate logic
+
+6
+00:00:22,200 --> 00:00:23,900
+developers can create modular
+
+7
+00:00:24,163 --> 00:00:24,825
+testable
+
+8
+00:00:25,200 --> 00:00:26,337
+and reusable code
+
+9
+00:00:26,663 --> 00:00:32,000
+which is essential for maintaining large codebases and ensuring a seamless user experience
+

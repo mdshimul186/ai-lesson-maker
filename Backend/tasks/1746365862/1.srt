@@ -1,0 +1,24 @@
+1
+00:00:00,050 --> 00:00:00,738
+In this scene
+
+2
+00:00:01,163 --> 00:00:04,088
+we introduce the concept of JavaScript functions
+
+3
+00:00:04,463 --> 00:00:09,762
+explaining how they are essential blocks of code designed to perform specific tasks when called
+
+4
+00:00:10,162 --> 00:00:13,400
+The example function adds two numbers and returns the sum
+
+5
+00:00:13,775 --> 00:00:20,250
+Functions simplify complex operations by breaking them into manageable and reusable pieces
+
+6
+00:00:20,613 --> 00:00:25,188
+enabling organized and efficient code development in programming projects
+

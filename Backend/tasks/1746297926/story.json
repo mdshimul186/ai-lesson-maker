@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In the first scene, we will explore the basics of Docker. Docker is a platform designed to help developers build, share, and run applications in containers. Containers are lightweight, standalone, and executable software packages that include everything needed to run a piece of software, including the code, runtime, system tools, libraries, and settings.",
+      "image_prompt": "graph TD; A[Docker] --> B[Containers]; B --> C[Code]; B --> D[Runtime]; B --> E[System Tools]; B --> F[Libraries]; B --> G[Settings];",
+      "url": ""
+    },
+    {
+      "text": "In the second scene, we will examine the Docker architecture. Docker uses a client-server architecture. The Docker client communicates with the Docker daemon, which does the heavy lifting of building, running, and distributing the Docker containers. The Docker daemon is also known as the Docker Engine.",
+      "image_prompt": "graph LR; H[Docker Client] --> I[REST API]; I --> J[Docker Daemon]; J --> K[Build Containers]; J --> L[Run Containers]; J --> M[Distribute Containers];",
+      "url": ""
+    }
+  ]
+}

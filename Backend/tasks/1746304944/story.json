@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Welcome to our lecture on Docker! Docker is a platform designed to make it easier to create, deploy, and run applications by using containers. Containers allow developers to package up an application with all parts it needs, such as libraries and other dependencies, and ship it all out as one package. Today, we'll explore how Docker improves the software development lifecycle, optimizes resource management, and simplifies application deployment. By isolating applications in containers, Docker ensures consistent environments from development to production. This introduction will lay the foundation for understanding how Docker revolutionizes modern IT infrastructure.",
+      "image_prompt": "graph LR; A[Developer] --> B[Dockerfile]; B --> C[Build Image]; C --> D[Docker CLI]; D --> E[Docker Registry]; E --> F[Pull Image]; F --> G[Run Container]; G --> H[Application];",
+      "url": "http://localhost:9000/mermaid-images/68fc29cf-e099-4a07-88f9-76f4c14e5a30.png"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": true,
+  "scenes": [
+    {
+      "text": "In JavaScript, functions are first-class objects, meaning they can be stored in variables, passed as arguments to other functions, and returned from functions. This allows for powerful programming paradigms such as closures and higher-order functions. Understanding functions is fundamental, as they are a core building block for writing modular, maintainable, and reusable code.",
+      "image_prompt": "# JavaScript Function Example\n\n```javascript\n// Define a function\nfunction add(a, b) {\n    return a + b;\n}\n\n// Use the function\nconst sum = add(5, 10);\nconsole.log(sum); // Output: 15\n```\n\n### Function Components:\n\n| Component | Description |\n|-----------|-------------|\n| Definition | Creating a function with a name and parameters |\n| Return | Output a value from a function |\n| Invocation | Calling a function with arguments |",
+      "url": "http://minio:9000/mermaid-images/b5c774df-fe6d-4ce3-9c2b-3fd4abf441ec.png"
+    },
+    {
+      "text": "Higher-order functions are functions that take other functions as arguments or return functions as their result. This concept enhances flexibility and allows for abstracting out patterns that involve multiple behaviors or functionalities. It is a crucial feature that enables more functional programming within JavaScript, promoting cleaner and more concise code.",
+      "image_prompt": "### Higher-Order Functions Example\n\n```javascript\n// Higher-order function: takes a function as an argument\nfunction filter(arr, test) {\n    let result = [];\n    for (let element of arr) {\n        if (test(element)) {\n            result.push(element);\n        }\n    }\n    return result;\n}\n\n// Usage\nconst numbers = [1, 2, 3, 4, 5];\nconst evenNumbers = filter(numbers, x => x % 2 === 0);\nconsole.log(evenNumbers); // Output: [2, 4]\n```",
+      "url": "http://minio:9000/mermaid-images/1ed1686e-a32f-4eea-ad14-973f7c898e33.png"
+    },
+    {
+      "text": "Closures in JavaScript are a fundamental concept where an inner function has access to the variables of its outer function even after the outer function has executed. This allows for data encapsulation and is essential for callbacks and functional programming. Closures are powerful and allow for avoiding global state, thus keeping your code organized and maintainable.",
+      "image_prompt": "# JavaScript Closures\n\n```javascript\nfunction createCounter() {\n    let count = 0;\n    return function() {\n        count++;\n        return count;\n    };\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // Output: 1\nconsole.log(counter()); // Output: 2\n```\n\n### Closure Visualization:\n\n```mermaid\nflowchart TD\n    A[Function Execution] --> B[Outer Variables]\n    B --> C[Inner Function]\n    C -->|Has Access To| B\n```\n",
+      "url": "http://minio:9000/mermaid-images/88732967-7848-4d9d-969b-3fda02520c08.png"
+    }
+  ]
+}

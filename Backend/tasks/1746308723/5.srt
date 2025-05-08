@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:02,962
+Understanding the scope of a function is crucial
+
+2
+00:00:03,362 --> 00:00:05,412
+JavaScript uses lexical scoping
+
+3
+00:00:05,900 --> 00:00:11,425
+meaning the accessibility of variables is determined by the position of functions and blocks in code
+

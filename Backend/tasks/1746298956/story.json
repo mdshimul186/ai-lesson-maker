@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Welcome to the foundational lecture on Docker. In this lecture, we will explore the core concepts and components that make Docker a revolutionary platform in containerization. Docker is a powerful tool that allows developers to create, deploy, and run applications in isolated environments called containers. By understanding Docker's architecture, including the Docker Engine, Docker Hub, and Docker Compose, you can streamline your development and deployment processes, ensuring scalable and efficient application management.",
+      "image_prompt": "graph TD; A(Docker Architecture)-->B[Docker Engine]; A-->C[Docker Hub]; A-->D[Docker Compose]; B-->E[Containers]; C-->F[Public Repository]; D-->G[Multi-Container Applications];",
+      "url": ""
+    }
+  ]
+}

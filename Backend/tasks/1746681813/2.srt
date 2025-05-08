@@ -1,0 +1,28 @@
+1
+00:00:00,075 --> 00:00:06,838
+Constructors in JavaScript classes are special methods used to initialize newly created objects of that class
+
+2
+00:00:07,213 --> 00:00:09,250
+While creating a new instance of a class
+
+3
+00:00:09,500 --> 00:00:14,550
+the constructor method is invoked automatically to set up the initial state of the object
+
+4
+00:00:14,938 --> 00:00:17,712
+This includes setting any default values
+
+5
+00:00:17,925 --> 00:00:19,087
+binding functions
+
+6
+00:00:19,462 --> 00:00:22,712
+or performing other startup processes specific to that object
+
+7
+00:00:23,087 --> 00:00:29,688
+Utilizing constructors effectively allows developers to craft robust and flexible object setups
+

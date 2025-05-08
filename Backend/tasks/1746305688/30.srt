@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,400
+Tagging Docker Images
+
+2
+00:00:01,775 --> 00:00:05,475
+Importance and methodology behind tagging Docker images
+

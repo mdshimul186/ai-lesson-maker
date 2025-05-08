@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:04,175
+JavaScript functions are one of the fundamental building blocks of the language
+
+2
+00:00:05,287 --> 00:00:08,325
+They allow us to encapsulate code into reusable blocks
+
+3
+00:00:08,637 --> 00:00:11,562
+making our programs more modular and maintainable
+
+4
+00:00:12,550 --> 00:00:14,950
+Functions are first-class citizens in JavaScript
+
+5
+00:00:15,175 --> 00:00:17,200
+meaning they can be assigned to variables
+
+6
+00:00:17,550 --> 00:00:19,712
+passed as arguments to other functions
+
+7
+00:00:19,950 --> 00:00:21,587
+and returned from functions
+

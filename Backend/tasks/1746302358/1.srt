@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:03,075
+Docker is a platform designed to help developers build
+
+2
+00:00:03,450 --> 00:00:04,062
+manage
+
+3
+00:00:04,237 --> 00:00:07,162
+and secure applications in isolated containers
+
+4
+00:00:07,537 --> 00:00:10,312
+Containers ensure that software runs the same
+
+5
+00:00:10,738 --> 00:00:12,062
+regardless of the environment
+
+6
+00:00:12,438 --> 00:00:15,438
+whether it be your local PC or cloud infrastructure
+

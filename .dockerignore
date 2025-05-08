@@ -1,0 +1,5 @@
+# Docker ignores for project context
+# Exclude node modules to prevent large context and file mode errors
+**/node_modules
+npm-debug.log*
+.DS_Store

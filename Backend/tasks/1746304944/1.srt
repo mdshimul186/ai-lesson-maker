@@ -1,0 +1,56 @@
+1
+00:00:00,100 --> 00:00:02,100
+Welcome to our lecture on Docker
+
+2
+00:00:02,475 --> 00:00:05,475
+Docker is a platform designed to make it easier to create
+
+3
+00:00:05,662 --> 00:00:06,312
+deploy
+
+4
+00:00:06,325 --> 00:00:08,613
+and run applications by using containers
+
+5
+00:00:08,988 --> 00:00:13,050
+Containers allow developers to package up an application with all parts it needs
+
+6
+00:00:13,438 --> 00:00:15,312
+such as libraries and other dependencies
+
+7
+00:00:15,713 --> 00:00:17,900
+and ship it all out as one package
+
+8
+00:00:18,300 --> 00:00:18,675
+Today
+
+9
+00:00:19,087 --> 00:00:23,000
+we'll explore how Docker improves the software development lifecycle
+
+10
+00:00:23,438 --> 00:00:25,163
+optimizes resource management
+
+11
+00:00:25,425 --> 00:00:27,300
+and simplifies application deployment
+
+12
+00:00:27,688 --> 00:00:30,462
+By isolating applications in containers
+
+13
+00:00:30,712 --> 00:00:34,438
+Docker ensures consistent environments from development to production
+
+14
+00:00:34,825 --> 00:00:42,163
+This introduction will lay the foundation for understanding how Docker revolutionizes modern IT infrastructure
+

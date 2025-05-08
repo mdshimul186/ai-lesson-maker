@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Docker is a platform that simplifies developing, shipping, and running applications by using containerization. Containers allow developers to package an application with all its dependencies and configurations, ensuring consistency across various environments. In this lecture, we will explore the key concepts of Docker, including images, containers, Dockerfile, and Docker Compose. We will also discuss how Docker improves DevOps efficiency with faster deployments and easier scaling. Understanding Docker is crucial for modern software development and IT advancements.",
+      "image_prompt": "graph TD; A[Docker] --> B[Images]; A --> C[Containers]; B --> D[Dockerfile]; C --> E[Docker Compose]; C --> F[Container Orchestration]; D --> G[Build Process]; E --> H[Multiple Containers Management]; F --> I[Scalability and Deployment];",
+      "url": ""
+    }
+  ]
+}

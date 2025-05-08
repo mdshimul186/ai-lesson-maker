@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this introduction, we explore what JavaScript functions are and why they are fundamental concepts in programming. Functions are reusable blocks of code designed to perform a particular task. They help make programs modular and easier to manage.",
+      "image_prompt": "mindmap; root((JavaScript Functions)); Concept 1; Concept 2; Concept 3;",
+      "url": ""
+    },
+    {
+      "text": "Here we describe how to define a function. A function is usually defined using the 'function' keyword followed by a name, parameters, a set of instructions, and a return statement.",
+      "image_prompt": "flowchart TD; A[Begin] --> B[Define Function]; B --> C[Write Instructions]; C --> D[Return Value]; D --> E[End];",
+      "url": "http://localhost:9000/mermaid-images/93b6c084-427d-4984-8400-7f6432d4b7c1.png"
+    },
+    {
+      "text": "In this part, we examine how function invocation works. A function must be called or invoked to execute its code. This can be done by referencing the function's name with the required parameters if any.",
+      "image_prompt": "sequenceDiagram; participant User; participant Function; User->>Function: Call; Function-->>User: Response;",
+      "url": "http://localhost:9000/mermaid-images/8554bdfc-79df-4f6e-98d9-db48c0ac114e.png"
+    },
+    {
+      "text": "This section focuses on function parameters and returns. Functions can accept input values called parameters and can produce an output known as the return value.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Parameters Input]; B --> C[Function Execution]; C --> D[Return Output]; D --> E[End];",
+      "url": "http://localhost:9000/mermaid-images/213b2748-113e-4ec3-b44b-a549266a5349.png"
+    },
+    {
+      "text": "Here we discuss advanced concepts like function expressions and arrow functions, which offer alternative ways to write functions. Understanding these allows developers to write more concise and expressive code.",
+      "image_prompt": "gantt; title Function Conversions; dateFormat YYYY-MM-DD; section Function Forms; Function Declaration: A1, 1d; Function Expression: A2, after A1, 1d; Arrow Function: A3, after A2, 1d;",
+      "url": ""
+    }
+  ]
+}

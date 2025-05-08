@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In JavaScript, functions are fundamental building blocks. They allow you to encapsulate code and execute it wherever necessary. Let's start by understanding the three main types of function syntax in JavaScript.",
+      "image_prompt": "flowchart TD\n  A[Function Declaration] --> B[Function Expression]\n  B --> C[Arrow Function]",
+      "url": "http://localhost:9000/mermaid-images/3efa9965-11ed-483d-aac6-3fa2a714810b.png"
+    },
+    {
+      "text": "A function declaration is one way to define a function in JavaScript. It starts with the 'function' keyword followed by a unique name and is then invoked later in the program.",
+      "image_prompt": "stateDiagram-v2\n  [*] --> FunctionDeclaration\n  FunctionDeclaration --> GlobalScope\n  GlobalScope --> Usage\n  Usage --> [*]",
+      "url": "http://localhost:9000/mermaid-images/6a7abe64-1238-4628-b7f9-46c97b441411.png"
+    },
+    {
+      "text": "Function expressions allow you to define a function as part of an expression. These can be anonymous and are often used with callbacks.",
+      "image_prompt": "flowchart TD\n  A[Create Function Expression] --> B[Assign to Variable]\n  B --> C[Invoke Function]\n  C --> D[End]",
+      "url": "http://localhost:9000/mermaid-images/834687d9-fdec-4e8c-8d38-3fba93d992e7.png"
+    },
+    {
+      "text": "Arrow functions are a shorthand form of function expressions introduced in ES6. They provide a more concise syntax and handle the 'this' keyword differently.",
+      "image_prompt": "mindmap\n  root((Arrow Function))\n    Syntax\n      Single-line\n      Multi-line\n    Behavior\n      This Keyword\n      Conciseness\n    Use Cases",
+      "url": "http://localhost:9000/mermaid-images/123519fc-7b1d-496d-b4b9-85f6d035b703.png"
+    },
+    {
+      "text": "Understanding the scope of a function is crucial. JavaScript uses lexical scoping, meaning the accessibility of variables is determined by the position of functions and blocks in code.",
+      "image_prompt": "stateDiagram-v2\n  [*] --> GlobalScope\n  GlobalScope --> FunctionScope\n  FunctionScope --> LocalScope\n  LocalScope --> [*]",
+      "url": "http://localhost:9000/mermaid-images/5abb3bfc-8334-4b1d-a23f-6a32024d0088.png"
+    }
+  ]
+}

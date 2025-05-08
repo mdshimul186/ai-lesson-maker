@@ -1,0 +1,44 @@
+1
+00:00:00,100 --> 00:00:06,250
+Prototypes are fundamental to JavaScript's memory-efficient method sharing across instances
+
+2
+00:00:06,638 --> 00:00:07,513
+In classes
+
+3
+00:00:07,675 --> 00:00:10,537
+static methods enable shared functionality
+
+4
+00:00:10,887 --> 00:00:13,312
+distinct from instance-specific methods
+
+5
+00:00:13,700 --> 00:00:15,725
+Unlike traditional prototype methods
+
+6
+00:00:15,975 --> 00:00:18,712
+static methods are called on the class itself
+
+7
+00:00:19,137 --> 00:00:20,438
+rather than its instances
+
+8
+00:00:20,837 --> 00:00:25,225
+This distinction is crucial for actions pertinent to the class as a whole
+
+9
+00:00:25,663 --> 00:00:27,825
+rather than any individual instance
+
+10
+00:00:28,225 --> 00:00:29,925
+By leveraging static methods
+
+11
+00:00:30,275 --> 00:00:34,013
+developers can encapsulate class-specific behavior cohesively
+

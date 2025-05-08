@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:06,225
+JavaScript classes include methods that define actions the objects created from the class can perform
+
+2
+00:00:06,625 --> 00:00:12,037
+The use of static methods and getters/setters further enhances class functionality
+
+3
+00:00:12,400 --> 00:00:15,387
+Static methods are called on the class itself
+
+4
+00:00:15,787 --> 00:00:20,562
+whereas getters and setters offer a way to intercept property access and assignments
+
+5
+00:00:20,950 --> 00:00:26,137
+making class usage more intuitive and safer by providing controlled access to properties
+

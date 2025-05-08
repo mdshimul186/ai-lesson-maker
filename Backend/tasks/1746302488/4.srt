@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,000
+Docker Images
+
+2
+00:00:01,387 --> 00:00:07,700
+Explore how Docker images present a set of layers that are stacked on top of each other to form a container file system
+

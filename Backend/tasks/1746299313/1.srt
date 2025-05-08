@@ -1,0 +1,48 @@
+1
+00:00:00,100 --> 00:00:01,850
+Welcome to the world of Docker
+
+2
+00:00:02,212 --> 00:00:07,112
+where we streamline the process of deploying and managing applications in containers
+
+3
+00:00:07,500 --> 00:00:13,275
+Unlike traditional VM  Virtual Machine  approaches that require significant resources
+
+4
+00:00:13,650 --> 00:00:16,400
+Docker provides a lightweight and portable solution
+
+5
+00:00:16,812 --> 00:00:20,637
+enabling developers to package applications and dependencies cyclically
+
+6
+00:00:21,012 --> 00:00:26,600
+Imagine running your application comfortably in a consistent environment across different machines
+
+7
+00:00:26,812 --> 00:00:28,125
+from development to production
+
+8
+00:00:28,587 --> 00:00:31,312
+making collaborations and deployments efficient
+
+9
+00:00:31,700 --> 00:00:32,925
+In this introductory scene
+
+10
+00:00:33,175 --> 00:00:37,763
+we'll get a high-level overview of Docker's core concepts including Docker Image
+
+11
+00:00:37,975 --> 00:00:38,800
+Docker Container
+
+12
+00:00:39,075 --> 00:00:39,925
+and the Docker Engine
+

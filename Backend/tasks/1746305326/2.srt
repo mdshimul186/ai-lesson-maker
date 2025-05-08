@@ -1,0 +1,24 @@
+1
+00:00:00,100 --> 00:00:01,175
+Docker Architecture
+
+2
+00:00:01,625 --> 00:00:03,925
+Docker uses a client-server architecture
+
+3
+00:00:04,312 --> 00:00:06,963
+The Docker client communicates with the Docker daemon
+
+4
+00:00:07,338 --> 00:00:08,963
+which is responsible for building
+
+5
+00:00:09,225 --> 00:00:09,662
+running
+
+6
+00:00:09,925 --> 00:00:11,588
+and managing Docker containers
+

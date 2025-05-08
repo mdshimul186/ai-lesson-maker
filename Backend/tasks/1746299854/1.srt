@@ -1,0 +1,44 @@
+1
+00:00:00,087 --> 00:00:00,863
+In this lecture
+
+2
+00:00:01,312 --> 00:00:02,837
+we will explore Docker
+
+3
+00:00:03,288 --> 00:00:05,638
+a powerful tool used for containerization
+
+4
+00:00:06,062 --> 00:00:12,537
+enabling developers to package applications with all their dependencies into a standardized unit for software development
+
+5
+00:00:12,925 --> 00:00:15,537
+We will cover key concepts such as Docker images
+
+6
+00:00:15,725 --> 00:00:16,475
+containers
+
+7
+00:00:16,700 --> 00:00:17,425
+Dockerfile
+
+8
+00:00:17,438 --> 00:00:18,075
+and Docker Hub
+
+9
+00:00:18,450 --> 00:00:22,712
+You'll learn how these components work together to streamline the development process
+
+10
+00:00:23,087 --> 00:00:25,500
+ensure consistency across environments
+
+11
+00:00:25,762 --> 00:00:27,312
+and enhance scalability
+

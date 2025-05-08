@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript classes provide a much-needed syntactic sugar over JavaScript's existing prototype-based inheritance model. They help organize code into reusable components, fostering ease of development and maintenance. Understanding JavaScript classes is crucial for creating complex and scalable applications, as they allow encapsulation of data and behavior using methods and properties.",
+      "image_prompt": "# JavaScript Classes Overview\n\n```mermaid\nclassDiagram\n    class Person {\n      +String name\n      +int age\n      +greet()\n    }\n    class Student {\n      +String studentID\n      +study()\n    }\n    Person <|-- Student\n```\n\n### Key Features:\n\n| Feature   | Description                     |\n|-----------|---------------------------------|\n| Inheritance | Allows classes to inherit properties and methods from other classes |\n| Encapsulation | Bundles data and methods within classes |\n| Reusability | Promotes code reuse through class instances |",
+      "url": "http://localhost:9000/mermaid-images/e1fedc08-7b47-46e9-b568-42e5209c0921.png"
+    }
+  ]
+}

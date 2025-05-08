@@ -1,0 +1,32 @@
+1
+00:00:00,075 --> 00:00:00,900
+In this first scene
+
+2
+00:00:01,325 --> 00:00:06,575
+we explore a simple JavaScript function designed to handle basic mathematical operations
+
+3
+00:00:06,963 --> 00:00:08,713
+We introduce a function that can add
+
+4
+00:00:08,963 --> 00:00:09,675
+subtract
+
+5
+00:00:09,912 --> 00:00:10,713
+multiply
+
+6
+00:00:10,938 --> 00:00:13,225
+and divide two numbers provided by the user
+
+7
+00:00:13,600 --> 00:00:19,637
+This function is vital as it provides the foundational understanding of how functions operate under the hood
+
+8
+00:00:20,062 --> 00:00:22,863
+enabling developers to perform tasks efficiently
+

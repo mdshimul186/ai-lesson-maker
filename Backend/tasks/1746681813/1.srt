@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:07,050
+JavaScript classes are primarily syntactic sugar over JavaScript's existing prototype-based inheritance
+
+2
+00:00:07,438 --> 00:00:15,675
+They provide a clearer and more recognizable syntax for object-oriented programming that is familiar to developers from other languages
+
+3
+00:00:16,075 --> 00:00:18,387
+JavaScript classes can contain properties
+
+4
+00:00:18,625 --> 00:00:19,387
+methods
+
+5
+00:00:19,550 --> 00:00:20,400
+constructors
+
+6
+00:00:20,587 --> 00:00:21,625
+and static methods
+
+7
+00:00:21,988 --> 00:00:26,188
+offering a more structured way to create and manage objects and their behaviors
+

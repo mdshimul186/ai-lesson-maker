@@ -1,0 +1,36 @@
+1
+00:00:00,075 --> 00:00:00,975
+In the second scene
+
+2
+00:00:01,250 --> 00:00:05,425
+we explore how functions are an integral part of JavaScript's versatility
+
+3
+00:00:05,812 --> 00:00:09,000
+particularly in the realm of asynchronous programming
+
+4
+00:00:09,400 --> 00:00:11,250
+By delving into callback functions
+
+5
+00:00:11,488 --> 00:00:12,275
+promises
+
+6
+00:00:12,525 --> 00:00:14,375
+and the async/await pattern
+
+7
+00:00:14,887 --> 00:00:20,800
+we uncover how JavaScript handles asynchronous operations such as API calls and event handling
+
+8
+00:00:21,200 --> 00:00:29,050
+Mastery of these concepts enables developers to build responsive applications that efficiently handle multiple tasks concurrently
+
+9
+00:00:29,512 --> 00:00:32,312
+adhering to the language’s non-blocking nature
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we will explore the basics of JavaScript functions, focusing on how they are defined and their usage in coding. Functions are building blocks in programming, allowing us to encapsulate code for reusability and clarity. This scene introduces the syntax for declaring a function and demonstrates calling it with appropriate arguments, exemplifying how functions improve code structure by preventing redundancy.",
+      "image_prompt": "# JavaScript Function Example\n\n```javascript\n// Define a simple function to add two numbers\nfunction add(a, b) {\n    return a + b;\n}\n\n// Use the function\nconst sum = add(5, 7);\nconsole.log('Sum:', sum); // Output: Sum: 12\n```",
+      "url": ""
+    },
+    {
+      "text": "This scene illustrates how modular code is structured using a flowchart. The process involves starting with a defined entry point, proceeding through logical steps to achieve a specified outcome. This visualization helps in understanding the sequence and decisions made within the code. The flowchart showcases the journey from initialization to different actions based on conditions, providing a visual representation of how decisions affect code execution pathways in programming.",
+      "image_prompt": "flowchart TD\n    A[Start] --> B[Initialize]\n    B --> C{Input Valid?}\n    C -->|Yes| D[Process Data]\n    C -->|No| E[Handle Error]\n    D --> F[Output Result]\n    E --> F\n    F --> G[End]",
+      "url": ""
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+1
+00:00:00,087 --> 00:00:00,838
+In this lecture
+
+2
+00:00:01,250 --> 00:00:02,500
+we will explore Docker
+
+3
+00:00:02,938 --> 00:00:05,225
+a platform designed to help developers build
+
+4
+00:00:05,463 --> 00:00:06,138
+deploy
+
+5
+00:00:06,350 --> 00:00:08,338
+and run applications within containers
+
+6
+00:00:08,725 --> 00:00:14,363
+Docker containers allow applications to run consistently across different environments
+
+7
+00:00:14,787 --> 00:00:16,913
+reducing the 'it works on my machine' problem
+
+8
+00:00:17,312 --> 00:00:19,738
+This scene will cover the key components of Docker
+
+9
+00:00:20,125 --> 00:00:21,400
+including Docker Engine
+
+10
+00:00:21,675 --> 00:00:22,625
+Docker Images
+
+11
+00:00:22,637 --> 00:00:23,800
+and Docker Containers
+
+12
+00:00:24,062 --> 00:00:28,050
+and discuss how they work together to streamline the application deployment process
+

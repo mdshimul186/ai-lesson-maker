@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:02,438
+JavaScript classes support inheritance
+
+2
+00:00:02,663 --> 00:00:05,612
+which allows one class to extend another class
+
+3
+00:00:06,013 --> 00:00:11,900
+This means that you can create a new class that inherits the properties and methods of an existing class
+
+4
+00:00:12,287 --> 00:00:16,875
+and you can add or override existing functionality to suit specific needs
+
+5
+00:00:17,262 --> 00:00:21,788
+Inheritance in JavaScript is implemented using the `extends` keyword
+

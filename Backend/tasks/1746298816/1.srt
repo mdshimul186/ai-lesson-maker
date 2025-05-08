@@ -1,0 +1,36 @@
+1
+00:00:00,087 --> 00:00:01,375
+Introduction to Docker
+
+2
+00:00:01,887 --> 00:00:02,513
+In this scene
+
+3
+00:00:03,062 --> 00:00:05,088
+we will explore the fundamentals of Docker
+
+4
+00:00:05,312 --> 00:00:07,700
+which is a platform designed to help developers build
+
+5
+00:00:07,975 --> 00:00:08,387
+ship
+
+6
+00:00:08,637 --> 00:00:11,875
+and run applications in a standardized unit called a container
+
+7
+00:00:12,262 --> 00:00:20,788
+Docker enables efficient resource utilization by isolating applications in containers that use the same underlying OS kernel
+
+8
+00:00:21,188 --> 00:00:26,562
+This makes it easy for applications to run consistently across different environments
+
+9
+00:00:26,788 --> 00:00:28,312
+from development to production
+

@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:00,537
+Next
+
+2
+00:00:00,762 --> 00:00:02,413
+we discuss how to declare a function
+
+3
+00:00:02,775 --> 00:00:03,663
+In JavaScript
+
+4
+00:00:03,900 --> 00:00:06,375
+functions can be declared using the function keyword
+
+5
+00:00:06,750 --> 00:00:09,500
+followed by a name and a set of parentheses
+

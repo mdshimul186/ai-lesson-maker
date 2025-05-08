@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:04,787
+A Dockerfile is a text document that contains all the commands to assemble an image
+
+2
+00:00:05,188 --> 00:00:08,975
+It automates the deployment of applications inside containers
+

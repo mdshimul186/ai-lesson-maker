@@ -1,0 +1,20 @@
+1
+00:00:00,075 --> 00:00:03,212
+We explore different types of functions in JavaScript
+
+2
+00:00:03,462 --> 00:00:05,350
+including function declarations
+
+3
+00:00:05,562 --> 00:00:06,450
+expressions
+
+4
+00:00:06,625 --> 00:00:08,012
+and arrow functions
+
+5
+00:00:08,425 --> 00:00:13,325
+each offering unique syntax and characteristics suitable for varying scenarios
+

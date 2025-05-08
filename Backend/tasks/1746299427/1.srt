@@ -1,0 +1,44 @@
+1
+00:00:00,075 --> 00:00:03,075
+Docker is a platform that enables developers to build
+
+2
+00:00:03,312 --> 00:00:04,025
+deploy
+
+3
+00:00:04,175 --> 00:00:06,237
+and manage applications in containers
+
+4
+00:00:06,638 --> 00:00:08,213
+Containers are lightweight
+
+5
+00:00:08,438 --> 00:00:09,062
+portable
+
+6
+00:00:09,262 --> 00:00:11,425
+and virtualized runtime environments
+
+7
+00:00:11,800 --> 00:00:15,562
+allowing you to run software consistently across environments
+
+8
+00:00:15,950 --> 00:00:18,500
+This scene will cover the basic concepts of Docker
+
+9
+00:00:18,875 --> 00:00:19,975
+including images
+
+10
+00:00:19,988 --> 00:00:20,837
+containers
+
+11
+00:00:21,038 --> 00:00:22,312
+and the Docker architecture
+

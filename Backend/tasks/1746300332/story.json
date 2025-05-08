@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Docker is an open platform for developing, shipping, and running applications. It allows developers to package applications into containers—standardized executable components that combine application source code with the operating system (OS) libraries and dependencies required to run that code in any environment. Here are the core concepts of Docker: Docker Container, Docker Image, Dockerfile, Docker Hub, and Docker Compose.",
+      "image_prompt": "graph TD; A(Docker) --> B(Docker Container); A --> C(Docker Image); A --> D(Dockerfile); A --> E(Docker Hub); A --> F(Docker Compose);",
+      "url": "http://localhost:9000/mermaid-images/d2d853de-797a-47d1-bec8-2c5440cac633.png"
+    }
+  ]
+}

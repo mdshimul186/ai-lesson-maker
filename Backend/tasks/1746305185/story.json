@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "This lecture covers the fundamentals of Docker, a platform designed to help developers build, deploy, and run applications using containers. Containers allow a developer to package an application with all the necessary parts, such as libraries and dependencies, and ship it all out as one package. With Docker, you can ensure that the application will behave the same regardless of the environment it's running in.",
+      "image_prompt": "graph TD; A[Developer] --> B(Docker CLI); B --> C[Docker Daemon]; C --> D[Docker Containers]; D --> E[Application Code]; D --> F[Libraries & Dependencies]; E --> G[Execution Environment]; F --> G;",
+      "url": "http://localhost:9000/mermaid-images/e6910554-8e0f-4f88-aa1a-818d78a825a7.png"
+    }
+  ]
+}

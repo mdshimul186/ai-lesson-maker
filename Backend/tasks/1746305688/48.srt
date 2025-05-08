@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,962
+Orchestrating Large Scale Applications with Docker
+
+2
+00:00:03,362 --> 00:00:05,912
+Techniques for managing large applications
+

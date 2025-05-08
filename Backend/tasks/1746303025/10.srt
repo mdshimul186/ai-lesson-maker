@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,700
+Advanced Docker Concepts
+
+2
+00:00:01,962 --> 00:00:07,325
+Brief on scaling applications using Docker Swarm and Kubernetes for orchestration
+

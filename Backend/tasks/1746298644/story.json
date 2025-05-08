@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this lecture on Docker, we will explore the core concepts and architecture of Docker, an essential tool for modern software development and deployment. Docker is a platform designed to facilitate the creation, deployment, and execution of applications using containers. Containers provide a lightweight and efficient alternative to traditional virtual machines, allowing developers to package an application with all its dependencies into a standardized unit for software development. The lecture will cover how Docker streamlines the development process, enhances collaboration, and simplifies the deployment of applications across different environments.",
+      "image_prompt": "graph TD; A(Docker Host) --> B(Docker Engine); B --> C{Docker Daemon}; C --> D[Container 1]; C --> E[Container 2]; C --> F[Container 3]; G(Docker CLI) --> C; C --> H{Docker API}; H --> I[Docker Hub]",
+      "url": ""
+    }
+  ]
+}

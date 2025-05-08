@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:02,300
+Introduction to JavaScript Functions
+
+2
+00:00:02,688 --> 00:00:05,787
+Functions are fundamental building blocks in JavaScript
+
+3
+00:00:06,188 --> 00:00:09,875
+They are sets of statements that perform tasks or calculate values
+
+4
+00:00:10,262 --> 00:00:10,950
+In this scene
+
+5
+00:00:11,412 --> 00:00:15,262
+we'll briefly introduce what a function is and its role in programming
+

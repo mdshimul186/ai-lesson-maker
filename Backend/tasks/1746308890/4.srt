@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:01,438
+Execution Phase
+
+2
+00:00:01,887 --> 00:00:03,375
+Implementing the project plan
+
+3
+00:00:03,750 --> 00:00:04,500
+team management
+
+4
+00:00:04,775 --> 00:00:05,725
+and communication
+

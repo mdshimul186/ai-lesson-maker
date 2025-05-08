@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we are going to discuss the basics of JavaScript functions. Functions are fundamental building blocks in JavaScript. You will learn how to declare a function, pass arguments to it, and return values. Functions help modularize and reuse code efficiently which is a key concept in writing maintainable and clean code.",
+      "image_prompt": "# Function Declaration and Usage in JavaScript\n\n```javascript\n// Function to add two numbers\nfunction addNumbers(a, b) {\n    return a + b;\n}\n\n// Calling the function\nconst sum = addNumbers(5, 7);\nconsole.log('Sum:', sum); // Expected output: Sum: 12\n```",
+      "url": "http://localhost:9000/mermaid-images/dc3cd1a7-aa6d-4c44-973c-fe8c540db5b2.png"
+    },
+    {
+      "text": "This scene delves into the concept of flow control using conditional statements in JavaScript. We will explore how decisions are made in programs to execute specific code blocks. Understanding how to correctly use 'if', 'else if', and 'else' statements will greatly enhance your ability to write dynamic, flexible code that can handle various conditions and scenarios.",
+      "image_prompt": "flowchart TD\n    A[Start] --> B{Is it raining?}\n    B -->|Yes| C[Take an umbrella]\n    B -->|No| D[Enjoy the sunny day]\n    C --> E[Proceed to destination]\n    D --> E",
+      "url": "http://localhost:9000/mermaid-images/53510480-bff3-4abf-8136-7bbb25ba8cb8.png"
+    }
+  ]
+}

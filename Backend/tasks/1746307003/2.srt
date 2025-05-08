@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:03,288
+Scene 2 explains function declaration and syntax
+
+2
+00:00:03,675 --> 00:00:04,537
+In JavaScript
+
+3
+00:00:04,763 --> 00:00:07,150
+a function is defined with the function keyword
+
+4
+00:00:07,400 --> 00:00:08,512
+followed by a name
+
+5
+00:00:08,738 --> 00:00:09,562
+parentheses
+
+6
+00:00:09,787 --> 00:00:11,988
+and a block of code between curly braces
+
+7
+00:00:12,375 --> 00:00:16,962
+Parameters can be added inside the parentheses to allow passing of arguments
+

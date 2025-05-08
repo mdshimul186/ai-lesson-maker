@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:02,300
+Introduction to JavaScript Classes
+
+2
+00:00:02,763 --> 00:00:05,100
+Learn the basics of classes in JavaScript
+
+3
+00:00:05,300 --> 00:00:07,037
+which are templates for creating objects
+
+4
+00:00:07,412 --> 00:00:09,887
+Understand the syntax for defining a class
+
+5
+00:00:10,275 --> 00:00:12,750
+and the key components such as the constructor method
+

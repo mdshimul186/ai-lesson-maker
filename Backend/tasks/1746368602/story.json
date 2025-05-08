@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this chapter, we will learn how to create a simple JavaScript function that adds two numbers. Understanding functions is crucial as they allow us to encapsulate code, so it can be reused with different inputs throughout our programs. We will also look at how to call these functions and capture their return values in variables to use them later. This foundational knowledge forms the basis for all further programming tasks.",
+      "image_prompt": "# JavaScript Function Example\n\n```javascript\n// Simple addition function\nfunction add(a, b) {\n    // Return the sum of a and b\n    return a + b;\n}\n\n// Function usage\nconst sum = add(5, 10);\nconsole.log('Sum:', sum);  // Outputs: Sum: 15\n```\n",
+      "url": "http://localhost:9000/mermaid-images/b84846c6-e3a5-4abc-8ad9-77219fd92dd7.png"
+    },
+    {
+      "text": "Now that we have created a basic function, let's understand the flow of function execution within a program. This scene covers the lifecycle of a function call, from its invocation to the return of its result. Comprehending this process will aid in debugging and optimizing code, as well as building more complex functions effectively.",
+      "image_prompt": "sequenceDiagram\n    participant Programmer\n    participant Function\n    participant Console\n    Programmer->>Function: add(5, 10)\n    Function-->>Programmer: return 15\n    Programmer->>Console: log('Sum:', 15)\n    Console-->>Programmer: Outputs Sum: 15",
+      "url": "http://localhost:9000/mermaid-images/85aee792-2f99-4afb-8fc8-09eb06f42b97.png"
+    }
+  ]
+}

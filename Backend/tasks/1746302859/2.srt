@@ -1,0 +1,28 @@
+1
+00:00:00,075 --> 00:00:00,787
+Scene 2
+
+2
+00:00:01,325 --> 00:00:05,112
+Docker Architecture - This scene explores Docker's architecture
+
+3
+00:00:05,500 --> 00:00:07,963
+including its main components such as the Docker Engine
+
+4
+00:00:08,363 --> 00:00:09,287
+Docker Images
+
+5
+00:00:09,450 --> 00:00:10,213
+Containers
+
+6
+00:00:10,412 --> 00:00:11,262
+and the Docker Hub
+
+7
+00:00:11,637 --> 00:00:17,400
+Understand how these elements interact to enable efficient application development and deployment
+

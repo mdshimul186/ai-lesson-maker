@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Docker is a popular platform as a service (PaaS) product that utilizes OS-level virtualization to deliver software in packages called containers. Containers are isolated, with their own software, libraries, and configuration files, but they can communicate with each other through well-defined channels. By using Docker, developers can automate the deployment of applications inside lightweight, portable containers that can run consistently on various environments.",
+      "image_prompt": "graph LR; A{Docker} --> B[Containers] --> C[Applications]; A --> D[Virtualization] --> E[Isolation and Portability];",
+      "url": "http://localhost:9000/mermaid-images/f177e20e-d17c-48ae-8627-00e7eeaa89b5.png"
+    }
+  ]
+}

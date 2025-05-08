@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture how project managemnt works ",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Project Management: Overview, scope, and significance.",
+      "image_prompt": "mindmap\n  root((Project Management))\n    Definition\n    Scope\n    Importance",
+      "url": "http://localhost:9000/mermaid-images/b3d40973-9d0b-401d-ae30-296cd9d7fe31.png"
+    },
+    {
+      "text": "Initiation Phase: Setting objectives, identifying key stakeholders, and outlining scope.",
+      "image_prompt": "flowchart TD\n  A[Start] --> B[Identify Objectives]\n  B --> C[Identify Stakeholders]\n  C --> D[Outline Scope]\n  D --> E[End]",
+      "url": "http://localhost:9000/mermaid-images/8fc75b16-25b9-42fd-a5af-188c3bb0897a.png"
+    },
+    {
+      "text": "Planning Phase: Developing schedule, resources, and risk management strategies.",
+      "image_prompt": "gantt\n  title Planning Schedule\n  dateFormat YYYY-MM-DD\n  section Planning Tasks\n  Schedule :a1, 2024-02-01, 20d\n  Resources :a2, after a1, 15d\n  Risk Management :a3, after a2, 10d",
+      "url": "http://localhost:9000/mermaid-images/6477349c-d693-47a4-99fc-fe23806e77fd.png"
+    },
+    {
+      "text": "Execution Phase: Implementing the project plan, team management, and communication.",
+      "image_prompt": "sequenceDiagram\n  participant ProjectManager\n  participant Team\n  ProjectManager->>Team: Assign Tasks\n  Team-->>ProjectManager: Provide Updates",
+      "url": "http://localhost:9000/mermaid-images/b775366b-a7f4-4e79-8abd-fe2ebe244b89.png"
+    },
+    {
+      "text": "Monitoring and Controlling Phase: Tracking project progress and making necessary adjustments.",
+      "image_prompt": "stateDiagram-v2\n  [*] --> Planning\n  Planning --> Execution\n  Execution --> Monitoring\n  Monitoring --> Controlling\n  Controlling --> [*]",
+      "url": "http://localhost:9000/mermaid-images/8aa42e07-1db4-4d7c-8560-b80603ef3ac7.png"
+    },
+    {
+      "text": "Closure Phase: Completing tasks, obtaining acceptance, and formally closing the project.",
+      "image_prompt": "flowchart TD\n  A[Start] --> B[Complete Tasks]\n  B --> C[Obtain Acceptance]\n  C --> D[Formal Closure]\n  D --> E[End]",
+      "url": "http://localhost:9000/mermaid-images/bee773bd-0cae-4680-b1ba-8d13e9c951cb.png"
+    },
+    {
+      "text": "Project Lifecycle: Understanding the stages from conception to completion.",
+      "image_prompt": "mindmap\n  root((Project Lifecycle))\n    Initiation\n    Planning\n    Execution\n    Monitoring\n    Closure",
+      "url": "http://localhost:9000/mermaid-images/6dba4842-84bb-4175-9f0a-95c64ad05323.png"
+    },
+    {
+      "text": "Role of Project Manager: Responsibilities, skills required, and leadership.",
+      "image_prompt": "mindmap\n  root((Project Manager))\n    Responsibilities\n    Skills\n    Leadership",
+      "url": "http://localhost:9000/mermaid-images/16ded748-c0d0-44ff-be6c-60a04c225c30.png"
+    },
+    {
+      "text": "Risk Management: Identifying, analyzing, and responding to project risks.",
+      "image_prompt": "flowchart TD\n  A[Start] --> B[Identify Risks]\n  B --> C[Analyze Risks]\n  C --> D[Respond to Risks]\n  D --> E[End]",
+      "url": "http://localhost:9000/mermaid-images/32a9e5c4-458d-4cc9-ab58-8bbb4d73c973.png"
+    },
+    {
+      "text": "Tools and Techniques: Overview of methodologies like Agile, Waterfall, and tools like Gantt Charts.",
+      "image_prompt": "mindmap\n  root((Tools and Techniques))\n    Methodologies\n      Agile\n      Waterfall\n    Tools\n      Gantt Charts\n      Kanban",
+      "url": "http://localhost:9000/mermaid-images/01b26595-e33d-44b5-be08-048084a0c587.png"
+    }
+  ]
+}

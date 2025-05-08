@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Scene 1 introduces JavaScript functions. A function is a block of code designed to perform a particular task and is executed when it is called or invoked. Functions help in organizing and reuse code, making programs more efficient and manageable.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Define Function]; B --> C[Invoke Function]; C --> D[Function Execution]; D --> E[End];",
+      "url": "http://localhost:9000/mermaid-images/ae088ece-d70d-413b-8f8b-0b119028a639.png"
+    },
+    {
+      "text": "Scene 2 explains function declaration and syntax. In JavaScript, a function is defined with the function keyword, followed by a name, parentheses, and a block of code between curly braces. Parameters can be added inside the parentheses to allow passing of arguments.",
+      "image_prompt": "sequenceDiagram; actor User; participant JavaScript; User->>JavaScript: Declare function; JavaScript-->>User: function greet(){...};",
+      "url": "http://localhost:9000/mermaid-images/08e90e50-51d3-4642-9b5d-4ccd11851138.png"
+    },
+    {
+      "text": "Scene 3 covers function expressions. Unlike declarations, function expressions can be defined as part of a larger expression. They are not hoisted, meaning they cannot be called before being defined.",
+      "image_prompt": "classDiagram; class FunctionExpression{+greet : function; +execute()};",
+      "url": ""
+    },
+    {
+      "text": "Scene 4 explores the concept of function return values. Functions can return a value back to the caller using the return statement. This allows the result of the function to be stored in a variable or used in further expressions.",
+      "image_prompt": "flowchart TD; A[Function Call] --> B[Function Execution]; B --> C{Return Value?}; C -- Yes --> D[Pass value to caller]; C -- No --> E[Return undefined];",
+      "url": "http://localhost:9000/mermaid-images/b85564b9-240b-42eb-9c1c-5f15d2016fee.png"
+    },
+    {
+      "text": "Scene 5 demonstrates anonymous functions and arrow functions. Anonymous functions don't have a name and are useful when a function is to be used only once. Arrow functions provide a concise syntax and do not have their own 'this' context.",
+      "image_prompt": "journey\n    title Anonymous And Arrow Functions\n    section Anonymous Functions\n      User: --> Use once\n      User: --> Combine with other code\n    section Arrow Functions\n      User: --> Simplified syntax\n      User: --> Context binding;",
+      "url": ""
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+1
+00:00:00,075 --> 00:00:00,912
+In this first scene
+
+2
+00:00:01,337 --> 00:00:04,300
+we will explore the basics of functions in JavaScript
+
+3
+00:00:04,525 --> 00:00:11,162
+which are essential building blocks in programming that allow us to encapsulate code for reuse and improve readability
+
+4
+00:00:11,550 --> 00:00:19,650
+Understanding how to declare and invoke functions forms the foundation upon which more complex programming concepts are built
+
+5
+00:00:20,050 --> 00:00:26,725
+We will also take a look at the syntax and proper usage of functions to ensure code efficiency and clarity
+

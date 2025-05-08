@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In the first scene of our JavaScript lesson plan, we will delve into the basics of JavaScript functions. This includes understanding what a function is, how to define it, and the significance of arguments and return values. We will illustrate this with a simple function declaration and usage example, which will aid in grasping the essential syntax and logic. This foundational knowledge is vital for developing functional applications effectively.",
+      "image_prompt": "# JavaScript Function Basics\n```javascript\n// Function definition\nfunction addNumbers(a, b) {\n    return a + b; // Returns the sum of two numbers\n}\n\n// Using the function\nconst result = addNumbers(5, 10);\nconsole.log(result); // Output: 15\n```",
+      "url": "http://localhost:9000/mermaid-images/d5234175-f2da-463a-ae05-e4ed8d731af5.png"
+    },
+    {
+      "text": "In the second scene of the lecture, we'll explore JavaScript flow control structures, which determine the order of execution in a program. We'll focus on conditional statements that allow executing different blocks of code based on certain conditions. This section will provide a clear understanding of how logical operations are interwoven with conditions, helping make the application decision-process dynamic and interactive.",
+      "image_prompt": "flowchart TD\n    Start[Start] --> Check{Condition}\n    Check -->|true| Execute[Execute Block A]\n    Execute --> End1[End]\n    Check -->|false| Execute2[Execute Block B]\n    Execute2 --> End2[End]",
+      "url": "http://localhost:9000/mermaid-images/48fc57c5-c8f5-4945-90b0-642ad4dc6e47.png"
+    }
+  ]
+}

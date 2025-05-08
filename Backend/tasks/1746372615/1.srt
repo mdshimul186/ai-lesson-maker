@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:08,488
+The concept of function declarations and expressions in JavaScript is pivotal for understanding how scripts execute and manage tasks
+
+2
+00:00:08,887 --> 00:00:13,775
+Functions are blocks of code that can be defined once and reused throughout a program
+
+3
+00:00:14,175 --> 00:00:15,225
+facilitating cleaner
+
+4
+00:00:15,625 --> 00:00:16,500
+modular design
+
+5
+00:00:16,887 --> 00:00:22,637
+They can be declared using traditional syntax or defined anonymously and assigned to variables
+
+6
+00:00:23,038 --> 00:00:28,550
+This versatility allows developers to use functions as first-class objects in JavaScript
+
+7
+00:00:29,038 --> 00:00:32,900
+leading to diverse patterns like callbacks and higher-order functions
+

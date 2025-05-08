@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Docker is a platform for developing, shipping, and running applications inside lightweight containers. Unlike virtual machines, Docker containers run on the host OS, which makes them start quickly and use fewer resources. This is an introduction to Docker where we discuss its core components: images, containers, and the Docker daemon.",
+      "image_prompt": "graph TD; A[Docker] --> B[Images]; A --> C[Containers]; A --> D[Docker Daemon]; B --> E[Create]; C --> F[Run]; D --> G[Manage]",
+      "url": ""
+    }
+  ]
+}

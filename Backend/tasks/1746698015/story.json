@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "In JavaScript, functions are one of the fundamental building blocks. A function is a JavaScript procedure—a set of statements performing a task or calculating a value. It allows code reuse and logical categorization of operations. Functions can be declared, expressed as variables, or defined using new syntax like arrow functions. Understanding functions is critical to managing complex logic and improving code efficiency in JavaScript. Mastery of functions will lead to cleaner, more organized, and maintainable code.",
+      "image_prompt": "# JavaScript Function Syntax\n\n```javascript\n// Function Declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Anonymous Function Expression\nconst multiply = function(a, b) {\n    return a * b;\n};\n\n// Arrow Function\nconst subtract = (a, b) => a - b;\n\n// Example Usage\nconsole.log(add(5, 3));  // Output: 8\nconsole.log(multiply(5, 3));  // Output: 15\nconsole.log(subtract(5, 3));  // Output: 2\n```\n",
+      "url": "http://localhost:9000/mermaid-images/7ec0e33e-042a-485c-8af4-fe4c1a31171d.png"
+    },
+    {
+      "text": "Functions in JavaScript can take arguments and return values, allowing them to be versatile tools in coding. Arguments are inputs passed into the function for processing, while the function's output is what it returns. This aspect of functions makes them incredibly powerful, enabling developers to create dynamic scripts that perform a wide array of operations. Whether you need to manipulate data, calculate results, or handle asynchronous actions, mastering function arguments and return statements is vital.",
+      "image_prompt": "```mermaid\nsequenceDiagram\n    participant User\n    participant JavaScript\n    User->>JavaScript: Call greet('World')\n    activate JavaScript\n    JavaScript->>User: Return 'Hello, World!'\n    deactivate JavaScript\n```\n",
+      "url": "http://localhost:9000/mermaid-images/284d02bf-5144-4b94-bbbf-fe159173d9db.png"
+    },
+    {
+      "text": "JavaScript functions can be applied in various real-world applications such as handling events, performing AJAX requests, and manipulating DOM elements. Understanding how to implement functions effectively can significantly enhance the interactivity and functionality of web applications. By using functions to separate logic, developers can create modular, testable, and reusable code, which is essential for maintaining large codebases and ensuring a seamless user experience.",
+      "image_prompt": "# Function Usage in JavaScript\n\n```javascript\n// Event Handling Function\nfunction onButtonClick() {\n    alert('Button clicked!');\n}\n\n// Assign Function to Button Click\nconst button = document.querySelector('#myButton');\nbutton.addEventListener('click', onButtonClick);\n```\n\n## DOM Manipulation Example\n\n```mermaid\nflowchart TD\n    A[Start] --> B[Select DOM Element]\n    B --> C{Event Occurs}\n    C -->|Yes| D[Execute Function]\n    D --> E[Modify DOM]\n    E --> F[End]\n    C -->|No| F\n```\n",
+      "url": "http://localhost:9000/mermaid-images/d1b1795b-7581-4008-80cd-1906c798cf04.png"
+    }
+  ]
+}

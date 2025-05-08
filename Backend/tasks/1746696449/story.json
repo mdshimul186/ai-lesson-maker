@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-NabanitaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্ট ফাংশন সম্পর্কে আলোচনা করা হবে। ফাংশন হল কোডের একটি পুনর্ব্যবহারযোগ্য অংশ যা একটি নির্দিষ্ট কাজ সম্পাদনের জন্য তৈরি করা হয়। ফাংশনের মাধ্যমে জাভাস্ক্রিপ্ট প্রোগ্রামে কোড পুনর্ব্যবহারযোগ্য ও মডুলার করা যায়। এর ফলে কোডের পাঠযোগ্যতা এবং রক্ষণাবেক্ষণ ক্ষমতা বৃদ্ধি পায়, যা দক্ষ প্রোগ্রাম প্রণয়নের জন্য গুরুত্বপূর্ণ।",
+      "image_prompt": "# Function Basics in JavaScript\n\n```javascript\n// Defining a function\nfunction add(a, b) {\n    return a + b;\n}\n\n// Using the function\nconst sum = add(5, 3);\nconsole.log('Sum:', sum);  // Outputs: Sum: 8\n```",
+      "url": "http://localhost:9000/mermaid-images/b513705a-537b-4477-abf1-3b5933b62a0b.png"
+    },
+    {
+      "text": "ফাংশন ডিক্লারেশন এবং ফাংশন এক্সপ্রেশন সম্পর্কে জেনেছি। এদের মাধ্যমিক পার্থক্য হল যে ফাংশন ডিক্লারেশন মানচিত্র সময়ে মূল্যায়ন করা হয় যেখানে ফাংশন এক্সপ্রেশন মূল্যায়ন হয় শুধুমাত্র এক্সিকিউশনের সময়। এই পার্থক্য ফাংশনের ব্যবহার এবং স্কোপ সম্পর্কে গভীরতর সমঝোতা প্রদান করে।",
+      "image_prompt": "# Function Declaration vs. Function Expression\n\n```mermaid\nflowchart TD\n    A[Start] --> B[Function Declaration]\n    B --> C[Hoisted and read at compile time]\n    A --> D[Function Expression]\n    D --> E[Evaluated at runtime]\n    C --> F[Code execution]\n    E --> F\n    F --> G[End]\n```",
+      "url": "http://localhost:9000/mermaid-images/c0cc6416-00b1-4176-9b60-e26dadb1148a.png"
+    },
+    {
+      "text": "ফাংশন হায়ার্ঠারকি বা নেস্টেড ফাংশন নিয়ে আলোচনা করা হবে। নেস্টেড ফাংশন ব্যবহার কোরে প্রোগ্রামিং লজিককে বিভাগ করতে সহায়ক। এভাবে ভিতরের ফাংশন আউটার ফাংশনের ভেরিয়েবলগুলির এক্সেস পেতে পারে, যা এক্সক্লোজার ধারণার মাধ্যমে কপি করা হয়।",
+      "image_prompt": "# Nested Functions in JavaScript\n\n```javascript\nfunction outerFunction(x) {\n    function innerFunction(y) {\n        return x + y;\n    }\n    return innerFunction;\n}\n\nconst addFive = outerFunction(5);\nconst result = addFive(10);\nconsole.log('Result:', result);  // Outputs: Result: 15\n```",
+      "url": "http://localhost:9000/mermaid-images/ebd930b8-1c92-4392-a612-6ec55e5bfbf9.png"
+    }
+  ]
+}

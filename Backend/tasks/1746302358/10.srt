@@ -1,0 +1,12 @@
+1
+00:00:00,050 --> 00:00:03,987
+Security in Docker involves strategies such as image scanning
+
+2
+00:00:04,438 --> 00:00:06,013
+role-based access control
+
+3
+00:00:06,425 --> 00:00:10,713
+and runtime defense to protect containers in development and production phases
+

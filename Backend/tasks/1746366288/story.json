@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this chapter, we explore the foundational concept of writing functions in JavaScript. Functions are reusable pieces of code that allow for more efficient and organized programming. They help in compartmentalizing logic and make the code easier to understand and maintain. Understanding how to declare and invoke functions, as well as comprehend their parameters and return values, is crucial for any budding programmer.",
+      "image_prompt": "# Function Declaration and Usage Example in JavaScript\n\n```javascript\n// Function declaration\nfunction multiply(a, b) {\n    return a * b;\n}\n\n// Function usage\nconst result = multiply(3, 4);\nconsole.log(result);  // Outputs: 12\n```",
+      "url": ""
+    },
+    {
+      "text": "This scene delves into the control flow in JavaScript using conditional statements. These statements are essential for directing the execution of code based on certain conditions and provide a mechanism to perform different actions depending on the situation. Mastery of control flow constructs like 'if-else' and 'switch' statements plays a pivotal role in making applications dynamic and responsive.",
+      "image_prompt": "# Conditional Statements in JavaScript\n\n```javascript\n// Example of 'if' and 'else'\nconst age = 18;\n\nif (age >= 18) {\n    console.log('Eligible to vote');\n} else {\n    console.log('Not eligible to vote');\n}\n\n// 'Switch' statement example\nconst day = 'Monday';\n\nswitch (day) {\n    case 'Monday':\n        console.log('Start of work week');\n        break;\n    case 'Friday':\n        console.log('End of work week');\n        break;\n    default:\n        console.log('Midweek');\n}\n```",
+      "url": ""
+    }
+  ]
+}

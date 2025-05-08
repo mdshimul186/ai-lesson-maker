@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "720*1280",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "In JavaScript, functions are one of the most fundamental concepts, serving as building blocks for any program. A function is a block of code designed to perform a specific task, executed when something invokes it. Learning how to define and invoke functions effectively allows developers to modularize their code, making it reusable and easier to debug. Functions can take parameters and return values, enabling them to process inputs and give outputs. JavaScript supports both function declarations and expressions, enhancing its flexibility.",
+      "image_prompt": "# Understanding JavaScript Functions\n\n```javascript\n// Function Declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function Expression\nconst multiply = function(x, y) {\n    return x * y;\n};\n\n// Function Invocation\nlet sum = add(5, 7);\nlet product = multiply(4, 6);\nconsole.log(sum);      // Outputs: 12\nconsole.log(product);  // Outputs: 24\n```\n\n### Function Types:\n\n| Function Type | Description               |\n|---------------|---------------------------|\n| Declaration   | Named and hoisted         |\n| Expression    | Anonymous and not hoisted |",
+      "url": "http://localhost:9000/mermaid-images/ac6658bb-81b3-4f86-af1c-ae9cb7c29b7e.png"
+    },
+    {
+      "text": "Advanced function concepts in JavaScript include higher-order functions and closures, adding powerful functional programming capabilities. Higher-order functions accept other functions as arguments or return them as results, allowing for more abstract and flexible code. Closures, on the other hand, are functions that remember their environment, even after they are called, enabling excellent use of private data. Both concepts form the backbone of many JavaScript patterns, such as function chaining and currying, which increase code efficiency and maintainability.",
+      "image_prompt": "# Advanced JavaScript Functions\n\n```javascript\n// Higher-order function\nfunction createMultiplier(multiplier) {\n    return function(x) {\n        return x * multiplier;\n    };\n}\n\n// Using the function\nconst double = createMultiplier(2);\nconsole.log(double(5)); // Outputs: 10\n\n// Closure example\nfunction counter() {\n    let count = 0;\n    return function() {\n        count++;\n        return count;\n    };\n}\n\nconst increment = counter();\nconsole.log(increment()); // Outputs: 1\nconsole.log(increment()); // Outputs: 2\n```\n\n### Key Concepts:\n\n| Concept        | Description                         |\n|----------------|-------------------------------------|\n| Higher-order   | Functions taking/returning functions|\n| Closures       | Functions retaining their environment|",
+      "url": "http://localhost:9000/mermaid-images/57464138-71a8-42d9-823d-9ff962ef7a6f.png"
+    },
+    {
+      "text": "In JavaScript, understanding scope and closures is essential for effective programming. Scope controls the visibility and life cycle of variables, whereas closures refer to functions retaining access to their parent scope variables after execution. JavaScript has two main scopes: global and local, with block-level scope enabled by 'let' and 'const'. This understanding prevents common issues like variable leaks and enables strategic functional programming. Closures enable encapsulation and maintaining state in applications, promoting code efficiency.",
+      "image_prompt": "# Scope and Closures in JavaScript\n\n```javascript\n// Scope Example\nlet globalVar = 'Global';\n\nfunction localScope() {\n    let localVar = 'Local';\n    console.log(globalVar); // Accessible\n    console.log(localVar);  // Accessible\n}\n\nlocalScope();\nconsole.log(globalVar);     // Accessible\n// console.log(localVar);  // Error: not defined\n\n// Closure Example\nfunction makeCounter() {\n    let count = 0;\n    return function() {\n        return ++count;\n    };\n}\n\nconst counter1 = makeCounter();\nconsole.log(counter1()); // 1\nconsole.log(counter1()); // 2\n```\n\n### Scope Levels:\n\n| Scope Type  | Description                           |\n|-------------|---------------------------------------|\n| Global      | Accessible everywhere                 |\n| Local       | Accessible in a specific function/block|",
+      "url": "http://localhost:9000/mermaid-images/0640a9d3-0396-41cc-8ea9-9d49d3c6d83e.png"
+    }
+  ]
+}

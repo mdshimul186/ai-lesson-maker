@@ -1,0 +1,24 @@
+1
+00:00:00,100 --> 00:00:01,413
+Project Lifecycle
+
+2
+00:00:01,887 --> 00:00:05,688
+Exploring the phases of a project lifecycle including initiation
+
+3
+00:00:06,075 --> 00:00:06,600
+planning
+
+4
+00:00:07,075 --> 00:00:07,775
+execution
+
+5
+00:00:08,238 --> 00:00:08,812
+monitoring
+
+6
+00:00:09,012 --> 00:00:09,675
+and closure
+

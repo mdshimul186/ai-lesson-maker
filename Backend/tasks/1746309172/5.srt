@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,175
+Executing the Plan
+
+2
+00:00:01,775 --> 00:00:06,700
+Allocating resources and coordinating team activities to accomplish tasks
+

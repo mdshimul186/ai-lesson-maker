@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Understanding its core purpose and the problem it solves by enabling applications to run in containers consistently across different environments.",
+      "image_prompt": "graph TD; A(Docker) -->|Containerization| B(Apps); B --> C(Consistent Environments);",
+      "url": "http://localhost:9000/mermaid-images/e285816e-25ac-49d8-a09f-6bfc8e869f0a.png"
+    },
+    {
+      "text": "Docker Architecture: Explore the architecture of Docker, which includes the Docker client, the Docker daemon, and Docker registries.",
+      "image_prompt": "graph TB; A(Docker Client) --> B(Docker Daemon); B --> C(Docker Engine); C --> D(Docker Registries);",
+      "url": "http://localhost:9000/mermaid-images/1849d360-405a-4d42-88fc-b404bde6fcee.png"
+    },
+    {
+      "text": "Understanding Docker Images: Learn how Docker images are read-only templates that form the base of containers.",
+      "image_prompt": "graph LR; A(Docker Images) --> B(Read-Only Templates); B --> C(Container Base);",
+      "url": "http://localhost:9000/mermaid-images/ffb28019-cc87-4791-93a5-cc12452125a6.png"
+    },
+    {
+      "text": "Docker Containers: Delve into the structure of Docker containers that house applications and their dependencies.",
+      "image_prompt": "graph TD; A(Docker Containers) --> B(Applications); B --> C(Dependencies);",
+      "url": "http://localhost:9000/mermaid-images/5d849fb1-0c05-4ada-a27c-4ed4ac6bcbad.png"
+    },
+    {
+      "text": "Working with Docker Hub: Explore Docker Hub, the cloud-based repository where Docker images are stored and shared.",
+      "image_prompt": "graph LR; A(Docker Hub) --> B(Cloud Repository); B --> C(Image Storage); C --> D(Image Sharing);",
+      "url": "http://localhost:9000/mermaid-images/8b36c825-80c5-4776-871d-065c536d1203.png"
+    },
+    {
+      "text": "Creating Your Own Docker Images: Steps and best practices for creating custom Docker images.",
+      "image_prompt": "graph LR; A(Custom Docker Images) --> B(Building Process); B --> C(Best Practices);",
+      "url": "http://localhost:9000/mermaid-images/e672412f-5778-4723-9d81-2cc7bd14d38b.png"
+    },
+    {
+      "text": "Docker Networking: Learn how Docker allows containers to communicate with each other and external networks.",
+      "image_prompt": "graph TB; A(Docker Networking) --> B(Container Communication); B --> C(External Networks);",
+      "url": "http://localhost:9000/mermaid-images/2ce5821f-cd7c-4f2d-a36a-62bb5caac376.png"
+    },
+    {
+      "text": "Data Management in Docker: Discuss persistent storage and how Docker volumes are used for data management inside containers.",
+      "image_prompt": "graph TD; A(Docker Volumes) --> B(Persistent Storage); B --> C(Data Management);",
+      "url": "http://localhost:9000/mermaid-images/f50404a4-a59a-4c6c-9313-b039c38becaf.png"
+    },
+    {
+      "text": "Docker Security: An overview of Docker's security features and practices to safeguard applications.",
+      "image_prompt": "graph TD; A(Docker Security) --> B(Security Features); B --> C(Practices); C --> D(Safeguard Applications);",
+      "url": "http://localhost:9000/mermaid-images/2645ea7f-b69a-4cac-ab8a-44303ce38e5f.png"
+    },
+    {
+      "text": "Advanced Docker Concepts: Brief on scaling applications using Docker Swarm and Kubernetes for orchestration.",
+      "image_prompt": "graph LR; A(Scaling Applications) --> B(Docker Swarm); B & C(Kubernetes);",
+      "url": "http://localhost:9000/mermaid-images/51d9ada9-a8b2-4333-bd80-885440d5219c.png"
+    }
+  ]
+}

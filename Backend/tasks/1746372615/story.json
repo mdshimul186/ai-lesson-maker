@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "The concept of function declarations and expressions in JavaScript is pivotal for understanding how scripts execute and manage tasks. Functions are blocks of code that can be defined once and reused throughout a program, facilitating cleaner, modular design. They can be declared using traditional syntax or defined anonymously and assigned to variables. This versatility allows developers to use functions as first-class objects in JavaScript, leading to diverse patterns like callbacks and higher-order functions.",
+      "image_prompt": "# JavaScript Functions Overview\n\n```javascript\n// Function Declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function Expression\nconst multiply = function(a, b) {\n    return a * b;\n};\n\n// Usage\nconsole.log(add(2, 3));   // Output: 5\nconsole.log(multiply(2, 3)); // Output: 6\n```\n\n### Key Differences:\n\n| Type | Syntax Definition | Hoisting |\n|------|-------------------|----------|\n| Declaration | `function name() {}` | Hoisted |\n| Expression | `const name = function() {}` | Not hoisted |",
+      "url": ""
+    },
+    {
+      "text": "A deeper dive into JavaScript function concepts reveals the power of closures. Closures occur when a function is able to remember and access its lexical scope even when that function is executing outside its lexical scope. This mechanism allows for advanced patterns such as data encapsulation, function factories, and maintaining state across function executions. Understanding closures is crucial for mastering JavaScript and dealing with complex callback patterns and asynchronous operations efficiently.",
+      "image_prompt": "# JavaScript Closures Explained\n\n```javascript\nfunction createCounter() {\n    let count = 0;\n    return function() {\n        count += 1;\n        return count;\n    };\n}\n\n// Usage\nconst counter = createCounter();\nconsole.log(counter()); // Output: 1\nconsole.log(counter()); // Output: 2\n```\n\n```mermaid\nsequenceDiagram\n    participant Script\n    participant Closure\n    Script->>Closure: createCounter()\n    Closure-->>Script: returns inner function\n    Script->>Closure: call inner function\n    Closure-->>Script: increment count and return\n```",
+      "url": ""
+    }
+  ]
+}

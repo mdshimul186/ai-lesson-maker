@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In JavaScript, classes are a template for creating objects. They encapsulate data with code to work on that data. Classes in JavaScript are a blueprint for creating objects with predefined properties and methods. This is a syntactical sugar notation in JavaScript to define objects and their characteristics in a more convenient way.",
+      "image_prompt": "# JavaScript Class Structure\n\n```javascript\nclass Animal {\n  constructor(name, type) {\n    this.name = name;\n    this.type = type;\n  }\n  speak() {\n    console.log(`${this.name} makes a noise.`);\n  }\n}\n\n// Creating an instance\nconst dog = new Animal('Dog', 'Mammal');\ndog.speak(); // Dog makes a noise.\n```\n\n### Class Features:\n\n| Feature | Description |\n|---------|-------------|\n| Constructor | Initializes new objects |\n| Methods | Functions inside the class |\n| Instances | Individual realizations of the class |\n",
+      "url": "http://localhost:9000/mermaid-images/cfd49158-d974-448b-9cd5-0cb7faab99d6.png"
+    },
+    {
+      "text": "JavaScript classes support inheritance, which allows one class to extend another class. This means that you can create a new class that inherits the properties and methods of an existing class, and you can add or override existing functionality to suit specific needs. Inheritance in JavaScript is implemented using the `extends` keyword.",
+      "image_prompt": "# Inheritance in JavaScript\n\n```javascript\nclass Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    console.log(`${this.name} makes a noise.`);\n  }\n}\n\nclass Dog extends Animal {\n  constructor(name, breed) {\n    super(name);  // Call the parent class constructor\n    this.breed = breed;\n  }\n  speak() {\n    console.log(`${this.name} barks.`);\n  }\n}\n\n// Creating an instance\nconst beagle = new Dog('Beagle', 'Beagle');\nbeagle.speak(); // Beagle barks.\n```\n\n### Inheritance Features:\n\n| Feature | Benefit |\n|---------|---------|\n| `extends` Keyword | Enables class inheritance |\n| `super` Keyword | Calls the parent class's constructor |\n| Method Overriding | Allows specific behavior |\n",
+      "url": "http://localhost:9000/mermaid-images/0818b817-39db-465d-b97d-8b19c19cf9e5.png"
+    },
+    {
+      "text": "Private fields and static methods are advanced features in JavaScript classes. Private fields are marked with a `#` to keep properties inaccessible outside the class. Static methods, unlike instance methods, are called on the class itself and not on instances of the class, enabling utility functions related strictly to the class.",
+      "image_prompt": "# Advanced Class Features\n\n```javascript\nclass Rectangle {\n  #height; // Private field\n  #width; // Private field\n  constructor(height, width) {\n    this.#height = height;\n    this.#width = width;\n  }\n  get area() {\n    return this.#calculateArea();\n  }\n  #calculateArea() {\n    return this.#height * this.#width;\n  }\n  static isSquare(rectangle) {\n    return rectangle.#height === rectangle.#width;\n  }\n}\n\n// Usage\nconst rectangle = new Rectangle(20, 10);\nconsole.log(rectangle.area); // 200\nconsole.log(Rectangle.isSquare(rectangle)); // false\n```\n\n### Key Concepts:\n\n| Concept | Description |\n|---------|-------------|\n| Private Fields | Encapsulate data within class |\n| Static Methods | Class-level utility functions |\n| Getter Methods | Access properties |\n",
+      "url": "http://localhost:9000/mermaid-images/82bbfadc-9904-4ea0-8417-75b86b63e9e3.png"
+    }
+  ]
+}

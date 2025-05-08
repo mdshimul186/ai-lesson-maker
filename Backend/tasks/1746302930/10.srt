@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:01,613
+Scaling with Docker Swarm
+
+2
+00:00:02,087 --> 00:00:06,150
+Docker Swarm allows us to orchestrate and manage clusters of Docker nodes
+
+3
+00:00:06,362 --> 00:00:09,438
+providing high-availability and scaling capabilities
+

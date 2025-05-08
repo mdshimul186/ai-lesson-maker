@@ -1,0 +1,24 @@
+1
+00:00:00,075 --> 00:00:00,938
+In the second scene
+
+2
+00:00:01,350 --> 00:00:06,763
+we delve into the flow of control within a JavaScript application using conditional statements
+
+3
+00:00:07,150 --> 00:00:12,350
+Control flow statements allow you to execute code snippets based on certain conditions
+
+4
+00:00:12,762 --> 00:00:15,713
+The most common conditional statement is the 'if' statement
+
+5
+00:00:15,988 --> 00:00:19,450
+followed by 'else if' and 'else' for alternative paths
+
+6
+00:00:19,837 --> 00:00:24,988
+This helps create dynamic and responsive applications capable of making decisions
+

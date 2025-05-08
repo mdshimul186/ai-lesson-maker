@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:00,938
+Function Calling
+
+2
+00:00:01,538 --> 00:00:02,950
+Learn how to invoke a function
+
+3
+00:00:03,438 --> 00:00:08,312
+understanding the process of execution and interaction between declared and called functions
+

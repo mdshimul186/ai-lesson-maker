@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:02,050
+Exploring Docker CLI
+
+2
+00:00:02,500 --> 00:00:05,950
+An overview of essential Docker command-line interface commands
+

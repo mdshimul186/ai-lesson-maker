@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:04,075
+A function declaration is one way to define a function in JavaScript
+
+2
+00:00:04,463 --> 00:00:09,838
+It starts with the 'function' keyword followed by a unique name and is then invoked later in the program
+

@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:00,825
+Docker Swarm
+
+2
+00:00:01,300 --> 00:00:07,050
+Dive into Docker Swarm as a native clustering and orchestration tool for Docker containers
+

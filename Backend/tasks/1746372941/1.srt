@@ -1,0 +1,32 @@
+1
+00:00:00,075 --> 00:00:00,812
+In the first scene
+
+2
+00:00:01,212 --> 00:00:04,588
+we introduce the concept of functions in JavaScript
+
+3
+00:00:04,987 --> 00:00:09,988
+Functions are reusable blocks of code designed to perform a specific task
+
+4
+00:00:10,375 --> 00:00:11,887
+They help in organizing code
+
+5
+00:00:12,338 --> 00:00:13,575
+improving readability
+
+6
+00:00:13,850 --> 00:00:15,450
+and enabling reuse
+
+7
+00:00:15,850 --> 00:00:20,925
+A function in JavaScript can be defined using a function declaration or a function expression
+
+8
+00:00:21,300 --> 00:00:25,312
+Let us look at a simple example of a function that greets the user by their name
+

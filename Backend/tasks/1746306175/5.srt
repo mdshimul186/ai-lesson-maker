@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:04,562
+The final scene covers practical usage and examples of JavaScript classes
+
+2
+00:00:04,838 --> 00:00:09,662
+demonstrating how to create instances and leverage polymorphism and encapsulation
+

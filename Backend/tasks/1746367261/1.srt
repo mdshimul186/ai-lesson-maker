@@ -1,0 +1,32 @@
+1
+00:00:00,062 --> 00:00:02,325
+In the first scene of our JavaScript lesson plan
+
+2
+00:00:02,788 --> 00:00:06,050
+we will delve into the basics of JavaScript functions
+
+3
+00:00:06,450 --> 00:00:09,287
+This includes understanding what a function is
+
+4
+00:00:09,488 --> 00:00:10,350
+how to define it
+
+5
+00:00:10,787 --> 00:00:13,387
+and the significance of arguments and return values
+
+6
+00:00:13,787 --> 00:00:17,875
+We will illustrate this with a simple function declaration and usage example
+
+7
+00:00:18,275 --> 00:00:21,738
+which will aid in grasping the essential syntax and logic
+
+8
+00:00:22,137 --> 00:00:27,600
+This foundational knowledge is vital for developing functional applications effectively
+

@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:04,275
+Inheritance in JavaScript classes allows one class to extend another
+
+2
+00:00:04,688 --> 00:00:08,950
+enabling the use of existing code and creating hierarchies of classes
+
+3
+00:00:09,338 --> 00:00:17,413
+The 'extends' keyword is used to signify inheritance and the 'super' keyword is utilized to call functions on an object's parent class
+
+4
+00:00:17,800 --> 00:00:26,325
+This approach to inheritance enhances reusability and maintainability by allowing common functionalities to be shared across classes
+

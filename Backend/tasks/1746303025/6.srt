@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,125
+Creating Your Own Docker Images
+
+2
+00:00:02,487 --> 00:00:06,025
+Steps and best practices for creating custom Docker images
+

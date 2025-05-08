@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:01,325
+Creating Instances
+
+2
+00:00:01,725 --> 00:00:03,175
+Once a class is defined
+
+3
+00:00:03,575 --> 00:00:06,787
+new instances can be created using the new keyword
+
+4
+00:00:07,175 --> 00:00:11,113
+Each instance contains the properties and methods defined in the class
+

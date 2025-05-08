@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:02,013
+Exploring the Docker Ecosystem
+
+2
+00:00:02,425 --> 00:00:05,700
+An overview of tools and platforms complementing Docker
+

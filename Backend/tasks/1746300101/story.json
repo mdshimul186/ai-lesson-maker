@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Docker is a platform that enables developers to build, deploy, and run applications inside containers. Containers are lightweight, portable units that come bundled with everything an application needs to run, including code, libraries, and dependencies. This ensures that wherever the container is deployed, it will run the same way, regardless of the underlying environment. In this lecture, we will cover the core components of Docker, including the Docker Engine, Docker Hub, the process of containerization, and how to manage containers effectively.",
+      "image_prompt": "graph LR; D(Docker)-->E(Docker Engine); D(Docker)-->H(Docker Hub); E-->C(Containerization); C-->M(Management); M-->A(Application);",
+      "url": "http://localhost:9000/mermaid-images/ccd2c1e3-1cba-40f1-9303-aa277264cfd6.png"
+    }
+  ]
+}

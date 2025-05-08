@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In the first scene of our lesson on JavaScript functions, we will explore the fundamental concepts of creating and using functions. A function in JavaScript is a block of code designed to perform a particular task, which is executed when it is invoked. Functions allow you to organize your code into reusable blocks, making it more modular and easier to maintain. We will discuss the basics of function declaration, how to call functions, and the importance of passing parameters to make functions more dynamic.",
+      "image_prompt": "# JavaScript Functions: Basics\n\n```javascript\n// Function declaration\nfunction sum(a, b) {\n    return a + b;\n}\n\n// Function call\nconst result = sum(5, 3);\nconsole.log(`The sum is: ${result}`);\n```\n\n### Function Components:\n\n| Component | Description |\n|-----------|-------------|\n| Declaration | Define the function with a name and parameters |\n| Invocation | Execute the function code |\n| Parameters | Inputs to customize function behavior |\n",
+      "url": ""
+    },
+    {
+      "text": "In the second scene of our lesson, we introduce the concept of higher-order functions in JavaScript. These are functions that take other functions as arguments or return them as output, allowing for more abstract and flexible code handling. Higher-order functions are a powerful feature of JavaScript, facilitating the creation of more expressive and concise code. We will look into examples of higher-order functions, such as `map`, `filter`, and `reduce`, which are commonly used for array processing and functional programming in JavaScript.",
+      "image_prompt": "## JavaScript Higher-Order Functions\n\n### Example: Using `map` Function\n\n```javascript\n// Array of numbers\nconst numbers = [1, 2, 3, 4];\n\n// Using map to square each number\nconst squares = numbers.map(function(num) {\n    return num * num;\n});\n\nconsole.log(squares); // Output: [1, 4, 9, 16]\n```\n\n```mermaid\nflowchart LR\n    A[Numbers Array] --> B{map function}\n    B --> C[Square Each Number]\n    C --> D[New Array of Squares]\n```\n\n### Key Characteristics:\n\n| Function | Purpose |\n|----------|---------|\n| `map` | Transform array elements |\n| `filter` | Select elements based on condition |\n| `reduce` | Aggregate array elements into a single value |\n",
+      "url": ""
+    }
+  ]
+}

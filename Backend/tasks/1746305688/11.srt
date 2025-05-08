@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,413
+Writing a Dockerfile
+
+2
+00:00:01,900 --> 00:00:05,525
+Understand the process of writing Dockerfiles for building images
+

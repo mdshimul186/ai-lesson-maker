@@ -1,0 +1,36 @@
+1
+00:00:00,087 --> 00:00:01,363
+Introduction to Docker
+
+2
+00:00:01,900 --> 00:00:07,812
+Docker is a platform that allows developers to automate the deployment of applications inside lightweight
+
+3
+00:00:08,012 --> 00:00:09,075
+portable containers
+
+4
+00:00:09,463 --> 00:00:12,200
+These containers bundle together the application code
+
+5
+00:00:12,613 --> 00:00:13,387
+libraries
+
+6
+00:00:13,400 --> 00:00:14,650
+and other dependencies
+
+7
+00:00:15,075 --> 00:00:19,637
+making it easy to ensure that software runs consistently across different environments
+
+8
+00:00:20,038 --> 00:00:23,475
+Docker containers can be run on any system that supports Docker
+
+9
+00:00:23,938 --> 00:00:28,637
+whether on a developer's laptop or in a large-scale production environment on cloud infrastructure
+

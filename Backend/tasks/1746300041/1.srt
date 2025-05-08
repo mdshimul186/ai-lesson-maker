@@ -1,0 +1,52 @@
+1
+00:00:00,087 --> 00:00:00,812
+In this lecture
+
+2
+00:00:01,262 --> 00:00:02,538
+we will explore Docker
+
+3
+00:00:03,025 --> 00:00:04,388
+a platform used to develop
+
+4
+00:00:04,662 --> 00:00:05,075
+ship
+
+5
+00:00:05,350 --> 00:00:07,425
+and run applications inside containers
+
+6
+00:00:07,812 --> 00:00:11,750
+Docker allows developers to package applications with all parts they need
+
+7
+00:00:12,137 --> 00:00:14,137
+such as libraries and other dependencies
+
+8
+00:00:14,525 --> 00:00:16,712
+and ship it all out as one package
+
+9
+00:00:17,113 --> 00:00:19,413
+It provides a standard way to run your code
+
+10
+00:00:19,913 --> 00:00:21,725
+regardless of where it will be executed
+
+11
+00:00:22,113 --> 00:00:24,188
+Such setup ensures efficiency
+
+12
+00:00:24,375 --> 00:00:25,188
+scalability
+
+13
+00:00:25,363 --> 00:00:27,887
+and consistency across different environments
+

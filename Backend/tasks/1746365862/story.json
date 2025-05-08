@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we introduce the concept of JavaScript functions, explaining how they are essential blocks of code designed to perform specific tasks when called. The example function adds two numbers and returns the sum. Functions simplify complex operations by breaking them into manageable and reusable pieces, enabling organized and efficient code development in programming projects.",
+      "image_prompt": "### JavaScript Function Example\n\n```javascript\n// Function to add two numbers\nfunction addNumbers(a, b) {\n    return a + b;\n}\n\n// Usage of addNumbers function\nconst sum = addNumbers(5, 10);\nconsole.log('The sum is:', sum); // Outputs: The sum is: 15\n```",
+      "url": ""
+    },
+    {
+      "text": "In this second scene, we delve into the process of a simple function call using a flowchart. This visualization illustrates the flow from the starting point where a function is defined, moving to the decision point where user input is received, then processing this input within the function, and finally proceeding towards outputting the result, following logical paths within a program's execution framework.",
+      "image_prompt": "flowchart TD\n    A[Define Function] --> B[Receive Input]\n    B --> C{Is Input Valid?}\n    C -->|Yes| D[Calculate Result]\n    D --> E[Output Result]\n    C -->|No| F[Return Error]\n    E --> G[End]\n    F --> G",
+      "url": ""
+    }
+  ]
+}

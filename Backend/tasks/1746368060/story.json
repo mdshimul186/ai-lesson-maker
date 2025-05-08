@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this first scene, we will explore the basics of functions in JavaScript, which are essential building blocks in programming that allow us to encapsulate code for reuse and improve readability. Understanding how to declare and invoke functions forms the foundation upon which more complex programming concepts are built. We will also take a look at the syntax and proper usage of functions to ensure code efficiency and clarity.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function to add two numbers\nfunction add(a, b) {\n    return a + b;\n}\n\n// Using the function\nconst sum = add(5, 7);\nconsole.log(sum); // Outputs: 12\n```",
+      "url": ""
+    },
+    {
+      "text": "In this second scene, we delve into the advanced features of JavaScript functions, specifically focusing on higher-order functions and their significance in functional programming. Higher-order functions are those that can take other functions as arguments or return them as output, enabling developers to write more expressive and flexible code. This concept is particularly useful in scenarios requiring abstraction and composition of functions.",
+      "image_prompt": "# Higher-Order Functions in JavaScript\n\n```javascript\n// Higher-order function that takes a function as argument\nfunction applyOperation(a, b, operation) {\n    return operation(a, b);\n}\n\n// Function examples\nfunction multiply(x, y) {\n    return x * y;\n}\n\n// Using the higher-order function\nconst product = applyOperation(5, 3, multiply);\nconsole.log(product); // Outputs: 15\n```",
+      "url": ""
+    }
+  ]
+}

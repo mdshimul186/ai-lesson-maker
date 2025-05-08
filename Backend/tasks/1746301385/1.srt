@@ -1,0 +1,44 @@
+1
+00:00:00,087 --> 00:00:00,675
+Scene 1
+
+2
+00:00:01,188 --> 00:00:02,337
+Introduction to Docker
+
+3
+00:00:02,725 --> 00:00:08,613
+Docker is an open-source platform that automates the deployment of applications inside lightweight
+
+4
+00:00:08,838 --> 00:00:09,912
+portable containers
+
+5
+00:00:10,312 --> 00:00:15,250
+Containers are an abstraction at the app layer that packages code and dependencies together
+
+6
+00:00:15,650 --> 00:00:20,312
+This makes it easy to scale and ship applications quickly and efficiently
+
+7
+00:00:20,688 --> 00:00:24,012
+ensuring they work seamlessly across different computing environments
+
+8
+00:00:24,400 --> 00:00:25,075
+In this scene
+
+9
+00:00:25,475 --> 00:00:29,450
+we will explore how Docker provides an ecosystem for developers to build
+
+10
+00:00:29,850 --> 00:00:30,337
+test
+
+11
+00:00:30,562 --> 00:00:32,188
+and run applications seamlessly
+

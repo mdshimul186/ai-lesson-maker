@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:02,138
+Best Practices for Docker Images
+
+2
+00:00:02,400 --> 00:00:04,950
+Guidelines for optimizing Docker images
+

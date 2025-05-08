@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,337
+Introduction to Docker
+
+2
+00:00:01,950 --> 00:00:05,725
+Learn the purpose and primary motivations behind using Docker
+

@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:01,087
+Docker Containers
+
+2
+00:00:01,538 --> 00:00:06,350
+Delve into the structure of Docker containers that house applications and their dependencies
+

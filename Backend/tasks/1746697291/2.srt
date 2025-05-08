@@ -1,0 +1,48 @@
+1
+00:00:00,100 --> 00:00:04,725
+Advanced function concepts in JavaScript include higher-order functions and closures
+
+2
+00:00:05,250 --> 00:00:07,975
+adding powerful functional programming capabilities
+
+3
+00:00:09,025 --> 00:00:13,775
+Higher-order functions accept other functions as arguments or return them as results
+
+4
+00:00:14,175 --> 00:00:16,875
+allowing for more abstract and flexible code
+
+5
+00:00:17,863 --> 00:00:18,312
+Closures
+
+6
+00:00:18,425 --> 00:00:19,387
+on the other hand
+
+7
+00:00:19,587 --> 00:00:21,762
+are functions that remember their environment
+
+8
+00:00:22,075 --> 00:00:23,375
+even after they are called
+
+9
+00:00:23,587 --> 00:00:25,837
+enabling excellent use of private data
+
+10
+00:00:26,800 --> 00:00:30,038
+Both concepts form the backbone of many JavaScript patterns
+
+11
+00:00:30,325 --> 00:00:32,337
+such as function chaining and currying
+
+12
+00:00:32,675 --> 00:00:35,562
+which increase code efficiency and maintainability
+

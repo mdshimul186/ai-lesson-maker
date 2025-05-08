@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In JavaScript, a function is a reusable block of code that performs a particular task. Functions make the code modular and assist in keeping it DRY (Don't Repeat Yourself). You declare a function with the 'function' keyword, followed by a name, parentheses, and the function body contained within curly braces.",
+      "image_prompt": "# JavaScript Function Declaration and Usage\n\n```javascript\n// Function declaration\nfunction calculateArea(radius) {\n    return Math.PI * radius * radius;\n}\n\n// Function usage\nconst area = calculateArea(5);\nconsole.log(`The area is ${area}`);\n```",
+      "url": ""
+    },
+    {
+      "text": "Understanding the control flow in JavaScript is fundamental as it dictates the order in which code is executed. Control flows include structures like loops and conditional statements that help in decision-making and repeating tasks based on conditions. Grasping their usage improves the logic of the code.",
+      "image_prompt": "flowchart TD\n    A[Start] --> B{Check Condition}\n    B -->|True| C[Execute Task]\n    C --> D{Continue Loop}\n    D -->|Yes| B\n    D -->|No| E[End Loop]\n    B -->|False| E\n    E --> F[Finish]",
+      "url": "http://localhost:9000/mermaid-images/27dceb2c-b4ab-44da-9636-43b51c45e94d.png"
+    }
+  ]
+}

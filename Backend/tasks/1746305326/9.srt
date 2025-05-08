@@ -1,0 +1,12 @@
+1
+00:00:00,100 --> 00:00:00,863
+Docker Swarm
+
+2
+00:00:01,350 --> 00:00:06,287
+Docker Swarm is a native clustering and orchestration tool for Docker containers
+
+3
+00:00:06,675 --> 00:00:10,588
+It turns a group of Docker engines into a single virtual Docker engine
+

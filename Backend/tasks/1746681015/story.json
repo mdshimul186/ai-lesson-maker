@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript classes are a blueprint for creating objects and provide a new syntax for creating object-oriented code. They allow developers to encapsulate data and behavior into a single entity, making code more organized and reusable. JavaScript classes include constructor methods to initialize properties and prototype methods that can be shared among all instances. This simplifies the process of creating objects and managing inheritance.",
+      "image_prompt": "# JavaScript Classes Overview\n\n## Simple Class Example\n\n```javascript\n// Define a class\nclass Animal {\n    constructor(name, species) {\n        this.name = name;\n        this.species = species;\n    }\n\n    speak() {\n        return `${this.name} makes a noise.`;\n    }\n}\n\n// Create an instance of the class\nconst dog = new Animal('Rover', 'Dog');\nconsole.log(dog.speak()); // Rover makes a noise.\n```\n\n### Class Structure:\n\n| Component | Description |\n|-----------|-------------|\n| Constructor | Initializes properties |\n| Method | Function within a class |\n| Instance | Created object |\n",
+      "url": "http://localhost:9000/mermaid-images/73df867c-0ed5-479b-8dc7-af76618f7307.png"
+    },
+    {
+      "text": "Inheritance in JavaScript classes allows one class to extend another, enabling the use of existing code and creating hierarchies of classes. The 'extends' keyword is used to signify inheritance and the 'super' keyword is utilized to call functions on an object's parent class. This approach to inheritance enhances reusability and maintainability by allowing common functionalities to be shared across classes.",
+      "image_prompt": "# JavaScript Class Inheritance\n\n## Inheritance Example\n\n```javascript\n// Parent class\nclass Animal {\n    constructor(name) {\n        this.name = name;\n    }\n\n    speak() {\n        return `${this.name} makes a noise.`;\n    }\n}\n\n// Child class\nclass Dog extends Animal {\n    constructor(name, breed) {\n        super(name);\n        this.breed = breed;\n    }\n\n    bark() {\n        return `${this.name} barks.`;\n    }\n}\n\nconst beagle = new Dog('Snoopy', 'Beagle');\nconsole.log(beagle.speak()); // Snoopy makes a noise.\nconsole.log(beagle.bark());  // Snoopy barks.\n```\n\n### Inheritance Diagram:\n\n```mermaid\nclassDiagram\n    class Animal {\n        +String name\n        +speak()\n    }\n    class Dog {\n        +String breed\n        +bark()\n    }\n    Animal <|-- Dog\n```\n",
+      "url": "http://localhost:9000/mermaid-images/37bc41e8-2c50-45b0-96ce-1fb87750a0a9.png"
+    },
+    {
+      "text": "JavaScript classes also support static methods and fields, which are defined on the class itself rather than any objects created by it. These are useful for defining utility functions or properties that are relevant to the class but don't depend on any specific instance. Static methods and properties can be accessed without instantiating the class, making them ideal for encapsulating code related to the class but not its individual instances.",
+      "image_prompt": "# JavaScript Static Methods and Properties\n\n## Static Example\n\n```javascript\nclass MathUtility {\n    static add(a, b) {\n        return a + b;\n    }\n\n    static get pi() {\n        return 3.14159;\n    }\n}\n\n// Using static methods and properties\nconsole.log(MathUtility.add(1, 2)); // 3\nconsole.log(MathUtility.pi); // 3.14159\n```\n\n### Features Table:\n\n| Feature | Description |\n|---------|-------------|\n| Static Method | Class utility functions |\n| Static Property | Class property without instantiation |\n| Access Method | Directly via class name |\n",
+      "url": "http://localhost:9000/mermaid-images/568c796d-b8af-49cc-8679-f95727f1b8c0.png"
+    }
+  ]
+}

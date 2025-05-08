@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript classes are templates for creating objects. They provide a more convenient syntax to create object and deal with inheritance, similar to class-based languages. A class encapsulates data and functions that can be shared among the objects created from it, improving code structure and readability. This class-based approach is especially useful in larger applications with a need for organized and reusable code, making maintenance easier.",
+      "image_prompt": "# Understanding JavaScript Classes\n\n## JavaScript Class Syntax\n\n```javascript\nclass Animal {\n    constructor(name, age) {\n        this.name = name;\n        this.age = age;\n    }\n    speak() {\n        console.log(`${this.name} makes a sound.`);\n    }\n}\n\n// Instantiating an object\nconst dog = new Animal('Dog', 5);\ndog.speak(); // Output: Dog makes a sound.\n```\n\n### Inheritance Diagram:\n\n```mermaid\nclassDiagram\n    class Animal {\n        +String name\n        +int age\n        +speak()\n    }\n    class Dog {\n        +bark()\n    }\n    Animal <|-- Dog\n```\n",
+      "url": "http://localhost:9000/mermaid-images/dcdbbff9-7e00-48f0-bae2-8aaa35d25bd0.png"
+    },
+    {
+      "text": "JavaScript class inheritance is a powerful feature that allows a class to extend another class. By using the 'extends' keyword, you can create a new class that inherits properties and methods from an existing class, enabling the reuse of code. Inheritance promotes a hierarchical class structure and supports code reusability and extension without modifying existing code, which is fundamental in object-oriented programming.",
+      "image_prompt": "# Inheritance in JavaScript Classes\n\n## Implementing Inheritance\n\n```javascript\nclass Animal {\n    constructor(name) {\n        this.name = name;\n    }\n    move() {\n        console.log(`The ${this.name} moves.`);\n    }\n}\n\nclass Bird extends Animal {\n    fly() {\n        console.log(`The ${this.name} flies.`);\n    }\n}\n\nconst parrot = new Bird('Parrot');\nparrot.move(); // Output: The Parrot moves.\nparrot.fly();  // Output: The Parrot flies.\n```\n\n### Inheritance Flow Diagram:\n\n```mermaid\nflowchart TD\n    A[Animal]\n    B[Bird]\n    A --> B\n    A -->|Properties & Methods| C[move()]\n    B -->|Extends| D[fly()]\n```\n",
+      "url": "http://localhost:9000/mermaid-images/8fb75e4e-e110-43e8-8099-b2e979aff63c.png"
+    }
+  ]
+}

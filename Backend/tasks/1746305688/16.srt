@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,325
+Scaling with Docker Swarm
+
+2
+00:00:01,863 --> 00:00:04,062
+Learn how to scale applications with Docker Swarm
+

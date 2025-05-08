@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,337
+Monitoring and Controlling Phase
+
+2
+00:00:02,750 --> 00:00:06,013
+Tracking project progress and making necessary adjustments
+

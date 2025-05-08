@@ -1,0 +1,36 @@
+1
+00:00:00,075 --> 00:00:00,700
+In this scene
+
+2
+00:00:00,950 --> 00:00:03,525
+we dive into the essence of JavaScript functions
+
+3
+00:00:03,888 --> 00:00:07,750
+explaining the core concepts of how functions operate in JavaScript
+
+4
+00:00:08,125 --> 00:00:09,488
+including how they are defined
+
+5
+00:00:09,850 --> 00:00:10,412
+invoked
+
+6
+00:00:10,700 --> 00:00:12,425
+and how parameter passing works
+
+7
+00:00:12,812 --> 00:00:16,762
+Understanding these basics is crucial for writing reusable code
+
+8
+00:00:17,175 --> 00:00:23,012
+as functions allow you to encapsulate code and execute it multiple times with different parameters
+
+9
+00:00:23,413 --> 00:00:28,450
+The example provided will demonstrate a simple function that performs a basic task
+

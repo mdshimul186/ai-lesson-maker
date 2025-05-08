@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-NabanitaNeural",
+  "voice_rate": 1.0,
+  "resolution": "720*1280",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্ট ফাংশন একটি গুরুত্বপূর্ণ বিষয় যা ওয়েব ডেভেলপমেন্টে অত্যন্ত ব্যবহূত। ফাংশন হলো কোডের পুনরায় ব্যবহারযোগ্য অংশ যা একটি নির্দিষ্ট কাজ সম্পন্ন করে। জাভাস্ক্রিপ্টের ফাংশনগুলি নাম চিহ্নিত বা অচিহ্নিত হতে পারে এবং বিভিন্ন প্যারামিটার নিতে পারে। এগুলি শুধুমাত্র একটি কাজ সম্পন্ন করে না, বরং জাভাস্ক্রিপ্টের অ্যাসিঙ্ক্রোনাস বৈশিষ্ট্য ব্যবহার করার মাধ্যমে আরও জটিল ক্রিয়াগুলি পরিচালনা করতেও সক্ষম।",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Simple function declaration\nfunction sayHello() {\n    return 'Hello, World!';\n}\n\n// Function call\nconsole.log(sayHello());\n\n// Function with parameters\nfunction add(a, b) {\n    return a + b;\n}\n\n// Call with arguments\nconsole.log(add(2, 3));\n```\n",
+      "url": "http://localhost:9000/mermaid-images/b5f69883-0a60-46a4-aa63-ea77c4794918.png"
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টে ফাংশন ডেক্লারেশন ও এক্সপ্রেশন হল ফাংশন সৃষ্টি করার দুই প্রাথমিক পন্থা। ফাংশন ডেক্লারেশন দ্বারা সম্পূর্ণ ফাংশন তৈরি করা হয় এবং ডিক্লেয়ার হওয়ার পর যে কোনও স্থানে ব্যবহৃত হতে পারে। ফাংশন এক্সপ্রেশন সাধারণত নির্দিষ্টায়িত পরিবর্তনীতে সংরক্ষিত হয় এবং তা কেবল তার পরে ডিফাইন করা হয়।",
+      "image_prompt": "# Function Declaration vs Expression\n\n```mermaid\nflowchart TB\n    A[Function Declaration] --> B{Hoisted: Yes}\n    C[Function Expression] --> D{Hoisted: No}\n\nclassDef hoisted fill:#f9f,stroke:#333,stroke-width:2px;\nclass B,D hoisted;\n\nB --> E[Can be called before definition]\nD --> F[Cannot be called before definition]\n```\n",
+      "url": "http://localhost:9000/mermaid-images/1742f086-8297-4f09-a796-cc1a341b8f19.png"
+    },
+    {
+      "text": "অ্যারো ফাংশন হল ECMAScript 6 দ্বারা প্রবর্তিত একটি সংক্ষিপ্ত ফাংশন সিনট্যাক্স যা পারফরম্যান্স বাড়ায় এবং কোড পড়তে সহজ করে। অ্যারো ফাংশন সাধারণত এক লাইনের জন্য ব্যবহার করা হয় এবং এতে ফাংশন কিওয়ার্ড ও কিউরলি ব্র্যাকেট ব্যবহৃত হয় না। এগুলি নিয়মিত ফাংশনের তুলনায় দ্রুত সম্পাদন করে এবং এর কাঠামো একটি ফাংশন কেও ব্যাখ্যা করতে সহায়ক হয়।",
+      "image_prompt": "# Arrow Functions in JavaScript\n\n```javascript\n// Traditional anonymous function\nlet traditional = function(x, y) {\n    return x + y;\n};\n\n// Arrow function\nlet arrow = (x, y) => x + y;\n\n// Enhancement: Implicit return\nconst greet = name => `Hello, ${name}!`;\n\nconsole.log(traditional(2, 3)); // 5\nconsole.log(arrow(2, 3)); // 5\nconsole.log(greet('World')); // Hello, World!\n```",
+      "url": "http://localhost:9000/mermaid-images/fb61b937-f3d2-4b02-b715-8ef03ae9f001.png"
+    }
+  ]
+}

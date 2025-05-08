@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:02,950
+JavaScript classes also support inheritance
+
+2
+00:00:03,325 --> 00:00:06,900
+allowing one class to extend the functionality of another
+
+3
+00:00:07,300 --> 00:00:13,100
+This provides a powerful mechanism for code reuse and is essential for implementing polymorphic behavior
+
+4
+00:00:13,488 --> 00:00:16,650
+By inheriting properties and methods from a parent class
+
+5
+00:00:17,075 --> 00:00:20,613
+a child class can override or extend functionalities
+
+6
+00:00:20,975 --> 00:00:23,887
+allowing for more sophisticated program architectures
+

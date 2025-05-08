@@ -1,0 +1,20 @@
+1
+00:00:00,100 --> 00:00:00,988
+Docker Registry
+
+2
+00:00:01,425 --> 00:00:05,725
+Docker Registry is a service for storing and distributing Docker images
+
+3
+00:00:06,138 --> 00:00:08,037
+Docker Hub is a public registry
+
+4
+00:00:08,438 --> 00:00:10,262
+but private registries can be set up
+
+5
+00:00:10,412 --> 00:00:10,775
+too
+

@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:00,775
+In this scene
+
+2
+00:00:01,212 --> 00:00:09,738
+we introduce JavaScript functions by defining what they are—blocks of code designed to perform particular tasks and how they are executed only when called
+
+3
+00:00:10,137 --> 00:00:13,650
+Functions allow code reuse and modular programming
+

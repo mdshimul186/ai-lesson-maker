@@ -1,0 +1,40 @@
+1
+00:00:00,100 --> 00:00:02,112
+Welcome to our lecture on Docker
+
+2
+00:00:02,538 --> 00:00:07,750
+a revolutionary tool for automating the deployment of applications inside lightweight
+
+3
+00:00:08,012 --> 00:00:09,113
+portable containers
+
+4
+00:00:09,488 --> 00:00:10,175
+In this scene
+
+5
+00:00:10,613 --> 00:00:13,025
+we will introduce Docker's core concepts
+
+6
+00:00:13,300 --> 00:00:14,025
+containers
+
+7
+00:00:14,275 --> 00:00:14,875
+images
+
+8
+00:00:15,062 --> 00:00:15,925
+and the Docker engine
+
+9
+00:00:16,312 --> 00:00:23,900
+You'll learn how Docker simplifies application deployment and management by encapsulating the entire runtime environment
+
+10
+00:00:24,300 --> 00:00:27,375
+ensuring consistent operation across different environments
+

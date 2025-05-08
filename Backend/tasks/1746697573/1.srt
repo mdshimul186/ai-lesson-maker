@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:03,425
+JavaScript functions are fundamental building blocks in the language
+
+2
+00:00:03,862 --> 00:00:08,400
+allowing developers to encapsulate code for reuse and organization
+
+3
+00:00:09,412 --> 00:00:12,450
+Functions in JavaScript can be declared in multiple ways
+
+4
+00:00:12,713 --> 00:00:16,100
+including function declarations and function expressions
+
+5
+00:00:17,188 --> 00:00:19,575
+Functions can also be anonymous or named
+
+6
+00:00:19,800 --> 00:00:24,725
+and they enable functional programming patterns such as higher-order functions and callbacks
+
+7
+00:00:25,863 --> 00:00:33,375
+Understanding functions is crucial for mastering JavaScript and is an essential skill for writing maintainable and efficient code
+

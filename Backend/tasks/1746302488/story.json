@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Learn the basic concept of Docker as a platform for developing, shipping, and running applications using container technology.",
+      "image_prompt": "graph LR; A[Docker Introduction] --> B[Containers]; A --> C[Images]; A --> D[Virtualization]",
+      "url": "http://localhost:9000/mermaid-images/5cc056fa-d85b-4511-bed3-62fcbed4baed.png"
+    },
+    {
+      "text": "Understanding Containers: Explore how Docker containers are lightweight, standalone, and executable packages that include everything needed to run a piece of software.",
+      "image_prompt": "graph TD; A[Containers] --> B[Lightweight]; A --> C[Standalone]; A --> D[Executable]",
+      "url": "http://localhost:9000/mermaid-images/4d29efbd-ef53-4871-810f-640b095875e4.png"
+    },
+    {
+      "text": "Docker Architecture: Delve into the architecture of Docker, including the Docker engine, client, daemon, and how they work together.",
+      "image_prompt": "graph TD; A[Docker Client] --> B[Docker Daemon]; B --> C[Docker Engine]; C --> D[Containers]; C --> E[Images]",
+      "url": "http://localhost:9000/mermaid-images/3137f4f2-7bca-4247-8992-19a2ab318d12.png"
+    },
+    {
+      "text": "Docker Images: Explore how Docker images present a set of layers that are stacked on top of each other to form a container file system.",
+      "image_prompt": "graph LR; A[Docker Images] --> B[Layers]; B --> C[File System]; C --> D[Container Creation]",
+      "url": "http://localhost:9000/mermaid-images/a50c67b6-d785-49fe-9181-70e6a8e72239.png"
+    },
+    {
+      "text": "Dockerfile Basics: Learn about Dockerfiles and how they are used to automate the process of creating Docker images.",
+      "image_prompt": "graph TD; A[Dockerfile] --> B[Instructions]; B --> C[Image Creation]; C --> D[Automation]",
+      "url": "http://localhost:9000/mermaid-images/338dee10-59f6-4231-9b20-4b4075e905fb.png"
+    },
+    {
+      "text": "Networking in Docker: Understand how Docker manages networking and connects containers, enabling communication between them.",
+      "image_prompt": "graph LR; A[Docker Networking] --> B[Bridge Networks]; B --> C[Container Communication]; A --> D[Overlay Networks]",
+      "url": "http://localhost:9000/mermaid-images/0624e119-b37d-426c-aebf-5657c0e16df7.png"
+    },
+    {
+      "text": "Docker Compose: Discover Docker Compose as a tool for defining and running multi-container Docker applications.",
+      "image_prompt": "graph TD; A[Docker Compose] --> B[Define Applications]; B --> C[Multi-Container]; C --> D[Configurations]",
+      "url": "http://localhost:9000/mermaid-images/57b3dcf2-0798-4337-a4c4-b040de6f4b39.png"
+    },
+    {
+      "text": "Docker Swarm: Dive into Docker Swarm as a native clustering and orchestration tool for Docker containers.",
+      "image_prompt": "graph LR; A[Docker Swarm] --> B[Clustering]; B --> C[Orchestration]; A --> D[Node Management]",
+      "url": "http://localhost:9000/mermaid-images/50b169e9-5613-4733-a144-e9678b611962.png"
+    },
+    {
+      "text": "Kubernetes vs Docker: Compare and contrast Kubernetes and Docker, understanding their relationship, differences, and use cases.",
+      "image_prompt": "graph TD; A[Kubernetes] --> B[Orchestration]; A --> C[Management]; D[Docker] --> C; D --> E[Containers]",
+      "url": "http://localhost:9000/mermaid-images/6424364a-1040-4979-b6ee-cc7c3fe5777b.png"
+    },
+    {
+      "text": "Conclusion and Future of Docker: Summarize key takeaways and discuss the future potential and evolution of Docker in the field of cloud computing and DevOps.",
+      "image_prompt": "graph LR; A[Conclusion] --> B[Key Takeaways]; B --> C[Future Potential]; C --> D[Evolution]",
+      "url": "http://localhost:9000/mermaid-images/e6079dea-ff55-49a3-a6d7-bba2fc58d98e.png"
+    }
+  ]
+}

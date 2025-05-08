@@ -1,0 +1,16 @@
+1
+00:00:00,100 --> 00:00:01,137
+Docker Architecture
+
+2
+00:00:01,613 --> 00:00:05,100
+Explore the three main components of Docker - the Docker Daemon
+
+3
+00:00:05,475 --> 00:00:06,175
+Docker Client
+
+4
+00:00:06,438 --> 00:00:07,112
+and Docker Hub
+

@@ -1,0 +1,28 @@
+1
+00:00:00,062 --> 00:00:00,825
+In the first scene
+
+2
+00:00:01,300 --> 00:00:04,312
+we will introduce the concept of JavaScript functions
+
+3
+00:00:04,700 --> 00:00:06,787
+an essential building block in programming
+
+4
+00:00:07,175 --> 00:00:13,100
+Functions allow us to encapsulate a task and execute it multiple times throughout a program
+
+5
+00:00:13,475 --> 00:00:17,075
+They help in reducing code redundancy and improving readability
+
+6
+00:00:17,438 --> 00:00:23,250
+We will start by understanding how to declare a function using the 'function' keyword and invoke it by name
+
+7
+00:00:23,700 --> 00:00:26,225
+which forms the foundation of modular code development
+

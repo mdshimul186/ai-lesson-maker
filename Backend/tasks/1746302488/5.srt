@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,262
+Dockerfile Basics
+
+2
+00:00:01,762 --> 00:00:07,125
+Learn about Dockerfiles and how they are used to automate the process of creating Docker images
+

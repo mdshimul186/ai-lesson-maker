@@ -1,0 +1,56 @@
+1
+00:00:00,075 --> 00:00:02,500
+In this introductory scene of our Docker lecture
+
+2
+00:00:02,975 --> 00:00:09,037
+we will explore what Docker is and why it has become an essential tool in modern software development
+
+3
+00:00:09,438 --> 00:00:13,662
+Docker is an open-source platform that allows you to automate the deployment
+
+4
+00:00:13,925 --> 00:00:14,575
+scaling
+
+5
+00:00:14,762 --> 00:00:16,975
+and management of applications in containers
+
+6
+00:00:17,350 --> 00:00:18,562
+Containers are lightweight
+
+7
+00:00:18,800 --> 00:00:19,575
+standalone
+
+8
+00:00:19,850 --> 00:00:24,350
+executable software packages that include everything needed to run a piece of software
+
+9
+00:00:24,587 --> 00:00:25,525
+including the code
+
+10
+00:00:26,025 --> 00:00:26,663
+runtime
+
+11
+00:00:26,913 --> 00:00:27,887
+system tools
+
+12
+00:00:28,137 --> 00:00:28,887
+libraries
+
+13
+00:00:29,062 --> 00:00:29,800
+and settings
+
+14
+00:00:30,188 --> 00:00:35,862
+Docker's containerization approach improves software delivery consistency and efficiency
+

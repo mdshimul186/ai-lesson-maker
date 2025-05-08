@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:00,950
+In JavaScript
+
+2
+00:00:01,200 --> 00:00:03,100
+understanding functions is crucial
+
+3
+00:00:03,562 --> 00:00:08,100
+as they are key building blocks that allow you to execute code snippets multiple times
+
+4
+00:00:09,275 --> 00:00:12,425
+Functions enable developers to encapsulate code logic
+
+5
+00:00:12,700 --> 00:00:14,137
+perform specific tasks
+
+6
+00:00:14,450 --> 00:00:17,137
+or return values based on certain inputs
+
+7
+00:00:18,262 --> 00:00:25,100
+They can be defined as function declarations or expressions and can even be nested within other functions or objects
+

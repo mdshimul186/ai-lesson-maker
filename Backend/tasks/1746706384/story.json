@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": true,
+  "scenes": [
+    {
+      "text": "JavaScript functions are one of the fundamental building blocks of the language. They allow us to encapsulate code into reusable blocks, making our programs more modular and maintainable. Functions are first-class citizens in JavaScript, meaning they can be assigned to variables, passed as arguments to other functions, and returned from functions.",
+      "image_prompt": "## JavaScript Function Basics\n\n```javascript\n// Function declaration\nfunction sayHello() {\n    console.log('Hello, World!');\n}\n\n// Calling the function\nsayHello();\n\n// Function expression\nconst greet = function(name) {\n    return `Hello, ${name}`;\n};\n\n// Using the function expression\nconsole.log(greet('Alice'));\n```\n\n### Function Call Flow\n```mermaid\nflowchart LR\n    A[Function Call] --> B[Execute Function Body]\n    B --> C[Return Value]\n    C --> D[Continue Execution]\n```",
+      "url": "http://minio:9000/mermaid-images/97b09111-63eb-4575-955b-297c0ee13b42.png"
+    },
+    {
+      "text": "There are different ways to define functions in JavaScript, including function declarations, function expressions, and arrow functions. Each syntax has its own use cases and benefits. Function declarations are hoisted to the top of their scope, allowing them to be called before being defined, whereas function expressions are not hoisted.",
+      "image_prompt": "## Function Declarations vs Expressions\n\n```javascript\n// Function declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function expression\nconst subtract = function(a, b) {\n    return a - b;\n};\n\n// Arrow function expression\nconst multiply = (a, b) => a * b;\n```\n\n### Comparison Table:\n\n| Type | Syntax | Hoisted |\n|------|--------|---------|\n| Declaration | `function name(){}` | Yes |\n| Expression | `const name = function(){}` | No |\n| Arrow | `const name = () => {}` | No |\n",
+      "url": "http://minio:9000/mermaid-images/b1cf9b45-c139-41e4-b748-8e7c0a52def7.png"
+    },
+    {
+      "text": "Understanding the scope and closures is vital for advanced function usage in JavaScript. Functions create their own scope, and inner functions have access to the outer function's scope, creating closures. Closures enable powerful patterns such as currying, memoization, and encapsulation in JavaScript applications.",
+      "image_prompt": "## JavaScript Closures\n\n```javascript\nfunction outer() {\n    let counter = 0;\n    return function increment() {\n        counter += 1;\n        return counter;\n    };\n}\n\nconst inc = outer();\nconsole.log(inc()); // 1\nconsole.log(inc()); // 2\n```\n\n### Closure Flow\n```mermaid\nflowchart TD\n    A[Call outer function] --> B[Create inner function with scope]\n    B --> C[Return inner function]\n    C --> D[Call inner function preserving scope]\n```",
+      "url": "http://minio:9000/mermaid-images/b2d02a11-1b35-426a-8488-af23ba24f7a7.png"
+    }
+  ]
+}

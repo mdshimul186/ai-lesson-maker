@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:01,500
+Using Static Methods
+
+2
+00:00:01,900 --> 00:00:06,638
+Static methods belong to the class itself rather than instances of the class
+
+3
+00:00:07,037 --> 00:00:10,963
+They are invoked using the class name rather than instance variables
+

@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:00,762
+In this scene
+
+2
+00:00:01,200 --> 00:00:05,237
+we explore the fundamentals of creating functions in JavaScript
+
+3
+00:00:05,612 --> 00:00:11,250
+Functions are crucial building blocks in programming as they allow you to encapsulate blocks of code
+
+4
+00:00:11,800 --> 00:00:12,562
+reuse them
+
+5
+00:00:13,000 --> 00:00:14,588
+and make your code more organized
+
+6
+00:00:14,975 --> 00:00:17,925
+Functions can accept arguments and return values
+
+7
+00:00:18,300 --> 00:00:22,837
+enabling you to work with dynamic data and build more complex applications
+

@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:00,938
+Docker Networking
+
+2
+00:00:01,375 --> 00:00:05,050
+Docker provides various network drivers to connect containers
+
+3
+00:00:05,438 --> 00:00:06,737
+These include bridge
+
+4
+00:00:06,875 --> 00:00:07,362
+host
+
+5
+00:00:07,612 --> 00:00:08,213
+overlay
+
+6
+00:00:08,450 --> 00:00:09,650
+and macvlan drivers
+
+7
+00:00:10,000 --> 00:00:11,637
+allowing efficient communication
+

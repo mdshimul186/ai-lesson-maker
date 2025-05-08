@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-NabanitaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": true,
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্ট ফাংশন হল কোডের একটি ব্লক যা একটি নির্দিষ্ট কাজ সম্পাদন করার জন্য ডিজাইন করা হয়েছে। ফাংশনগুলি প্রোগ্রামিং এর একটি গুরুত্বপূর্ণ অংশ কারণ এগুলি পুনর্ব্যবহারযোগ্য, সহজভাবে পরিচালনাযোগ্য এবং প্রোগ্রামকে সংগঠিত রাখতে সাহায্য করে। ফাংশনগুলি ডাটা গ্রহণ করতে পারে যেগুলিকে প্রায়শই 'আর্গুমেন্ট' বলা হয় এবং আউটপুট প্রদান করতে পারে। একটি ফাংশন ঘোষণার দুটি অংশ আছে: ফাংশন হেডার এবং ফাংশন বডি। ফাংশনগুলি জাভাস্ক্রিপ্টের ফ্রি স্টাইল কোডিং স্টাইলের সাথে ভাল মতো মানিয়ে যেতে পারে।",
+      "image_prompt": "```javascript\n// Function declaration\nfunction square(number) {\n    return number * number;\n}\n\n// Function usage\nconst result = square(5);\nconsole.log(result); // Outputs: 25\n```",
+      "url": ""
+    },
+    {
+      "text": "জাভাস্ক্রিপ্ট ফাংশনগুলির মধ্যে একটি চমৎকার বৈশিষ্ট্য হল তাদের ফ্লেক্সিবিলিটি, কারণ এগুলি বিভিন্ন ধরণের ঘোষণা পদ্ধতির মাধ্যমে ব্যবহার করা যেতে পারে, যেমন ফাংশন এক্সপ্রেশন। এই পন্থা প্রোগ্রামের লং-টার্ম রিয়্যাবিলিটি ও সাহস ফ্লো বাস্তবায়ন সংক্রান্ত মার্জিন বৃদ্ধি করে। ফাংশন এক্সপ্রেশনের একটি অসাধারণ উদাহরণ হল অ্যানোনিমাস (নামহীন) ফাংশন, যা ফাংশনকে কিছু নির্দিষ্ট প্যারামিটার বা রিফারেন্স ছাড়াই ব্যবহার করা যায়।",
+      "image_prompt": "```javascript\n// Function expression\nconst multiply = function(a, b) {\n    return a * b;\n};\n\n// Calling the function\nconst product = multiply(4, 5);\nconsole.log(product); // Outputs: 20\n```",
+      "url": ""
+    },
+    {
+      "text": "ফাংশনের উন্নত বৈশিষ্ট্যগুলির মধ্যে, জাভাস্ক্রিপ্ট বিভিন্ন অ্যাডভান্সড কনসেপ্ট সমর্থন করে, যেমন কলব্যাক ফাংশন। কলব্যাক ফাংশন প্রায়ই অ্যাসিঙ্ক্রোনাস কার্যগুলিতে ব্যবহৃত হয় যেখানে একটি নির্দিষ্ট কাজ সমাপ্ত হওয়ার পর একটি ফাংশন চালানোর নির্দেশ দেওয়া হয়। এছাড়া জাভাস্ক্রিপ্টের ফাংশনগুলি ফার্স্ট-ক্লাস সিটিজেন হওয়ার ফলে এগুলি ভ্যারিয়েবল, অ্যারের এলিমেন্ট বা কোনো ফাংশনের রিটার্ন ভ্যালি হিসেবে স্থান পেতে পারে।",
+      "image_prompt": "```javascript\n// Callback function\nfunction greet(name, callback) {\n    console.log('Hello, ' + name + '!');\n    callback();\n}\n\nfunction sayGoodbye() {\n    console.log('Goodbye!');\n}\n\n// Usage\ngreet('Alice', sayGoodbye);\n// Outputs:\n// Hello, Alice!\n// Goodbye!\n```",
+      "url": ""
+    }
+  ]
+}

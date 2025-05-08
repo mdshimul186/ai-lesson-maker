@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this first scene, we introduce the concept of JavaScript functions, which are one of the fundamental building blocks in JavaScript. A function in JavaScript is a block of code designed to perform a particular task. It is executed when something invokes it or calls it. Functions help in organizing code, reusing blocks of code, and in making the code more readable and maintainable.",
+      "image_prompt": "# JavaScript Function Structure\n\n```javascript\n// Define a JavaScript function\nfunction calculateArea(width, height) {\n    return width * height; // Compute and return the area\n}\n\n// Example usage\nconst area = calculateArea(5, 3);\nconsole.log(`The area is: ${area}`); // Logs 'The area is: 15'\n```",
+      "url": ""
+    },
+    {
+      "text": "In the second scene, we look at the more advanced concept of arrow functions in JavaScript, which are a more concise way of writing functions. Arrow functions allow for a shorter syntax compared to function expressions. They do not have their own 'this' context, making them suitable for use in certain situations where traditional functions might present issues, especially when referring to objects.",
+      "image_prompt": "# Arrow Function Usage\n\n```javascript\n// Declaring an arrow function\nconst multiply = (x, y) => x * y; // Returns the result of x multiplied by y\n\n// Example usage\nconst product = multiply(4, 5);\nconsole.log(`The product is: ${product}`); // Logs 'The product is: 20'\n```",
+      "url": ""
+    }
+  ]
+}

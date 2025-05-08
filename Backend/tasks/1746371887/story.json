@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In JavaScript, a function is a fundamental building block which allows you to encapsulate a block of code. Functions can be reused and make code easier to manage. Understanding the syntax of a function is essential to unlocking the full potential of JavaScript programming. Furthermore, knowing how to pass arguments and return values empowers you to write modular, reusable code.",
+      "image_prompt": "# Basics of JavaScript Functions\n\n```javascript\n// Function declaration\nfunction sayHello(name) {\n    return `Hello, ${name}!`;\n}\n\n// Function call\nconsole.log(sayHello('Alice')); // Outputs: Hello, Alice!\n```\n\n### Function Components:\n\n| Component | Description |\n|-----------|-------------|\n| Name | Identifier for the function |\n| Parameters | Input variables |\n| Return | Output value |\n\n**Tip:** Always name functions clearly to indicate their purpose.",
+      "url": ""
+    },
+    {
+      "text": "JavaScript functions can also be expressed using the arrow function syntax, which provides a concise way to write functions. This syntax is particularly useful for short, inline functions. It must be noted that arrow functions differ from regular function expressions in their handling of the 'this' keyword, which refers to the function's execution context. Grasping the nuances of this modern syntax will enhance your ability to develop clean, efficient code.",
+      "image_prompt": "# Arrow Functions in JavaScript\n\n```javascript\n// Arrow function syntax\nconst add = (a, b) => a + b;\n\n// Function call\nconsole.log(add(5, 3)); // Outputs: 8\n```\n\n### Key Differences:\n\n| Feature | Regular Function | Arrow Function |\n|---------|------------------|----------------|\n| Syntax | Verbose | Concise |\n| 'this' Behavior | Dynamic | Lexical |\n\n**Note:** Use arrow functions for shorter, anonymous functions where context is clear.",
+      "url": ""
+    }
+  ]
+}

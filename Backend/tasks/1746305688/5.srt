@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:01,012
+Docker Images
+
+2
+00:00:01,450 --> 00:00:03,950
+Learn what Docker images are and how to create them
+

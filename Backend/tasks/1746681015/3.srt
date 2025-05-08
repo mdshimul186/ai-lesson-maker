@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:04,362
+JavaScript classes also support static methods and fields
+
+2
+00:00:04,750 --> 00:00:08,875
+which are defined on the class itself rather than any objects created by it
+
+3
+00:00:09,238 --> 00:00:17,075
+These are useful for defining utility functions or properties that are relevant to the class but don't depend on any specific instance
+
+4
+00:00:17,462 --> 00:00:22,025
+Static methods and properties can be accessed without instantiating the class
+
+5
+00:00:22,425 --> 00:00:28,038
+making them ideal for encapsulating code related to the class but not its individual instances
+

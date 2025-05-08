@@ -1,0 +1,32 @@
+1
+00:00:00,100 --> 00:00:03,013
+There are different ways to define functions in JavaScript
+
+2
+00:00:03,212 --> 00:00:05,000
+including function declarations
+
+3
+00:00:05,263 --> 00:00:06,450
+function expressions
+
+4
+00:00:06,725 --> 00:00:07,925
+and arrow functions
+
+5
+00:00:08,988 --> 00:00:11,762
+Each syntax has its own use cases and benefits
+
+6
+00:00:12,875 --> 00:00:15,725
+Function declarations are hoisted to the top of their scope
+
+7
+00:00:16,113 --> 00:00:18,550
+allowing them to be called before being defined
+
+8
+00:00:18,800 --> 00:00:21,125
+whereas function expressions are not hoisted
+

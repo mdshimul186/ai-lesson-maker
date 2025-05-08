@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this lecture, we will explore the basic concepts of Docker, a platform for developing, shipping, and running applications inside containers. Docker provides a standard way to package an application along with its dependencies, making it easy to execute in a consistent environment. We will cover how Docker containers can streamline development processes, increase portability across different environments, and improve resource efficiency.",
+      "image_prompt": "graph LR; A[Docker] --> B[Containers]; A --> C[Images]; A --> D[Docker Files]; B --> E[Portability]; B --> F[Isolation]; C --> G[Layering]; D --> H[Build]; D --> I[Versioning];",
+      "url": "http://localhost:9000/mermaid-images/291b2a31-286c-4d19-8256-6ce6722d6dda.png"
+    }
+  ]
+}

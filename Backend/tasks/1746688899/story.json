@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "javascriptasd",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-PradeepNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্ট হলো একটি বহুল ব্যবহৃত প্রোগ্রামিং ল্যাঙ্গুয়েজ যা ইন্টারনেট অ্যাপ্লিকেশন ডেভেলপমেন্টের জন্য ব্যবহৃত হয়। এটি সাধারণত ওয়েব পেজের ইন্টারেক্টিভ অংশ তৈরি করতে ব্যবহৃত হয়। জাভাস্ক্রিপ্ট একটি ক্লায়েন্ট-সাইড ভাষা হিসাবে ওয়েব ব্রাউজারের সাথে সরাসরি কাজ করে। এটি ডেভেলপারদের ওয়েব পেজের তথ্য বাস্তবায়নে সাহায্য করে।",
+      "image_prompt": "# জাভাস্ক্রিপ্টের মৌলিক ধারণা\n\n```mermaid\nflowchart TD\n    A[শুরুর নির্দেশ] --> B[প্রক্রিয়া শুরু]\n    B --> C{নির্ধারণ}\n    C -->|হ্যাঁ| D[কার্যক্রম ১]\n    C -->|না| E[কার্যক্রম ২]\n    D --> F[শেষ]\n    E --> F\n```\n",
+      "url": "http://localhost:9000/mermaid-images/0f4f1393-3e6d-4d36-a6ed-481bf386e5c8.png"
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টে বিবিধ কার্যপদ্ধতির মধ্যে সবচেয়ে বহুল ব্যবহৃত একটি হলো ফাংশন। ফাংশন মানে নির্দিষ্ট কাজ সম্পন্ন করার জন্য কোডের রিপোর্ট ব্যবহার করা হয়। এই পদ্ধতি কোড পুনঃব্যবহারের জন্য খুবই কার্যকর। জাভাস্ক্রিপ্টে ফাংশন মডুলার আইডিয়াকে উৎসাহিত করে।",
+      "image_prompt": "# জাভাস্ক্রিপ্টে ফাংশনের উদাহরণ\n\n```javascript\n// ফাংশন ঘোষণা\nfunction greet(name) {\n    return `হ্যালো, ${name}!`;\n}\n\n// ফাংশন ব্যবহার\nconst message = greet('বিশ্ব');\nconsole.log(message);\n```\n",
+      "url": "http://localhost:9000/mermaid-images/cd4b9e15-89ff-4088-9658-6973281ede0b.png"
+    },
+    {
+      "text": "জাভাস্ক্রিপ্ট অ্যাসিঙ্ক্রোনাস প্রোগ্রামিংয়ের মাধ্যমে ডেভেলপারদের ইনপুট/আউটপুট কাজ আসিঙ্ক্রোনাসলি পরিচালনা করতে সক্ষম করে। এতে করে অ্যাপ্লিকেশন পারফরম্যান্স উন্নত হতে পারে। আসিঙ্ক্রোনাস প্রোগ্রামিং Promise বা Async/Await এর মাধ্যমে করা যায়, যা কোড পড়া সহজ করে তোলে।",
+      "image_prompt": "# আসিঙ্ক্রোনাস জাভাস্ক্রিপ্ট\n\n## প্রমিজ-ভিত্তিক পদ্ধতি\n\n```javascript\nasync function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('ত্রুটি:', error);\n  }\n}\n\n// ব্যবহার\nfetchData();\n```\n\n### প্রবাহ চিত্র:\n\n```mermaid\nsequenceDiagram\n    participant অ্যাপ\n    participant এপিআই\n    অ্যাপ->>এপিআই: ফেচ অনুরোধ\n    এপিআই-->>অ্যাপ: প্রতিক্রিয়া\n    অ্যাপ->>অ্যাপ: ডেটা প্রক্রিয়াকরণ\n```\n",
+      "url": "http://localhost:9000/mermaid-images/8304985d-ae57-47e5-b9f3-fd67d1844add.png"
+    }
+  ]
+}

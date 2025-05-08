@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:01,163
+Closure Phase
+
+2
+00:00:01,375 --> 00:00:02,638
+Completing tasks
+
+3
+00:00:02,800 --> 00:00:04,000
+obtaining acceptance
+
+4
+00:00:04,225 --> 00:00:05,975
+and formally closing the project
+

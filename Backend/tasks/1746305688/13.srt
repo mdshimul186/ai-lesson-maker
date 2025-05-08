@@ -1,0 +1,8 @@
+1
+00:00:00,050 --> 00:00:02,400
+Running Multi-container Docker Applications
+
+2
+00:00:02,812 --> 00:00:06,562
+Explore multi-container orchestration using Docker Compose
+

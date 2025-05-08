@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: In this scene, we will explore the fundamentals of Docker, which is a platform designed to help developers build, ship, and run applications in a standardized unit called a container. Docker enables efficient resource utilization by isolating applications in containers that use the same underlying OS kernel. This makes it easy for applications to run consistently across different environments, from development to production.",
+      "image_prompt": "graph TD; A[Developer's Code] --> B[Docker Build Process]; B --> C[Container Image]; C --> D[Docker Container]; D --> E[Application Runtime Environment]; A --> F[Local Development]; F --> |Dockerized| D;",
+      "url": ""
+    }
+  ]
+}

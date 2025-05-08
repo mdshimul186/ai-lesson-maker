@@ -1,0 +1,40 @@
+1
+00:00:00,087 --> 00:00:00,838
+In this lecture
+
+2
+00:00:01,312 --> 00:00:03,900
+we will explore the basic concepts of Docker
+
+3
+00:00:04,388 --> 00:00:05,825
+a platform for developing
+
+4
+00:00:06,088 --> 00:00:06,700
+shipping
+
+5
+00:00:06,950 --> 00:00:09,287
+and running applications inside containers
+
+6
+00:00:09,675 --> 00:00:14,213
+Docker provides a standard way to package an application along with its dependencies
+
+7
+00:00:14,613 --> 00:00:17,575
+making it easy to execute in a consistent environment
+
+8
+00:00:17,975 --> 00:00:21,962
+We will cover how Docker containers can streamline development processes
+
+9
+00:00:22,325 --> 00:00:24,938
+increase portability across different environments
+
+10
+00:00:25,312 --> 00:00:27,250
+and improve resource efficiency
+

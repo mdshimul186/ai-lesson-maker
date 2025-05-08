@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:01,312
+Introduction to Docker
+
+2
+00:00:01,900 --> 00:00:05,225
+Learn the basic concept of Docker as a platform for developing
+
+3
+00:00:05,450 --> 00:00:06,050
+shipping
+
+4
+00:00:06,300 --> 00:00:08,825
+and running applications using container technology
+

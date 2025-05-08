@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we explore the basics of creating a JavaScript function. Functions are essential in programming as they allow code reusability and organization by encapsulating blocks of code designed to perform a particular task. The example provided demonstrates how to declare a function, invoke it, and output the result using the console.",
+      "image_prompt": "# JavaScript Function Example\n\n```javascript\n// JavaScript function to add two numbers\nfunction addNumbers(a, b) {\n  // Return the sum of a and b\n  return a + b;\n}\n\n// Calling the function\nconst sum = addNumbers(5, 7);\nconsole.log('The sum is:', sum); // Outputs: The sum is: 12\n```",
+      "url": ""
+    },
+    {
+      "text": "This scene delves into the conceptual understanding of JavaScript function execution flow using a visual diagram. The flowchart illustrates how a function is invoked with specific parameters, processes the input, and returns an output. This aids in grasping the methodology behind function encapsulation and execution.",
+      "image_prompt": "flowchart TD\n    A[Start Function] --> B[Receive Parameters]\n    B --> C[Process Logic]\n    C --> D[Return Result]\n    D --> E[Function Call Ends]",
+      "url": ""
+    }
+  ]
+}

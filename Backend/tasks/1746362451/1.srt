@@ -1,0 +1,32 @@
+1
+00:00:00,075 --> 00:00:00,912
+In this first scene
+
+2
+00:00:01,337 --> 00:00:04,312
+we introduce the concept of a function in JavaScript
+
+3
+00:00:04,713 --> 00:00:13,062
+Functions are fundamental building blocks in JavaScript and help streamline your code by encapsulating functionality in reusable modules
+
+4
+00:00:13,425 --> 00:00:15,812
+A function is created with the 'function' keyword
+
+5
+00:00:16,175 --> 00:00:17,238
+followed by a name
+
+6
+00:00:17,488 --> 00:00:18,975
+parameters in parentheses
+
+7
+00:00:19,225 --> 00:00:21,663
+and a block of statements in curly braces
+
+8
+00:00:22,038 --> 00:00:28,375
+Understanding how to declare and invoke functions is crucial for writing efficient and organized code
+

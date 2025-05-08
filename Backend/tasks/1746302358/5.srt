@@ -1,0 +1,16 @@
+1
+00:00:00,100 --> 00:00:04,375
+Docker Hub is a cloud-based repository where you can find Docker images
+
+2
+00:00:04,750 --> 00:00:06,362
+It's a platform for finding
+
+3
+00:00:06,713 --> 00:00:07,338
+sharing
+
+4
+00:00:07,588 --> 00:00:10,412
+and collaborating on container-based applications
+

@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:05,650
+JavaScript's event loop is a fundamental concept that allows non-blocking I/O operations
+
+2
+00:00:06,013 --> 00:00:10,400
+enabling asynchronous input/output through a single-threaded architecture
+
+3
+00:00:10,762 --> 00:00:18,775
+Understanding how the event loop works is essential for writing efficient code that takes full advantage of the asynchronous nature of JavaScript
+
+4
+00:00:19,050 --> 00:00:21,900
+commonly used in scalable web applications
+

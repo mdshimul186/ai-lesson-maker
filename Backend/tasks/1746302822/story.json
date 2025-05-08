@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Understanding the Basics of Containerization.",
+      "image_prompt": "graph TD; A[User] -->|Pull| B(Docker Hub); B -->|Image| C[Docker Engine]; C --> D[Container];",
+      "url": "http://localhost:9000/mermaid-images/cb383e0b-7258-4f87-b3ad-65a143e2ab79.png"
+    },
+    {
+      "text": "Docker Architecture: A Closer Look at Docker's Core Components.",
+      "image_prompt": "graph TD; A[Client] --> B[Docker Host]; B --> C[Docker Daemon]; B --> D[Docker CLI]; C --> E[Images & Containers];",
+      "url": "http://localhost:9000/mermaid-images/fe52b301-c7c0-4cee-a704-05ff4a1d965c.png"
+    },
+    {
+      "text": "Creating and Running Containers: Starting Your First Docker Container.",
+      "image_prompt": "graph TD; A[Docker CLI] --> B[Docker Daemon]; B --> C[Container];",
+      "url": "http://localhost:9000/mermaid-images/9c7e8720-4a3b-40d9-afd0-69b84201e381.png"
+    },
+    {
+      "text": "Docker Images: Building and Understanding Docker Images from Scratch.",
+      "image_prompt": "graph TD; A[Dockerfile] --> B[Docker Build]; B --> C[Docker Image]; C -->|Run| D[Container];",
+      "url": "http://localhost:9000/mermaid-images/ab3faba9-772a-4385-8f2e-b5649404b62d.png"
+    },
+    {
+      "text": "Docker Networking: How Networks Work in Docker Environment.",
+      "image_prompt": "graph TD; A[Network] --> B[Bridge Network]; B --> C[Container 1]; B --> D[Container 2];",
+      "url": "http://localhost:9000/mermaid-images/1b14895a-76d0-47d7-a968-1c539954b706.png"
+    },
+    {
+      "text": "Docker Volumes: Persisting Data in Docker Containers.",
+      "image_prompt": "graph TD; A[Container] --> B[Volume]; A --> C[Persistent Storage];",
+      "url": "http://localhost:9000/mermaid-images/3034290f-7981-4732-b766-7fb6a20e18cd.png"
+    },
+    {
+      "text": "Docker Compose: Managing Multi-Container Applications with Ease.",
+      "image_prompt": "graph TD; A[Docker Compose File] --> B[Docker CLI]; B --> C[Multiple Containers];",
+      "url": "http://localhost:9000/mermaid-images/1fc9341b-5d0b-4b38-96f4-38104bd0994b.png"
+    },
+    {
+      "text": "Docker Registry: Understanding Docker Hub and Private Registries.",
+      "image_prompt": "graph TD; A[Docker Client] -->|Push/Pull| B[Docker Registry]; B --> C[Image Repository];",
+      "url": "http://localhost:9000/mermaid-images/8347ebe9-76d9-47fb-aa52-833763ded9e9.png"
+    },
+    {
+      "text": "Best Practices for Docker: Security, Performance, and Maintenance.",
+      "image_prompt": "graph TD; A[Security] --> B[Best Practices]; A --> C[Performance]; A --> D[Maintenance];",
+      "url": "http://localhost:9000/mermaid-images/7b3791a7-e52d-4ec7-8cc7-aac96c26161c.png"
+    },
+    {
+      "text": "Future of Docker: Exploring the Evolving Landscape of Containerization.",
+      "image_prompt": "graph TD; A[Docker] --> B[Container Orchestration]; B --> C[Kubernetes]; B --> D[Future Technologies];",
+      "url": "http://localhost:9000/mermaid-images/4b6243de-f605-4e9b-8e7d-05182edbe37b.png"
+    }
+  ]
+}

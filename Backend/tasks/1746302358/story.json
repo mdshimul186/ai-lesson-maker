@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Docker is a platform designed to help developers build, manage, and secure applications in isolated containers. Containers ensure that software runs the same, regardless of the environment, whether it be your local PC or cloud infrastructure.",
+      "image_prompt": "graph TD; A[Developer] -->|Build| B[Docker Container]; A -->|Run| C[Environment]",
+      "url": "http://localhost:9000/mermaid-images/1de537d9-6f84-404a-bd8d-03aaa0b16b66.png"
+    },
+    {
+      "text": "At its core, Docker utilizes containers to bundle and run applications at scale. Containers are lightweight and contain all necessary dependencies and configuration to run an application.",
+      "image_prompt": "graph TD; A[Docker] --> B[Container]; B --> C[Application + Dependencies]",
+      "url": "http://localhost:9000/mermaid-images/2b4dcab0-aa46-414f-88bc-f9ee2b33373e.png"
+    },
+    {
+      "text": "Docker containers are created from Docker images. An image is a lightweight, standalone, and executable software package that includes everything needed to run a piece of software.",
+      "image_prompt": "graph TD; A[Docker Image] -->|Creates| B[Container]",
+      "url": "http://localhost:9000/mermaid-images/0a5432a5-44bc-4e86-9892-62c4a7d0e5a7.png"
+    },
+    {
+      "text": "The Docker Engine is the core part of Docker, responsible for container management and operation. It exposes a REST API for interaction, and it can run on various platforms.",
+      "image_prompt": "graph TD; A[Docker Client] -->|API| B[Docker Engine] -->|Run| C[Container]",
+      "url": "http://localhost:9000/mermaid-images/54ccf1cf-d697-4f99-8c28-ce5f828fdb76.png"
+    },
+    {
+      "text": "Docker Hub is a cloud-based repository where you can find Docker images. It's a platform for finding, sharing, and collaborating on container-based applications.",
+      "image_prompt": "graph TD; A[Docker Client] -->|Pull| B[Docker Hub]; B -->|Push| A",
+      "url": "http://localhost:9000/mermaid-images/1011b8d5-d33d-4bb7-965b-8b05048924df.png"
+    },
+    {
+      "text": "A Dockerfile is a text document that contains all the commands to assemble an image. It automates the deployment of applications inside containers.",
+      "image_prompt": "graph TD; A[Dockerfile] -->|Build| B[Docker Image]",
+      "url": "http://localhost:9000/mermaid-images/e39df4d6-8068-46ad-adfd-770e6c99decd.png"
+    },
+    {
+      "text": "Networking in Docker provides multiple solutions to connect containers with each other and the outside world. Containers can communicate via shared networks, bridge networks, or overlay networks.",
+      "image_prompt": "graph TD; A[Container1] -- Network --> B[Bridge] -- Network --> C[Container2]; B --> D[External Network]",
+      "url": "http://localhost:9000/mermaid-images/3365d7b1-0990-4255-8e78-a3803fc7d1c7.png"
+    },
+    {
+      "text": "Storage in Docker is managed using volumes, which provide efficient data storage and sharing between containers, or between a container and the host system.",
+      "image_prompt": "graph TD; A[Host System] -->|Volume| B[Container]; B -->|Shares Data| C[Volume]",
+      "url": "http://localhost:9000/mermaid-images/7e538ac1-0874-4ad0-9553-4702fbf4535e.png"
+    },
+    {
+      "text": "Docker Compose allows the definition and running of multi-container Docker applications using a simple YAML file, streamlining development and deployment processes.",
+      "image_prompt": "graph TD; A[Docker Compose] -->|Define| B[Multi-Container]; B -->|Run| C[Docker Engine]",
+      "url": "http://localhost:9000/mermaid-images/6c185b59-67dd-4686-bfcd-ca1ec6888a53.png"
+    },
+    {
+      "text": "Security in Docker involves strategies such as image scanning, role-based access control, and runtime defense to protect containers in development and production phases.",
+      "image_prompt": "graph TD; A[Container] -->|Scanned by| B[Security Tool]; B -->|Protect| C[Container]",
+      "url": "http://localhost:9000/mermaid-images/cfdcf3dd-256d-4e38-89d5-ddd0f25d9ce4.png"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In the first scene, we will explore the basics of creating functions in JavaScript. Functions are fundamental building blocks in JavaScript, allowing developers to encapsulate code logic and promote reuse. Understanding how to declare and call functions can greatly enhance your ability to create efficient and maintainable code.",
+      "image_prompt": "# Creating Functions in JavaScript\n\n## Function Declaration\n\n```javascript\n// Function declaration example\nfunction add(a, b) {\n    return a + b;\n}\n\n// Using the function\nconst sum = add(5, 10);\nconsole.log('Sum:', sum);\n```",
+      "url": "http://localhost:9000/mermaid-images/9f908f9b-05ef-4af7-b41b-65f81934a889.png"
+    },
+    {
+      "text": "In the second scene, we delve into advanced function concepts including anonymous functions and arrow functions. These function types are integral to modern JavaScript development, offering more concise syntax and fostering better context handling with 'this' keyword. Gaining proficiency in these forms equips developers to write cleaner and more expressive code.",
+      "image_prompt": "# Advanced JavaScript Functions\n\n## Anonymous and Arrow Functions\n\n```javascript\n// Anonymous function example\nconst multiply = function(x, y) {\n    return x * y;\n};\n\n// Arrow function example\nconst divide = (x, y) => x / y;\n\n// Function usage\nconsole.log('Product:', multiply(4, 5));\nconsole.log('Quotient:', divide(20, 4));\n```\n\n## Function Usage\n\n```mermaid\nflowchart TD\n    A[Start] --> B[Invoke Anonymous Function]\n    B --> C[Invoke Arrow Function]\n    C --> D[Output Results]\n    D --> E[End]\n```",
+      "url": "http://localhost:9000/mermaid-images/ee2557bf-7ab2-4e0a-84c0-ad9f5497043b.png"
+    }
+  ]
+}

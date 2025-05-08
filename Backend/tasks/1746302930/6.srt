@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:01,475
+Running Docker Containers
+
+2
+00:00:01,725 --> 00:00:04,513
+Containers are instances of Docker images
+
+3
+00:00:04,900 --> 00:00:07,888
+They run applications with specified configurations
+
+4
+00:00:08,312 --> 00:00:10,500
+utilizing isolated resources
+

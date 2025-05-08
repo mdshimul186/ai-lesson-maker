@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:01,200
+Closing the Project
+
+2
+00:00:01,613 --> 00:00:03,975
+Finalizing all project activities
+
+3
+00:00:04,213 --> 00:00:06,375
+ensuring all deliverables are accepted
+
+4
+00:00:06,812 --> 00:00:08,338
+and reflecting on lessons learned
+

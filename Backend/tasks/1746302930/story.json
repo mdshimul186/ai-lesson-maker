@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Docker is a platform designed to help developers create, deploy, and run applications inside lightweight containers. It's revolutionizing software development by solving application delivery challenges.",
+      "image_prompt": "graph TD; A[Developer] --> B[Docker Platform] --> C[Container]; C --> D[Application]",
+      "url": "http://localhost:9000/mermaid-images/a1a51174-45fd-498c-912c-12f8421a6f59.png"
+    },
+    {
+      "text": "Understanding Containers: Containers encapsulate an application with all its dependencies, ensuring consistent environments across different systems.",
+      "image_prompt": "graph TD; A[Application] --> B[Dependencies]; B --> C[Container]",
+      "url": "http://localhost:9000/mermaid-images/e2436fe8-40bb-4ba2-8b07-0907d630d952.png"
+    },
+    {
+      "text": "Docker Architecture Overview: Docker consists of components like Docker Client, Docker Daemon, Docker Engine, Containers, and Docker Hub.",
+      "image_prompt": "graph TD; A[Docker Client] --> B[Docker Daemon]; B --> C[Docker Engine]; C --> D[Containers]; B --> E[Docker Hub]",
+      "url": "http://localhost:9000/mermaid-images/ee74f078-8357-4ff3-a667-027dcbd830c2.png"
+    },
+    {
+      "text": "Docker Installation: Installing Docker involves downloading the Docker software suitable for your operating system from the official Docker website.",
+      "image_prompt": "graph TD; A[Operating System] --> B[Docker Installation]; B --> C[Docker Software]",
+      "url": "http://localhost:9000/mermaid-images/5cc4eba4-7fd3-426f-bbdc-8b8da696100d.png"
+    },
+    {
+      "text": "Building Docker Images: Images are templates for Docker containers. We build them using Dockerfiles that describe the steps needed to setup the environment.",
+      "image_prompt": "graph TD; A[Dockerfile] --> B[Build Process]; B --> C[Docker Image]",
+      "url": "http://localhost:9000/mermaid-images/5b8c0ef2-adf7-4e88-9b6c-85a9b481d1b0.png"
+    },
+    {
+      "text": "Running Docker Containers: Containers are instances of Docker images. They run applications with specified configurations, utilizing isolated resources.",
+      "image_prompt": "graph TD; A[Docker Image] --> B[Run Command]; B --> C[Running Container]",
+      "url": "http://localhost:9000/mermaid-images/8dc436b7-8ab1-4f47-b8ff-43cb69626810.png"
+    },
+    {
+      "text": "Docker Networking: Docker provides several networking modes (bridge, host, overlay) to facilitate communication between containers.",
+      "image_prompt": "graph TD; A[Container1] -- Bridge --> B[Network]; B -- Overlay --> C[Container2]",
+      "url": "http://localhost:9000/mermaid-images/3a1266fc-d116-42e3-aa02-16a951bc4e02.png"
+    },
+    {
+      "text": "Docker Storage Management: Docker volumes and bind mounts help manage persistent data separately from the container's filesystem.",
+      "image_prompt": "graph TD; A[Storage] --> B[Volumes]; B --> C[Containers]",
+      "url": "http://localhost:9000/mermaid-images/48d723fb-8d52-4f96-8a21-8236f490783c.png"
+    },
+    {
+      "text": "Docker Compose: Docker Compose is a tool for defining and running multi-container Docker applications through the use of a YAML file.",
+      "image_prompt": "graph TD; A[Yaml File] --> B[Docker Compose]; B --> C[Multiple Containers]",
+      "url": "http://localhost:9000/mermaid-images/3d2900fe-d3a8-41eb-b308-ac4c3dd88486.png"
+    },
+    {
+      "text": "Scaling with Docker Swarm: Docker Swarm allows us to orchestrate and manage clusters of Docker nodes, providing high-availability and scaling capabilities.",
+      "image_prompt": "graph TD; A[Node1] --> B[Swarm Cluster]; A --> C[Node2]; B --> D[Scaling Services]",
+      "url": "http://localhost:9000/mermaid-images/53d06fa4-85c4-4125-b238-8862ed1da63e.png"
+    }
+  ]
+}

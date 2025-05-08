@@ -1,0 +1,40 @@
+1
+00:00:00,100 --> 00:00:03,663
+Functions in JavaScript can take arguments and return values
+
+2
+00:00:04,062 --> 00:00:06,763
+allowing them to be versatile tools in coding
+
+3
+00:00:07,763 --> 00:00:10,713
+Arguments are inputs passed into the function for processing
+
+4
+00:00:11,075 --> 00:00:13,625
+while the function's output is what it returns
+
+5
+00:00:14,713 --> 00:00:17,637
+This aspect of functions makes them incredibly powerful
+
+6
+00:00:17,938 --> 00:00:22,950
+enabling developers to create dynamic scripts that perform a wide array of operations
+
+7
+00:00:24,075 --> 00:00:25,725
+Whether you need to manipulate data
+
+8
+00:00:26,062 --> 00:00:27,288
+calculate results
+
+9
+00:00:27,562 --> 00:00:29,562
+or handle asynchronous actions
+
+10
+00:00:29,875 --> 00:00:33,475
+mastering function arguments and return statements is vital
+

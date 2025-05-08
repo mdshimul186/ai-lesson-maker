@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:01,762
+Besides basic functions
+
+2
+00:00:02,013 --> 00:00:10,287
+JavaScript allows for the utilization of higher-order functions which can either take other functions as arguments or return a function as a result
+
+3
+00:00:10,675 --> 00:00:14,350
+This advanced technique is pivotal for operations like filtering
+
+4
+00:00:14,775 --> 00:00:15,325
+mapping
+
+5
+00:00:15,600 --> 00:00:17,175
+and reducing data collections
+
+6
+00:00:17,538 --> 00:00:21,163
+helping developers write more flexible and reusable code components
+
+7
+00:00:21,538 --> 00:00:25,300
+Mastering them opens the door to functional programming paradigms
+

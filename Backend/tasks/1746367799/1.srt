@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:00,738
+In this scene
+
+2
+00:00:01,150 --> 00:00:04,025
+we explore the basics of creating a JavaScript function
+
+3
+00:00:04,412 --> 00:00:14,400
+Functions are essential in programming as they allow code reusability and organization by encapsulating blocks of code designed to perform a particular task
+
+4
+00:00:14,787 --> 00:00:17,550
+The example provided demonstrates how to declare a function
+
+5
+00:00:17,950 --> 00:00:18,538
+invoke it
+
+6
+00:00:18,975 --> 00:00:20,975
+and output the result using the console
+

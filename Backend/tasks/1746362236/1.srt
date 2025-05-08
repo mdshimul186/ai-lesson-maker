@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:00,725
+In this scene
+
+2
+00:00:01,000 --> 00:00:04,225
+we are going to discuss the basics of JavaScript functions
+
+3
+00:00:04,612 --> 00:00:07,925
+Functions are fundamental building blocks in JavaScript
+
+4
+00:00:08,300 --> 00:00:09,800
+You will learn how to declare a function
+
+5
+00:00:10,188 --> 00:00:11,325
+pass arguments to it
+
+6
+00:00:11,750 --> 00:00:12,762
+and return values
+
+7
+00:00:13,150 --> 00:00:20,587
+Functions help modularize and reuse code efficiently which is a key concept in writing maintainable and clean code
+

@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,600
+Updating Docker Containers
+
+2
+00:00:02,075 --> 00:00:05,162
+How to efficiently update containers with minimum downtime
+

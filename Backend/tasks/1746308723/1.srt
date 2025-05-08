@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:00,950
+In JavaScript
+
+2
+00:00:01,325 --> 00:00:03,587
+functions are fundamental building blocks
+
+3
+00:00:03,987 --> 00:00:08,175
+They allow you to encapsulate code and execute it wherever necessary
+
+4
+00:00:08,575 --> 00:00:13,387
+Let's start by understanding the three main types of function syntax in JavaScript
+

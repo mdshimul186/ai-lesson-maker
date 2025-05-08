@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,425
+Stakeholder Communication
+
+2
+00:00:01,887 --> 00:00:06,662
+Managing expectations and keeping stakeholders informed throughout the project
+

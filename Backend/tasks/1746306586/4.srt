@@ -1,0 +1,20 @@
+1
+00:00:00,075 --> 00:00:02,562
+Inheritance in JavaScript Classes
+
+2
+00:00:02,938 --> 00:00:05,675
+Classes can inherit features from other classes
+
+3
+00:00:06,075 --> 00:00:07,850
+Using the extends keyword
+
+4
+00:00:08,238 --> 00:00:10,575
+a class can become a child of another class
+
+5
+00:00:10,975 --> 00:00:13,238
+inheriting its properties and methods
+

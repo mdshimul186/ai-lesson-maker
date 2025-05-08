@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,438
+Data Management in Docker
+
+2
+00:00:01,837 --> 00:00:07,062
+Discuss persistent storage and how Docker volumes are used for data management inside containers
+

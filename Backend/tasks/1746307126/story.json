@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Welcome to the introduction of JavaScript functions. In this scene, we discuss the basic syntax and purpose of functions. A JavaScript function is a block of code designed to perform a particular task. Functions are executed when they are invoked or called.",
+      "image_prompt": "flowchart TD; A[Start] --> B{JavaScript Function}; B --> C[Syntax: function name()]",
+      "url": ""
+    },
+    {
+      "text": "In this scene, we cover how to declare and call functions in JavaScript. This section explains function declaration using the 'function' keyword and invoking the function by its name followed by parentheses.",
+      "image_prompt": "sequenceDiagram; participant User; participant Function; User->>Function: Calls; Note right of Function: Executes code block; Function-->>User: Returns result",
+      "url": "http://localhost:9000/mermaid-images/6d16de97-2202-4991-82b3-0aec2cbd11e9.png"
+    },
+    {
+      "text": "Next, we explore the use of parameters and arguments in functions. Parameters allow functions to accept input values, and these values are specified when the function is invoked, known as arguments.",
+      "image_prompt": "classDiagram; class Function { +execute(param1, param2) void; }",
+      "url": ""
+    },
+    {
+      "text": "In this scene, we will look into advanced concepts like return statements and scope. Functions can return values using the return keyword, which exits the function and specifies the value to be returned.",
+      "image_prompt": "stateDiagram-v2; [*] --> Start; Start --> FunctionDeclaration; FunctionDeclaration --> ReturnStatement; ReturnStatement --> [*]",
+      "url": ""
+    },
+    {
+      "text": "Let's conclude with practical usage of anonymous functions and arrow functions. These are special kinds of functions used for shorthand and functional programming practices.",
+      "image_prompt": "pie title Function Types; \"Named Functions\" : 40; \"Anonymous Functions\" : 30; \"Arrow Functions\" : 30",
+      "url": "http://localhost:9000/mermaid-images/11730bfb-ff69-4363-93b5-fa3cd43690a1.png"
+    }
+  ]
+}

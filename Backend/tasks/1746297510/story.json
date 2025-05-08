@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this introductory scene of our Docker lecture, we will explore what Docker is and why it has become an essential tool in modern software development. Docker is an open-source platform that allows you to automate the deployment, scaling, and management of applications in containers. Containers are lightweight, standalone, executable software packages that include everything needed to run a piece of software, including the code, runtime, system tools, libraries, and settings. Docker's containerization approach improves software delivery consistency and efficiency.",
+      "image_prompt": "graph TD; A[Introduction to Docker] --> B[Docker Platform]; A --> C[What are Containers?]; B --> D[Open-source]; C --> E[Lightweight and Portable]; E --> F[Applications Executable]; C --> G[Improved Consistency & Efficiency];",
+      "url": ""
+    },
+    {
+      "text": "In the second scene, we'll delve into the architecture of Docker and how it operates. Docker uses a client-server architecture, where the Docker client communicates with the Docker daemon (server) to build, run, and manage Docker containers. The Docker daemon listens for Docker API requests and manages Docker images, containers, networks, and volumes. Docker uses an image file to create Docker containers. These images can be stored in and pulled from Docker Hub or private repositories, allowing for efficient sharing and reuse. Understanding Docker's architecture is crucial for optimizing your workflows and leveraging its full potential.",
+      "image_prompt": "graph TD; A[Docker Architecture] --> B[Docker Client]; A --> C[Docker Daemon (Server)]; B --> D[Docker API Requests]; C --> E[Manage Containers/Images]; E --> F[Docker Hub/Private Repo]; F --> G[Image Sharing and Reuse]; G --> H[Efficient Workflows];",
+      "url": ""
+    }
+  ]
+}

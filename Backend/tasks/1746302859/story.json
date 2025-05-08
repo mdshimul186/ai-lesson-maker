@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Scene 1: Introduction to Docker - In this scene, we introduce Docker as a platform that allows developers to automate the deployment of applications inside lightweight, portable containers. Learn about the fundamental concepts of containerization and how Docker fits into modern DevOps practices.",
+      "image_prompt": "graph LR; A[Introduction to Docker] --> B[Containerization]; A --> C[DevOps Practices]; B --> D[Lightweight Containers]; C --> D;",
+      "url": "http://localhost:9000/mermaid-images/c3c5cfd5-46e4-4da1-8396-a0d11d77f1a3.png"
+    },
+    {
+      "text": "Scene 2: Docker Architecture - This scene explores Docker's architecture, including its main components such as the Docker Engine, Docker Images, Containers, and the Docker Hub. Understand how these elements interact to enable efficient application development and deployment.",
+      "image_prompt": "graph LR; A[Docker Architecture] --> B[Docker Engine]; A --> C[Docker Images]; A --> D[Containers]; A --> E[Docker Hub]; B --> D; C --> D; D --> E;",
+      "url": "http://localhost:9000/mermaid-images/573135db-7564-479d-827f-4e7a170c8756.png"
+    },
+    {
+      "text": "Scene 3: Practical Applications of Docker - Dive into real-world applications of Docker by exploring use cases such as microservices architecture, CI/CD pipelines, and cloud portability. Learn how Docker facilitates seamless integration into various development workflows.",
+      "image_prompt": "graph LR; A[Practical Applications of Docker] --> B[Microservices]; A --> C[CI/CD Pipelines]; A --> D[Cloud Portability]; B --> C; C --> D;",
+      "url": "http://localhost:9000/mermaid-images/0c440c59-934c-428e-9376-1c71ba7e14ce.png"
+    }
+  ]
+}

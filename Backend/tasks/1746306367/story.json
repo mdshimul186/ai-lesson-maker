@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to JavaScript Classes: Learn the basics of classes in JavaScript, which are templates for creating objects. Understand the syntax for defining a class, and the key components such as the constructor method.",
+      "image_prompt": "classDiagram; class MyClass { +constructor() }",
+      "url": ""
+    },
+    {
+      "text": "Defining and Instantiating Classes: Dive deeper into how to define classes and use them to instantiate objects. Explore concepts like class methods and properties, and how they facilitate object-oriented programming in JavaScript.",
+      "image_prompt": "classDiagram; class Car { +brand +model +constructor(brand, model) +displayInfo() }",
+      "url": ""
+    },
+    {
+      "text": "Inheritance in JavaScript Classes: Learn about the concept of inheritance, allowing one class to inherit fields and methods from another. Understand how to extend a class using the 'extends' keyword.",
+      "image_prompt": "classDiagram; class Animal { +name +constructor(name) +speak() } class Dog { +constructor(name) } Dog --> Animal",
+      "url": ""
+    },
+    {
+      "text": "Static Methods and Properties: Discover how static members allow for shared functionality that isn't tied to individual instances of a class. Differentiate when to use static properties and methods in your class design.",
+      "image_prompt": "classDiagram; class Helper { +static add(x, y) } class Math { +sum() -privateMethod() } Helper <|-- Math",
+      "url": ""
+    },
+    {
+      "text": "Private Fields and Methods: Understand the implementation of encapsulation in JavaScript classes using private fields and methods. Learn how to define private members using the '#' syntax for better data security.",
+      "image_prompt": "classDiagram; class BankAccount { -#balance #deposit(amount) }",
+      "url": ""
+    }
+  ]
+}

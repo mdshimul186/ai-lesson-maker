@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,087
+The Future of Docker
+
+2
+00:00:01,587 --> 00:00:06,112
+Anticipate emerging trends and future developments in Docker technology
+

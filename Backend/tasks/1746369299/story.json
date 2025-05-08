@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In Scene 1, we delve into the essential concept of JavaScript functions. A function in JavaScript is a block of code designed to perform a particular task, which aids in structuring the program logically and efficiently. Functions encapsulate code for reuse, enhancing modularity in programming. It can accept arguments, process logic, and return output. Understanding how to declare and use functions is critical to mastering JavaScript programming.",
+      "image_prompt": "# JavaScript Function Example\n\n```javascript\n// Function declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function usage\nconst sum = add(5, 3);\nconsole.log(`The sum is: ${sum}`);  // Output: The sum is: 8\n```\n",
+      "url": "http://localhost:9000/mermaid-images/24f87d69-0302-417f-9122-f4a18c439155.png"
+    },
+    {
+      "text": "In Scene 2, we explore the flow of logic within a program by delving into control flows using if-else statements in JavaScript. Control flow is the order in which individual statements, instructions, or function calls are executed or evaluated. The if-else statement is used to perform different actions based on different conditions, playing a pivotal role in decision-making within the code, thus altering the program's execution path based on evaluation.",
+      "image_prompt": "flowchart TD\n    Start[Start]\n    --> Check{Is age >= 18?}\n    Check --|Yes|--> Adult[Display 'Adult']\n    Check --|No|--> Minor[Display 'Minor']\n    Adult & Minor --> End[End]\n",
+      "url": "http://localhost:9000/mermaid-images/74fafe3e-f33b-40e3-87cf-d7ba104d9cb8.png"
+    }
+  ]
+}

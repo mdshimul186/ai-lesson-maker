@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,538
+Introduction to Docker
+
+2
+00:00:02,112 --> 00:00:10,300
+Understanding its core purpose and the problem it solves by enabling applications to run in containers consistently across different environments
+

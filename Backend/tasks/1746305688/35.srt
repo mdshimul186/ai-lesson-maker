@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,438
+Setting Up Docker for Continuous Deployment
+
+2
+00:00:02,900 --> 00:00:06,912
+Steps to integrate Docker into a CI/CD pipeline
+

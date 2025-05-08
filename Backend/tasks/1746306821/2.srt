@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:01,125
+Function Declaration
+
+2
+00:00:01,562 --> 00:00:04,775
+Explore how to declare a function using the function keyword
+
+3
+00:00:05,138 --> 00:00:08,562
+providing a clear understanding of syntax and structure
+

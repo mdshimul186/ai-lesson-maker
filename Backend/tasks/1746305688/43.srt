@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:02,663
+Docker's Impact on Software Delivery
+
+2
+00:00:03,062 --> 00:00:07,075
+Analyze how Docker has transformed software delivery processes
+

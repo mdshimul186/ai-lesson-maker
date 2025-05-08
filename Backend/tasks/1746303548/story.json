@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Docker is a platform used to develop, ship, and run applications on containers. Containers are small, lightweight, and portable units in which you can develop and deploy applications.",
+      "image_prompt": "graph TD; A(Docker) --> B(Containers) --> C(Applications); A --> D(Develop, Ship, Run);",
+      "url": ""
+    },
+    {
+      "text": "Docker Architecture: Docker utilizes a client-server architecture. The Docker client communicates with the Docker daemon, which does the heavy lifting of building, running, and distributing your Docker containers.",
+      "image_prompt": "graph LR; E(Docker Client) -- Request --> F(Docker Daemon); F -- Operates --> G(Containers);",
+      "url": ""
+    },
+    {
+      "text": "Docker Workflow: A typical Docker workflow begins with creating a Dockerfile to define container specifications. Next, you build the Docker image, and finally, run it as a container. This workflow enables consistent environments across development and production.",
+      "image_prompt": "sequenceDiagram; participant Dev as Developer; participant Df as Dockerfile; participant Di as Docker Image; participant C as Container; Dev->>Df: Create; Dev->>Di: Build; Dev->>C: Run;",
+      "url": ""
+    }
+  ]
+}

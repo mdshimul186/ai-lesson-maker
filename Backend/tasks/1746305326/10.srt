@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:01,925
+Conclusion and Benefits
+
+2
+00:00:02,200 --> 00:00:04,575
+Docker streamlines the development lifecycle
+
+3
+00:00:04,987 --> 00:00:06,375
+increases efficiency
+
+4
+00:00:06,750 --> 00:00:08,275
+and enhances collaboration
+
+5
+00:00:08,662 --> 00:00:10,550
+It solves the 'it works on my machine' problem
+

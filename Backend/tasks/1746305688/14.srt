@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,863
+Environment Variables in Docker
+
+2
+00:00:02,288 --> 00:00:05,925
+Discover how to manage configurations using environment variables
+

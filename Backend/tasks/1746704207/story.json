@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-NabanitaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্ট ফাংশন হল কোডের এমন কিছু অংশ যা বারবার ব্যবহারের জন্য গ্রুপ করা হয়েছে। একটি ফাংশন ডিক্লিয়ারেশন বানানোর সময়, আপনাকে এর নাম এবং প্রয়োজনীয় পরিবর্তনী দিতে হবে। এতে কোডের পুনঃব্যবহারযোগ্যতার ক্ষমতা বাড়ে এবং কার্যকরভাবে কাজ করতে সাহায্য করে।",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function declaration\nfunction greet(name) {\n    return `Hello, ${name}!`;\n}\n\n// Function call\nconst message = greet('World');\nconsole.log(message);\n```\n\n## Flowchart of Execution\n\n```mermaid\nflowchart TD\n    A[Start] --> B{Call Function}\n    B -->|Yes| C[Execute Function]\n    C --> D[Return Value]\n    D --> E[Use Value]\n    E --> F[End]\n```\n",
+      "url": ""
+    },
+    {
+      "text": "ফাংশনের একটি গুরুত্বপূর্ণ দিক হলো এর প্যারামিটার এবং পরিবর্তনফল ব্যবহার করার ক্ষমতা। প্যারামিটার হল ফাংশন কলে উত্তীর্ণ মান এবং পরিবর্তনফল হল ফাংশনের ফলাফল। এরা কোডের কার্যকারিতা উন্নত করে।",
+      "image_prompt": "## Function Parameters and Return\n\n```javascript\n// Function with parameters\nfunction add(a, b) {\n    return a + b;\n}\n\n// Using the function\nconst sum = add(5, 3);\nconsole.log(`Sum: ${sum}`);\n```\n\n### Comparison Table\n\n| Feature | Parameter | Return Value |\n|---------|-----------|--------------|\n| Purpose | Input values | Output result |\n| Example | `a, b` | `a + b` |\n",
+      "url": ""
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টে ফাংশন অভিব্যক্তি হল ফাংশনের আরেকটি রূপ যেখানে ফাংশনকে একটি পরিবর্তনীতে সংরক্ষণ করা হয়। এটি ফাংশন কলে আরও নমনীয় এবং শক্তিশালী প্রক্রিয়া প্রদান করে।",
+      "image_prompt": "# JavaScript Function Expressions\n\n```javascript\n// Function expression\nconst multiply = function(x, y) {\n    return x * y;\n};\n\n// Function call\nconst product = multiply(4, 5);\nconsole.log(`Product: ${product}`);\n```\n\n## Flowchart\n\n```mermaid\nflowchart LR\n    A[Declare Variable] --> B[Assign Function]\n    B --> C[Invoke Function]\n    C --> D[Return Product]\n```\n",
+      "url": ""
+    }
+  ]
+}

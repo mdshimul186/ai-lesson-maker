@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this first scene, we introduce the concept of a JavaScript function. A function is a block of code designed to perform a particular task, which is executed when it is invoked or called.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Define Function]; B --> C[Invoke Function]; C --> D[End];",
+      "url": "http://localhost:9000/mermaid-images/576da91f-b739-4653-b6f0-8384ba8696b4.png"
+    },
+    {
+      "text": "Next, we discuss how to declare a function. In JavaScript, functions can be declared using the function keyword, followed by a name and a set of parentheses.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Declare Function using: function functionName() { }]; B --> C[Function Body]; C --> D[End];",
+      "url": ""
+    },
+    {
+      "text": "Now, let's explore function expressions - a way to define a function using a variable. Functions can be stored in variables and passed around like other variables.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Define Function: const myFunction = function() { }]; B --> C[Invoke myFunction]; C --> D[End];",
+      "url": ""
+    },
+    {
+      "text": "This scene covers arrow functions, a concise way to write functions in JavaScript, especially helpful for non-method functions in modern JavaScript.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Define Function using: const myFunction = () => { }]; B --> C[Invoke myFunction]; C --> D[End];",
+      "url": ""
+    },
+    {
+      "text": "Finally, let's discuss parameters and arguments. Functions can take inputs known as parameters, which are specified within the parentheses during function declaration.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Define Function with Parameters: function add(a, b) { return a + b; }]; B --> C[Call add(2, 3)]; C --> D[Returns 5];",
+      "url": ""
+    }
+  ]
+}

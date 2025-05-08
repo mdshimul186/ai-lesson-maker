@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we introduce the basic structure of a JavaScript function. A JavaScript function is a given set of statements that performs a task or calculates a value. Functions in JavaScript are a fundamental building block. This scene covers function declaration, where the keyword `function` is followed by the name of the function and a set of parentheses. This will help learners understand how JavaScript functions are structured and the role they play in programming.",
+      "image_prompt": "# JavaScript Function Structure\n\n```javascript\n// Basic JavaScript Function Structure\nfunction sayHello(name) {\n    return `Hello, ${name}!`;\n}\n\n// Calling the function\nconst greeting = sayHello('Alice');\nconsole.log(greeting);\n```\n",
+      "url": ""
+    },
+    {
+      "text": "This scene delves into the workings of a JavaScript function when invoked. It describes how a function returns a value when called in the code, highlighting the mechanics of passing arguments and retrieving a result. It helps learners see the connection between a function's implementation and its execution in a program, emphasizing practical use cases.",
+      "image_prompt": "sequenceDiagram\n    participant Code\n    participant Function\n    Code->>Function: Call sayHello('Alice')\n    Function-->>Code: Return 'Hello, Alice!'\n    Code->>Console: Display 'Hello, Alice!'",
+      "url": ""
+    }
+  ]
+}

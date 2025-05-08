@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,475
+Docker's Integration with Cloud Services
+
+2
+00:00:02,913 --> 00:00:06,237
+Advantages of aligning Docker with cloud platforms
+

@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this lecture, we will explore the fundamental concepts of Docker, a prominent platform for developing, shipping, and running applications with ease. Docker enables the management of application processes within isolated containers, providing a lightweight and portable environment that simplifies software development and deployment. We'll delve into the core components of Docker, including images, containers, and the Docker engine, understanding how they interrelate to facilitate efficient application lifecycle management.",
+      "image_prompt": "graph TD; Docker_Engine-->Images; Docker_Engine-->Containers; Images-->Containers; Containers-->Applications;",
+      "url": ""
+    }
+  ]
+}

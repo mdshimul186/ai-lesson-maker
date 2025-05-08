@@ -1,0 +1,44 @@
+1
+00:00:00,075 --> 00:00:00,812
+In this lecture
+
+2
+00:00:01,075 --> 00:00:02,400
+we will explore Docker
+
+3
+00:00:02,837 --> 00:00:05,075
+a platform designed to help developers build
+
+4
+00:00:05,338 --> 00:00:06,013
+deploy
+
+5
+00:00:06,237 --> 00:00:08,062
+and run applications in containers
+
+6
+00:00:08,450 --> 00:00:14,100
+Docker ensures that applications are isolated and are consistent across various environments
+
+7
+00:00:14,325 --> 00:00:15,812
+from development to production
+
+8
+00:00:16,200 --> 00:00:18,238
+We will cover the core components of Docker
+
+9
+00:00:18,613 --> 00:00:20,275
+such as images and containers
+
+10
+00:00:20,738 --> 00:00:21,637
+how they interact
+
+11
+00:00:21,850 --> 00:00:25,562
+and the benefits of utilizing Docker in software development processes
+

@@ -1,0 +1,56 @@
+1
+00:00:00,075 --> 00:00:01,975
+In this introductory lecture on Docker
+
+2
+00:00:02,362 --> 00:00:08,162
+we will explore the basic concepts and benefits of using Docker in software development and deployment
+
+3
+00:00:08,562 --> 00:00:15,037
+Docker is a platform that allows developers to automate the deployment of applications inside lightweight
+
+4
+00:00:15,287 --> 00:00:16,375
+portable containers
+
+5
+00:00:16,775 --> 00:00:19,950
+These containers include everything needed to run the application
+
+6
+00:00:20,312 --> 00:00:21,125
+such as the code
+
+7
+00:00:21,538 --> 00:00:22,137
+runtime
+
+8
+00:00:22,562 --> 00:00:23,288
+libraries
+
+9
+00:00:23,462 --> 00:00:24,500
+and system tools
+
+10
+00:00:24,913 --> 00:00:26,125
+By using containers
+
+11
+00:00:26,325 --> 00:00:29,750
+developers can ensure consistency across multiple development
+
+12
+00:00:30,125 --> 00:00:30,725
+testing
+
+13
+00:00:30,938 --> 00:00:32,150
+and production environments
+
+14
+00:00:32,550 --> 00:00:35,288
+thus enhancing the development and deployment process
+

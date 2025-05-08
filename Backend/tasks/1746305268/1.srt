@@ -1,0 +1,52 @@
+1
+00:00:00,087 --> 00:00:00,838
+In this lecture
+
+2
+00:00:01,288 --> 00:00:03,325
+we will delve into the world of Docker
+
+3
+00:00:03,788 --> 00:00:05,950
+a tool designed to make it easier to create
+
+4
+00:00:06,150 --> 00:00:06,800
+deploy
+
+5
+00:00:06,812 --> 00:00:09,075
+and run applications by using containers
+
+6
+00:00:09,463 --> 00:00:14,012
+Containers allow a developer to package up an application with all of the parts it needs
+
+7
+00:00:14,400 --> 00:00:16,325
+such as libraries and other dependencies
+
+8
+00:00:16,600 --> 00:00:18,712
+and ship it all out as one package
+
+9
+00:00:19,100 --> 00:00:24,325
+This ensures that the application will run on any other machine as long as it has Docker installed
+
+10
+00:00:24,725 --> 00:00:26,962
+We will cover key Docker components
+
+11
+00:00:27,150 --> 00:00:28,312
+including Docker Engine
+
+12
+00:00:28,587 --> 00:00:29,250
+Docker Hub
+
+13
+00:00:29,525 --> 00:00:30,025
+and more
+

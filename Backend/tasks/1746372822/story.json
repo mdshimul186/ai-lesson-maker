@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In today's lesson, we will explore the fundamental concepts of JavaScript functions. A function in JavaScript is a block of code designed to perform a particular task. Functions allow you to encapsulate code for reusable, maintainable, and scalable applications. We'll examine how to declare and use functions, highlighting their importance in structuring code correctly. Furthermore, we'll delve into different types of functions, including function declarations and expressions.",
+      "image_prompt": "# JavaScript Functions Overview\n\n```javascript\n// Function Declaration\nfunction sum(a, b) {\n    return a + b;\n}\n\n// Function Expression\nconst multiply = function(x, y) {\n    return x * y;\n};\n\n// Arrow Function\nconst divide = (dividend, divisor) => dividend / divisor;\n\n// Usage\nconsole.log(sum(5, 3)); // Output: 8\nconsole.log(multiply(4, 2)); // Output: 8\nconsole.log(divide(10, 2)); // Output: 5\n```\n\n### Function Types:\n\n| Type             | Description                          |\n|------------------|--------------------------------------|\n| Declaration      | Named functions with hoisting benefits |\n| Expression       | Anonymous functions stored in variables |\n| Arrow            | Compact syntax with context binding  |",
+      "url": "http://localhost:9000/mermaid-images/57e05a3e-e727-4e3b-ba0f-fedc6a3e9a2b.png"
+    },
+    {
+      "text": "In this segment, we will look at the flow of control in JavaScript functions with a focus on decision-making using control statements. Control flow determines the sequence in which operations are executed in a function. Understanding control flow is crucial to writing effective functions that perform necessary actions based on conditions. We will visualize the process from start to end, analyze decision paths, and discuss how they impact function outcomes.",
+      "image_prompt": "# JavaScript Function Control Flow\n\n```mermaid\nflowchart TD\n    Start(Start) --> CheckInput{Is Input Valid?}\n    CheckInput -->|Yes| ProcessData[Process Data]\n    CheckInput -->|No| HandleError[Handle Error]\n    ProcessData --> SaveResults[Save Results]\n    SaveResults --> End(End)\n    HandleError --> End\n```\n\n### Example Code:\n\n```javascript\nfunction processInput(input) {\n    if (typeof input !== 'string') {\n        console.error('Invalid input!');\n        return;\n    }\n    const processed = input.trim().toUpperCase();\n    console.log(processed);\n}\n\n// Test\nprocessInput(' Hello World '); // Output: 'HELLO WORLD'\nprocessInput(123); // Output: 'Invalid input!'\n```\n\n> **Note:** Effective use of control flow enhances error handling and data processing in functions.",
+      "url": "http://localhost:9000/mermaid-images/63628948-8d7b-4316-a28b-78741fa5851e.png"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Welcome to the world of Docker, where we streamline the process of deploying and managing applications in containers. Unlike traditional VM (Virtual Machine) approaches that require significant resources, Docker provides a lightweight and portable solution, enabling developers to package applications and dependencies cyclically. Imagine running your application comfortably in a consistent environment across different machines, from development to production, making collaborations and deployments efficient. In this introductory scene, we'll get a high-level overview of Docker's core concepts including Docker Image, Docker Container, and the Docker Engine.",
+      "image_prompt": "graph TD; Docker[Docker] -->|runs on| Host[Host OS]; Docker -->|uses| Engine[Docker Engine]; Engine --> Image[Docker Image]; Engine --> Container[Docker Container]; Image --> Container;",
+      "url": "http://localhost:9000/mermaid-images/41c86f68-97a1-4794-a81e-cd45c4aafd6b.png"
+    }
+  ]
+}

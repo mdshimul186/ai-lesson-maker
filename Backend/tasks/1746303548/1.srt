@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:01,312
+Introduction to Docker
+
+2
+00:00:01,800 --> 00:00:03,900
+Docker is a platform used to develop
+
+3
+00:00:04,150 --> 00:00:04,562
+ship
+
+4
+00:00:04,987 --> 00:00:06,763
+and run applications on containers
+
+5
+00:00:07,150 --> 00:00:08,688
+Containers are small
+
+6
+00:00:09,175 --> 00:00:09,812
+lightweight
+
+7
+00:00:10,050 --> 00:00:13,425
+and portable units in which you can develop and deploy applications
+

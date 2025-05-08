@@ -1,0 +1,40 @@
+1
+00:00:00,100 --> 00:00:00,950
+In JavaScript
+
+2
+00:00:01,225 --> 00:00:05,000
+understanding scope and closures is essential for effective programming
+
+3
+00:00:06,013 --> 00:00:09,375
+Scope controls the visibility and life cycle of variables
+
+4
+00:00:09,688 --> 00:00:15,637
+whereas closures refer to functions retaining access to their parent scope variables after execution
+
+5
+00:00:16,650 --> 00:00:18,512
+JavaScript has two main scopes
+
+6
+00:00:18,850 --> 00:00:19,962
+global and local
+
+7
+00:00:20,125 --> 00:00:23,000
+with block-level scope enabled by 'let' and 'const'
+
+8
+00:00:23,950 --> 00:00:29,938
+This understanding prevents common issues like variable leaks and enables strategic functional programming
+
+9
+00:00:30,962 --> 00:00:34,913
+Closures enable encapsulation and maintaining state in applications
+
+10
+00:00:35,212 --> 00:00:36,763
+promoting code efficiency
+

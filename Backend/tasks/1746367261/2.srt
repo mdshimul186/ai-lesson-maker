@@ -1,0 +1,24 @@
+1
+00:00:00,075 --> 00:00:01,462
+In the second scene of the lecture
+
+2
+00:00:01,863 --> 00:00:04,875
+we'll explore JavaScript flow control structures
+
+3
+00:00:05,138 --> 00:00:07,862
+which determine the order of execution in a program
+
+4
+00:00:08,250 --> 00:00:14,938
+We'll focus on conditional statements that allow executing different blocks of code based on certain conditions
+
+5
+00:00:15,325 --> 00:00:21,600
+This section will provide a clear understanding of how logical operations are interwoven with conditions
+
+6
+00:00:22,000 --> 00:00:25,913
+helping make the application decision-process dynamic and interactive
+

@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,125
+Creating Private Docker Registries
+
+2
+00:00:02,388 --> 00:00:05,550
+Steps to set up and secure a private Docker registry
+

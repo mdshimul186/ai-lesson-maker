@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:05,625
+The foundation of JavaScript functions lies in their ability to encapsulate code for reuse
+
+2
+00:00:06,062 --> 00:00:07,263
+increase modularity
+
+3
+00:00:07,513 --> 00:00:09,713
+and simplify complex tasks
+
+4
+00:00:10,100 --> 00:00:17,212
+Functions allow developers to define a block of code once and execute it multiple times without redundancy
+
+5
+00:00:17,600 --> 00:00:21,062
+This is crucial for maintaining clean and efficient code
+
+6
+00:00:21,525 --> 00:00:23,413
+especially in large applications
+

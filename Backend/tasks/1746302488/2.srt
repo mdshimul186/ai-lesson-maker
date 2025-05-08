@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:01,363
+Understanding Containers
+
+2
+00:00:01,800 --> 00:00:04,463
+Explore how Docker containers are lightweight
+
+3
+00:00:04,825 --> 00:00:05,600
+standalone
+
+4
+00:00:05,875 --> 00:00:10,238
+and executable packages that include everything needed to run a piece of software
+

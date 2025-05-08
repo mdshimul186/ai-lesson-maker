@@ -1,0 +1,28 @@
+1
+00:00:00,075 --> 00:00:00,975
+In the third scene
+
+2
+00:00:01,375 --> 00:00:05,662
+we explore loops which allow developers to automate repetitive tasks
+
+3
+00:00:06,050 --> 00:00:12,600
+Loops are used to iterate over collections or perform a repetitive operation till a specified condition is met
+
+4
+00:00:13,000 --> 00:00:16,400
+JavaScript provides various types of loops such as 'for'
+
+5
+00:00:16,700 --> 00:00:17,038
+while
+
+6
+00:00:17,425 --> 00:00:18,087
+and 'do while'
+
+7
+00:00:18,462 --> 00:00:26,150
+These loops enhance the efficiency of the code by reducing unnecessary repetitions and enabling iterative operations
+

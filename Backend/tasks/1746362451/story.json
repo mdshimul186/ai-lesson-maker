@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this first scene, we introduce the concept of a function in JavaScript. Functions are fundamental building blocks in JavaScript and help streamline your code by encapsulating functionality in reusable modules. A function is created with the 'function' keyword, followed by a name, parameters in parentheses, and a block of statements in curly braces. Understanding how to declare and invoke functions is crucial for writing efficient and organized code.",
+      "image_prompt": "# JavaScript Function Declaration and Invocation\n\n```javascript\n// Function declaration\nfunction calculateSum(a, b) {\n    // Returns the sum of a and b\n    return a + b;\n}\n\n// Function usage\nconst result = calculateSum(5, 7);\nconsole.log('The sum is', result); // Outputs: The sum is 12\n```",
+      "url": "http://localhost:9000/mermaid-images/8666f88f-5db0-4efa-b798-926d74a1daef.png"
+    },
+    {
+      "text": "In the second scene, we dive deeper into the life cycle of a function within a program. This scene demonstrates how a function is called multiple times with different arguments, which allows you to perform repetitive tasks effortlessly. It's important to grasp how function calls work in JavaScript and how arguments are passed from a function call to the function itself, as this knowledge greatly enhances the versatility and power of your code.",
+      "image_prompt": "flowchart TD\n    A[Start] --> B{Call calculateSum}\n    B -->|5, 7| C[First Call: Returns 12]\n    B -->|10, 15| D[Second Call: Returns 25]\n    C --> E[Log Output: The sum is 12]\n    D --> F[Log Output: The sum is 25]\n    E --> G[End]\n    F --> G",
+      "url": "http://localhost:9000/mermaid-images/8f2c98f6-f241-4286-b118-3e420cd50578.png"
+    }
+  ]
+}

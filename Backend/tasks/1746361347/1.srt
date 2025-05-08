@@ -1,0 +1,32 @@
+1
+00:00:00,075 --> 00:00:00,863
+In the first scene
+
+2
+00:00:01,312 --> 00:00:07,875
+we will explore what Docker is and why it is a revolutionary tool in the software development process
+
+3
+00:00:08,262 --> 00:00:15,012
+Docker is a platform that uses OS-level virtualization to deliver software in packages called containers
+
+4
+00:00:15,412 --> 00:00:17,188
+These containers are lightweight
+
+5
+00:00:17,613 --> 00:00:22,300
+executable software components that include everything needed to run an application
+
+6
+00:00:22,700 --> 00:00:25,438
+ensuring consistency across various environments
+
+7
+00:00:25,837 --> 00:00:29,413
+This concept simplifies software distribution and deployment
+
+8
+00:00:29,925 --> 00:00:35,487
+allowing developers to focus on building applications rather than dealing with infrastructure complexities
+

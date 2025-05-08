@@ -1,0 +1,52 @@
+1
+00:00:00,087 --> 00:00:00,850
+In this lecture
+
+2
+00:00:01,275 --> 00:00:02,600
+we will explore Docker
+
+3
+00:00:03,000 --> 00:00:04,925
+a powerful platform for developing
+
+4
+00:00:05,125 --> 00:00:05,725
+shipping
+
+5
+00:00:05,975 --> 00:00:08,150
+and running applications through containerization
+
+6
+00:00:08,550 --> 00:00:10,912
+We will discuss the core concepts of Docker
+
+7
+00:00:11,175 --> 00:00:12,275
+including images
+
+8
+00:00:12,287 --> 00:00:13,025
+containers
+
+9
+00:00:13,238 --> 00:00:13,887
+Docker Hub
+
+10
+00:00:14,137 --> 00:00:14,875
+Dockerfile
+
+11
+00:00:15,125 --> 00:00:17,012
+and orchestration with Docker Compose
+
+12
+00:00:17,413 --> 00:00:18,562
+By the end of this session
+
+13
+00:00:19,000 --> 00:00:23,913
+you will understand how Docker can improve development workflows and application deployment
+

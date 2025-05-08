@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In Scene 1, we introduce Docker, a platform designed to enable developers to build, ship, and run applications consistently across different environments. Docker uses containerization, a lightweight alternative to virtual machines, by allowing applications to be bundled with all their dependencies into containers. This scene covers the basics of Docker architecture, emphasizing how it leverages the host OS kernel, leading to efficient utilization of resources.",
+      "image_prompt": "graph TD; A[Docker Architecture] --> B[Docker Daemon]; A --> C[Containers]; B --> D[Docker CLI]; B --> E[Images]; C --> F[Applications]; D --> G[Docker Host]; G --> B;",
+      "url": ""
+    },
+    {
+      "text": "Scene 2 deep dives into Docker's workflow and commands. We explore how to create a Dockerfile, which is a set of instructions to build Docker images. Then, we analyze the process of container lifecycle management including running, stopping, and removing containers. Additionally, the scene explores how Docker Compose is used for defining and running multi-container Docker applications by using a YAML file.",
+      "image_prompt": "sequenceDiagram; participant Dev as Developer; participant CLI as Docker CLI; participant Daemon as Docker Daemon; participant Container as Docker Container; participant Image as Docker Image; Dev ->> CLI: docker build; CLI ->> Daemon: Sends build request; Daemon ->> Image: Creates image from Dockerfile; Dev ->> CLI: docker run; CLI ->> Daemon: Sends run command; Daemon ->> Container: Starts container; Dev ->> CLI: docker stop; CLI ->> Daemon: Sends stop command; Daemon ->> Container: Stops container;",
+      "url": ""
+    }
+  ]
+}

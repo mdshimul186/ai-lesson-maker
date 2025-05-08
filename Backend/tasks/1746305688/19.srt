@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:00,887
+Docker Logs
+
+2
+00:00:01,375 --> 00:00:04,825
+Learn about logging features and how to access container logs
+

@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:01,575
+Building Docker Images
+
+2
+00:00:01,988 --> 00:00:04,287
+Images are templates for Docker containers
+
+3
+00:00:04,662 --> 00:00:09,125
+We build them using Dockerfiles that describe the steps needed to setup the environment
+

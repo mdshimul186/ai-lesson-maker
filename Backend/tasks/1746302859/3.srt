@@ -1,0 +1,20 @@
+1
+00:00:00,075 --> 00:00:01,000
+Scene 3
+
+2
+00:00:01,462 --> 00:00:09,787
+Practical Applications of Docker - Dive into real-world applications of Docker by exploring use cases such as microservices architecture
+
+3
+00:00:10,188 --> 00:00:12,900
+CI/CD pipelines
+
+4
+00:00:13,162 --> 00:00:14,275
+and cloud portability
+
+5
+00:00:14,650 --> 00:00:20,087
+Learn how Docker facilitates seamless integration into various development workflows
+

@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:04,275
+This scene delves into the flow of control in a program using a flowchart
+
+2
+00:00:04,662 --> 00:00:13,287
+Visualizing the logical steps in a sequence allows developers to plan and understand complex decision-making within applications
+
+3
+00:00:13,675 --> 00:00:21,837
+We'll demonstrate a simple decision-making process to showcase how different paths are executed based on conditions provided in the program
+

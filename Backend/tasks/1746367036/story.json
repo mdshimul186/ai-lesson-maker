@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this first scene, we explore the basic structure of a JavaScript function. A function in JavaScript is a block of code designed to perform a particular task. It can be reused with different inputs, known as parameters. Functions are defined with the function keyword, followed by a name, and then parentheses (). The code to be executed is placed inside curly brackets {}. Understanding functions is essential because it helps in organizing code into reusable components, making the code clean and manageable.",
+      "image_prompt": "# JavaScript Function Declaration Example\n\n```javascript\n// Simple function to square a number\nfunction square(number) {\n    return number * number;\n}\n\n// Example usage\nconst result = square(5);\nconsole.log(result); // Outputs: 25\n```",
+      "url": ""
+    },
+    {
+      "text": "The second scene delves into more advanced JavaScript function concepts, introducing callback functions. A callback function is a function that is passed into another function as an argument and is executed after a certain event occurs. This technique is often used for asynchronous operations where the callback is called after a task has been completed, such as fetching data from an API. Understanding callback functions is crucial as they form the foundation for more complex patterns like Promises and async/await in JavaScript.",
+      "image_prompt": "# JavaScript Callback Function Example\n\n```javascript\n// Function with a callback\nfunction fetchData(callback) {\n    // Simulate API call\n    setTimeout(() => {\n        const data = { id: 1, name: 'John Doe'};\n        callback(data);\n    }, 1000);\n}\n\n// Using the callback function\nfetchData((data) => {\n    console.log('Data received:', data);\n});\n```",
+      "url": ""
+    }
+  ]
+}

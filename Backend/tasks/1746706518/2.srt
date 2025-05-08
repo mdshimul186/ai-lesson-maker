@@ -1,0 +1,16 @@
+1
+00:00:00,100 --> 00:00:06,400
+Higher-order functions are functions that take other functions as arguments or return functions as their result
+
+2
+00:00:07,425 --> 00:00:14,950
+This concept enhances flexibility and allows for abstracting out patterns that involve multiple behaviors or functionalities
+
+3
+00:00:16,000 --> 00:00:20,188
+It is a crucial feature that enables more functional programming within JavaScript
+
+4
+00:00:20,438 --> 00:00:23,038
+promoting cleaner and more concise code
+

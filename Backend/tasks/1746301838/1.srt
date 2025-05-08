@@ -1,0 +1,48 @@
+1
+00:00:00,087 --> 00:00:00,850
+In this lecture
+
+2
+00:00:01,275 --> 00:00:03,538
+we will explore the fundamentals of Docker
+
+3
+00:00:04,025 --> 00:00:05,388
+a platform used to develop
+
+4
+00:00:05,650 --> 00:00:06,037
+ship
+
+5
+00:00:06,425 --> 00:00:09,850
+and run applications in isolated environments called containers
+
+6
+00:00:10,238 --> 00:00:15,425
+We'll begin by understanding the concept of containers and how they differ from virtual machines
+
+7
+00:00:15,812 --> 00:00:17,788
+then we'll delve into the architecture of Docker
+
+8
+00:00:18,200 --> 00:00:21,562
+including its key components like the Docker Engine and Docker Hub
+
+9
+00:00:21,950 --> 00:00:24,350
+We'll also cover the basic commands to create
+
+10
+00:00:24,775 --> 00:00:25,375
+manage
+
+11
+00:00:25,613 --> 00:00:27,675
+and deploy containers using Docker
+
+12
+00:00:28,150 --> 00:00:31,625
+highlighting its benefits such as scalability and ease of automation
+

@@ -1,0 +1,32 @@
+1
+00:00:00,100 --> 00:00:02,038
+When working with JavaScript functions
+
+2
+00:00:02,413 --> 00:00:05,175
+understanding the scope and context is crucial
+
+3
+00:00:06,150 --> 00:00:07,912
+Functions create their own scope
+
+4
+00:00:08,137 --> 00:00:12,338
+meaning variables declared within a function are not accessible outside of it
+
+5
+00:00:13,312 --> 00:00:13,850
+Moreover
+
+6
+00:00:14,050 --> 00:00:17,650
+functions can access variables from the surrounding lexical scope
+
+7
+00:00:17,887 --> 00:00:18,938
+known as closures
+
+8
+00:00:20,000 --> 00:00:27,688
+Knowing how to utilize closures effectively can greatly enhance your ability to write more flexible and efficient JavaScript code
+

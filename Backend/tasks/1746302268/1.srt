@@ -1,0 +1,44 @@
+1
+00:00:00,075 --> 00:00:00,812
+In this lecture
+
+2
+00:00:01,262 --> 00:00:04,112
+we will explore the fundamental concepts of Docker
+
+3
+00:00:04,575 --> 00:00:08,550
+a platform that automates the deployment of applications inside lightweight
+
+4
+00:00:08,775 --> 00:00:09,887
+portable containers
+
+5
+00:00:10,262 --> 00:00:12,162
+We'll cover the main components of Docker
+
+6
+00:00:12,400 --> 00:00:13,500
+including images
+
+7
+00:00:13,713 --> 00:00:14,475
+containers
+
+8
+00:00:14,562 --> 00:00:15,425
+Dockerfiles
+
+9
+00:00:15,438 --> 00:00:16,275
+and the Docker Hub
+
+10
+00:00:16,675 --> 00:00:18,938
+By understanding how these elements work together
+
+11
+00:00:19,375 --> 00:00:26,438
+you'll gain insight into how Docker helps streamline development workflows and simulates production environments accurately
+

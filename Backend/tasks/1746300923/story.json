@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Welcome to our lecture on Docker, a revolutionary tool for automating the deployment of applications inside lightweight, portable containers. In this scene, we will introduce Docker's core concepts: containers, images, and the Docker engine. You'll learn how Docker simplifies application deployment and management by encapsulating the entire runtime environment, ensuring consistent operation across different environments.",
+      "image_prompt": "graph TD; A[Docker] --> B[Containers]; A --> C[Images]; A --> D[Docker Engine]; B --> E[Portable]; C --> F[Reusable]; D --> G[Encapsulates Environment];",
+      "url": ""
+    }
+  ]
+}

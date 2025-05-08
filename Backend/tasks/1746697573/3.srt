@@ -1,0 +1,52 @@
+1
+00:00:00,100 --> 00:00:04,338
+JavaScript offers multiple ways to interact with functions in meaningful ways
+
+2
+00:00:04,638 --> 00:00:07,412
+such as higher-order functions and method chaining
+
+3
+00:00:08,425 --> 00:00:09,475
+Higher-order functions
+
+4
+00:00:09,688 --> 00:00:10,225
+like map
+
+5
+00:00:10,387 --> 00:00:10,950
+filter
+
+6
+00:00:11,188 --> 00:00:11,838
+and reduce
+
+7
+00:00:12,213 --> 00:00:14,213
+allow for processing arrays in a clean
+
+8
+00:00:14,387 --> 00:00:15,262
+functional manner
+
+9
+00:00:16,238 --> 00:00:20,962
+Function chaining provides a streamlined approach to executing multiple methods sequentially
+
+10
+00:00:21,262 --> 00:00:22,938
+reducing code complexity
+
+11
+00:00:23,950 --> 00:00:25,375
+By utilizing these features
+
+12
+00:00:25,675 --> 00:00:31,337
+developers can write expressive and concise code that is both easier to understand and efficient
+
+13
+00:00:32,325 --> 00:00:36,562
+Mastering these patterns is fundamental for advanced JavaScript programming
+

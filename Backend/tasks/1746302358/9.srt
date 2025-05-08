@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:06,862
+Docker Compose allows the definition and running of multi-container Docker applications using a simple YAML file
+
+2
+00:00:07,250 --> 00:00:09,900
+streamlining development and deployment processes
+

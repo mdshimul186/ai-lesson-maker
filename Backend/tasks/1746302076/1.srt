@@ -1,0 +1,36 @@
+1
+00:00:00,075 --> 00:00:09,775
+Docker is a popular platform as a service  PaaS  product that utilizes OS-level virtualization to deliver software in packages called containers
+
+2
+00:00:10,150 --> 00:00:11,600
+Containers are isolated
+
+3
+00:00:11,950 --> 00:00:13,125
+with their own software
+
+4
+00:00:13,412 --> 00:00:14,238
+libraries
+
+5
+00:00:14,400 --> 00:00:16,325
+and configuration files
+
+6
+00:00:16,725 --> 00:00:20,200
+but they can communicate with each other through well-defined channels
+
+7
+00:00:20,613 --> 00:00:21,600
+By using Docker
+
+8
+00:00:21,800 --> 00:00:26,087
+developers can automate the deployment of applications inside lightweight
+
+9
+00:00:26,337 --> 00:00:30,425
+portable containers that can run consistently on various environments
+

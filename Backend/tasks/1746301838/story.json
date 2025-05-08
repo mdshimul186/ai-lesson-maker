@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this lecture, we will explore the fundamentals of Docker, a platform used to develop, ship, and run applications in isolated environments called containers. We'll begin by understanding the concept of containers and how they differ from virtual machines, then we'll delve into the architecture of Docker, including its key components like the Docker Engine and Docker Hub. We'll also cover the basic commands to create, manage, and deploy containers using Docker, highlighting its benefits such as scalability and ease of automation.",
+      "image_prompt": "graph TD; A[Docker Engine] --> B{Docker Daemon}; B --> C[Images]; B --> D[Containers]; A --> E[Client CLI]; E --> |Commands| B; C --> |Build| D; B --> F[Docker Hub]; F --> |Pull/Push| C;",
+      "url": ""
+    }
+  ]
+}

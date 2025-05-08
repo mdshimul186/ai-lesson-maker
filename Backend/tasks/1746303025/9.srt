@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,000
+Docker Security
+
+2
+00:00:01,350 --> 00:00:06,588
+An overview of Docker's security features and practices to safeguard applications
+

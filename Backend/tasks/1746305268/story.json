@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this lecture, we will delve into the world of Docker, a tool designed to make it easier to create, deploy, and run applications by using containers. Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package. This ensures that the application will run on any other machine as long as it has Docker installed. We will cover key Docker components, including Docker Engine, Docker Hub, and more.",
+      "image_prompt": "graph TD; A[Docker] --> B[Docker Engine]; A --> C[Docker Hub]; A --> D[Containers]; B --> E[Applications]; C --> F[Repositories]; D --> G[Isolation & Security]; E --> H[Deployment]; F --> I[Sharing & Version Control]; G --> J[Resource Efficiency];",
+      "url": "http://localhost:9000/mermaid-images/9603e378-05d1-443f-8a17-c796393ef4ff.png"
+    }
+  ]
+}

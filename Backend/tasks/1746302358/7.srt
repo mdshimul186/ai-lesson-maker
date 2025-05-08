@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:06,213
+Networking in Docker provides multiple solutions to connect containers with each other and the outside world
+
+2
+00:00:06,612 --> 00:00:09,175
+Containers can communicate via shared networks
+
+3
+00:00:09,412 --> 00:00:10,363
+bridge networks
+
+4
+00:00:10,575 --> 00:00:11,850
+or overlay networks
+

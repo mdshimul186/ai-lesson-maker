@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:01,100
+Return Values
+
+2
+00:00:01,538 --> 00:00:04,450
+Functions can return values using the 'return' statement
+
+3
+00:00:04,850 --> 00:00:09,463
+This scene will detail how return values work and their significance within the function
+

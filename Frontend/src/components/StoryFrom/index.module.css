@@ -1,0 +1,5 @@
+.formDiv {
+    /* Fixed width for form container */
+    width: 100%;
+    flex-shrink: 0;
+}

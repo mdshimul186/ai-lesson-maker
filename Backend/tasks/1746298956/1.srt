@@ -1,0 +1,48 @@
+1
+00:00:00,100 --> 00:00:02,688
+Welcome to the foundational lecture on Docker
+
+2
+00:00:03,062 --> 00:00:03,837
+In this lecture
+
+3
+00:00:04,237 --> 00:00:11,325
+we will explore the core concepts and components that make Docker a revolutionary platform in containerization
+
+4
+00:00:11,700 --> 00:00:15,225
+Docker is a powerful tool that allows developers to create
+
+5
+00:00:15,438 --> 00:00:16,175
+deploy
+
+6
+00:00:16,387 --> 00:00:19,938
+and run applications in isolated environments called containers
+
+7
+00:00:20,350 --> 00:00:22,275
+By understanding Docker's architecture
+
+8
+00:00:22,675 --> 00:00:24,038
+including the Docker Engine
+
+9
+00:00:24,300 --> 00:00:24,950
+Docker Hub
+
+10
+00:00:25,212 --> 00:00:26,300
+and Docker Compose
+
+11
+00:00:26,575 --> 00:00:29,337
+you can streamline your development and deployment processes
+
+12
+00:00:29,712 --> 00:00:32,675
+ensuring scalable and efficient application management
+

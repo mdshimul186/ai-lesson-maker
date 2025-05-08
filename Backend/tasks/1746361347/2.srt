@@ -1,0 +1,36 @@
+1
+00:00:00,087 --> 00:00:03,587
+The second scene delves into Docker's architecture and its components
+
+2
+00:00:03,812 --> 00:00:05,237
+which include the Docker Engine
+
+3
+00:00:05,513 --> 00:00:06,500
+Docker Images
+
+4
+00:00:06,700 --> 00:00:07,875
+and Docker Containers
+
+5
+00:00:08,262 --> 00:00:10,775
+The Docker Engine is the core of Docker
+
+6
+00:00:11,025 --> 00:00:14,963
+providing the command line functions that make it interact with the host operating system
+
+7
+00:00:15,363 --> 00:00:21,012
+Docker Images represent all functionalities and dependencies necessary for an application to operate
+
+8
+00:00:21,475 --> 00:00:26,775
+while Docker Containers are instances of Docker Images running as isolated processes
+
+9
+00:00:27,163 --> 00:00:31,812
+Understanding these components is crucial for utilizing Docker effectively
+

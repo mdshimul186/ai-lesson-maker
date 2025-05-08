@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this lecture, we will introduce Docker, a platform designed to simplify application development and deployment by using containerization. Docker allows developers to package applications along with their dependencies into containers, ensuring consistency across multiple environments. A Docker container is a lightweight, standalone, and executable package that incorporates everything needed to run a piece of software, including the application code, runtime, system tools, and libraries. This characteristic makes it an essential tool for modern DevOps practices, enabling seamless collaboration between development and operations teams.",
+      "image_prompt": "graph TD; A(Docker Basics) --> B(Containerization); A --> C(Image & Container); B --> D(Consistency Across Environments); C --> E(Packaging Applications); D --> F(Ease of Deployment); E --> F; C --> G(Running App with Dependencies); G --> H(Standalone and Executable); H --> F",
+      "url": "http://localhost:9000/mermaid-images/afe8b78e-5954-4655-9e2e-48ec1fc9763c.png"
+    }
+  ]
+}

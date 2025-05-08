@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:02,513
+The Docker Engine is the core part of Docker
+
+2
+00:00:02,938 --> 00:00:05,550
+responsible for container management and operation
+
+3
+00:00:05,950 --> 00:00:09,012
+It exposes a REST API for interaction
+
+4
+00:00:09,438 --> 00:00:11,200
+and it can run on various platforms
+

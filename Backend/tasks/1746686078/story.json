@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript functions are fundamental building blocks in JavaScript programming. They allow us to encapsulate code and execution logic, making it reusable and modular. A function can be declared using the `function` keyword followed by a name, a list of parameters in parentheses, and a block of code inside curly braces. Understanding how to declare, invoke, and pass parameters to functions is crucial for organizing and managing code efficiently.",
+      "image_prompt": "# Understanding JavaScript Functions\n\n## Function Declaration and Invocation\n\n```javascript\n// Function declaration\nfunction multiply(a, b) {\n    return a * b;\n}\n\n// Function invocation\nconst result = multiply(3, 4);\nconsole.log(result); // Outputs: 12\n```\n\n### Key Points:\n- **Declaration**: Creating a function with the `function` keyword.\n- **Parameters**: Inputs to function for processing.\n- **Invocation**: Calling a function to execute the code inside it.",
+      "url": "http://localhost:9000/mermaid-images/ac683378-8f71-4f80-9dae-27ab1586b1f1.png"
+    },
+    {
+      "text": "The flow of executing a function in JavaScript involves several key steps. Initially, the function is defined with a specific pattern, followed by its invocation. Upon calling a function, execution control transfers to the function body, where the function parameters are utilized to perform specified operations. Once the function tasks are complete, control returns to the point where the function was invoked. Understanding this flow is fundamental for comprehending how functions operate in the JavaScript execution context.",
+      "image_prompt": "# Function Execution Flow\n\n```mermaid\nflowchart TD\n    A[Function Definition] --> B[Function Invocation]\n    B --> C[Transfer Execution to Function Body]\n    C --> D[Execute Operations]\n    D --> E{Return Value or Control}\n    E -->|Return Value| F[Result is Used]\n    E -->|No Return Value| G[Execution Continues]\n    F --> H[Program Continues]\n    G --> H\n```\n\n### Execution Steps:\n- **Definition**: Define the function pattern.\n- **Invocation**: Call and pass parameters.\n- **Execution**: Perform operations and return results.\n- **Continuation**: Proceed with the next line of code after returning.",
+      "url": "http://localhost:9000/mermaid-images/6973c9b2-9fae-4cb8-abed-58f5ef386ffd.png"
+    }
+  ]
+}

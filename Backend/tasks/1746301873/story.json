@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this introductory lecture on Docker, we will explore the basic concepts and benefits of using Docker in software development and deployment. Docker is a platform that allows developers to automate the deployment of applications inside lightweight, portable containers. These containers include everything needed to run the application, such as the code, runtime, libraries, and system tools. By using containers, developers can ensure consistency across multiple development, testing, and production environments, thus enhancing the development and deployment process.",
+      "image_prompt": "graph LR; A[Docker] --> B[Containerization]; A --> C[Consistency Across Environments]; B --> D[Isolation]; C --> E[Efficiency]; D --> F[Portability]; E --> F;",
+      "url": "http://localhost:9000/mermaid-images/d11b3434-75f1-405b-99e6-73b6ca8b313a.png"
+    }
+  ]
+}

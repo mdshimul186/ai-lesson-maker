@@ -1,0 +1,32 @@
+1
+00:00:00,075 --> 00:00:00,738
+In this scene
+
+2
+00:00:01,012 --> 00:00:03,975
+we explore the concept of JavaScript functions
+
+3
+00:00:04,350 --> 00:00:07,350
+which are fundamental building blocks in modern web development
+
+4
+00:00:07,725 --> 00:00:12,050
+A function is a reusable block of code that performs a specific task
+
+5
+00:00:12,450 --> 00:00:13,762
+By defining functions
+
+6
+00:00:13,938 --> 00:00:16,087
+developers can create modular code
+
+7
+00:00:16,512 --> 00:00:19,038
+improving readability and maintainability
+
+8
+00:00:19,438 --> 00:00:24,738
+This scene will demonstrate how to declare a simple JavaScript function and how to use it within a program
+

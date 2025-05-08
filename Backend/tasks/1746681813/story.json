@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript classes are primarily syntactic sugar over JavaScript's existing prototype-based inheritance. They provide a clearer and more recognizable syntax for object-oriented programming that is familiar to developers from other languages. JavaScript classes can contain properties, methods, constructors, and static methods, offering a more structured way to create and manage objects and their behaviors.",
+      "image_prompt": "# JavaScript Classes Overview\n\n```mermaid\nclassDiagram\n    class Vehicle {\n      +String model\n      +String manufacturer\n      +void drive()\n      +void start()\n    }\n    class Car {\n      +String color\n      +int year\n      +Car(String model, String manufacturer, String color, int year)\n    }\n    Vehicle <|-- Car\n```\n\n### Class Structure:\n\n| Component | Description |\n|-----------|-------------|\n| Model | Identifies the model of the vehicle |\n| Manufacturer | Brand producing the vehicle |\n| Drive | Method to operate the vehicle |\n| Start | Method to initiate vehicle functions |",
+      "url": "http://localhost:9000/mermaid-images/bd7d7558-7fb5-4cde-987d-321525b8de01.png"
+    },
+    {
+      "text": "Constructors in JavaScript classes are special methods used to initialize newly created objects of that class. While creating a new instance of a class, the constructor method is invoked automatically to set up the initial state of the object. This includes setting any default values, binding functions, or performing other startup processes specific to that object. Utilizing constructors effectively allows developers to craft robust and flexible object setups.",
+      "image_prompt": "# JavaScript Class Constructors\n\n```javascript\n// Define a class with a constructor\nclass Animal {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n\n  // Method to display info\n  displayInfo() {\n    return `${this.name} is ${this.age} years old.`;\n  }\n}\n\n// Create an instance of the class\nconst tiger = new Animal('Tiger', 5);\nconsole.log(tiger.displayInfo());\n```\n\n### Constructor Flow:\n\n```mermaid\nflowchart TD\n    A[New Instance Creation]\n    B[Invoke Constructor]\n    C[Initialize Properties]\n    D[Return Object]\n    A --> B\n    B --> C\n    C --> D\n```",
+      "url": "http://localhost:9000/mermaid-images/e16a8d96-74d9-44ce-96a1-2daf21a80f33.png"
+    },
+    {
+      "text": "Prototypes are fundamental to JavaScript's memory-efficient method sharing across instances. In classes, static methods enable shared functionality, distinct from instance-specific methods. Unlike traditional prototype methods, static methods are called on the class itself, rather than its instances. This distinction is crucial for actions pertinent to the class as a whole, rather than any individual instance. By leveraging static methods, developers can encapsulate class-specific behavior cohesively.",
+      "image_prompt": "# Static Methods in JavaScript Classes\n\n```javascript\n// Define a class with static method\nclass MathUtility {\n  static add(a, b) {\n    return a + b;\n  }\n}\n\n// Call the static method\nconst sum = MathUtility.add(5, 10);\nconsole.log(sum);\n```\n\n### Static Method Call Process:\n\n```mermaid\nsequenceDiagram\n    participant Dev\n    participant MathUtility\n    Dev->>MathUtility: Call add(5, 10)\n    MathUtility-->>Dev: Return Result 15\n```\n\n### Static vs Instance:\n\n| Type | Accessed From |\n|------|---------------|\n| Static Method | Class itself |\n| Instance Method | Individual instance |",
+      "url": "http://localhost:9000/mermaid-images/678d21ea-51f6-4057-9611-8ae195bca7ee.png"
+    }
+  ]
+}

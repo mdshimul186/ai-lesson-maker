@@ -1,0 +1,20 @@
+1
+00:00:00,075 --> 00:00:00,925
+In JavaScript
+
+2
+00:00:01,137 --> 00:00:03,525
+classes are a template for creating objects
+
+3
+00:00:03,925 --> 00:00:07,450
+They encapsulate data with code to work on that data
+
+4
+00:00:07,825 --> 00:00:13,512
+Classes in JavaScript are a blueprint for creating objects with predefined properties and methods
+
+5
+00:00:13,912 --> 00:00:21,438
+This is a syntactical sugar notation in JavaScript to define objects and their characteristics in a more convenient way
+

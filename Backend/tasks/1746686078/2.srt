@@ -1,0 +1,40 @@
+1
+00:00:00,087 --> 00:00:04,525
+The flow of executing a function in JavaScript involves several key steps
+
+2
+00:00:04,912 --> 00:00:05,562
+Initially
+
+3
+00:00:05,750 --> 00:00:08,387
+the function is defined with a specific pattern
+
+4
+00:00:08,800 --> 00:00:10,188
+followed by its invocation
+
+5
+00:00:10,575 --> 00:00:11,938
+Upon calling a function
+
+6
+00:00:12,350 --> 00:00:15,062
+execution control transfers to the function body
+
+7
+00:00:15,500 --> 00:00:19,575
+where the function parameters are utilized to perform specified operations
+
+8
+00:00:19,975 --> 00:00:22,100
+Once the function tasks are complete
+
+9
+00:00:22,363 --> 00:00:25,238
+control returns to the point where the function was invoked
+
+10
+00:00:25,625 --> 00:00:32,663
+Understanding this flow is fundamental for comprehending how functions operate in the JavaScript execution context
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript classes provide a way to structure and organize code, particularly object-oriented code. They are essentially syntactic sugar over JavaScript's existing prototype-based inheritance. Classes enable developers to create objects and define object behavior through methods while maintaining a clear, readable syntax. This promotes reusability and maintainability of code, especially in large-scale applications.",
+      "image_prompt": "# JavaScript Class Structure\n\n```javascript\n// Define a class\nclass Animal {\n  constructor(name) {\n    this.name = name;\n  }\n\n  speak() {\n    console.log(`${this.name} makes a sound`);\n  }\n}\n\n// Create an instance\nconst a = new Animal('Dog');\na.speak(); // Output: Dog makes a sound\n```\n\n### Class Diagram\n\n```mermaid\nclassDiagram\n    class Animal {\n        +String name\n        +speak()\n    }\n```\n",
+      "url": "http://localhost:9000/mermaid-images/80e81a34-83e6-4e4f-ae7d-e8b14f7cdf3a.png"
+    },
+    {
+      "text": "Extending classes with JavaScript allows developers to create new classes that inherit properties and methods from existing ones. This supports the creation of more complex object models by building upon simpler base classes. The 'extends' keyword is used to create a subclass from a superclass, and 'super()' is used within the subclass to call the constructor of the superclass, enabling better abstraction and code reuse.",
+      "image_prompt": "# Class Inheritance in JavaScript\n\n```javascript\n// Base class\nclass Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    console.log(`${this.name} makes a sound`);\n  }\n}\n\n// Subclass\nclass Dog extends Animal {\n  speak() {\n    console.log(`${this.name} barks`);\n  }\n}\n\nconst d = new Dog('Rex');\nd.speak(); // Output: Rex barks\n```\n\n### Inheritance Flowchart\n\n```mermaid\nclassDiagram\n    class Animal {\n        +String name\n        +speak()\n    }\n    class Dog {\n        +speak()\n    }\n    Animal <|-- Dog\n```\n",
+      "url": "http://localhost:9000/mermaid-images/273bf057-388b-470b-82e4-b3e03dc954f0.png"
+    }
+  ]
+}

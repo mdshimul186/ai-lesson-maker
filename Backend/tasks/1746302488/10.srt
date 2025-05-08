@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,225
+Conclusion and Future of Docker
+
+2
+00:00:02,675 --> 00:00:10,075
+Summarize key takeaways and discuss the future potential and evolution of Docker in the field of cloud computing and DevOps
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In the first scene, we will learn how to create a basic JavaScript function. Functions are reusable blocks of code that perform a specific task. We will use a simple example of an addition function, which takes two input numbers, adds them together, and returns the result. Functions often use parameters to accept input values and return statements to output results.",
+      "image_prompt": "# JavaScript Function Example\n\n```javascript\n// Addition function\nfunction addNumbers(a, b) {\n    // Addition of two numbers\n    return a + b;\n}\n\n// Using the function\nconst sum = addNumbers(5, 3);\nconsole.log('Sum:', sum); // Output will be 'Sum: 8'\n```",
+      "url": ""
+    },
+    {
+      "text": "In the second scene, we will visualize the flow of executing a JavaScript function. This flowchart will show how the program starts with user input, moves through the function call where the inputs are processed, and ends with the return of the calculated result. Understanding this flow helps in grasping how data moves within a function and how outputs are generated.",
+      "image_prompt": "flowchart TD\n    A[Start] --> B[User Inputs]\n    B --> C{Call addNumbers Function}\n    C -->|Pass Inputs| D[Process Addition]\n    D --> E[Return Result]\n    E --> F[Output Result]\n    F --> G[End]",
+      "url": ""
+    }
+  ]
+}

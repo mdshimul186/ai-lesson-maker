@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to JavaScript Functions: Understanding the basic concept of functions in JavaScript, which are reusable blocks of code designed to perform a specific task.",
+      "image_prompt": "flowchart TD; A[Function] -->|Uses| B(Code Block); B -->|Return| C(Output); C -->|Used in| D(JavaScript Programs);",
+      "url": "http://localhost:9000/mermaid-images/d72c5e3b-4155-4e81-afb4-200f977e3776.png"
+    },
+    {
+      "text": "Function Declaration: Explore how to declare a function using the function keyword, providing a clear understanding of syntax and structure.",
+      "image_prompt": "sequenceDiagram; participant User; participant JS; User->>JS: Declare function; JS-->>User: Acknowledge syntax; User->>JS: Execute function;",
+      "url": "http://localhost:9000/mermaid-images/5a3d2f61-f18d-415b-b85a-4fc0500472d2.png"
+    },
+    {
+      "text": "Function Calling: Learn how to invoke a function, understanding the process of execution and interaction between declared and called functions.",
+      "image_prompt": "stateDiagram-v2; [*] --> Idle; Idle --> CallFunction: Call function(); CallFunction --> Execute: Run code inside function; Execute --> [*];",
+      "url": ""
+    },
+    {
+      "text": "Function Parameters and Arguments: Discover how functions can accept inputs via parameters, manipulating data with arguments for dynamic operations.",
+      "image_prompt": "classDiagram; class Function{ +execute(param1, param2) +returns value } param1 : input; param2 : parameter; value : result;",
+      "url": ""
+    },
+    {
+      "text": "Anonymous and Arrow Functions: Understand the modern approaches to function expressions using anonymous and arrow functions for concise syntax.",
+      "image_prompt": "journey title Function Evolution; section Traditional; Function Declaration: 5; Function Expression: 4; section Modern; Anonymous Function: 3; Arrow Function: 2;",
+      "url": ""
+    }
+  ]
+}

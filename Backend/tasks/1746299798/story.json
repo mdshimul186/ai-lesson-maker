@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we will explore the basics of Docker, a powerful platform that enables developers to build, ship, and run applications efficiently inside containers. We'll cover Docker's architecture, including core components such as Docker Engine, Images, Containers, Docker Hub, and Docker Compose. Understanding these components is crucial for deploying scalable and isolated applications seamlessly across various environments.",
+      "image_prompt": "graph TD; A[Docker Architecture] --> B[Docker Engine]; A --> C[Docker Images]; A --> D[Docker Containers]; A --> E[Docker Hub]; A --> F[Docker Compose]; B --> G[Client-Server Application]; C --> H[Reusable Building Blocks]; D --> I[Isolated Environments]; E --> J[Public Repository]; F --> K[Multi-Container Management];",
+      "url": "http://localhost:9000/mermaid-images/8e56bed4-b7ef-44fe-ba8b-911981c845e2.png"
+    }
+  ]
+}

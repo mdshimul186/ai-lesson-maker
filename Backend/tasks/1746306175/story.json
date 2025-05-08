@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this first scene, we introduce the concept of classes in JavaScript. A class is a blueprint for creating objects with predefined properties and methods. It simplifies the process of object creation, providing a clean, clear syntax.",
+      "image_prompt": "classDiagram\nClass01 <|-- Class02\nClass01 : +int field1\nClass01 : +int field2\nClass01 : +method1()\nClass02 : +method2()",
+      "url": "http://localhost:9000/mermaid-images/7c8a96ea-c458-4189-bd09-30d1b68c0bb3.png"
+    },
+    {
+      "text": "In the second scene, we discuss how to define a class in JavaScript using the 'class' keyword, followed by creating a constructor method to initialize object properties.",
+      "image_prompt": "graph TD;\nA[Class Declaration] --> B(Constructor definition);\nB --> C{\"class ClassName { constructor(args) { this.property = args } }\"}",
+      "url": "http://localhost:9000/mermaid-images/95f9b178-c533-47da-97a1-4578fc4f5aeb.png"
+    },
+    {
+      "text": "Next, we explore how to create methods within a JavaScript class. Methods are functions that belong to the class, allowing objects to perform actions.",
+      "image_prompt": "classDiagram\nClassA --|> methodA : functionality\nClassA : +function methodA(){...}\nClassA : +function methodB(param)",
+      "url": "http://localhost:9000/mermaid-images/52f89405-3a0b-457b-a16c-3acce4b9858f.png"
+    },
+    {
+      "text": "In this scene, the focus is on how inheritance works in JavaScript classes. Inheritance allows one class to extend another, inheriting its properties and methods.",
+      "image_prompt": "classDiagram\nclass ParentClass{\n  +methodA()\n  +methodB()\n}\nclass ChildClass extends ParentClass {\n  +methodC()\n}",
+      "url": "http://localhost:9000/mermaid-images/c96f0dd0-3e8b-4267-a794-5e13cf6b27df.png"
+    },
+    {
+      "text": "The final scene covers practical usage and examples of JavaScript classes, demonstrating how to create instances and leverage polymorphism and encapsulation.",
+      "image_prompt": "graph TD;\nA[Create Instance] --> B((new ClassName()));\nB --> C{Use Methods};\nC --> D[Extend Classes]\nD --> E[Polymorphism]",
+      "url": ""
+    }
+  ]
+}

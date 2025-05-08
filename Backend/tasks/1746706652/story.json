@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "The concept of functions in JavaScript is fundamental to writing effective, reusable code. Functions allow us to encapsulate code logic into named blocks that can be executed many times, with even different inputs. JavaScript functions are versatile and can be defined in several ways, such as function declarations, function expressions, and arrow functions.",
+      "image_prompt": "# JavaScript Functions Basics\n\n```javascript\n// Function Declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function Expression\nconst multiply = function(a, b) {\n    return a * b;\n};\n\n// Arrow Function\nconst subtract = (a, b) => a - b;\n\n// Usage\nconsole.log(add(5, 3)); // Output: 8\nconsole.log(multiply(5, 3)); // Output: 15\nconsole.log(subtract(5, 3)); // Output: 2\n```\n\n### Key Concepts:\n\n| Syntax | Example | Description |\n|--------|---------|-------------|\n| Declaration | `function name(...)` | Defines a function with the keyword `function`. |\n| Expression | `const name = function(...)` | Defines a function assigned to a variable. |\n| Arrow | `const name = (...) => ...` | A shorthand for expressions with implicit returns. |",
+      "url": "http://minio:9000/mermaid-images/f05fcbe4-6319-4147-b0ea-f95561a69bba.png"
+    },
+    {
+      "text": "When working with JavaScript functions, understanding the scope and context is crucial. Functions create their own scope, meaning variables declared within a function are not accessible outside of it. Moreover, functions can access variables from the surrounding lexical scope, known as closures. Knowing how to utilize closures effectively can greatly enhance your ability to write more flexible and efficient JavaScript code.",
+      "image_prompt": "# Function Scope and Closures\n\n```javascript\nfunction outerFunction(outerVariable) {\n    return function innerFunction(innerVariable) {\n        console.log(`Outer: ${outerVariable}, Inner: ${innerVariable}`);\n    };\n}\n\nconst newFunction = outerFunction('outside');\nnewFunction('inside'); // Output: Outer: outside, Inner: inside\n```\n\n## Flow Diagram of Execution\n\n```mermaid\nsequenceDiagram\n    participant Caller\n    participant Outer\n    participant Inner\n    Caller->>Outer: Call outerFunction\n    Outer->>Inner: Return innerFunction\n    Caller->>Inner: Call innerFunction\n    Inner->>Inner: Access closure variables\n```\n\n### Key Points:\n- **Outer Function**: Defines a new scope.\n- **Inner Function**: Captures variables from the outer function.\n- **Closure**: Inner function retains access to the scope in which it was created.",
+      "url": "http://minio:9000/mermaid-images/5c8a8474-56d8-4a05-98b3-0d85f6e680fd.png"
+    },
+    {
+      "text": "JavaScript functions can also be enhanced with capabilities such as being passed around as arguments, returned from other functions, or even having properties and methods attached to them. This flexibility allows developers to implement powerful design patterns like callbacks, promises, and more. Understanding these advanced concepts can significantly elevate your JavaScript programming skills.",
+      "image_prompt": "# Advanced Function Usage\n\n## Callback Function Example\n\n```javascript\nfunction fetchData(callback) {\n    setTimeout(() => {\n        callback('Data received');\n    }, 1000);\n}\n\nfetchData(function(message) {\n    console.log(message);\n});\n\n```\n\n## Promise Usage\n\n```javascript\nlet condition = true;\nlet promise = new Promise((resolve, reject) => {\n    if (condition) {\n        resolve('Promise resolved');\n    } else {\n        reject('Promise rejected');\n    }\n});\n\npromise.then(message => console.log(message)).catch(error => console.error(error));\n```\n\n### Table: Function Capabilities\n\n| Capability | Description |\n|------------|-------------|\n| Callback   | Functions passed as arguments |\n| Promise    | Manage asynchronous code |\n| Method     | Functions as object properties |\n| Constructor | Create object instances |\n",
+      "url": "http://minio:9000/mermaid-images/9ac3a93c-d20a-40f2-810f-941e002f071c.png"
+    }
+  ]
+}

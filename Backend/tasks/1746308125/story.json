@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to JavaScript Functions: Functions are fundamental building blocks in JavaScript. They are sets of statements that perform tasks or calculate values. In this scene, we'll briefly introduce what a function is and its role in programming.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Introduction]; B --> C[Concept of Functions]; C --> D[End];",
+      "url": "http://localhost:9000/mermaid-images/63db9ac1-0a64-4b52-b983-5fb7d79509d7.png"
+    },
+    {
+      "text": "Defining a Function: To define a function in JavaScript, you use the 'function' keyword, followed by a name and a code block. This scene covers the syntax and structure of defining functions.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Function Definition]; B --> C[Assign Parameters]; C --> D[End];",
+      "url": "http://localhost:9000/mermaid-images/4a67f337-e505-4ba3-8de4-aad9de6cdcc4.png"
+    },
+    {
+      "text": "Function Invocation: Functions need to be called or invoked to execute the code inside them. We will explore different ways to invoke functions and what happens when they are called.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Invoke Function]; B --> C[Execute Code]; C --> D[End];",
+      "url": "http://localhost:9000/mermaid-images/e7e8186d-9cc2-4681-ba5a-624aa40cc685.png"
+    },
+    {
+      "text": "Return Values: Functions can return values using the 'return' statement. This scene will detail how return values work and their significance within the function.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Function Execution]; B --> C[Return Value]; C --> D[Use Return Value]; D --> E[End];",
+      "url": "http://localhost:9000/mermaid-images/309e2c17-8d5c-4b8f-af90-d55bce98df47.png"
+    },
+    {
+      "text": "Types of Functions: JavaScript supports various types of functions including regular functions, arrow functions, and anonymous functions. In this concluding scene, we'll summarize these types and their use cases.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Types of Functions]; B --> C[Regular]; B --> D[Arrow]; B --> E[Anonymous]; E --> F[End];",
+      "url": "http://localhost:9000/mermaid-images/6815ca1d-b615-457e-aaf8-25568a344492.png"
+    }
+  ]
+}

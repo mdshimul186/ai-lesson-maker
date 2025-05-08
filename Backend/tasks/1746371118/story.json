@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In our exploration of JavaScript functions, we will begin by understanding the syntax and use of function declarations. Functions in JavaScript are first-class objects; they can take inputs in the form of parameters, process these inputs by encapsulating reusable code logic, and then return output. We'll delve into the two primary types of function creation: function declarations and function expressions. This lecture will provide a solid grounding in how functions operate at a fundamental level.",
+      "image_prompt": "# JavaScript Function Declarations and Expressions\n\n```javascript\n// Function declaration\nfunction multiply(a, b) {\n  return a * b;\n}\n\n// Function expression\nconst divide = function(a, b) {\n  return a / b;\n};\n\n// Using functions\nlet resultMultiply = multiply(4, 5);\nlet resultDivide = divide(20, 4);\nconsole.log(`Multiplication Result: ${resultMultiply}`); // Output: 20\nconsole.log(`Division Result: ${resultDivide}`); // Output: 5\n```\n\n### Key Points:\n\n| Function Type       | Syntax                                  | Example Call           |\n|---------------------|-----------------------------------------|------------------------|\n| Declaration         | `function name(params) { ... }`         | `multiply(4, 5)`       |\n| Expression          | `const name = function(params) { ... };`| `divide(20, 4)`        |",
+      "url": ""
+    },
+    {
+      "text": "In this second scene, we will explore the concept of scope, closures, and the significance of the 'this' keyword in JavaScript functions. Understanding these elements is crucial to mastering advanced function usage and avoiding common pitfalls, especially when dealing with asynchronous code. Closures enable function factories and create private properties, while 'this' is pivotal for object-oriented programming within JavaScript. Getting to grips with these concepts will elevate your coding skills significantly.",
+      "image_prompt": "# JavaScript Scope, Closures, and 'this' Keyword\n\n```javascript\n// Global scope\nlet globalVar = 'I am global';\n\nfunction outerFunction(outerVar) {\n  // Local scope\n  let innerVar = 'I am inner';\n\n  function innerFunction() {\n    console.log(globalVar); // Access global variable\n    console.log(outerVar); // Access outerFunction's parameter\n    console.log(innerVar); // Access own local scope\n  }\n\n  return innerFunction;\n}\n\nconst createClosure = outerFunction('I am outer');\ncreateClosure();\n\n// Object with method using this keyword\nconst person = {\n  name: 'Alice',\n  greet: function() {\n    console.log(`Hello, my name is ${this.name}`);\n  }\n};\nperson.greet(); // Output: Hello, my name is Alice\n```\n\n### Diagram:\n\n```mermaid\nflowchart TD\n    A[Global Scope: globalVar] --> B[outerFunction: outerVar]\n    B --> C[innerFunction]\n    C --> D[inner scope: innerVar]\n    E[Object Method: this.name] --> F[Greeting Output]\n```",
+      "url": ""
+    }
+  ]
+}

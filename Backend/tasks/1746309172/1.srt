@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:01,900
+Introduction to Project Management
+
+2
+00:00:02,438 --> 00:00:03,850
+Understanding the definition
+
+3
+00:00:04,062 --> 00:00:04,850
+importance
+
+4
+00:00:04,862 --> 00:00:08,275
+and purpose of project management in achieving goals efficiently
+

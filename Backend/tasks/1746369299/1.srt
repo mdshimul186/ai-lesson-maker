@@ -1,0 +1,40 @@
+1
+00:00:00,075 --> 00:00:00,825
+In Scene 1
+
+2
+00:00:01,225 --> 00:00:04,763
+we delve into the essential concept of JavaScript functions
+
+3
+00:00:05,162 --> 00:00:09,900
+A function in JavaScript is a block of code designed to perform a particular task
+
+4
+00:00:10,287 --> 00:00:13,988
+which aids in structuring the program logically and efficiently
+
+5
+00:00:14,350 --> 00:00:17,125
+Functions encapsulate code for reuse
+
+6
+00:00:17,525 --> 00:00:19,812
+enhancing modularity in programming
+
+7
+00:00:20,200 --> 00:00:21,325
+It can accept arguments
+
+8
+00:00:21,413 --> 00:00:22,438
+process logic
+
+9
+00:00:22,650 --> 00:00:23,562
+and return output
+
+10
+00:00:23,950 --> 00:00:29,950
+Understanding how to declare and use functions is critical to mastering JavaScript programming
+

@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,938
+Introduction to Docker Registries
+
+2
+00:00:02,225 --> 00:00:05,713
+Discover the purpose and functionality of Docker registries
+

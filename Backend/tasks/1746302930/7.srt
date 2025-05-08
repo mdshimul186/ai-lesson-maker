@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:00,975
+Docker Networking
+
+2
+00:00:01,387 --> 00:00:04,675
+Docker provides several networking modes  bridge
+
+3
+00:00:05,037 --> 00:00:05,487
+host
+
+4
+00:00:05,888 --> 00:00:09,338
+overlay  to facilitate communication between containers
+

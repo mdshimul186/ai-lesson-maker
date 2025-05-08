@@ -1,0 +1,40 @@
+1
+00:00:00,075 --> 00:00:00,988
+In JavaScript
+
+2
+00:00:01,175 --> 00:00:03,800
+classes act as templates for creating objects
+
+3
+00:00:04,188 --> 00:00:07,513
+They encapsulate data with code to work on that data
+
+4
+00:00:07,912 --> 00:00:10,512
+Although JavaScript is prototype-based
+
+5
+00:00:10,750 --> 00:00:12,500
+classes give a more intuitive
+
+6
+00:00:12,775 --> 00:00:14,537
+object-oriented syntax
+
+7
+00:00:14,775 --> 00:00:19,725
+which resembles class-based code structures in other programming languages like Java or C#
+
+8
+00:00:20,125 --> 00:00:22,550
+This makes code more readable and maintainable
+
+9
+00:00:22,975 --> 00:00:27,475
+thus allowing developers to easily implement inheritance and encapsulation
+
+10
+00:00:27,775 --> 00:00:29,750
+crucial for software design patterns
+

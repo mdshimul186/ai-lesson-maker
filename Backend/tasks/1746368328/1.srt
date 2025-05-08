@@ -1,0 +1,28 @@
+1
+00:00:00,075 --> 00:00:00,738
+In this scene
+
+2
+00:00:01,188 --> 00:00:04,475
+we introduce the basic structure of a JavaScript function
+
+3
+00:00:04,850 --> 00:00:10,200
+A JavaScript function is a given set of statements that performs a task or calculates a value
+
+4
+00:00:10,600 --> 00:00:13,625
+Functions in JavaScript are a fundamental building block
+
+5
+00:00:14,025 --> 00:00:16,225
+This scene covers function declaration
+
+6
+00:00:16,613 --> 00:00:21,038
+where the keyword `function` is followed by the name of the function and a set of parentheses
+
+7
+00:00:21,438 --> 00:00:27,262
+This will help learners understand how JavaScript functions are structured and the role they play in programming
+

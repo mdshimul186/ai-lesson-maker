@@ -1,0 +1,28 @@
+1
+00:00:00,075 --> 00:00:06,100
+Incorporating async and await in JavaScript functions handles asynchronous tasks with ease
+
+2
+00:00:06,500 --> 00:00:08,838
+They provide a cleaner way to work with promises
+
+3
+00:00:09,213 --> 00:00:11,938
+making asynchronous code appear synchronous
+
+4
+00:00:12,325 --> 00:00:14,787
+By using async keyword before a function
+
+5
+00:00:15,200 --> 00:00:16,688
+it always returns a promise
+
+6
+00:00:17,087 --> 00:00:22,113
+The await keyword within the function pauses its execution until the promise settles
+
+7
+00:00:22,525 --> 00:00:26,488
+yielding more readable and manageable asynchronous operations
+

@@ -1,0 +1,52 @@
+1
+00:00:00,075 --> 00:00:00,775
+In the first scene
+
+2
+00:00:01,250 --> 00:00:03,362
+we will explore the basics of Docker
+
+3
+00:00:03,750 --> 00:00:06,650
+Docker is a platform designed to help developers build
+
+4
+00:00:06,900 --> 00:00:07,438
+share
+
+5
+00:00:07,713 --> 00:00:09,450
+and run applications in containers
+
+6
+00:00:09,838 --> 00:00:11,100
+Containers are lightweight
+
+7
+00:00:11,350 --> 00:00:12,100
+standalone
+
+8
+00:00:12,350 --> 00:00:17,150
+and executable software packages that include everything needed to run a piece of software
+
+9
+00:00:17,512 --> 00:00:18,512
+including the code
+
+10
+00:00:18,950 --> 00:00:19,587
+runtime
+
+11
+00:00:19,837 --> 00:00:20,725
+system tools
+
+12
+00:00:21,012 --> 00:00:21,762
+libraries
+
+13
+00:00:21,812 --> 00:00:22,512
+and settings
+

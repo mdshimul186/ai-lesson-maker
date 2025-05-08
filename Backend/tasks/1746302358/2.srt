@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:00,762
+At its core
+
+2
+00:00:01,012 --> 00:00:05,062
+Docker utilizes containers to bundle and run applications at scale
+
+3
+00:00:05,463 --> 00:00:11,750
+Containers are lightweight and contain all necessary dependencies and configuration to run an application
+

@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,325
+Collaborating with Docker
+
+2
+00:00:01,863 --> 00:00:04,950
+Using Docker for team collaboration and consistency
+

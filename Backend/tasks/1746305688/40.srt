@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:02,550
+Understanding Docker's Layered File System
+
+2
+00:00:03,087 --> 00:00:06,225
+Learn about the layered file system architecture in Docker
+

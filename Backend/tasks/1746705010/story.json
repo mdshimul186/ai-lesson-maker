@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js function",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "JavaScript functions are one of the building blocks of programming in JavaScript. They allow for the grouping of code into reusable operations or tasks. Functions can be declared using various syntaxes and may have parameters. Understanding function structure, scope, and usage is essential in writing efficient and dynamic code.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function Declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function Expression\nconst subtract = function(a, b) {\n    return a - b;\n};\n\n// Arrow Function\nconst multiply = (a, b) => a * b;\n\n// Function Usage Example\nconsole.log(add(2, 3)); // 5\nconsole.log(subtract(5, 2)); // 3\nconsole.log(multiply(3, 4)); // 12\n```\n\n### Types of Function:\n- **Declaration**\n- **Expression**\n- **Arrow Function**\n",
+      "url": ""
+    },
+    {
+      "text": "Functions can have different scopes in JavaScript. The scope determines the accessibility of variables within functions or blocks of code. JavaScript has mainly two scopes: global and local. Understanding the difference between these scopes helps in managing variable lifetimes and avoiding potential bugs like variable leakage.",
+      "image_prompt": "# JavaScript Function Scopes\n\n```mermaid\nflowchart TD\n    A[Global Scope]\n    A --> B[Function Scope]\n    B --> C{Block Scope}\n    C -->|Yes| D[let and const]\n    C -->|No| E[var only]\n    D --> F[Block Scoped Variables]\n    E --> G[Function Scoped Variables]\n```\n\n### Scope Details:\n\n| Scope Type | Description |\n|------------|-------------|\n| Global | Variables defined outside functions |\n| Function | Variables defined within a function |\n| Block | Limited to block scope with let/const |\n",
+      "url": ""
+    },
+    {
+      "text": "JavaScript functions can be executed asynchronously using callbacks, promises, or async/await syntax. This allows non-blocking code execution, which is essential for operations like fetching data from servers. Understanding asynchronous execution patterns is crucial for writing performant JavaScript applications.",
+      "image_prompt": "# Asynchronous JavaScript Functions\n\n## Using Async/Await\n\n```javascript\nasync function fetchData(url) {\n    try {\n        const response = await fetch(url);\n        const data = await response.json();\n        return data;\n    } catch (error) {\n        console.error('Error fetching data:', error);\n    }\n}\n\n// Calling the Function\nfetchData('https://api.example.com/data')\n  .then(data => console.log(data));\n```\n\n### Asynchronous Flow:\n\n```mermaid\nsequenceDiagram\n    participant JS\n    participant API\n    JS->>API: fetch request\n    API-->>JS: response data\n    JS->>JS: process and return data\n```\n",
+      "url": ""
+    }
+  ]
+}

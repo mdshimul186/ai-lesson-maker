@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,875
+Docker Compose vs Docker Swarm
+
+2
+00:00:03,425 --> 00:00:06,450
+Understanding the differences in orchestration strategies
+

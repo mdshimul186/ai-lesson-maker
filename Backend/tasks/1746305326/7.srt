@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:01,137
+Docker Compose
+
+2
+00:00:01,425 --> 00:00:06,250
+Docker Compose is a tool for defining and running multi-container Docker applications
+
+3
+00:00:06,638 --> 00:00:10,075
+It uses a YAML file to configure application services
+

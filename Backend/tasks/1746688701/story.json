@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "javascriptasd",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-PradeepNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্ট একটি প্রোগ্রামিং ভাষা যা ওয়েব ডেভেলপমেন্টের জন্য অত্যন্ত গুরুত্বপূর্ণ। এটি ক্লায়েন্ট-সাইড এবং সার্ভার-সাইড প্রোগ্রামিংয়ের জন্য ব্যবহৃত হয়। একদিকে এটি দিয়ে ওয়েব পেজকে ডায়নামিক করা যায় আবার অন্যদিকে সার্ভার সাইডেও ব্যবহার করা যায়। অতএব, জাভাস্ক্রিপ্ট একটি সম্পূর্ণ প্রোগ্রামিং ভাষা যেমন ওয়েব ডেভেলপমেন্ট ছাড়া অন্যান্য ক্ষেত্রেও ব্যাপক প্রয়োগ করা হচ্ছে।",
+      "image_prompt": "# জাভাস্ক্রিপ্ট ব্যবহারের ক্ষেত্র\n\n| ব্যবহার | বিবরণ |\n|---------|-------|\n| ক্লায়েন্ট-সাইড | ডায়নামিক ওয়েব পেজ তৈরি |\n| সার্ভার-সাইড | সার্ভার পরিচালনা |\n| মোবাইল অ্যাপ | ক্রস-প্ল্যাটফর্ম ডেভেলপমেন্ট |\n| গেম ডেভেলপমেন্ট | ইন্টারেক্টিভ গেম তৈরি |\n",
+      "url": ""
+    },
+    {
+      "text": "ওয়েবসাইটে জাভাস্ক্রিপ্ট ব্যবহার করার কতগুলো উপায় রয়েছে। সবচেয়ে সাধারণ উপায় হলো HTML ডকুমেন্টের মধ্যে <script> ট্যাগ ব্যবহার করা। এছাড়াও, বাইরের জাভাস্ক্রিপ্ট ফাইল যোগ করার জন্যও ইনপুট অপশন রয়েছে। জাভাস্ক্রিপ্ট ব্যবহার করার মাধ্যমে একটি ওয়েবসাইটকে আরও আকর্ষণীয় এবং ইন্টারেক্টিভ করা যায়।",
+      "image_prompt": "```javascript\n// একেবারে সাদামাটা জাভাস্ক্রিপ্ট কোড\nconsole.log('Hello, JavaScript!');\n\n// HTML এ জাভাস্ক্রিপ্ট যোগ করার উপায়: \n/*\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n    <script>\n        console.log('Inline JavaScript');\n    </script>\n</head>\n<body>\n</body>\n</html>\n*/\n```",
+      "url": ""
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টে অ্যাসিঙ্ক্রোনাস প্রোগ্রামিং ওয়েবের পরিবেশে অত্যন্ত গুরুত্বপূর্ণ। এটি ব্যবহার করে ওয়েব অ্যাপ্লিকেশনগুলি আরও দক্ষ এবং মসৃণভাবে কাজ করে, কারণ এটি অন্য ইউজার ইন্টারফেস টাস্কগুলো বন্ধ না করেই নেটওয়ার্ক থেকে ডেটা আনা বা ডেটা পাঠানোর কাজ করে। প্রমিজ ব্যবহার করে, ডেটা ফ্যাচিং অ্যাসিঙ্ক্রোনাস প্রক্রিয়ায় করা যায়।",
+      "image_prompt": "# অ্যাসিঙ্ক্রোনাস ডেটা ফ্যাচিং উদাহরণ\n\n```javascript\nasync function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\n// ব্যবহার\ngetData();\n```\n\n## ডেটা ফ্লো ডায়াগ্রাম:\n\n```mermaid\nsequenceDiagram\n    participant User\n    participant Browser\n    participant Server\n    User->>Browser: ট্রিগার ফ্যাচ\n    Browser->>Server: ফ্যাচ রিকোয়েস্ট\n    Server-->>Browser: রেসপন্স পাঠান\n    Browser->>User: ডেটা প্রদর্শন\n```\n",
+      "url": ""
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:02,487
+Introduction to JavaScript Classes
+
+2
+00:00:02,888 --> 00:00:05,912
+A JavaScript class is a template for creating objects
+
+3
+00:00:06,300 --> 00:00:13,188
+It acts as a blueprint for object instances with properties and methods common to all instances created from the class
+

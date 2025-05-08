@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:00,787
+Dockerfile
+
+2
+00:00:01,250 --> 00:00:06,287
+A Dockerfile is a text document that contains instructions for Docker to build an image
+
+3
+00:00:06,688 --> 00:00:10,762
+It automates repetitive tasks and ensures a consistent environment
+

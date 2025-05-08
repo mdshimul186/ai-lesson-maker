@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:03,100
+Storage in Docker is managed using volumes
+
+2
+00:00:03,325 --> 00:00:06,800
+which provide efficient data storage and sharing between containers
+
+3
+00:00:07,175 --> 00:00:09,375
+or between a container and the host system
+

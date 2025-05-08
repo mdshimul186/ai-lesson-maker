@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we will introduce a basic JavaScript function that demonstrates the creation and invocation of functions. Understanding functions is critical because they allow you to reuse code efficiently and organize your scripts better. We'll define a simple function that takes two numbers, adds them, and returns the result. This function illustrates fundamental programming constructs including parameters, return values, and the `console.log` method.",
+      "image_prompt": "# JavaScript Function Example\n\n```javascript\n// Function to add two numbers\nfunction addNumbers(a, b) {\n    return a + b;\n}\n\n// Invoke the function with arguments\nconst sum = addNumbers(5, 7);\nconsole.log('The sum is:', sum); // Outputs: The sum is: 12\n```\n",
+      "url": ""
+    },
+    {
+      "text": "We will now visualize how conditional statements can guide the flow of logic in a program using a Mermaid flowchart. This scene will demonstrate a decision-making process, highlighting the use of 'if-else' constructs in programming. Such decisions allow programs to react differently based on conditions, thereby adding intelligence and flexibility to applications.",
+      "image_prompt": "flowchart TD\n    Start[Start] --> Check_Condition{Is X > 10?}\n    Check_Condition -->|Yes| Action1[Execute Task A]\n    Check_Condition -->|No| Action2[Execute Task B]\n    Action1 --> End[End]\n    Action2 --> End",
+      "url": "http://localhost:9000/mermaid-images/3cf0fbf2-6fd6-405a-b9aa-136993cf56f9.png"
+    }
+  ]
+}

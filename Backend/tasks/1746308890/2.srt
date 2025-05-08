@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:01,425
+Initiation Phase
+
+2
+00:00:01,812 --> 00:00:02,812
+Setting objectives
+
+3
+00:00:03,013 --> 00:00:04,875
+identifying key stakeholders
+
+4
+00:00:05,062 --> 00:00:06,475
+and outlining scope
+

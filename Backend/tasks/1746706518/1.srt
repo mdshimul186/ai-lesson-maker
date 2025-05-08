@@ -1,0 +1,40 @@
+1
+00:00:00,100 --> 00:00:00,938
+In JavaScript
+
+2
+00:00:01,062 --> 00:00:02,862
+functions are first-class objects
+
+3
+00:00:03,163 --> 00:00:05,062
+meaning they can be stored in variables
+
+4
+00:00:05,400 --> 00:00:07,537
+passed as arguments to other functions
+
+5
+00:00:07,787 --> 00:00:09,387
+and returned from functions
+
+6
+00:00:10,463 --> 00:00:15,463
+This allows for powerful programming paradigms such as closures and higher-order functions
+
+7
+00:00:16,538 --> 00:00:18,613
+Understanding functions is fundamental
+
+8
+00:00:19,012 --> 00:00:21,488
+as they are a core building block for writing modular
+
+9
+00:00:21,725 --> 00:00:22,462
+maintainable
+
+10
+00:00:22,762 --> 00:00:23,900
+and reusable code
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we'll explore the fundamental concept of JavaScript functions. Functions are one of the core building blocks of JavaScript programming. They let you wrap code in a package that you can easily reuse. Understanding functions is critical to writing clean and efficient code as they help in breaking down complex problems into smaller, manageable pieces.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function to add two numbers\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function usage\nconst sum = add(3, 4);\nconsole.log('Sum:', sum);\n```\n\n### Function Flow:\n\n```mermaid\nflowchart TD\n    A[Input Numbers]\n    A --> B[Call add Function]\n    B --> C[Perform Addition]\n    C --> D[Return Result]\n    D --> E[Output Sum]\n```\n",
+      "url": ""
+    },
+    {
+      "text": "In this scene, we'll dive into JavaScript's ability to handle asynchronous operations using promises. Asynchronous programming is key when performing long-running tasks such as data fetching from an API. Promises make it easier to write cleaner code that executes asynchronously by preventing callback hell, improving readability and maintainability.",
+      "image_prompt": "# Promises in JavaScript\n\n## Asynchronous Operation\n\n```javascript\n// Fetching data with a promise\nfetch('https://api.example.com/data')\n    .then(response => response.json())\n    .then(data => console.log(data))\n    .catch(error => console.error('Error:', error));\n```\n\n### Execution Flow:\n\n```mermaid\nsequenceDiagram\n    participant JS\n    participant Server\n    JS->>Server: Fetch data request\n    Server-->>JS: Response with data\n    JS->>JS: Process data\n```\n",
+      "url": ""
+    }
+  ]
+}

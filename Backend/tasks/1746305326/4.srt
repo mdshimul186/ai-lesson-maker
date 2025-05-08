@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:01,188
+Docker Containers
+
+2
+00:00:01,462 --> 00:00:07,200
+Containers are lightweight and portable encapsulations of environments where applications are executed
+
+3
+00:00:07,600 --> 00:00:11,188
+They are isolated but can share OS and resources
+

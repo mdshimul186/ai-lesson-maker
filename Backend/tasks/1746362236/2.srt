@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:05,425
+This scene delves into the concept of flow control using conditional statements in JavaScript
+
+2
+00:00:05,825 --> 00:00:10,988
+We will explore how decisions are made in programs to execute specific code blocks
+
+3
+00:00:11,375 --> 00:00:13,600
+Understanding how to correctly use 'if'
+
+4
+00:00:13,887 --> 00:00:14,762
+'else if'
+
+5
+00:00:14,988 --> 00:00:18,512
+and 'else' statements will greatly enhance your ability to write dynamic
+
+6
+00:00:18,775 --> 00:00:22,525
+flexible code that can handle various conditions and scenarios
+

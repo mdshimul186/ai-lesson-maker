@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-NabanitaNeural",
+  "voice_rate": 1.0,
+  "resolution": "720*1280",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্টের ফাংশন হল একটি বিশেষ ধরনের কোড ব্লক যা পুনরায় ব্যবহারযোগ্য এবং প্রয়োজন অনুযায়ী কোডের বিভিন্ন স্থানে কল করা যায়। এই ফাংশনগুলি ভিন্ন ভিন্ন প্যারামিটার গ্রহণ করতে পারে এবং একটি নির্দিষ্ট ফলাফল রিটার্ন করতে পারে। ফাংশন আপনাকে আপনার প্রোগ্রামের সিস্টেমেটিক এবং গঠনমূলক কোড লিখতে সহায়তা করে।",
+      "image_prompt": "# Understanding JavaScript Functions\n\n```javascript\n// Function Declaration\nfunction calculateSum(a, b) {\n    return a + b;\n}\n\n// Function Expression\nconst multiply = function(x, y) {\n    return x * y;\n};\n\n// Arrow Function\nconst divide = (m, n) => m / n;\n\n// Usage\nconsole.log(calculateSum(5, 10)); // Output: 15\nconsole.log(multiply(3, 4)); // Output: 12\nconsole.log(divide(20, 5)); // Output: 4\n```\n",
+      "url": "http://localhost:9000/mermaid-images/424901da-37b5-4b4b-ae96-8185929391aa.png"
+    },
+    {
+      "text": "জাভাস্ক্রিপ্ট ফাংশনের কার্যপ্রবাহ সহজেই প্রবাহ চার্ট দ্বারাও প্রকাশ করা যায়। একটি সাধারণ ফাংশন প্রবাহ চার্ট ফাংশন ডিক্লেয়ারেশন থেকে শুরু করে ইনপুট গ্রহণ করা এবং আউটপুট রিটার্ন করার পুরো প্রক্রিয়া প্রদর্শন করে, যা ফাংশন ব্যবহারের সময় ধারাবাহিক কার্যকলাপ প্রকাশ করে।",
+      "image_prompt": "```mermaid\nflowchart TD\n    A[Declare Function]\n    B[Receive Input]\n    C[Process Input]\n    D[Return Output]\n    A --> B --> C --> D\n```\n",
+      "url": "http://localhost:9000/mermaid-images/a6a2b229-6d46-4b73-a819-672b35e05f2b.png"
+    },
+    {
+      "text": "জাভাস্ক্রিপ্ট ফাংশনগুলি অন্যান্য প্রোগ্রামিং ভাষাগুলোর সাথে তুলনা করলে দারুণভাবে নমনীয়তা ও কার্যকারিতা প্রদর্শন করে। ফাংশনগুলোর ফ্লেক্সিবিলিটি এবং অসাধারণ ক্ষমতা জাভাস্ক্রিপ্টকে একটি অবশ্যই শেখার মতো ভাষায় পরিণত করেছে।",
+      "image_prompt": "| Feature | JavaScript | Python | Java |\n|---------|------------|--------|------|\n| Syntax Flexibility | High | Moderate | Low |\n| Use Case | Web Development, Servers | Data Analysis, AI | Android Apps, Web \nApplications |\n| Execution | Interpreted | Interpreted | Compiled |\n",
+      "url": "http://localhost:9000/mermaid-images/e1a8820d-67fa-4a3a-b3a9-f49bd6ef8ba0.png"
+    }
+  ]
+}

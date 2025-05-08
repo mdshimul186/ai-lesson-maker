@@ -1,0 +1,24 @@
+1
+00:00:00,075 --> 00:00:01,738
+In every JavaScript function
+
+2
+00:00:02,025 --> 00:00:07,138
+the creation process starts by defining a function name followed by parentheses
+
+3
+00:00:07,525 --> 00:00:10,338
+Parameters can be defined within these parentheses
+
+4
+00:00:10,750 --> 00:00:13,512
+acting as placeholders for values passed to the function
+
+5
+00:00:13,912 --> 00:00:19,887
+This foundational step encapsulates a series of instructions to form the complete function body
+
+6
+00:00:20,288 --> 00:00:26,387
+effectively making it a reusable code block for performing specific tasks within applications
+

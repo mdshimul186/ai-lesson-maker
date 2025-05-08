@@ -1,0 +1,52 @@
+1
+00:00:00,087 --> 00:00:00,850
+In Scene 1
+
+2
+00:00:01,125 --> 00:00:02,163
+we introduce Docker
+
+3
+00:00:02,625 --> 00:00:04,013
+a platform used to develop
+
+4
+00:00:04,275 --> 00:00:04,675
+ship
+
+5
+00:00:04,950 --> 00:00:06,700
+and run applications in containers
+
+6
+00:00:07,100 --> 00:00:10,650
+It allows developers to package an application with all its parts
+
+7
+00:00:10,875 --> 00:00:12,838
+including libraries and dependencies
+
+8
+00:00:13,088 --> 00:00:15,088
+and deploy it as a single package
+
+9
+00:00:15,475 --> 00:00:19,750
+This ensures that the application runs seamlessly regardless of the environment
+
+10
+00:00:20,175 --> 00:00:23,225
+thereby improving consistency and scalability
+
+11
+00:00:23,625 --> 00:00:25,837
+Key components include Docker images
+
+12
+00:00:26,062 --> 00:00:26,812
+containers
+
+13
+00:00:26,988 --> 00:00:27,775
+and Docker Hub
+

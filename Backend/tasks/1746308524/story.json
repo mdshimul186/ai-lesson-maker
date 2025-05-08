@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we introduce JavaScript functions by defining what they are—blocks of code designed to perform particular tasks and how they are executed only when called. Functions allow code reuse and modular programming.",
+      "image_prompt": "flowchart TD; A[Define Function] --> B[Call Function]; B --> C[Execute Function]; C --> D[Return Output]; D --> E[End];",
+      "url": "http://localhost:9000/mermaid-images/a25dd04f-e05b-42ea-b5f3-0ae2e52cdccc.png"
+    },
+    {
+      "text": "We explore different types of functions in JavaScript, including function declarations, expressions, and arrow functions, each offering unique syntax and characteristics suitable for varying scenarios.",
+      "image_prompt": "classDiagram; FunctionDeclaration <|-- FunctionExpression; FunctionExpression <|-- ArrowFunction; FunctionDeclaration: +execute(); FunctionExpression: +execute(); ArrowFunction: +execute();",
+      "url": ""
+    },
+    {
+      "text": "This scene dives into the concept of parameters and arguments in functions. Parameters are placeholders for values, while arguments are the actual values passed to the function during its invocation.",
+      "image_prompt": "sequenceDiagram; participant User; participant Function; User->>Function: Pass Argument; Function-->>User: Return Result;",
+      "url": "http://localhost:9000/mermaid-images/75c0cb31-2a72-445b-895d-fdf986f4bd09.png"
+    },
+    {
+      "text": "We examine the scope in JavaScript functions, illustrating the difference between local and global scope, and how variables are accessible within various levels based on their declaration context.",
+      "image_prompt": "stateDiagram-v2; [*] --> GlobalScope; GlobalScope --> LocalScope; LocalScope --> [*];",
+      "url": ""
+    },
+    {
+      "text": "The lecture concludes by discussing function return values and how they are used to pass back information after processing inputs. We highlight the return statement and control flow after a return is encountered.",
+      "image_prompt": "flowchart TD; A[Start] --> B[Function Call]; B --> C[Process Input]; C --> D[Return Value]; D --> E[Output Result]; E --> F[End];",
+      "url": "http://localhost:9000/mermaid-images/a8effcd3-9d6b-4e69-8595-edbb87588025.png"
+    }
+  ]
+}

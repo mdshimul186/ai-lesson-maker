@@ -1,0 +1,36 @@
+1
+00:00:00,050 --> 00:00:02,812
+In the first scene of our lesson on JavaScript functions
+
+2
+00:00:03,200 --> 00:00:07,450
+we will explore the fundamental concepts of creating and using functions
+
+3
+00:00:07,838 --> 00:00:12,600
+A function in JavaScript is a block of code designed to perform a particular task
+
+4
+00:00:13,037 --> 00:00:14,787
+which is executed when it is invoked
+
+5
+00:00:15,175 --> 00:00:18,750
+Functions allow you to organize your code into reusable blocks
+
+6
+00:00:19,150 --> 00:00:21,962
+making it more modular and easier to maintain
+
+7
+00:00:22,350 --> 00:00:25,125
+We will discuss the basics of function declaration
+
+8
+00:00:25,525 --> 00:00:26,875
+how to call functions
+
+9
+00:00:27,163 --> 00:00:31,137
+and the importance of passing parameters to make functions more dynamic
+

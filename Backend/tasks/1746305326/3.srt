@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:01,100
+Docker Images
+
+2
+00:00:01,538 --> 00:00:05,200
+Docker images are read-only templates used to create containers
+
+3
+00:00:05,600 --> 00:00:08,500
+They include everything needed to run an application
+
+4
+00:00:08,887 --> 00:00:11,662
+ensuring consistency across environments
+

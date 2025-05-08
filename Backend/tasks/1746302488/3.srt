@@ -1,0 +1,24 @@
+1
+00:00:00,100 --> 00:00:01,188
+Docker Architecture
+
+2
+00:00:01,700 --> 00:00:03,462
+Delve into the architecture of Docker
+
+3
+00:00:03,850 --> 00:00:05,175
+including the Docker engine
+
+4
+00:00:05,425 --> 00:00:05,912
+client
+
+5
+00:00:06,213 --> 00:00:06,675
+daemon
+
+6
+00:00:07,150 --> 00:00:08,137
+and how they work together
+

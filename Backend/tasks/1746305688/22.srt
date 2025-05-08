@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,500
+Automating Docker Builds
+
+2
+00:00:01,913 --> 00:00:06,112
+Learn about continuous integration and deployment pipelines using Docker
+

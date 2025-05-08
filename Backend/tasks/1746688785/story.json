@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "Bengali",
+  "story_prompt": "javascriptasd",
+  "image_style": "realistic",
+  "voice_name": "bn-BD-PradeepNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "জাভাস্ক্রিপ্ট একটি বহুল ব্যবহৃত প্রোগ্রামিং ভাষা যা ওয়েব উন্নয়নের জন্য অপরিহার্য। এটি ক্লায়েন্ট সাইড এবং সার্ভার সাইড উভয় ক্ষেত্রেই ব্যবহৃত হয়। এর মাধ্যমে ওয়েব পেজের ইন্টারেক্টিভিটি বাড়ানো যায়, অনলাইন গেম এবং বিভিন্ন ওয়েব এপ্লিকেশন তৈরি করা যায়।",
+      "image_prompt": "# জাভাস্ক্রিপ্টের মৌলিক ধারণা\n\n```mermaid\nmindmap\n  root((JavaScript))\n    Features\n      Variables\n      Functions\n    Applications\n      Web Development\n      Games\n      Servers\n```",
+      "url": ""
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টের অন্যতম বৈশিষ্ট্য হল এর অ্যাসিঙ্ক্রোনাস প্রোগ্রামিং যা বড় বড় ডেটা প্যাকেটগুলির সাথে কাজ করার জন্য উপযোগী। প্রমিজ এবং অ্যাসিঙ্ক/অ্যাওয়েট এর মতো বৈশিষ্ট্যগুলি ডেটা হস্তান্তর এবং প্রসেসিংকে দ্রুত এবং কার্যকর করতে সহায়ক হয়।",
+      "image_prompt": "# অ্যাসিঙ্ক্রোনাস প্রোগ্রামিং উদাহরণ\n\n```javascript\n// প্রমিজ ভিত্তিক কোড\nfetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => console.log(data))\n  .catch(error => console.error('Error:', error));\n\n// অ্যাসিঙ্ক/অ্যাওয়েট উদাহরণ\nasync function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\ngetData();\n```\n\n### প্রমিজ ফ্লো:\n\n```mermaid\nsequenceDiagram\n    participant User\n    participant API\n    User->>API: fetch request\n    API-->>User: response\n    User->>User: process data\n```",
+      "url": ""
+    },
+    {
+      "text": "জাভাস্ক্রিপ্টের নোড জেএস প্রযুক্তিটি সার্ভার-সাইড ডেভেলপমেন্টের জন্য ব্যবহৃত হয়। এটি একটি ইভেন্ট-চালিত, নন-ব্লকিং আইও মডেল যা এপ্লিকেশনগুলির জন্য দুর্দান্ত কর্মক্ষমতা সরবরাহ করে।",
+      "image_prompt": "# নোড জেএস স্থাপত্য\n\n```mermaid\nflowchart LR\n    A[Client] -->|HTTP Request| B[Node.js Server]\n    B --> C[Event Loop]\n    C --> D[Non-blocking I/O]\n    D --> E[Database]\n    E -->|Data| C\n    C --> B\n    B -->|HTTP Response| A\n```\n\n### গুরুত্বপূর্ণ উপাদান:\n\n| উপাদান | ভূমিকা |\n|---------|--------|\n| Client | অনুরোধ প্রেরণকারী |\n| Server | অনুরোধ প্রাপ্তকারী |\n| Event Loop | ইভেন্ট পরিচালনা |\n| Non-blocking I/O | দ্রুত ডেটা হ্যান্ডলিং |\n| Database | ডেটা সংরক্ষণ |\n\n> **নোট:** এই স্থাপত্য দ্রুতহেতু সম্পাদন এবং স্কেলিংয়ের সুবিধা প্রদান করে।",
+      "url": ""
+    }
+  ]
+}

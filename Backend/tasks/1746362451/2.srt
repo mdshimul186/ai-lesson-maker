@@ -1,0 +1,24 @@
+1
+00:00:00,075 --> 00:00:00,988
+In the second scene
+
+2
+00:00:01,363 --> 00:00:05,513
+we dive deeper into the life cycle of a function within a program
+
+3
+00:00:05,912 --> 00:00:10,363
+This scene demonstrates how a function is called multiple times with different arguments
+
+4
+00:00:10,750 --> 00:00:13,650
+which allows you to perform repetitive tasks effortlessly
+
+5
+00:00:14,050 --> 00:00:21,762
+It's important to grasp how function calls work in JavaScript and how arguments are passed from a function call to the function itself
+
+6
+00:00:22,312 --> 00:00:26,250
+as this knowledge greatly enhances the versatility and power of your code
+

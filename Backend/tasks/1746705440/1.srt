@@ -1,0 +1,40 @@
+1
+00:00:00,100 --> 00:00:05,263
+JavaScript functions are a fundamental building block for writing reusable pieces of code
+
+2
+00:00:06,237 --> 00:00:11,463
+They allow developers to write a block of code once and reuse it whenever needed throughout the program
+
+3
+00:00:12,475 --> 00:00:16,562
+This ability promotes DRY  Don't Repeat Yourself  principles
+
+4
+00:00:16,800 --> 00:00:19,788
+making codebase more maintainable and organized
+
+5
+00:00:20,750 --> 00:00:21,312
+Furthermore
+
+6
+00:00:21,475 --> 00:00:24,050
+functions are first-class citizens in JavaScript
+
+7
+00:00:24,262 --> 00:00:26,238
+meaning they can be assigned to variables
+
+8
+00:00:26,562 --> 00:00:28,688
+passed as arguments to other functions
+
+9
+00:00:28,962 --> 00:00:30,825
+and returned from other functions
+
+10
+00:00:31,125 --> 00:00:33,450
+providing great flexibility in coding
+

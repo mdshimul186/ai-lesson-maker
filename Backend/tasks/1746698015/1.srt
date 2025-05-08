@@ -1,0 +1,44 @@
+1
+00:00:00,100 --> 00:00:00,950
+In JavaScript
+
+2
+00:00:01,087 --> 00:00:03,775
+functions are one of the fundamental building blocks
+
+3
+00:00:04,900 --> 00:00:10,875
+A function is a JavaScript procedure—a set of statements performing a task or calculating a value
+
+4
+00:00:11,850 --> 00:00:15,900
+It allows code reuse and logical categorization of operations
+
+5
+00:00:16,975 --> 00:00:18,225
+Functions can be declared
+
+6
+00:00:18,400 --> 00:00:19,812
+expressed as variables
+
+7
+00:00:20,038 --> 00:00:23,137
+or defined using new syntax like arrow functions
+
+8
+00:00:24,200 --> 00:00:30,613
+Understanding functions is critical to managing complex logic and improving code efficiency in JavaScript
+
+9
+00:00:31,587 --> 00:00:33,638
+Mastery of functions will lead to cleaner
+
+10
+00:00:33,862 --> 00:00:34,962
+more organized
+
+11
+00:00:35,150 --> 00:00:36,337
+and maintainable code
+

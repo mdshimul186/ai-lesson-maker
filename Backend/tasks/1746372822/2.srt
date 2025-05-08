@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:00,775
+In this segment
+
+2
+00:00:01,163 --> 00:00:07,700
+we will look at the flow of control in JavaScript functions with a focus on decision-making using control statements
+
+3
+00:00:08,075 --> 00:00:13,075
+Control flow determines the sequence in which operations are executed in a function
+
+4
+00:00:13,463 --> 00:00:20,975
+Understanding control flow is crucial to writing effective functions that perform necessary actions based on conditions
+
+5
+00:00:21,375 --> 00:00:23,938
+We will visualize the process from start to end
+
+6
+00:00:24,212 --> 00:00:25,712
+analyze decision paths
+
+7
+00:00:25,925 --> 00:00:28,288
+and discuss how they impact function outcomes
+

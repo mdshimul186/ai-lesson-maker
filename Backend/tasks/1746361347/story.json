@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn about docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In the first scene, we will explore what Docker is and why it is a revolutionary tool in the software development process. Docker is a platform that uses OS-level virtualization to deliver software in packages called containers. These containers are lightweight, executable software components that include everything needed to run an application, ensuring consistency across various environments. This concept simplifies software distribution and deployment, allowing developers to focus on building applications rather than dealing with infrastructure complexities.",
+      "image_prompt": "mindmap\n  root((Docker Overview))\n    Benefits\n      Portability\n      Scalability\n    Core Concepts\n      Containers\n      Images\n    Use Cases\n      DevOps\n      Microservices\n",
+      "url": "http://localhost:9000/mermaid-images/e5d7f024-4074-4937-b498-331c6be531ed.png"
+    },
+    {
+      "text": "The second scene delves into Docker's architecture and its components, which include the Docker Engine, Docker Images, and Docker Containers. The Docker Engine is the core of Docker, providing the command line functions that make it interact with the host operating system. Docker Images represent all functionalities and dependencies necessary for an application to operate, while Docker Containers are instances of Docker Images running as isolated processes. Understanding these components is crucial for utilizing Docker effectively.",
+      "image_prompt": "flowchart TD\n    A[Docker Architecture] --> B[Docker Engine]\n    B --> C[Docker Images]\n    B --> D[Docker Containers]\n    C --> E[Applications]\n    D --> F[Running Instances]\n",
+      "url": "http://localhost:9000/mermaid-images/ce00b083-7de9-485a-98e2-b8508c7daccd.png"
+    }
+  ]
+}

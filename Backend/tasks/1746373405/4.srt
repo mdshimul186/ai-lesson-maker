@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:02,038
+JavaScript supports closures
+
+2
+00:00:02,288 --> 00:00:07,100
+a powerful attribute that allows for the creation of private variables and functions
+
+3
+00:00:07,475 --> 00:00:14,125
+Closures provide the capability to retain scope access even after a function has completed execution
+
+4
+00:00:14,512 --> 00:00:18,887
+This feature is essential for creating modules and reducing dependency
+
+5
+00:00:19,312 --> 00:00:22,325
+thereby promoting private state and encapsulation
+

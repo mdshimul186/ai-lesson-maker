@@ -1,0 +1,4 @@
+# Ignore node modules and logs in frontend context
+node_modules
+npm-debug.log*
+.DS_Store

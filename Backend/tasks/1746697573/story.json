@@ -1,0 +1,30 @@
+{
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "js func",
+  "image_style": "realistic",
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_rate": 1.0,
+  "resolution": "3840*2160",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "scenes": [
+    {
+      "text": "JavaScript functions are fundamental building blocks in the language, allowing developers to encapsulate code for reuse and organization. Functions in JavaScript can be declared in multiple ways, including function declarations and function expressions. Functions can also be anonymous or named, and they enable functional programming patterns such as higher-order functions and callbacks. Understanding functions is crucial for mastering JavaScript and is an essential skill for writing maintainable and efficient code.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function Declaration\nfunction square(x) {\n  return x * x;\n}\n\n// Function Expression\nconst multiply = function(a, b) {\n  return a * b;\n};\n\n// Arrow Function\nconst add = (a, b) => a + b;\n\n// Function Usage\nconsole.log(square(4)); // 16\nconsole.log(multiply(2, 3)); // 6\nconsole.log(add(1, 2)); // 3\n```\n",
+      "url": "http://localhost:9000/mermaid-images/08a114ee-6fdb-4551-94e7-626867022798.png"
+    },
+    {
+      "text": "Functions in JavaScript can accept arguments and return values, enabling them to perform a wide range of operations. They can utilize default parameters for more flexible function calls and can return multiple values through objects or arrays. Advanced function concepts include closures, where functions have access to variables from their outer scope, providing powerful features for creating private variables and encapsulating functionality. Asynchronous functions offer a paradigm to handle asynchronous operations, making JavaScript code more efficient and manageable.",
+      "image_prompt": "# Advanced JavaScript Functions\n\n```mermaid\nflowchart TD\n    A[Function Begin] --> B{Accept Arguments}\n    B --> C[Process Logic]\n    C --> D{Return Value}\n    D --> E[Closure Scope Access]\n    E --> F{End}\n```\n\n### Function Components:\n\n| Component      | Role                          |\n|----------------|------------------------------|\n| Arguments      | Input parameters             |\n| Logic          | Operations and processing    |\n| Return Values  | Outputs of the function      |\n| Closure Access | Persistent outer scope       |\n",
+      "url": "http://localhost:9000/mermaid-images/5d30c10b-5254-402d-81cb-48f6e7527744.png"
+    },
+    {
+      "text": "JavaScript offers multiple ways to interact with functions in meaningful ways, such as higher-order functions and method chaining. Higher-order functions, like map, filter, and reduce, allow for processing arrays in a clean, functional manner. Function chaining provides a streamlined approach to executing multiple methods sequentially, reducing code complexity. By utilizing these features, developers can write expressive and concise code that is both easier to understand and efficient. Mastering these patterns is fundamental for advanced JavaScript programming.",
+      "image_prompt": "# Functional Programming in JavaScript\n\n```javascript\n// Higher-order Function Example\nconst numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(x => x * 2);\nconsole.log(doubled); // [2, 4, 6, 8, 10]\n\n// Method Chaining Example\nlet result = '   JavaScript Functions   '.trim().toUpperCase();\nconsole.log(result); // 'JAVASCRIPT FUNCTIONS'\n```\n\n### Key Functional Methods:\n\n- **map()**: Apply a function to each element\n- **filter()**: Filter elements based on a condition\n- **reduce()**: Reduce array to a single value\n",
+      "url": "http://localhost:9000/mermaid-images/38fe3e24-eceb-488a-8665-38f18dd4a5a5.png"
+    }
+  ]
+}

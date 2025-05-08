@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:02,788
+Scene 1 introduces JavaScript functions
+
+2
+00:00:03,150 --> 00:00:10,188
+A function is a block of code designed to perform a particular task and is executed when it is called or invoked
+
+3
+00:00:10,562 --> 00:00:13,500
+Functions help in organizing and reuse code
+
+4
+00:00:13,925 --> 00:00:16,438
+making programs more efficient and manageable
+

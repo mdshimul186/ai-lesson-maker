@@ -1,0 +1,32 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 3,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In JavaScript, a class is a special type of function that serves as a blueprint for creating objects with pre-defined properties and methods, allowing developers to use object-oriented programming concepts. The class syntax introduced in ECMAScript 6 provides a more straightforward and cleaner way to create objects and handle inheritance, making code easier to write and understand.",
+      "image_prompt": "# JavaScript Class Structure\n\n```javascript\nclass Animal {\n    constructor(name, age) {\n        this.name = name;\n        this.age = age;\n    }\n\n    speak() {\n        console.log(`${this.name} makes a noise.`);\n    }\n}\n\nconst dog = new Animal('Rex', 5);\ndog.speak();  // Outputs: Rex makes a noise.\n```\n\n### Class Diagram\n\n```mermaid\nclassDiagram\n    class Animal {\n        -name: String\n        -age: Number\n        +speak()\n    }\n\n    Animal --|> Object\n```\n\nIn the diagram above, a class 'Animal' includes properties for 'name' and 'age', and a method 'speak()'. Instances of 'Animal' inherit from the base 'Object' class.",
+      "url": "http://localhost:9000/mermaid-images/62b2e9dc-c8ce-4db4-8906-c2f9ba03fcfa.png"
+    },
+    {
+      "text": "A powerful feature of JavaScript classes is inheritance, which allows a class to inherit properties and methods from another class. This promotes code reuse and logical abstraction. By using the 'extends' keyword, a new class can inherit all the properties and behaviors of another class, and you can also override or add new methods to extend functionality further.",
+      "image_prompt": "# Inheritance in JavaScript Classes\n\n```javascript\nclass Dog extends Animal {\n    constructor(name, age, breed) {\n        super(name, age);\n        this.breed = breed;\n    }\n\n    speak() {\n        console.log(`${this.name} barks.`);\n    }\n}\n\nconst beagle = new Dog('Buddy', 3, 'Beagle');\nbeagle.speak();  // Outputs: Buddy barks.\n```\n\n### Inheritance Diagram\n\n```mermaid\nclassDiagram\n    class Animal {\n        -name: String\n        -age: Number\n        +speak()\n    }\n\n    class Dog {\n        -breed: String\n        +speak()\n    }\n\n    Animal <|-- Dog\n```\n\nThis diagram depicts the inheritance relationship, where 'Dog' extends 'Animal', inheriting its properties while modifying the 'speak()' method.",
+      "url": "http://localhost:9000/mermaid-images/5f3c0d59-51b2-4e69-9064-fd158b065a27.png"
+    },
+    {
+      "text": "JavaScript classes provide the concept of static methods. Static methods are called on the class itself rather than on instances of the class. These methods are often used for utility functions related to the class that do not require an instance to operate. Static methods are declared using the 'static' keyword, offering developers tools to execute tasks essential to the class as a whole.",
+      "image_prompt": "# Static Methods in JavaScript Classes\n\n```javascript\nclass Calculator {\n    static add(a, b) {\n        return a + b;\n    }\n\n    static subtract(a, b) {\n        return a - b;\n    }\n}\n\nconsole.log(Calculator.add(5, 3));  // Outputs: 8\nconsole.log(Calculator.subtract(10, 7));  // Outputs: 3\n```\n\n### Static Methods in Diagram\n\n```mermaid\nclassDiagram\n    class Calculator {\n        +static add(a, b)\n        +static subtract(a, b)\n    }\n\n    note for Calculator \"No need for an instance to use static methods\"\n```\n\nIn this diagram, 'Calculator' includes static methods 'add' and 'subtract', which can be called directly on the class without creating an instance.",
+      "url": "http://localhost:9000/mermaid-images/36655c91-0ba8-4e85-a629-f22010ba8d03.png"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+1
+00:00:00,087 --> 00:00:00,912
+In this first scene
+
+2
+00:00:01,312 --> 00:00:04,375
+we explore the basic structure of a JavaScript function
+
+3
+00:00:04,763 --> 00:00:09,725
+A function in JavaScript is a block of code designed to perform a particular task
+
+4
+00:00:10,100 --> 00:00:12,075
+It can be reused with different inputs
+
+5
+00:00:12,463 --> 00:00:13,537
+known as parameters
+
+6
+00:00:13,900 --> 00:00:16,212
+Functions are defined with the function keyword
+
+7
+00:00:16,575 --> 00:00:17,562
+followed by a name
+
+8
+00:00:18,087 --> 00:00:19,337
+and then parentheses
+
+9
+00:00:19,750 --> 00:00:23,238
+The code to be executed is placed inside curly brackets
+
+10
+00:00:23,712 --> 00:00:29,488
+Understanding functions is essential because it helps in organizing code into reusable components
+
+11
+00:00:29,762 --> 00:00:31,938
+making the code clean and manageable
+

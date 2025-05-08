@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we explore the concept of JavaScript functions, which are fundamental building blocks in modern web development. A function is a reusable block of code that performs a specific task. By defining functions, developers can create modular code, improving readability and maintainability. This scene will demonstrate how to declare a simple JavaScript function and how to use it within a program.",
+      "image_prompt": "# JavaScript Function Declaration and Usage\n```javascript\n// Function declaration\nfunction greet(name) {\n    return `Hello, ${name}!`;\n}\n\n// Function usage\nconst message = greet('World');\nconsole.log(message);\n// Outputs: Hello, World!\n```",
+      "url": "http://localhost:9000/mermaid-images/73d455f2-9406-4a6d-bd5f-8b5dbd303a63.png"
+    },
+    {
+      "text": "This scene delves into the flow of control in a program using a flowchart. Visualizing the logical steps in a sequence allows developers to plan and understand complex decision-making within applications. We'll demonstrate a simple decision-making process to showcase how different paths are executed based on conditions provided in the program.",
+      "image_prompt": "flowchart TD\n    A[Start] --> B[Evaluate Expression]\n    B -->|True| C[Execute True Block]\n    B -->|False| D[Execute False Block]\n    C --> E[End]\n    D --> E",
+      "url": "http://localhost:9000/mermaid-images/fc733a1d-1e2f-4731-b99c-ccf301b3cd64.png"
+    }
+  ]
+}

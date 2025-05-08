@@ -1,0 +1,28 @@
+1
+00:00:00,075 --> 00:00:00,938
+In JavaScript
+
+2
+00:00:01,387 --> 00:00:06,450
+a function is a fundamental building block which allows you to encapsulate a block of code
+
+3
+00:00:06,850 --> 00:00:10,600
+Functions can be reused and make code easier to manage
+
+4
+00:00:10,988 --> 00:00:18,125
+Understanding the syntax of a function is essential to unlocking the full potential of JavaScript programming
+
+5
+00:00:18,500 --> 00:00:19,113
+Furthermore
+
+6
+00:00:19,550 --> 00:00:23,800
+knowing how to pass arguments and return values empowers you to write modular
+
+7
+00:00:24,262 --> 00:00:25,150
+reusable code
+

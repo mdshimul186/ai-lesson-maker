@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,975
+Managing Resources in Docker
+
+2
+00:00:02,538 --> 00:00:05,750
+Understand how to manage CPU and memory resources
+

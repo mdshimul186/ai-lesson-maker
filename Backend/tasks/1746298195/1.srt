@@ -1,0 +1,36 @@
+1
+00:00:00,075 --> 00:00:01,950
+In the first scene of our Docker lecture
+
+2
+00:00:02,362 --> 00:00:05,175
+we'll introduce the concept of containerization
+
+3
+00:00:05,562 --> 00:00:13,938
+We'll discuss how Docker allows developers to package applications and their dependencies into a standardized unit for software development
+
+4
+00:00:14,338 --> 00:00:18,450
+This makes deployment processes much simpler and more efficient
+
+5
+00:00:18,850 --> 00:00:20,738
+The key components include images
+
+6
+00:00:20,762 --> 00:00:21,538
+containers
+
+7
+00:00:21,738 --> 00:00:22,613
+the Docker engine
+
+8
+00:00:22,850 --> 00:00:23,562
+and Docker Hub
+
+9
+00:00:23,962 --> 00:00:30,275
+These elements work together to create an ecosystem that supports seamless application management
+

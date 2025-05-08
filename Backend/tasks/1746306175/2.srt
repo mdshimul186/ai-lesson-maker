@@ -1,0 +1,12 @@
+1
+00:00:00,087 --> 00:00:00,950
+In the second scene
+
+2
+00:00:01,200 --> 00:00:05,062
+we discuss how to define a class in JavaScript using the 'class' keyword
+
+3
+00:00:05,463 --> 00:00:09,537
+followed by creating a constructor method to initialize object properties
+

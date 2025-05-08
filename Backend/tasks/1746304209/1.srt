@@ -1,0 +1,40 @@
+1
+00:00:00,075 --> 00:00:02,312
+Docker is an open platform for developing
+
+2
+00:00:02,675 --> 00:00:03,225
+shipping
+
+3
+00:00:03,475 --> 00:00:04,688
+and running applications
+
+4
+00:00:05,075 --> 00:00:10,100
+It enables you to separate your applications from your infrastructure so you can deliver software quickly
+
+5
+00:00:10,500 --> 00:00:11,113
+With Docker
+
+6
+00:00:11,575 --> 00:00:15,412
+you can manage your infrastructure in the same ways you manage your applications
+
+7
+00:00:15,812 --> 00:00:18,925
+By taking advantage of Docker's methodologies for shipping
+
+8
+00:00:19,163 --> 00:00:19,775
+testing
+
+9
+00:00:20,000 --> 00:00:21,538
+and deploying code quickly
+
+10
+00:00:21,812 --> 00:00:26,288
+you can significantly reduce the delay between writing code and running it in production
+

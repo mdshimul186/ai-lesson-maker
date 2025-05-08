@@ -1,0 +1,36 @@
+1
+00:00:00,075 --> 00:00:00,925
+In JavaScript
+
+2
+00:00:01,350 --> 00:00:04,213
+a class is a blueprint for creating objects
+
+3
+00:00:04,600 --> 00:00:09,000
+Classes encapsulate data with code to operate on that data
+
+4
+00:00:09,375 --> 00:00:16,712
+An instance of a class is a specific implementation with defined properties and behaviors inherited from the class
+
+5
+00:00:17,113 --> 00:00:21,125
+ES6 introduced classes implementing a much clearer
+
+6
+00:00:21,538 --> 00:00:24,475
+more concise syntax which encapsulates behavior
+
+7
+00:00:25,000 --> 00:00:26,988
+making the coding process more logical
+
+8
+00:00:27,400 --> 00:00:30,938
+reducing code redundancy and increasing reusability
+
+9
+00:00:31,325 --> 00:00:39,650
+It is vital in both object-oriented programming and modern JavaScript development for organizing code in a more performant and sustainable way
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we will explore the foundations of JavaScript functions. A function is a block of code designed to perform a particular task, which can be reused and executed with different inputs. Understanding how to declare, call, and utilize functions is crucial for efficient programming. Functions can take in parameters, perform operations, and return results, which makes them versatile for tasks ranging from simple calculations to complex algorithms.",
+      "image_prompt": "# Declaring and Using JavaScript Functions\n\n```javascript\n// Function to add two numbers\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function usage\nconst sum = add(5, 3);\nconsole.log(sum); // Output: 8\n```",
+      "url": ""
+    },
+    {
+      "text": "In this scene, we delve into the control flow of a typical web application using a sequence diagram. Control flow refers to the order in which individual statements, instructions, or function calls are executed in a program. Comprehending this flow is vital for designing responsive and manageable applications. The diagram illustrates a user interacting with a system, where a request is sent and a response is received, highlighting the interactive nature of web applications.",
+      "image_prompt": "sequenceDiagram\n    participant User\n    participant System\n    User->>System: Send Request\n    System-->>User: Return Response",
+      "url": "http://localhost:9000/mermaid-images/c2792616-91e6-40f0-a83c-85377a54217a.png"
+    }
+  ]
+}

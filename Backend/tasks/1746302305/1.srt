@@ -1,0 +1,84 @@
+1
+00:00:00,087 --> 00:00:00,912
+In this lecture
+
+2
+00:00:01,325 --> 00:00:03,237
+we will explore the basics of Docker
+
+3
+00:00:03,675 --> 00:00:05,400
+a platform used for developing
+
+4
+00:00:05,638 --> 00:00:06,275
+shipping
+
+5
+00:00:06,525 --> 00:00:08,537
+and running applications in containers
+
+6
+00:00:08,925 --> 00:00:10,825
+A Docker container is a lightweight
+
+7
+00:00:11,075 --> 00:00:11,863
+standalone
+
+8
+00:00:12,350 --> 00:00:16,087
+executable package that includes everything needed to run a piece of software
+
+9
+00:00:16,450 --> 00:00:17,200
+such as the code
+
+10
+00:00:17,637 --> 00:00:18,275
+runtime
+
+11
+00:00:18,538 --> 00:00:19,450
+system tools
+
+12
+00:00:19,725 --> 00:00:20,450
+libraries
+
+13
+00:00:20,512 --> 00:00:21,175
+and settings
+
+14
+00:00:21,562 --> 00:00:22,450
+Using Docker
+
+15
+00:00:22,663 --> 00:00:25,062
+developers can streamline their workflows
+
+16
+00:00:25,425 --> 00:00:30,425
+ensuring that applications work seamlessly in various environments from development to production
+
+17
+00:00:30,825 --> 00:00:34,163
+This introduction will cover core Docker concepts
+
+18
+00:00:34,375 --> 00:00:35,575
+including images
+
+19
+00:00:35,750 --> 00:00:36,513
+containers
+
+20
+00:00:36,700 --> 00:00:37,888
+the Docker architecture
+
+21
+00:00:38,362 --> 00:00:42,350
+and how these elements fit together to facilitate application deployment
+

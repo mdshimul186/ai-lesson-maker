@@ -1,0 +1,32 @@
+1
+00:00:00,100 --> 00:00:03,862
+Functions in JavaScript can accept arguments and return values
+
+2
+00:00:04,213 --> 00:00:07,275
+enabling them to perform a wide range of operations
+
+3
+00:00:08,363 --> 00:00:15,938
+They can utilize default parameters for more flexible function calls and can return multiple values through objects or arrays
+
+4
+00:00:17,038 --> 00:00:19,413
+Advanced function concepts include closures
+
+5
+00:00:19,712 --> 00:00:22,988
+where functions have access to variables from their outer scope
+
+6
+00:00:23,312 --> 00:00:28,538
+providing powerful features for creating private variables and encapsulating functionality
+
+7
+00:00:29,587 --> 00:00:33,775
+Asynchronous functions offer a paradigm to handle asynchronous operations
+
+8
+00:00:34,100 --> 00:00:37,087
+making JavaScript code more efficient and manageable
+

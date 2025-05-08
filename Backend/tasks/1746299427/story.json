@@ -1,0 +1,22 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Docker is a platform that enables developers to build, deploy, and manage applications in containers. Containers are lightweight, portable, and virtualized runtime environments, allowing you to run software consistently across environments. This scene will cover the basic concepts of Docker, including images, containers, and the Docker architecture.",
+      "image_prompt": "graph LR; A[Docker Architecture] --> B[Docker Client]; A --> C[Docker Host]; A --> D[Docker Registry]; B --> E[Container Images]; C --> F[Containers]; D --> G[Docker Hub]; E -->|Pull| F; F -->|Push| G;",
+      "url": "http://localhost:9000/mermaid-images/f2aa0d81-2358-4978-9063-d9f15d68f856.png"
+    }
+  ]
+}

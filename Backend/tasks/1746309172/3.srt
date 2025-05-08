@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:01,288
+Initiating a Project
+
+2
+00:00:01,837 --> 00:00:03,225
+Identifying objectives
+
+3
+00:00:03,388 --> 00:00:04,287
+stakeholders
+
+4
+00:00:04,537 --> 00:00:06,463
+and creating a project charter
+

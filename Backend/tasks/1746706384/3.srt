@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:04,950
+Understanding the scope and closures is vital for advanced function usage in JavaScript
+
+2
+00:00:05,925 --> 00:00:07,638
+Functions create their own scope
+
+3
+00:00:07,850 --> 00:00:11,113
+and inner functions have access to the outer function's scope
+
+4
+00:00:11,363 --> 00:00:12,338
+creating closures
+
+5
+00:00:13,400 --> 00:00:15,875
+Closures enable powerful patterns such as currying
+
+6
+00:00:16,100 --> 00:00:16,875
+memoization
+
+7
+00:00:17,150 --> 00:00:19,975
+and encapsulation in JavaScript applications
+

@@ -1,0 +1,48 @@
+1
+00:00:00,087 --> 00:00:00,725
+In this scene
+
+2
+00:00:01,163 --> 00:00:03,725
+we will introduce Docker and its core concepts
+
+3
+00:00:04,125 --> 00:00:07,263
+Docker is a platform that enables developers to build
+
+4
+00:00:07,537 --> 00:00:07,938
+ship
+
+5
+00:00:08,350 --> 00:00:10,275
+and run applications in containers
+
+6
+00:00:10,662 --> 00:00:12,150
+Containers are lightweight
+
+7
+00:00:12,412 --> 00:00:17,225
+standalone units that package all the components necessary to run an application
+
+8
+00:00:17,700 --> 00:00:19,075
+isolated from the host machine
+
+9
+00:00:19,475 --> 00:00:23,225
+This ensures consistency across development environments
+
+10
+00:00:23,600 --> 00:00:30,200
+We'll cover the difference between containers and virtual machines and introduce Docker's components such as the Docker Engine
+
+11
+00:00:30,675 --> 00:00:31,212
+Images
+
+12
+00:00:31,387 --> 00:00:32,288
+and Containers
+

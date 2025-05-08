@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "JavaScript functions are a fundamental building block used in web development. Functions allow developers to encapsulate code for reusability and modular design. Understanding how to declare, invoke, and utilize parameters and return values is crucial for creating effective JavaScript applications.",
+      "image_prompt": "## JavaScript Function Basics\n\n```javascript\n// Function declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function invocation\nconst sum = add(2, 3);\nconsole.log('Sum:', sum); // Output: Sum: 5\n```\n\n> **Note**: Functions help to reduce repetition and enhance code organization by performing tasks with inputs and producing outputs.",
+      "url": ""
+    },
+    {
+      "text": "Visualize the JavaScript function lifecycle with an emphasis on its execution flow. Understanding how functions start processing, handle decision-making, and complete their execution process aids in debugging and optimizing JavaScript programs effectively.",
+      "image_prompt": "## Function Execution Flow\n\n```mermaid\nflowchart TD\n    A[Start Function] --> B[Execute Code]\n    B --> C{Check Condition}\n    C -->|True| D[Execute True Block]\n    C -->|False| E[Execute False Block]\n    D --> F[Return Result]\n    E --> F\n    F --> G[End Function]\n```\n\n> **Important**: This flowchart outlines how functions process inputs and outputs, ensuring a clear path from start to end execution.",
+      "url": ""
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,150
+Docker Compose
+
+2
+00:00:01,550 --> 00:00:04,575
+An introduction to Docker Compose and its benefits
+

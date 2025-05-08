@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:00,900
+In this chapter
+
+2
+00:00:01,288 --> 00:00:05,938
+we explore the foundational concept of writing functions in JavaScript
+
+3
+00:00:06,338 --> 00:00:12,037
+Functions are reusable pieces of code that allow for more efficient and organized programming
+
+4
+00:00:12,438 --> 00:00:17,375
+They help in compartmentalizing logic and make the code easier to understand and maintain
+
+5
+00:00:17,750 --> 00:00:20,700
+Understanding how to declare and invoke functions
+
+6
+00:00:21,087 --> 00:00:23,762
+as well as comprehend their parameters and return values
+
+7
+00:00:24,163 --> 00:00:26,450
+is crucial for any budding programmer
+

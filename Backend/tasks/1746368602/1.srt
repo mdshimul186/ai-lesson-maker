@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:00,912
+In this chapter
+
+2
+00:00:01,300 --> 00:00:05,575
+we will learn how to create a simple JavaScript function that adds two numbers
+
+3
+00:00:05,963 --> 00:00:10,775
+Understanding functions is crucial as they allow us to encapsulate code
+
+4
+00:00:11,137 --> 00:00:14,113
+so it can be reused with different inputs throughout our programs
+
+5
+00:00:14,488 --> 00:00:20,738
+We will also look at how to call these functions and capture their return values in variables to use them later
+
+6
+00:00:21,125 --> 00:00:25,775
+This foundational knowledge forms the basis for all further programming tasks
+

@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we will explore the basics of creating a JavaScript function. Functions are the fundamental building blocks for encapsulating logic, enabling code reuse, and organizing code into logical sections. A function in JavaScript is defined with the `function` keyword followed by a name, a list of parameters enclosed in parentheses, and a block of code to be executed when the function is called. Understanding how to define and invoke a function effectively is crucial as it allows developers to write code that is easy to debug, maintain, and extend.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function declaration\nfunction greet(name) {\n    return `Hello, ${name}!`;\n}\n\n// Function usage\nconst message = greet('World');\nconsole.log(message);\n```\n\n### Components of a Function:\n\n| Component   | Description                                 |\n|-------------|---------------------------------------------|\n| Declaration | The process of defining a function.          |\n| Parameters  | Inputs to the function.                      |\n| Return      | Output from the function.                    |\n\n> **Note:** Functions encapsulate code for reusability and readability.",
+      "url": ""
+    },
+    {
+      "text": "In this scene, we delve deeper into the various types of functions in JavaScript, including regular functions, arrow functions, and anonymous functions. Each type of function offers different syntax and behaviour, serving diverse use cases in modern web development. Arrow functions, introduced in ES6, provide a more concise syntax and do not bind `this` keyword, making them useful in situations where you do not want to alter the context of `this`. Anonymous functions are crucial for scenarios such as event handlers and immediately invoked function expressions (IIFE). Mastering these types enables developers to write more efficient and expressive JavaScript code.",
+      "image_prompt": "# Types of JavaScript Functions\n\n```javascript\n// Regular Function\nfunction add(a, b) {\n    return a + b;\n}\n\n// Arrow Function\nconst multiply = (x, y) => x * y;\n\n// Anonymous Function\nsetTimeout(function() {\n    console.log('This is an anonymous function!');\n}, 1000);\n```\n\n### Function Types Overview:\n\n```mermaid\ngraph LR\n    A[Regular Function] -- Syntax Simplification --> B[Arrow Function]\n    A --> C[Anonymous Function]\n    C --> D(IIFE: Immediately Invoked Function Expression)\n```\n\n> **Tip:** Choose the appropriate function type based on the use case for clarity and performance.",
+      "url": "http://localhost:9000/mermaid-images/fb099e88-d1e3-40f1-a145-5eaf7cb88651.png"
+    }
+  ]
+}

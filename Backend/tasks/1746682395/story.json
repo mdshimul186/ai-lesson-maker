@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 1,
+  "language": "en-US",
+  "story_prompt": "make a lecture on js class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In JavaScript, a class is a blueprint for creating objects. Classes encapsulate data with code to operate on that data. An instance of a class is a specific implementation with defined properties and behaviors inherited from the class. ES6 introduced classes implementing a much clearer, more concise syntax which encapsulates behavior, making the coding process more logical, reducing code redundancy and increasing reusability. It is vital in both object-oriented programming and modern JavaScript development for organizing code in a more performant and sustainable way.",
+      "image_prompt": "# JavaScript Class Structure Introduction\n\n```javascript\n// Class declaration\nclass Animal {\n    constructor(name, species) {\n        this.name = name;\n        this.species = species;\n    }\n\n    describe() {\n        return `${this.name} is a/an ${this.species}`;\n    }\n}\n\n// Creating an instance of the Animal class\nconst dog = new Animal('Buddy', 'dog');\nconsole.log(dog.describe()); // Output: Buddy is a/an dog\n```\n\n### Key Concepts:\n\n| Concept | Description |\n|---------|-------------|\n| Class | Blueprint for creating objects |\n| Instance | Specific object created from a class |\n| Constructor | Method for initializing class properties |\n| Method | Function associated with an object |\n",
+      "url": "http://localhost:9000/mermaid-images/cc60fce9-bf28-495f-a0a7-9c3ddbf33727.png"
+    },
+    {
+      "text": "Using classes in JavaScript permits the use of inheritance, allowing a class to extend another class's properties and methods. This makes classes highly useful for structuring complex software systems, fostering code reuse, and maintaining a cleaner codebase. Classes can have constructors to set initial states and methods for operations, making them versatile tools. Imagine them as templates that can be declared and instantiated multiple times, retaining core functionality while allowing for the introduction of unique specifications per instance without altering the core template.",
+      "image_prompt": "# Extending Classes and Inheritance\n\n```javascript\n// Base class\nclass Animal {\n    constructor(name, species) {\n        this.name = name;\n        this.species = species;\n    }\n\n    describe() {\n        return `${this.name} is a/an ${this.species}`;\n    }\n}\n\n// Subclass extending Animal\nclass Dog extends Animal {\n    constructor(name, breed) {\n        super(name, 'dog');\n        this.breed = breed;\n    }\n\n    bark() {\n        return `${this.name} barks!`;\n    }\n}\n\n// Creating a dog object\nconst pet = new Dog('Snowy', 'Labrador');\nconsole.log(pet.describe()); // Output: Snowy is a/an dog\nconsole.log(pet.bark()); // Output: Snowy barks!\n```\n\n### Inheritance Diagram:\n\n```mermaid\nclassDiagram\nAnimal <|-- Dog\nclass Animal{\n  -name\n  -species\n  +describe()\n}\nclass Dog{\n  -breed\n  +bark()\n}\n```\n",
+      "url": "http://localhost:9000/mermaid-images/858dd5e9-aa22-457f-b767-e1c198a381fe.png"
+    }
+  ]
+}

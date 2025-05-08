@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:02,938
+Docker containers are created from Docker images
+
+2
+00:00:03,312 --> 00:00:04,625
+An image is a lightweight
+
+3
+00:00:04,900 --> 00:00:05,675
+standalone
+
+4
+00:00:05,938 --> 00:00:10,662
+and executable software package that includes everything needed to run a piece of software
+

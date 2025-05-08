@@ -1,0 +1,16 @@
+1
+00:00:00,075 --> 00:00:00,988
+In this introduction
+
+2
+00:00:01,413 --> 00:00:06,362
+we explore what JavaScript functions are and why they are fundamental concepts in programming
+
+3
+00:00:06,763 --> 00:00:11,725
+Functions are reusable blocks of code designed to perform a particular task
+
+4
+00:00:12,137 --> 00:00:15,287
+They help make programs modular and easier to manage
+

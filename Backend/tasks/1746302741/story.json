@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Docker: Docker is a platform that enables developers to automate the deployment of applications inside lightweight, portable containers. Containers have all the necessary executables, binary code, libraries, and configuration files.",
+      "image_prompt": "graph LR; A(Docker Ecosystem)-->B(Docker Containers); A-->C(Docker Images); A-->D(Docker Hub)",
+      "url": "http://localhost:9000/mermaid-images/06d96f0d-d2b3-4c78-8ba6-fb76a692dee3.png"
+    },
+    {
+      "text": "Understanding Containers: Containers are isolated processes that run on a shared operating system, essentially packaging an application with its dependencies to ensure consistency across different environments.",
+      "image_prompt": "graph TB; A(Host OS)-->B(Docker Daemon); B-->C(Container); C-->|Shared|D(Libraries & Binaries); C-->E(Application)",
+      "url": "http://localhost:9000/mermaid-images/0b6e215c-6708-46ca-beda-5a33b54c3b54.png"
+    },
+    {
+      "text": "Docker Architecture: Docker works through various components like the Docker Client, Docker Daemon, and Docker Registry to create, manage, and distribute containers.",
+      "image_prompt": "graph LR; A[Docker Client]-->B[Docker Daemon]; B-->C[Container]; B-->D[Docker Registry]",
+      "url": "http://localhost:9000/mermaid-images/da8ebbc4-7559-4615-8684-ddda76422345.png"
+    },
+    {
+      "text": "Building Docker Images: Docker images are read-only templates used to create containers. They are built from instructions provided in a Dockerfile.",
+      "image_prompt": "graph TD; A[Dockerfile]-->B[Docker CLI]; B-->C[Docker Daemon]; C-->D(Docker Image)",
+      "url": "http://localhost:9000/mermaid-images/1bc45034-83a3-40ef-815a-a7c0d59235c9.png"
+    },
+    {
+      "text": "Dockerfile Essentials: A Dockerfile is a text document that contains all the commands to assemble an image. Key instructions include FROM, RUN, COPY, and CMD.",
+      "image_prompt": "graph TB; A{Dockerfile}-->|FROM|B[Base Image]; B-->|RUN|C[Install Dependencies]; C-->|COPY|D[Add Files]; D-->|CMD|E[Default Command]",
+      "url": "http://localhost:9000/mermaid-images/eddfbbda-061a-4915-b69e-ca6bf27eed7f.png"
+    },
+    {
+      "text": "Docker Networking: Docker provides a built-in networking subsystem to help connect containers to each other and to non-Docker environments.",
+      "image_prompt": "graph LR; A[Container 1]-->|Bridge Network|B[Docker Host]; A-->|Expose Ports|C[External Network]",
+      "url": "http://localhost:9000/mermaid-images/146c2b4d-dc1d-4441-855d-831b3638ea68.png"
+    },
+    {
+      "text": "Managing Data with Volumes: Docker Volumes are the preferred way to persist data generated and used by Docker containers.",
+      "image_prompt": "graph TD; A[Container]-->|Bind|B[Volume]; B-->C[Host Filesystem]",
+      "url": "http://localhost:9000/mermaid-images/935648d9-fc13-422e-9160-0d94cc966a1b.png"
+    },
+    {
+      "text": "Docker Compose: Docker Compose is a tool for defining and running multi-container Docker applications, using YAML files to configure application services.",
+      "image_prompt": "graph TB; A[Docker Compose YAML]-->B[Define Services]; B-->C[Deploy Application]",
+      "url": "http://localhost:9000/mermaid-images/e18d50c2-0af0-4338-8cdb-10614b4f9526.png"
+    },
+    {
+      "text": "Docker in Production: When deploying Docker in a production environment, consider aspects such as security, orchestration, and scaling solutions like Kubernetes.",
+      "image_prompt": "graph LR; A[Docker]-->B[Security Best Practices]; A-->C[Orchestration Tools]; C-->D[Kubernetes]",
+      "url": "http://localhost:9000/mermaid-images/ed4f24bc-532e-41c6-919b-c63e9bb0bf7a.png"
+    },
+    {
+      "text": "Conclusion and Best Practices: Docker offers a comprehensive ecosystem to manage the lifecycle of containers, improving development and deployment efficiency through best practices like minimal base images and continuous integration pipelines.",
+      "image_prompt": "graph TB; A[Docker Workflow]-->B[Development]; B-->C[Integration]; C-->D[Deployment]; D-->E[Best Practices]",
+      "url": "http://localhost:9000/mermaid-images/d61a7cf5-3592-46fc-a15b-ef8df943d913.png"
+    }
+  ]
+}

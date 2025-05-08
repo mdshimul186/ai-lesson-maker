@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we explore the fundamentals of creating functions in JavaScript. Functions are crucial building blocks in programming as they allow you to encapsulate blocks of code, reuse them, and make your code more organized. Functions can accept arguments and return values, enabling you to work with dynamic data and build more complex applications.",
+      "image_prompt": "### JavaScript Function Basics\n\n```javascript\n// Simple function declaration\nfunction add(a, b) {\n    return a + b;\n}\n\n// Function invocation\nconst sum = add(5, 3);\nconsole.log(sum); // Output: 8\n```\n\n```mermaid\nflowchart TD\n    A[Start] --> B[Declare Function]\n    B --> C[Invoke Function]\n    C --> D[Return Result]\n    D --> E[End]\n```\n\n### Function Components:\n\n| Component | Description |\n|-----------|-------------|\n| Declaration | Defining the function and parameters |\n| Invocation | Executing the function with arguments |\n| Return | Outputting a result from the function |",
+      "url": "http://localhost:9000/mermaid-images/572225cd-1575-4119-b155-e779a7517d71.png"
+    },
+    {
+      "text": "The second scene delves into control structures in JavaScript, focusing on how they enable decision-making in code. Control structures like if-else statements and loops allow you to run code conditionally or repetitively. This is particularly useful for handling different scenarios or iterating over collections, which is essential for managing complex workflows and enhancing application logic.",
+      "image_prompt": "### JavaScript Control Structures\n\n```javascript\n// Conditional example\nif (isLoggedIn) {\n    console.log('Welcome back!');\n} else {\n    console.log('Please log in.');\n}\n\n// Loop example\nfor (let i = 0; i < 5; i++) {\n    console.log(i);\n}\n```\n\n```mermaid\nflowchart TD\n    A[Start] --> B{Condition}\n    B -->|True| C[Execute Code Block]\n    B -->|False| D[Skip Code Block]\n    C --> E[End]\n    D --> E\n```\n\n### Control Structure Types:\n\n| Type | Purpose |\n|------|---------|\n| Conditional | Execute code based on conditions |\n| Loop | Repeat code execution |\n",
+      "url": "http://localhost:9000/mermaid-images/0fb0e780-1522-45ab-a06f-d5c41b2d595b.png"
+    }
+  ]
+}

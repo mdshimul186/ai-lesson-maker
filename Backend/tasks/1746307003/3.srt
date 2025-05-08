@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:02,562
+Scene 3 covers function expressions
+
+2
+00:00:02,950 --> 00:00:04,450
+Unlike declarations
+
+3
+00:00:04,825 --> 00:00:08,900
+function expressions can be defined as part of a larger expression
+
+4
+00:00:09,287 --> 00:00:10,400
+They are not hoisted
+
+5
+00:00:10,925 --> 00:00:13,350
+meaning they cannot be called before being defined
+

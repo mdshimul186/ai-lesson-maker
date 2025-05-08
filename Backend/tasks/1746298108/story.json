@@ -1,0 +1,27 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 2,
+  "language": "en-US",
+  "story_prompt": "create a lecture on docker",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "In this scene, we will introduce Docker and its core concepts. Docker is a platform that enables developers to build, ship, and run applications in containers. Containers are lightweight, standalone units that package all the components necessary to run an application, isolated from the host machine. This ensures consistency across development environments. We'll cover the difference between containers and virtual machines and introduce Docker's components such as the Docker Engine, Images, and Containers.",
+      "image_prompt": "graph LR; A(Docker)-->B{Docker Engine}; B-->C[Images]; B-->D[Containers]; C-->E[Isolated environments]; D-->F[Consistency across environments]; B-->G[Docker CLI]",
+      "url": ""
+    },
+    {
+      "text": "In this scene, we will delve deeper into the practical applications of Docker. We'll explore how Docker simplifies application deployment by creating Dockerfiles that define the environment in which an application resides. We'll also cover Docker Compose, which allows for managing multi-container Docker applications. We will demonstrate how Docker integrates with CI/CD pipelines to automate deployment processes, ensuring seamless and efficient project management.",
+      "image_prompt": "graph TD; A[Dockerfile]-->B{Build Images}; B-->C[Docker Registry]; C-->D[CI/CD Integration]; D-->E[Automated Deployment]; A-->F[Docker Compose]; F-->G[Multi-Container Applications]",
+      "url": ""
+    }
+  ]
+}

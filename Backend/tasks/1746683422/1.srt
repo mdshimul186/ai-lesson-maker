@@ -1,0 +1,28 @@
+1
+00:00:00,087 --> 00:00:03,362
+JavaScript classes provide a blueprint for creating objects
+
+2
+00:00:03,763 --> 00:00:06,987
+encapsulating data with code to work on that data
+
+3
+00:00:07,388 --> 00:00:10,325
+They are an essential aspect of JavaScript programming
+
+4
+00:00:10,812 --> 00:00:14,125
+allowing developers to implement object-oriented principles
+
+5
+00:00:14,525 --> 00:00:17,125
+Classes enhance code reusability
+
+6
+00:00:17,525 --> 00:00:18,425
+maintainability
+
+7
+00:00:18,650 --> 00:00:25,200
+and the overall structure of applications by allowing the declaration of methods specific to a particular object type
+

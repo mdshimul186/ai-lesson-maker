@@ -1,0 +1,68 @@
+1
+00:00:00,087 --> 00:00:02,938
+Docker is a platform that enables developers to build
+
+2
+00:00:03,188 --> 00:00:03,913
+deploy
+
+3
+00:00:04,062 --> 00:00:06,350
+and run applications inside containers
+
+4
+00:00:06,725 --> 00:00:08,100
+Containers are lightweight
+
+5
+00:00:08,350 --> 00:00:12,125
+portable units that come bundled with everything an application needs to run
+
+6
+00:00:12,562 --> 00:00:13,488
+including code
+
+7
+00:00:13,975 --> 00:00:14,675
+libraries
+
+8
+00:00:14,750 --> 00:00:15,600
+and dependencies
+
+9
+00:00:15,988 --> 00:00:18,500
+This ensures that wherever the container is deployed
+
+10
+00:00:18,875 --> 00:00:20,262
+it will run the same way
+
+11
+00:00:20,750 --> 00:00:22,675
+regardless of the underlying environment
+
+12
+00:00:23,075 --> 00:00:23,863
+In this lecture
+
+13
+00:00:24,137 --> 00:00:26,325
+we will cover the core components of Docker
+
+14
+00:00:26,712 --> 00:00:27,950
+including the Docker Engine
+
+15
+00:00:28,225 --> 00:00:28,925
+Docker Hub
+
+16
+00:00:29,312 --> 00:00:30,938
+the process of containerization
+
+17
+00:00:31,400 --> 00:00:33,175
+and how to manage containers effectively
+

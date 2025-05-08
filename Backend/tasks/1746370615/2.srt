@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:03,112
+The second scene delves into control structures in JavaScript
+
+2
+00:00:03,538 --> 00:00:06,287
+focusing on how they enable decision-making in code
+
+3
+00:00:06,675 --> 00:00:13,625
+Control structures like if-else statements and loops allow you to run code conditionally or repetitively
+
+4
+00:00:14,025 --> 00:00:19,337
+This is particularly useful for handling different scenarios or iterating over collections
+
+5
+00:00:19,725 --> 00:00:24,550
+which is essential for managing complex workflows and enhancing application logic
+

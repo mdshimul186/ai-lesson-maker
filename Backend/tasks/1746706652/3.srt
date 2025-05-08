@@ -1,0 +1,28 @@
+1
+00:00:00,100 --> 00:00:05,787
+JavaScript functions can also be enhanced with capabilities such as being passed around as arguments
+
+2
+00:00:06,250 --> 00:00:07,713
+returned from other functions
+
+3
+00:00:08,050 --> 00:00:11,150
+or even having properties and methods attached to them
+
+4
+00:00:12,188 --> 00:00:16,950
+This flexibility allows developers to implement powerful design patterns like callbacks
+
+5
+00:00:17,200 --> 00:00:17,887
+promises
+
+6
+00:00:18,100 --> 00:00:18,637
+and more
+
+7
+00:00:19,625 --> 00:00:25,275
+Understanding these advanced concepts can significantly elevate your JavaScript programming skills
+

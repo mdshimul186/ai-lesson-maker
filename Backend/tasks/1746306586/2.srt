@@ -1,0 +1,20 @@
+1
+00:00:00,087 --> 00:00:01,262
+Defining a Class
+
+2
+00:00:01,525 --> 00:00:02,362
+In JavaScript
+
+3
+00:00:02,538 --> 00:00:06,300
+classes are defined using the class keyword followed by the class name
+
+4
+00:00:06,688 --> 00:00:07,888
+Inside the class
+
+5
+00:00:08,113 --> 00:00:11,762
+a constructor method is used for initializing new objects
+

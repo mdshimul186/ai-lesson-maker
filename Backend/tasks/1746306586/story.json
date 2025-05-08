@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "create a lecture on javascript class",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to JavaScript Classes: A JavaScript class is a template for creating objects. It acts as a blueprint for object instances with properties and methods common to all instances created from the class.",
+      "image_prompt": "classDiagram\n  ClassName\n  class ClassName{\n    +constructor(arg)\n    +method1()\n    +method2()\n  }",
+      "url": "http://localhost:9000/mermaid-images/b4a7fca9-0d75-4b89-bd02-4b5cf38aaaea.png"
+    },
+    {
+      "text": "Defining a Class: In JavaScript, classes are defined using the class keyword followed by the class name. Inside the class, a constructor method is used for initializing new objects.",
+      "image_prompt": "classDiagram\n  class Car {\n    +String model\n    +int year\n    +constructor(model, year)\n    +start()\n    +stop()\n  }",
+      "url": "http://localhost:9000/mermaid-images/fdfe0a40-6c4d-43c9-a12d-83e53bf982c1.png"
+    },
+    {
+      "text": "Creating Instances: Once a class is defined, new instances can be created using the new keyword. Each instance contains the properties and methods defined in the class.",
+      "image_prompt": "flowchart TD\n  A[Create Class] --> B[Initialize Instances]\n  B --> C[Add Properties to Instances]",
+      "url": "http://localhost:9000/mermaid-images/a52a6add-8c37-4eed-a818-11dbac3e2169.png"
+    },
+    {
+      "text": "Inheritance in JavaScript Classes: Classes can inherit features from other classes. Using the extends keyword, a class can become a child of another class, inheriting its properties and methods.",
+      "image_prompt": "classDiagram\n  Vehicle <|-- Car\n  Vehicle <|-- Bike\n  class Vehicle{\n    +start()\n    +stop()\n  }\n  class Car{\n    +honk()\n  }\n  class Bike{\n    +pedal()\n  }",
+      "url": "http://localhost:9000/mermaid-images/034b762a-5b06-4298-bd54-7951833d1948.png"
+    },
+    {
+      "text": "Using Static Methods: Static methods belong to the class itself rather than instances of the class. They are invoked using the class name rather than instance variables.",
+      "image_prompt": "classDiagram\n  class Calculator {\n    +static add(a, b)\n    +static subtract(a, b)\n  }",
+      "url": "http://localhost:9000/mermaid-images/b273ec46-4a2c-407b-af21-965ad89b1209.png"
+    }
+  ]
+}

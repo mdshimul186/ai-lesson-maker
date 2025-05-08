@@ -1,0 +1,16 @@
+1
+00:00:00,087 --> 00:00:00,512
+Next
+
+2
+00:00:00,912 --> 00:00:04,375
+we explore how to create methods within a JavaScript class
+
+3
+00:00:04,775 --> 00:00:07,287
+Methods are functions that belong to the class
+
+4
+00:00:07,675 --> 00:00:09,800
+allowing objects to perform actions
+

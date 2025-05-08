@@ -1,0 +1,40 @@
+1
+00:00:00,087 --> 00:00:02,150
+Docker is a platform for developing
+
+2
+00:00:02,400 --> 00:00:03,013
+shipping
+
+3
+00:00:03,225 --> 00:00:06,412
+and running applications inside lightweight containers
+
+4
+00:00:06,800 --> 00:00:08,350
+Unlike virtual machines
+
+5
+00:00:08,637 --> 00:00:11,162
+Docker containers run on the host OS
+
+6
+00:00:11,537 --> 00:00:14,387
+which makes them start quickly and use fewer resources
+
+7
+00:00:14,787 --> 00:00:18,762
+This is an introduction to Docker where we discuss its core components
+
+8
+00:00:19,238 --> 00:00:19,775
+images
+
+9
+00:00:19,825 --> 00:00:20,600
+containers
+
+10
+00:00:20,812 --> 00:00:21,663
+and the Docker daemon
+

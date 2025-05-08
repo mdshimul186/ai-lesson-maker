@@ -1,0 +1,44 @@
+1
+00:00:00,087 --> 00:00:00,713
+In this scene
+
+2
+00:00:01,150 --> 00:00:04,263
+we will explore the foundations of JavaScript functions
+
+3
+00:00:04,662 --> 00:00:08,762
+A function is a block of code designed to perform a particular task
+
+4
+00:00:09,162 --> 00:00:12,162
+which can be reused and executed with different inputs
+
+5
+00:00:12,562 --> 00:00:14,012
+Understanding how to declare
+
+6
+00:00:14,225 --> 00:00:14,650
+call
+
+7
+00:00:14,900 --> 00:00:18,500
+and utilize functions is crucial for efficient programming
+
+8
+00:00:18,900 --> 00:00:20,750
+Functions can take in parameters
+
+9
+00:00:20,938 --> 00:00:22,250
+perform operations
+
+10
+00:00:22,450 --> 00:00:23,525
+and return results
+
+11
+00:00:23,775 --> 00:00:29,113
+which makes them versatile for tasks ranging from simple calculations to complex algorithms
+

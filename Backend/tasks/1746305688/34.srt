@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:01,975
+Docker's Role in DevOps
+
+2
+00:00:02,438 --> 00:00:05,775
+Examining Docker's influence on modern DevOps practices
+

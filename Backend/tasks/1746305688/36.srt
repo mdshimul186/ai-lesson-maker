@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:01,562
+Working with Docker Plugins
+
+2
+00:00:02,013 --> 00:00:04,612
+How plugins can extend the functionality of Docker
+

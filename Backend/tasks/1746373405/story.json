@@ -1,0 +1,42 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 5,
+  "language": "en-US",
+  "story_prompt": "make a lesosn js function",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "The foundation of JavaScript functions lies in their ability to encapsulate code for reuse, increase modularity, and simplify complex tasks. Functions allow developers to define a block of code once and execute it multiple times without redundancy. This is crucial for maintaining clean and efficient code, especially in large applications.",
+      "image_prompt": "# JavaScript Function Basics\n\n```javascript\n// Function declaration\nfunction sum(a, b) {\n    return a + b;\n}\n\n// Function expression\nconst multiply = function(x, y) {\n    return x * y;\n};\n\nconsole.log(sum(5, 10)); // 15\nconsole.log(multiply(3, 4)); // 12\n```\n\n### Function Characteristics\n\n| Property | Description |\n|----------|-------------|\n| Reusable | Functions can be called multiple times. |\n| Modular | Encourages code decomposition into smaller units. |\n| Encapsulation | Isolates code functionality. |\n",
+      "url": "http://localhost:9000/mermaid-images/607537d0-e324-46af-86b4-bbeb620cd8ea.png"
+    },
+    {
+      "text": "In JavaScript, handling asynchronous operations efficiently is essential for creating seamless user experiences. Promises represent a core feature for managing asynchronous tasks, allowing developers to execute code sequentially while handling potential completion or failure. This adds robustness to code flow and application responsiveness.",
+      "image_prompt": "# Promises for Async Operations\n\n```javascript\n// Creating a promise\nconst fetchData = () => {\n    return new Promise((resolve, reject) => {\n        // Simulate an API call\n        setTimeout(() => {\n            const data = { message: 'Hello World' };\n            resolve(data);\n        }, 1000);\n    });\n};\n\n// Consuming the promise\nfetchData().then(data => console.log(data));\n```\n\n### Promise States\n\n| State | Description |\n|-------|-------------|\n| Pending | Initial state, neither fulfilled nor rejected. |\n| Fulfilled | Operation completed successfully. |\n| Rejected | Operation failed. |\n",
+      "url": "http://localhost:9000/mermaid-images/e2b4a52e-4359-49be-8bb2-6f0614578ffe.png"
+    },
+    {
+      "text": "The 'this' keyword in JavaScript is critical for context-based programming. Understanding its behavior in different execution contexts, such as global, function, and object method contexts, is key to writing effective and predictable code in dynamic applications. Each context affects what 'this' refers to, making its grasp vital for JavaScript mastery.",
+      "image_prompt": "# Understanding 'this' in JavaScript\n\n```javascript\n// Global Context\nconsole.log(this); // In browser, refers to window\n\n// Function Context\nfunction showThis() {\n    console.log(this);\n}\n\n// Method Context\nconst obj = {\n    name: 'JavaScript',\n    display: function() {\n        console.log(this.name);\n    }\n};\n\nshowThis(); // In non-strict mode, refers to global object\nobj.display(); // Refers to obj\n```\n\n### Context Usage\n\n| Context | 'this' Reference |\n|---------|------------------|\n| Global | Global Object |\n| Function | Caller Object or Global Object |\n| Method | Object Owning Method |\n",
+      "url": "http://localhost:9000/mermaid-images/8a310d5d-0c03-4999-bcab-465e1ffb3518.png"
+    },
+    {
+      "text": "JavaScript supports closures, a powerful attribute that allows for the creation of private variables and functions. Closures provide the capability to retain scope access even after a function has completed execution. This feature is essential for creating modules and reducing dependency, thereby promoting private state and encapsulation.",
+      "image_prompt": "# JavaScript Closures Explained\n\n```javascript\nfunction makeCounter() {\n    let count = 0;\n    return function() {\n        return count++;\n    };\n}\n\nconst counter = makeCounter();\nconsole.log(counter()); // 0\nconsole.log(counter()); // 1\n```\n\n### Benefits of Closures\n\n| Feature | Description |\n|---------|-------------|\n| Private Data | Enables data hiding and encapsulation. |\n| Stateful Functions | Remembers state across function calls. |\n| Module Pattern | Aids in organizing code into units. |\n",
+      "url": "http://localhost:9000/mermaid-images/ff9e9b32-cbd7-4d13-88ee-20e53077a0f8.png"
+    },
+    {
+      "text": "JavaScript's event loop is a fundamental concept that allows non-blocking I/O operations, enabling asynchronous input/output through a single-threaded architecture. Understanding how the event loop works is essential for writing efficient code that takes full advantage of the asynchronous nature of JavaScript, commonly used in scalable web applications.",
+      "image_prompt": "# JavaScript Event Loop Overview\n\n```mermaid\nsequenceDiagram\n    participant JS\n    participant WebAPI\n    participant EventLoop\n    participant CallbackQueue\n    JS->>WebAPI: send asynchronous task\n    WebAPI-->>EventLoop: registers task when complete\n    EventLoop-->>CallbackQueue: task added to queue\n    CallbackQueue-->>JS: execute next task\n```\n\n### Event Loop Workflow\n\n1. Executes code block by block.\n2. Handles events queued.\n3. Manages asynchronous APIs.\n",
+      "url": "http://localhost:9000/mermaid-images/c75dd4a4-7263-41a4-83aa-d54c13a31896.png"
+    }
+  ]
+}

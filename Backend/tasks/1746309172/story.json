@@ -1,0 +1,67 @@
+{
+  "text_llm_provider": "openai",
+  "image_llm_provider": "openai",
+  "text_llm_model": "gpt-4o",
+  "image_llm_model": "flux",
+  "test_mode": false,
+  "task_id": null,
+  "segments": 10,
+  "language": "en-US",
+  "story_prompt": "create a lecture how project managemnt works ",
+  "image_style": "realistic",
+  "voice_name": "en-US-AndrewMultilingualNeural",
+  "voice_rate": 1.0,
+  "resolution": "1280*720",
+  "scenes": [
+    {
+      "text": "Introduction to Project Management: Understanding the definition, importance, and purpose of project management in achieving goals efficiently.",
+      "image_prompt": "mindmap\n  root((Project Management))\n    Definition\n    Importance\n    Purpose",
+      "url": "http://localhost:9000/mermaid-images/662d4886-a69e-4379-a59c-270e309174c0.png"
+    },
+    {
+      "text": "Project Lifecycle: Exploring the phases of a project lifecycle including initiation, planning, execution, monitoring, and closure.",
+      "image_prompt": "flowchart TD\n  A[Initiation] --> B[Planning]\n  B --> C[Execution]\n  C --> D[Monitoring]\n  D --> E[Closure]",
+      "url": "http://localhost:9000/mermaid-images/eef8fe47-7fc6-4c49-8968-95dfa0e1767c.png"
+    },
+    {
+      "text": "Initiating a Project: Identifying objectives, stakeholders, and creating a project charter.",
+      "image_prompt": "flowchart TD\n  A[Identify Objectives] --> B[Identify Stakeholders]\n  B --> C[Create Project Charter]",
+      "url": "http://localhost:9000/mermaid-images/495e4273-7400-416a-be2d-2aeda5239770.png"
+    },
+    {
+      "text": "Project Planning: Defining tasks, schedules, resources, and budgets to create a roadmap.",
+      "image_prompt": "gantt\n  title Project Planning Schedule\n  dateFormat YYYY-MM-DD\n  section Planning\n  Define Tasks :a1, 2024-02-01, 15d\n  Set Schedules :a2, after a1, 10d\n  Allocate Resources :a3, after a2, 10d\n  Budgeting :a4, after a3, 10d",
+      "url": "http://localhost:9000/mermaid-images/7a23272c-5733-45ed-b03b-3e17a524d2da.png"
+    },
+    {
+      "text": "Executing the Plan: Allocating resources and coordinating team activities to accomplish tasks.",
+      "image_prompt": "flowchart TD\n  A[Allocate Resources] --> B[Coordinate Team]\n  B --> C[Execute Tasks]",
+      "url": "http://localhost:9000/mermaid-images/a78acf77-b5a7-4146-9df9-78d8cb5a44f6.png"
+    },
+    {
+      "text": "Monitoring Progress: Implementing tools and techniques to track project progress and performance.",
+      "image_prompt": "flowchart TD\n  A[Track Performance] --> B[Measure Variances]\n  B --> C[Implement Changes]",
+      "url": "http://localhost:9000/mermaid-images/3e9cfd11-ec20-46f1-87b5-534f58902bb0.png"
+    },
+    {
+      "text": "Risk Management: Identifying, analyzing, and responding to project risks effectively.",
+      "image_prompt": "flowchart TD\n  A[Identify Risks] --> B[Analyze Risks]\n  B --> C[Plan Responses]\n  C --> D[Implement Responses]",
+      "url": "http://localhost:9000/mermaid-images/ab4054f1-017d-4b4a-87ff-681cfdded56f.png"
+    },
+    {
+      "text": "Quality Management: Ensuring deliverables meet the required standards through quality assurance and control.",
+      "image_prompt": "flowchart TD\n  A[Quality Assurance] --> B[Quality Control]\n  B --> C[Ensure Standards]",
+      "url": "http://localhost:9000/mermaid-images/4b60f1e4-69f7-4baf-844b-b5917bdca593.png"
+    },
+    {
+      "text": "Stakeholder Communication: Managing expectations and keeping stakeholders informed throughout the project.",
+      "image_prompt": "stateDiagram-v2\n  [*] --> Analysis\n  Analysis --> Communication\n  Communication --> [*]",
+      "url": "http://localhost:9000/mermaid-images/6a95c681-e5c7-4e9f-b471-932130a6532d.png"
+    },
+    {
+      "text": "Closing the Project: Finalizing all project activities, ensuring all deliverables are accepted, and reflecting on lessons learned.",
+      "image_prompt": "flowchart TD\n  A[Finalize Activities] --> B[Ensure Deliverables Accepted]\n  B --> C[Reflect on Lessons Learned]",
+      "url": "http://localhost:9000/mermaid-images/46b9148c-12ad-4a2b-b1d3-6ca33294d3ab.png"
+    }
+  ]
+}

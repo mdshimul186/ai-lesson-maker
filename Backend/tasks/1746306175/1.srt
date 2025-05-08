@@ -1,0 +1,24 @@
+1
+00:00:00,087 --> 00:00:00,875
+In this first scene
+
+2
+00:00:01,163 --> 00:00:04,013
+we introduce the concept of classes in JavaScript
+
+3
+00:00:04,375 --> 00:00:09,338
+A class is a blueprint for creating objects with predefined properties and methods
+
+4
+00:00:09,725 --> 00:00:12,412
+It simplifies the process of object creation
+
+5
+00:00:12,688 --> 00:00:13,750
+providing a clean
+
+6
+00:00:13,963 --> 00:00:15,062
+clear syntax
+

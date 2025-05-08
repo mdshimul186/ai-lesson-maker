@@ -1,0 +1,12 @@
+1
+00:00:00,075 --> 00:00:01,450
+Networking in Docker
+
+2
+00:00:01,988 --> 00:00:05,987
+Understand how Docker manages networking and connects containers
+
+3
+00:00:06,362 --> 00:00:08,200
+enabling communication between them
+

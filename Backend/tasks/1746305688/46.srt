@@ -1,0 +1,8 @@
+1
+00:00:00,087 --> 00:00:02,275
+Using Docker for Continuous Testing
+
+2
+00:00:02,800 --> 00:00:05,838
+How to leverage Docker in continuous testing strategies
+

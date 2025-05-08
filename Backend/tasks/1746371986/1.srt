@@ -1,0 +1,32 @@
+1
+00:00:00,075 --> 00:00:00,863
+In this first scene
+
+2
+00:00:01,413 --> 00:00:04,675
+we delve into the fundamental concepts of JavaScript functions
+
+3
+00:00:05,062 --> 00:00:07,225
+exploring how they are declared and utilized
+
+4
+00:00:07,600 --> 00:00:10,675
+Functions are crucial building blocks of JavaScript
+
+5
+00:00:11,137 --> 00:00:15,338
+allowing code to be organized into reusable and modular pieces
+
+6
+00:00:15,738 --> 00:00:18,863
+By understanding how to create functions and invoke them
+
+7
+00:00:19,225 --> 00:00:21,825
+developers can write cleaner and more efficient code
+
+8
+00:00:22,212 --> 00:00:27,712
+This fundamental understanding lays the groundwork for more advanced programming techniques
+

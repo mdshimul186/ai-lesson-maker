@@ -1,0 +1,32 @@
+1
+00:00:00,100 --> 00:00:04,088
+The concept of functions in JavaScript is fundamental to writing effective
+
+2
+00:00:04,375 --> 00:00:05,362
+reusable code
+
+3
+00:00:06,350 --> 00:00:11,838
+Functions allow us to encapsulate code logic into named blocks that can be executed many times
+
+4
+00:00:12,150 --> 00:00:13,575
+with even different inputs
+
+5
+00:00:14,750 --> 00:00:18,700
+JavaScript functions are versatile and can be defined in several ways
+
+6
+00:00:19,000 --> 00:00:20,762
+such as function declarations
+
+7
+00:00:21,025 --> 00:00:22,212
+function expressions
+
+8
+00:00:22,488 --> 00:00:23,675
+and arrow functions
+

@@ -1,0 +1,8 @@
+1
+00:00:00,075 --> 00:00:01,062
+Installing Docker
+
+2
+00:00:01,325 --> 00:00:05,237
+Step-by-step guide on installing Docker on various platforms
+

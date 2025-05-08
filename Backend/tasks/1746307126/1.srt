@@ -1,0 +1,20 @@
+1
+00:00:00,100 --> 00:00:03,263
+Welcome to the introduction of JavaScript functions
+
+2
+00:00:03,663 --> 00:00:04,325
+In this scene
+
+3
+00:00:04,725 --> 00:00:08,262
+we discuss the basic syntax and purpose of functions
+
+4
+00:00:08,650 --> 00:00:13,412
+A JavaScript function is a block of code designed to perform a particular task
+
+5
+00:00:13,800 --> 00:00:16,863
+Functions are executed when they are invoked or called
+
