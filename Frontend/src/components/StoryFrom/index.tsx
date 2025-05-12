@@ -33,7 +33,7 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { getVoiceList, generateVideo, uploadFile, getTaskStatus, Task, VideoGenerateReq } from '../../services/index';
-
+import { v4 as uuidv4 } from 'uuid';
 import styles from './index.module.css';
 import { useVideoStore } from "../../stores/index";
 
@@ -266,8 +266,7 @@ const App: React.FC = () => {
         setCurrentTaskId(null);
         message.loading('Initiating video generation...', 0);
 
-        const taskId = crypto.randomUUID();
-
+        const taskId = uuidv4();
         // Use type assertion to bypass TypeScript checks for fields that aren't 
         // explicitly defined in the interface but accepted by the API
         const payload = {
