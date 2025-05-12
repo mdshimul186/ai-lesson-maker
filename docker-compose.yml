@@ -1,0 +1,57 @@
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - Backend/.env
+    volumes:
+      - ./Backend:/app
+    networks:
+      - app-network
+    depends_on:
+      - frontend
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+          cpus: '1'
+    container_name: frontend
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./Frontend:/app       # 挂载源代码
+      - /app/node_modules     # 防止覆盖容器内的 node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - app-network
+    command: ["npm", "run", "dev", "--", "--host"]
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  minio-data:

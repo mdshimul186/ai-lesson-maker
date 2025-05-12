@@ -1,0 +1,43 @@
+.formDiv {
+    /* Fixed width for form container */
+    width: 100%;
+    flex-shrink: 0;
+    /* padding: 20px; */
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    overflow: auto;
+}
+
+.formCard {
+    max-width: 1000px; /* Increased max-width for the main card */
+    /* margin: 40px auto; */
+    /* padding: 20px; */
+     overflow: auto;
+     height: 100vh;
+
+}
+
+.sectionCard {
+    background-color: #ffffff;
+    border: 1px solid #e8e8e8;
+}
+
+/* Custom styles for Upload component to make it larger */
+.avatarUploader > .ant-upload {
+    width: 100% !important;         /* Make uploader take full width of its column */
+    height: 150px !important;       /* Increased height */
+    min-width: 128px; /* Ensure a minimum width */
+}
+
+.avatarUploader > .ant-upload.ant-upload-select-picture-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.avatarUploader img, .avatarUploader video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensures the whole image/video is visible */
+}

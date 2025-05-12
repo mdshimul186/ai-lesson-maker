@@ -1,0 +1,32 @@
+# ┌─────── Stage 1: Build the Vite app ───────┐
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# 1. Install dependencies
+COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
+RUN npm ci
+
+# 2. Copy source & build
+COPY . .
+RUN npm run build
+# └───────────────────────────────────────────┘
+
+# ┌─────── Stage 2: Serve the built assets ───────┐
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# 3. Copy only the dist folder from the builder
+COPY --from=builder /app/dist ./dist
+
+# 4. Install 'serve' to host static files
+RUN npm install -g serve
+
+# 5. Expose a port (default 4001) and allow overriding via env
+ENV PORT=4001
+EXPOSE $PORT
+
+# 6. Start the server
+CMD ["serve", "-s", "dist", "-l", "4001"]
+# └────────────────────────────────────────────────┘
