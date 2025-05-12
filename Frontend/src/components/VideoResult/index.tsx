@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useVideoStore } from "../../stores/index";
 import styles from './index.module.css';
-import { Task, TaskEvent } from '../../services/index';
+import {TaskEvent } from '../../services/index';
 import { Alert, Progress, Timeline, Badge, Tag, Button, Modal, List } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined, SyncOutlined, WarningOutlined, CloseCircleOutlined, LinkOutlined, PlayCircleOutlined, FileImageOutlined, FileTextOutlined, FileOutlined } from '@ant-design/icons';
 
