@@ -55,8 +55,10 @@ const TasksList: React.FC = () => {
     const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
-    
-    // State for task details drawer
+
+    console.log(dateRange);
+
+   // State for task details drawer
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
     const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
       // Function to fetch tasks

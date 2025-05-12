@@ -12,7 +12,6 @@ import {
     Switch,
     Row,
     Col,
-    Badge,
     InputNumber,
     Upload,
     Spin,
@@ -29,7 +28,6 @@ import {
     FullscreenOutlined,
     MobileOutlined,
     BorderOutlined,
-    CheckCircleFilled,
     UploadOutlined,
     VideoCameraAddOutlined
 } from '@ant-design/icons';
