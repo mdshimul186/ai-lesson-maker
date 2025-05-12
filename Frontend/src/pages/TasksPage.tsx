@@ -8,9 +8,11 @@ const { Content } = Layout;
 
 const TasksPage: React.FC = () => {
   return (
-    <Layout className="site-layout">
-      <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
+    <Layout style={{
+      width: "100vw"
+    }}>
+      <Content style={{ padding: '0 50px' ,display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <Breadcrumb style={{ margin: '16px' }}>
           <Breadcrumb.Item>
             <Link to="/"><HomeOutlined /> Home</Link>
           </Breadcrumb.Item>
