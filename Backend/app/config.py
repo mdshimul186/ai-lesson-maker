@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
     text_llm_model: str = "gpt-4o"
     image_llm_model: str = "dall-e-3"
-    minio_endpoint: str = "http://minio:9000"
+    minio_endpoint: str = ""
     minio_access_key: str = "minioadmin"
     minio_secret_key: str = "minioadmin"
     bucket_name: str = "mermaid-images"
