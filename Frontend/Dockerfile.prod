@@ -9,8 +9,7 @@ RUN npm ci
 
 # 2. Copy source & build
 COPY . .
-RUN tsc -b
-RUN vite build
+RUN npm run build
 # └───────────────────────────────────────────┘
 
 # ┌─────── Stage 2: Serve the built assets ───────┐
