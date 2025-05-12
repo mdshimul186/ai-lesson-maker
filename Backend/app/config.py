@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     minio_access_key: str = "minioadmin"
     minio_secret_key: str = "minioadmin"
     bucket_name: str = "mermaid-images"
-    minio_public_endpoint: str = "http://localhost:9000"
+    minio_public_endpoint: str = ""
     db_url: str = "mongodb://devops:mongoDB1%21@96.85.103.130:27017/ai-video-maker?authSource=admin"
 
     class Config:
