@@ -7,7 +7,7 @@ import './App.css';
 import './locales/index';
 import { Layout } from 'antd';
 
-const { Header, Footer } = Layout;
+const {  Footer } = Layout;
 
 function App() {
   return (
