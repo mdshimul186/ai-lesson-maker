@@ -18,6 +18,8 @@ from app.config import get_settings
 
 logger = logging.getLogger(__name__)
 
+# Transforms a public MinIO URL to an internal MinIO URL.
+# If the input URL does not match the public MinIO endpoint, it's returned unchanged.
 def _get_internal_asset_url(public_url: Optional[str]) -> Optional[str]:
     if not public_url:
         return None
@@ -31,6 +33,8 @@ def _get_internal_asset_url(public_url: Optional[str]) -> Optional[str]:
         return internal_url
     return public_url
 
+# Checks a video file for the presence and properties of video and audio streams using ffprobe.
+# Logs detailed information about the streams or warnings if streams are missing or ffprobe encounters issues.
 def ffprobe_check_streams(video_path: str, stage_name: str):
     """Checks for video and audio streams using ffprobe and logs detailed findings."""
     if not os.path.exists(video_path):
@@ -82,6 +86,9 @@ def ffprobe_check_streams(video_path: str, stage_name: str):
     except Exception as e:
         logger.error(f"[{stage_name}] An unexpected error occurred during ffprobe check for {os.path.basename(video_path)}: {e}")
 
+# Standardizes an input video to a common format (H.264 video, AAC audio) suitable for concatenation.
+# Ensures the output video has the target resolution and frame rate.
+# If the input video lacks an audio stream, a silent audio track is added.
 def standardize_video_for_concat(input_path: str, output_path: str, target_width: int, target_height: int, task_dir: str, target_fps: int = 25):
     """
     Standardizes a video to H.264, AAC audio, target resolution, and FPS.
@@ -142,6 +149,8 @@ def standardize_video_for_concat(input_path: str, output_path: str, target_width
         logger.error(f"An unexpected error occurred during standardization of {input_path}: {str(e)}")
         raise
 
+# Parses a resolution string (e.g., "1920*1080") and returns the width and height as integers.
+# Defaults to 1920x1080 if parsing fails.
 def get_target_dimensions(resolution: str) -> tuple[int, int]:
     try:
         width, height = map(int, resolution.split("*"))
@@ -149,6 +158,8 @@ def get_target_dimensions(resolution: str) -> tuple[int, int]:
     except:
         return 1920, 1080
 
+# Calculates the dimensions to resize an original image/video to fit within target dimensions while preserving aspect ratio.
+# The output dimensions will be scaled down to fit either the target width or target height, whichever is more restrictive.
 def calculate_resize_dimensions(orig_width: int, orig_height: int, target_width: int, target_height: int) -> tuple[int, int]:
     orig_aspect = orig_width / orig_height
     target_aspect = target_width / target_height
@@ -162,6 +173,11 @@ def calculate_resize_dimensions(orig_width: int, orig_height: int, target_width:
     
     return new_width, new_height
 
+# Orchestrates the creation of a video from a list of scenes.
+# This includes generating audio and subtitles for each scene, creating video clips from images and audio,
+# concatenating scene clips, applying a logo, adding background music (optional),
+# and prepending/appending intro/outro videos (optional).
+# Progress is reported via a task service.
 async def create_video_with_scenes(
     task_id: str,
     task_dir: str, 
@@ -213,16 +229,57 @@ async def create_video_with_scenes(
                     logger.warning(f"Test mode: files missing for scene {i}")
                     raise FileNotFoundError("Test mode files missing")
             else:
+                # audio_file is the path where generate_voice will save the TTS output
+                # subtitle_file is also determined here
                 audio_file, subtitle_file = await generate_voice(
                     scene.text, voice_name, voice_rate, audio_file, subtitle_file
                 )
             
+            # audio_file now holds the path to the original speech audio from TTS.
+            # Let's rename for clarity before modifying it.
+            tts_output_audio_file = audio_file
+
+            # Get duration of the original speech audio
             duration_cmd = [
                 "ffprobe", "-v", "error", "-show_entries", "format=duration",
-                "-of", "default=noprint_wrappers=1:nokey=1", audio_file
+                "-of", "default=noprint_wrappers=1:nokey=1", tts_output_audio_file
             ]
-            duration = float(subprocess.check_output(duration_cmd).decode('utf-8').strip())
-            durations.append(duration)
+            speech_duration = float(subprocess.check_output(duration_cmd).decode('utf-8').strip())
+            
+            # Add 2s silence to the beginning of the audio
+            silence_duration_s = 2.0
+            silence_prefix_tmp_file = os.path.join(task_dir, f"silence_prefix_tmp_{i}.mp3")
+            final_audio_for_scene_creation = os.path.join(task_dir, f"audio_final_for_scene_{i}.mp3")
+
+            # Create 2s silence file
+            cmd_create_silence = [
+                "ffmpeg", "-y", "-f", "lavfi",
+                "-i", f"anullsrc=channel_layout=stereo:sample_rate=44100:d={silence_duration_s}",
+                silence_prefix_tmp_file
+            ]
+            subprocess.run(cmd_create_silence, check=True, cwd=task_dir, capture_output=True)
+            files_to_cleanup_later.append(silence_prefix_tmp_file)
+
+            # Concatenate silence and original speech audio
+            cmd_concat_audio = [
+                "ffmpeg", "-y",
+                "-i", silence_prefix_tmp_file,
+                "-i", tts_output_audio_file, # This is the speech audio
+                "-filter_complex", "[0:a][1:a]concat=n=2:v=0:a=1[aout]",
+                "-map", "[aout]", final_audio_for_scene_creation
+            ]
+            subprocess.run(cmd_concat_audio, check=True, cwd=task_dir, capture_output=True)
+            files_to_cleanup_later.append(final_audio_for_scene_creation)
+            
+            # The original TTS audio output is now intermediate, add to cleanup
+            files_to_cleanup_later.append(tts_output_audio_file)
+            
+            # This audio file (with silence) will be used for the scene video
+            audio_input_for_scene_ffmpeg = final_audio_for_scene_creation
+            # The total duration for this scene's video file
+            total_scene_video_duration = speech_duration + silence_duration_s
+            
+            durations.append(total_scene_video_duration) # Append total duration for this scene
             
             size_cmd = [
                 "ffprobe", "-v", "error", "-select_streams", "v:0",
@@ -245,6 +302,11 @@ async def create_video_with_scenes(
                 f"pad={target_width}:{target_height}:(ow-iw)/2:(oh-ih)/2:color=white"
             )
             if os.path.exists(subtitle_file) and include_subtitles:
+                logger.warning(
+                    f"Scene {i}: Added {silence_duration_s}s silence to audio. "
+                    f"Subtitles in '{os.path.basename(subtitle_file)}' may be out of sync by {silence_duration_s}s. "
+                    "Manual adjustment of SRT timings might be needed if precise synchronization is critical."
+                )
                 sub_filename = os.path.basename(subtitle_file).replace("'", "\\\\'") 
                 filter_chain += f",subtitles='{sub_filename}':force_style='Fontname=MicrosoftYaHeiBold,FontSize={font_size}'"
             filter_chain += "[v]"
@@ -252,11 +314,11 @@ async def create_video_with_scenes(
             command = [
                 "ffmpeg", "-y",
                 "-loop", "1", "-i", image_file,
-                "-i", audio_file,
+                "-i", audio_input_for_scene_ffmpeg, # Use the audio with prefixed silence
                 "-c:v", "libx264", "-tune", "stillimage",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
                 "-pix_fmt", "yuv420p",
-                "-t", str(duration),
+                "-t", str(total_scene_video_duration), # Use the total duration (speech + silence)
                 "-filter_complex", filter_chain,
                 "-map", "[v]",
                 "-map", "1:a",
