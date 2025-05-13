@@ -409,6 +409,11 @@ class LLMService:
         ```
         ```
 
+        **Mermaid Formatting Guidelines**:
+        - Begin and end code fences on their own lines: ```mermaid and ```
+        - Do not escape backticks within mermaid fences; use raw triple backticks.
+        - Ensure the diagram code is enclosed exactly between the fences without extra indentation.
+
         **2. Tables** (for data comparison):
         ```
         | Feature | Python | JavaScript | Java |
