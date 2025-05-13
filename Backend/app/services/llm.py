@@ -392,7 +392,8 @@ class LLMService:
         2. Each object in the `list` array must include:
             - `text`: A descriptive text for the chapter, written in {language}.
             - `image_prompt`: Markdown content for visualization {visual_content_in_language_value}.
-        3. Use appropriate markdown syntax for different visualizations:
+        3. Use appropriate markdown syntax for different visualizations.
+        4. Following each visualization (code block, diagram, or table), include a bullet point list or a table summarizing the key points of the visualization.
 
         **Available Visualization Types**:
 
