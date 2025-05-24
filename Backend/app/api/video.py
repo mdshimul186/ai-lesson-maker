@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Query, BackgroundTasks, Depends
 from loguru import logger
 from app.services.video import generate_video
 from app.services.upload_service import upload_directory_to_minio
@@ -9,6 +9,10 @@ import shutil
 from app.utils.utils import extract_id
 from app.config import get_settings
 from app.services import task_service
+from app.services.credit_service import deduct_credits_for_video
+from app.api.users import get_current_active_user
+from app.schemas.user import UserInDB as User
+from app.api.dependencies import get_valid_account_id # Import the new dependency
 import uuid
 
 router = APIRouter()
@@ -16,17 +20,29 @@ router = APIRouter()
 @router.post("/generate")
 async def generate_video_endpoint(
     request: VideoGenerateRequest,
-    background_tasks: BackgroundTasks
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(get_current_active_user),
+    account_id: str = Depends(get_valid_account_id) # Use the new dependency
 ):
-    """Generate video and upload the entire task folder to MinIO"""
+    """Generate video and upload the entire task folder to MinIO"""    # Deduct credits before starting generation
+    try:
+        video_info = request.story_prompt[:50] + "..." if request.story_prompt else "Untitled Video"
+        # Use account_id from the dependency and pass the number of scenes
+        await deduct_credits_for_video(account_id=account_id, user_id=current_user.id, video_info=video_info, num_scenes=request.segments)
+    except HTTPException as e:
+        # If credit deduction fails, return the error immediately
+        raise e
+    except Exception as e:
+        logger.error(f"Credit deduction failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to deduct credits: {str(e)}")
+
     client_provided_task_id = getattr(request, 'task_id', None)
     if client_provided_task_id:
         task_id = client_provided_task_id
     else:
-        task_id = str(uuid.uuid4())
-
-    await task_service.create_task(task_id=task_id, initial_status="PENDING")
-    await task_service.add_task_event(task_id=task_id, message="Video generation request received.", status="PENDING", progress=0)
+        task_id = str(uuid.uuid4())    # Use account_id from the dependency
+    await task_service.create_task(task_id=task_id, user_id=current_user.id, account_id=account_id, initial_status="PENDING")
+    await task_service.add_task_event(task_id=task_id, message=f"Video generation request received. {request.segments} credits deducted (1 per scene).", status="PENDING", progress=0)
 
     # Return immediately with task ID
     response = VideoGenerateResponse(

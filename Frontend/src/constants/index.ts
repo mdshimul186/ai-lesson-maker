@@ -1,4 +1,4 @@
-export const VOICE_LANGUAGES: Language[] = [
+export const VOICE_LANGUAGES: any[] = [
     "zh-CN",
     "zh-TW",
     "en-US",
@@ -21,7 +21,5 @@ export const VOICE_LANGUAGES_LABELS = [
         label: 'Bangla (India)',
         value: 'bn-IN',
     },
-
-
 
 ]

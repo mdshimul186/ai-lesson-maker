@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from datetime import datetime
@@ -16,6 +15,8 @@ class TaskEvent(BaseModel):
 
 class Task(BaseModel):
     task_id: str = Field(..., description="Unique identifier for the task")
+    user_id: str = Field(..., description="Identifier of the user who created the task")
+    account_id: str = Field(..., description="Identifier of the account associated with the task")
     status: str = Field(default="PENDING", description="Current status of the task (e.g., PENDING, PROCESSING, COMPLETED, FAILED)")
     events: List[TaskEvent] = Field(default_factory=list, description="Chronological list of events that occurred during the task execution")
     progress: Optional[float] = Field(default=0.0, ge=0, le=100, description="Overall task progress percentage")

@@ -1,15 +1,17 @@
 import { request } from "../utils/request";
 
-export async function getVoiceList(data: {area: string[]}): Promise<VoiceListRes> {
-    return request<VoiceListRes>({
+export * from './account';  // Export account and payment services
+
+export async function getVoiceList(data: {area: string[]}): Promise<any> {
+    return request<any>({
         url: "/api/voice/voices",
         method: "post",
         data,
     });
 }
 
-export async function getLLMProviders(): Promise<LLMProvidersRes> {
-    return request<LLMProvidersRes>({
+export async function getLLMProviders(): Promise<any> {
+    return request<any>({
         url: "/api/llm/providers",
         method: "get",
     });

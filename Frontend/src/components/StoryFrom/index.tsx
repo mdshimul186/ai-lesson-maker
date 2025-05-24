@@ -35,7 +35,7 @@ import { useTranslation } from 'react-i18next';
 import { getVoiceList, generateVideo, uploadFile, getTaskStatus, Task, VideoGenerateReq } from '../../services/index';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './index.module.css';
-import { useVideoStore } from "../../stores/index";
+import { useVideoStore, useAccountStore } from "../../stores/index"; // Import useAccountStore
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -104,6 +104,7 @@ const resolutionOptions = [
 
 const App: React.FC = () => {
     const { setVideoUrl, setLoading, setError, videoUrl, setTaskStatus, taskStatus } = useVideoStore();
+    const { fetchAccounts: refreshAccounts } = useAccountStore(); // Get fetchAccounts action
     const { t } = useTranslation();
     const [form] = Form.useForm();
     const [allVoiceList, setAllVoiceList] = useState<voiceList[]>([]);
@@ -306,6 +307,8 @@ const App: React.FC = () => {
 
             // Display message that the video generation is in progress
             message.info('Video generation has started in the background. You can track its progress below.', 5);
+            // Refresh account details to update credit balance
+            refreshAccounts();
 
         }).catch(err => {
             resetGenerationState();
@@ -396,9 +399,6 @@ const App: React.FC = () => {
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                 }}
             >
-                <Title level={2} style={{ marginBottom: 24, textAlign: 'center' }}>
-                    <PlaySquareOutlined /> AI Video Generator
-                </Title>
 
                 {currentTaskId && (
                     <Card
@@ -460,15 +460,15 @@ const App: React.FC = () => {
 
 
                     <Card
-                        title={<span><HighlightOutlined /> Story Details</span>}
+                        title={<span><HighlightOutlined /> Scene Details</span>}
                         className={styles.sectionCard}
                         style={{ marginBottom: 24, borderRadius: '8px' }}
                     >
 
                         <Form.Item<FieldType>
-                            label={t('Story Prompt')}
+                            label={t('Scene Prompt')}
                             name="story_prompt"
-                            rules={[{ required: true, message: t('Please input the story prompt!') }]}
+                            rules={[{ required: true, message: t('Please input the scene prompt!') }]}
                         >
                             <Input.TextArea rows={3} placeholder={t("Enter the topic of your video. E.g., 'Make a lecture on Docker'") as string} />
                         </Form.Item>

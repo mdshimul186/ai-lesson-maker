@@ -22,3 +22,12 @@ Markdown == 3.8
 html2image
 motor==3.4.0
 pymongo==4.5 # Added to ensure compatibility with motor==3.4.0
+# Authentication packages
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+sendgrid==6.10.0
+# For generating unique tokens for email verification
+uuid==1.30
+email-validator==2.1.0.post1
+# Payment processing
+paypalrestsdk==1.13.1

@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 import { Task } from '../services/index'
+export { useAuthStore } from './useAuthStore';
+export { useAccountStore } from './useAccountStore';
 
 interface VideoStore {
     videoUrl: string;

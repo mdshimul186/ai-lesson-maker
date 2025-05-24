@@ -33,7 +33,15 @@ class Settings(BaseSettings):
     minio_secret_key: str = "minioadmin"
     bucket_name: str = "mermaid-images"
     minio_public_endpoint: str = ""
-    db_url: str = "mongodb://devops:mongoDB1%21@96.85.103.130:27017/ai-video-maker?authSource=admin"
+    db_url: str = ""
+    sendgrid_api_key: str= ""
+    sendgrid_sender_email: str = ""
+
+    paypal_mode: str = ""
+    paypal_client_id: str = ""
+    paypal_client_secret: str = ""
+    secret_key: str = ""
+    frontend_base_url: str = "http://localhost:4001" # Add new setting for frontend URL
 
     class Config:
         env_file = ".env"

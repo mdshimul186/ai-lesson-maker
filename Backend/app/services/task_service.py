@@ -7,7 +7,7 @@ from app.schemas.task import Task, TaskEvent, TaskCreate
 
 TASKS_COLLECTION = "tasks"
 
-async def create_task(task_id: str, initial_status: str = "PENDING") -> Task:
+async def create_task(task_id: str, user_id: str, account_id: str, initial_status: str = "PENDING") -> Task:
     collection = await get_collection(TASKS_COLLECTION)
     existing_task = await collection.find_one({"task_id": task_id})
     if existing_task:
@@ -23,6 +23,8 @@ async def create_task(task_id: str, initial_status: str = "PENDING") -> Task:
 
     task_data = Task(
         task_id=task_id,
+        user_id=user_id,
+        account_id=account_id,
         status=initial_status,
         events=[TaskEvent(message=f"Task {initial_status.lower()}")]
     )
@@ -124,11 +126,13 @@ async def set_task_failed(task_id: str, error_message: str, error_details: Optio
         return Task(**result)
     return None
 
-async def get_all_tasks(limit: int = 100, skip: int = 0, status_filter: Optional[str] = None) -> List[Task]:
+async def get_all_tasks(user_id: str, account_id: Optional[str] = None, limit: int = 100, skip: int = 0, status_filter: Optional[str] = None) -> List[Task]:
     """
-    Retrieve all tasks with pagination and optional status filtering.
+    Retrieve all tasks for a given user and optionally account, with pagination and status filtering.
     
     Args:
+        user_id: The ID of the user whose tasks to retrieve.
+        account_id: Optional. The ID of the account whose tasks to retrieve.
         limit: Maximum number of tasks to return
         skip: Number of tasks to skip (for pagination)
         status_filter: Optional filter to only return tasks with a specific status
@@ -139,7 +143,9 @@ async def get_all_tasks(limit: int = 100, skip: int = 0, status_filter: Optional
     collection = await get_collection(TASKS_COLLECTION)
     
     # Build the query based on filters
-    query = {}
+    query = {"user_id": user_id} # Always filter by user_id
+    if account_id:
+        query["account_id"] = account_id
     if status_filter:
         query["status"] = status_filter
     
