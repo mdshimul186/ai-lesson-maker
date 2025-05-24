@@ -57,7 +57,7 @@ const API_BASE_URL = import.meta.env.VITE_API_ROOT_URL;
 export const accountService = {  // Get all accounts for the current user
   getUserAccounts: async (): Promise<IAccount[]> => {
     const token = localStorage.getItem('token') || '';
-    const response = await axios.get(`${API_BASE_URL}/accounts`, {
+    const response = await axios.get(`${API_BASE_URL}/api/accounts`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -65,7 +65,7 @@ export const accountService = {  // Get all accounts for the current user
   // Get a specific account by ID
   getAccount: async (accountId: string): Promise<IAccount> => {
     const token = localStorage.getItem('token') || '';
-    const response = await axios.get(`${API_BASE_URL}/accounts/${accountId}`, {
+    const response = await axios.get(`${API_BASE_URL}/api/accounts/${accountId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -73,7 +73,7 @@ export const accountService = {  // Get all accounts for the current user
   // Create a new account
   createAccount: async (accountData: CreateAccountData): Promise<IAccount> => {
     const token = localStorage.getItem('token') || '';
-    const response = await axios.post(`${API_BASE_URL}/accounts`, accountData, {
+    const response = await axios.post(`${API_BASE_URL}/api/accounts`, accountData, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -81,7 +81,7 @@ export const accountService = {  // Get all accounts for the current user
   // Update an account
   updateAccount: async (accountId: string, updateData: UpdateAccountData): Promise<IAccount> => {
     const token = localStorage.getItem('token') || '';
-    const response = await axios.put(`${API_BASE_URL}/accounts/${accountId}`, updateData, {
+    const response = await axios.put(`${API_BASE_URL}/api/accounts/${accountId}`, updateData, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -90,7 +90,7 @@ export const accountService = {  // Get all accounts for the current user
   inviteMember: async (accountId: string, email: string, role?: string): Promise<any> => {
     const token = localStorage.getItem('token') || '';
     const inviteData: InviteMemberData = { email, role };
-    const response = await axios.post(`${API_BASE_URL}/accounts/${accountId}/members/invite`, inviteData, {
+    const response = await axios.post(`${API_BASE_URL}/api/accounts/${accountId}/members/invite`, inviteData, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -99,7 +99,7 @@ export const accountService = {  // Get all accounts for the current user
   respondToInvitation: async (invitationId: string, accept: boolean): Promise<any> => {
     const token = localStorage.getItem('token') || '';
     const response = await axios.post(
-      `${API_BASE_URL}/accounts/invitations/respond?accept=${accept}`,
+      `${API_BASE_URL}/api/accounts/invitations/respond?accept=${accept}`,
       { invitation_id: invitationId }, // Send invitation_id in the body
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -108,7 +108,7 @@ export const accountService = {  // Get all accounts for the current user
   // Remove a member from an account
   removeMember: async (accountId: string, memberUserId: string): Promise<any> => {
     const token = localStorage.getItem('token') || '';
-    const response = await axios.delete(`${API_BASE_URL}/accounts/${accountId}/members/${memberUserId}`, {
+    const response = await axios.delete(`${API_BASE_URL}/api/accounts/${accountId}/members/${memberUserId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -119,7 +119,7 @@ export const accountService = {  // Get all accounts for the current user
 export const paymentService = {  // Get available credit packages
   getCreditPackages: async (): Promise<ICreditPackage[]> => {
     const token = localStorage.getItem('token') || '';
-    const response = await axios.get(`${API_BASE_URL}/payments/packages`, {
+    const response = await axios.get(`${API_BASE_URL}/api/payments/packages`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -127,17 +127,18 @@ export const paymentService = {  // Get available credit packages
   // Create a payment
   createPayment: async (paymentData: CreatePaymentData): Promise<PaymentResponse> => {
     const token = localStorage.getItem('token') || '';
-    const response = await axios.post(`${API_BASE_URL}/payments/create`, paymentData, {
+    const response = await axios.post(`${API_BASE_URL}/api/payments/create`, paymentData, {
       headers: { Authorization: `Bearer ${token}` }
     });
-    return response.data;  },
-  
+    return response.data;
+  },
+
   // Execute a payment after approval
   executePayment: async (verifyData: PaymentVerifyData): Promise<PaymentResponse> => {
     const token = localStorage.getItem('token') || '';
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/payments/execute`, verifyData, {
+      const response = await axios.post(`${API_BASE_URL}/api/payments/execute`, verifyData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -151,7 +152,7 @@ export const paymentService = {  // Get available credit packages
   verifyPaymentStatus: async (paymentId: string): Promise<PaymentResponse> => {
     const token = localStorage.getItem('token') || '';
     try {
-      const response = await axios.get(`${API_BASE_URL}/payments/verify/${paymentId}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/payments/verify/${paymentId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       return response.data;
@@ -166,7 +167,7 @@ export const paymentService = {  // Get available credit packages
     const token = localStorage.getItem('token') || '';
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/payments/mark-as-completed`,
+        `${API_BASE_URL}/api/payments/mark-as-completed`,
         { 
           payment_id: paymentId,
           payer_id: payerId,
@@ -183,7 +184,7 @@ export const paymentService = {  // Get available credit packages
   // Get transaction history
   getTransactions: async (accountId?: string): Promise<ITransaction[]> => {
     const token = localStorage.getItem('token') || '';
-    let url = `${API_BASE_URL}/payments/transactions`;
+    let url = `${API_BASE_URL}/api/payments/transactions`;
     if (accountId) {
       url += `?account_id=${accountId}`;
     }
