@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Typography, Collapse, Card, Tag, Divider } from 'antd';
+import React from 'react';
+import { Typography, Collapse, Card, Divider } from 'antd';
 import { QuestionCircleOutlined, DownOutlined } from '@ant-design/icons';
 
 const { Title, Paragraph, Text } = Typography;
@@ -12,8 +12,7 @@ interface FAQItem {
 }
 
 const AccountFAQ: React.FC = () => {
-  const [activeKey, setActiveKey] = useState<string | string[]>(['0', '1']); // Default open the first two items
-  
+
   const faqItems: FAQItem[] = [
     {
       question: "How do credits work in this application?",

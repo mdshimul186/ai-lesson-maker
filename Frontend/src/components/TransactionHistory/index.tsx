@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react';
 import { Card, Typography, Table, Tag, Spin } from 'antd';
 import { useAccountStore } from '../../stores';
-import { Transaction } from '../../services';
+// Ensure the Transaction type is correctly imported from the right path
+type Transaction = {
+  id: string;
+  created_at: string;
+  transaction_type: 'purchase' | 'deduction' | 'refund';
+  amount: number;
+  description: string;
+}
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -11,7 +18,6 @@ const TransactionHistory: React.FC = () => {
     transactions,
     fetchTransactions,
     isLoading,
-    error
   } = useAccountStore();
 
   useEffect(() => {
@@ -109,15 +115,15 @@ const TransactionHistory: React.FC = () => {
         </Card>
       ) : (
         <Table 
-          dataSource={transactions} 
-          columns={transactionColumns}
+          dataSource={transactions as any} 
+          columns={transactionColumns as any}
           rowKey="id"
           pagination={{ pageSize: 10 }}
           bordered
           summary={pageData => {
             let totalCredits = 0;
-            
-            pageData.forEach(({ transaction_type, amount }) => {
+
+            pageData.forEach(({ transaction_type, amount }: any) => {
               if (transaction_type === 'purchase' || transaction_type === 'refund') {
                 totalCredits += amount;
               } else if (transaction_type === 'deduction') {
