@@ -7,11 +7,12 @@ import {
   UserOutlined, 
   LogoutOutlined, 
   DownOutlined, 
-  HomeOutlined, 
   HistoryOutlined,
   SettingOutlined,
-  WalletOutlined,
   IdcardOutlined,
+  VideoCameraOutlined,
+  BookOutlined,
+  DashboardOutlined
 } from '@ant-design/icons';
 import AccountSelector from '../AccountSelector';
 
@@ -65,9 +66,8 @@ const AppHeader: React.FC = () => {
         top: 0,
         zIndex: 100,
       }}
-    >
-      <div className="logo" style={{ fontSize: '20px', fontWeight: 'bold' }}>
-        <Link to="/" style={{ color: '#fff', display: 'flex', alignItems: 'center' }}>
+    >      <div className="logo" style={{ fontSize: '20px', fontWeight: 'bold' }}>
+        <Link to={isAuthenticated ? "/dashboard" : "/"} style={{ color: '#fff', display: 'flex', alignItems: 'center' }}>
           <IdcardOutlined style={{ fontSize: '24px', marginRight: '10px' }} />
           AI Lesson Maker
         </Link>
@@ -85,16 +85,19 @@ const AppHeader: React.FC = () => {
         selectedKeys={[location.pathname]}
         theme="dark"
       >
-        <Menu.Item key="/" icon={<HomeOutlined />}>
-          <Link to="/">Generate Video</Link>
-        </Menu.Item>
         {isAuthenticated && (
           <>
+            <Menu.Item key="/dashboard" icon={<DashboardOutlined />}>
+              <Link to="/dashboard">Dashboard</Link>
+            </Menu.Item>
+            <Menu.Item key="/lesson-maker" icon={<VideoCameraOutlined />}>
+              <Link to="/lesson-maker">Lesson Maker</Link>
+            </Menu.Item>
+            <Menu.Item key="/course-maker" icon={<BookOutlined />}>
+              <Link to="/course-maker">Course Maker</Link>
+            </Menu.Item>
             <Menu.Item key="/tasks" icon={<HistoryOutlined />}>
               <Link to="/tasks">Tasks</Link>
-            </Menu.Item>
-            <Menu.Item key="/account" icon={<WalletOutlined />}>
-              <Link to="/account">Account</Link>
             </Menu.Item>
           </>
         )}

@@ -2,7 +2,12 @@
 // npm install react-router-dom
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import HomePage from './pages/HomePage';
+import LessonMakerPage from './pages/LessonMakerPage';
+import DashboardPage from './pages/DashboardPage';
+import CourseMakerPage from './pages/CourseMakerPage';
+import CreateCoursePage from './pages/CreateCoursePage';
+import CourseViewPage from './pages/CourseViewPage';
+import LandingPage from './pages/LandingPage';
 import TasksPage from './pages/TasksPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -43,18 +48,40 @@ function App() {
       fetchCurrentUser();
     }
   }, [token, fetchCurrentUser]);
-  
-  return (
+    return (
     <Router>
-      <Layout style={{ minHeight: '100vh' ,width:"100vw"}}>
+      <Layout style={{ minHeight: '100vh', width: "100vw" }}>
         <AppHeader />
         <Content style={{ padding: '0 50px', marginTop: 20 }}>
           <Routes>
             <Route path="/" element={
+              useAuthStore().isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />
+            } />
+            <Route path="/dashboard" element={
               <ProtectedRoute>
-                <HomePage />
+                <DashboardPage />
               </ProtectedRoute>
-            } />            <Route path="/tasks" element={
+            } />
+            <Route path="/lesson-maker" element={
+              <ProtectedRoute>
+                <LessonMakerPage />
+              </ProtectedRoute>
+            } />            <Route path="/course-maker" element={
+              <ProtectedRoute>
+                <CourseMakerPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/course-maker/create" element={
+              <ProtectedRoute>
+                <CreateCoursePage />
+              </ProtectedRoute>
+            } />
+            <Route path="/course/:courseId" element={
+              <ProtectedRoute>
+                <CourseViewPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/tasks" element={
               <ProtectedRoute>
                 <TasksPage />
               </ProtectedRoute>
@@ -70,10 +97,11 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="/login" element={
-              useAuthStore().isAuthenticated ? <Navigate to="/" /> : <LoginPage />
+              useAuthStore().isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />
             } />
             <Route path="/register" element={
-              useAuthStore().isAuthenticated ? <Navigate to="/" /> : <RegisterPage />            } />
+              useAuthStore().isAuthenticated ? <Navigate to="/dashboard" /> : <RegisterPage />            
+            } />
             <Route path="/verify-email" element={<VerifyEmailPage />} />
             <Route path="/payment/success" element={
               <ProtectedRoute>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
     Table, 
     Tag, 
@@ -17,9 +17,17 @@ import {
     Typography,
     Drawer,
     Timeline,
-    Alert
+    Alert,
+    Popconfirm,
+    message
 } from 'antd';
-import { Task, getAllTasks } from '../../services/index';
+import { 
+    Task, 
+    getAllTasks, 
+    cancelTask, 
+    getQueueStatus, 
+    getTaskStatus
+} from '../../services/index';
 import { 
     SearchOutlined, 
     ReloadOutlined, 
@@ -33,9 +41,12 @@ import {
     FileImageOutlined,
     FileTextOutlined,
     FileOutlined,
-    InfoCircleOutlined
+    InfoCircleOutlined,
+    StopOutlined
 } from '@ant-design/icons';
 import styles from './index.module.css';
+import { useAccountStore } from '../../stores';
+import { clearApiCachePattern } from '../../utils/apiUtils';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -50,19 +61,32 @@ const TasksList: React.FC = () => {
         pageSize: 10,
         total: 0
     });
-    
-    // State for filters
-    const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
+      // State for filters
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  // Date range state is used in the RangePicker UI but not yet implemented in filtering
+  // TODO: Implement date range filtering in the backend and use dateRange variable
+  const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
 
-    console.log(dateRange);
+  console.log(dateRange);
 
-   // State for task details drawer
+    // State for polling queue status
+    const [pollingInterval, setPollingInterval] = useState<any>(null);
+
+    // Get current account from store
+    const { currentAccount } = useAccountStore();
+
+    // State for task details drawer
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
     const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
       // Function to fetch tasks
     const fetchTasks = async (page = 1, pageSize = 10, status?: string) => {
+        // If we're already loading, don't start another request
+        if (loading) {
+            console.log('Already loading tasks, skipping duplicate request');
+            return;
+        }
+
         setLoading(true);
         try {
             const skip = (page - 1) * pageSize;
@@ -73,12 +97,30 @@ const TasksList: React.FC = () => {
             });
             
             if (Array.isArray(response)) {
+                // Store active task IDs before update for comparison
+                const previousActiveTasks = tasks
+                    .filter(taskNeedsQueuePositionUpdate)
+                    .map(t => t.task_id);
+                
+                // Update tasks state
                 setTasks(response);
+                
+                // Update pagination based on response
                 setPagination({
                     ...pagination,
                     current: page,
                     total: response.length + skip // This is an estimate; backend should ideally return total count
                 });
+                
+                // Check if we need to start/stop polling based on active tasks
+                const currentActiveTasks = response
+                    .filter(taskNeedsQueuePositionUpdate)
+                    .map(t => t.task_id);
+                
+                // Log changes in active tasks for debugging
+                if (previousActiveTasks.length !== currentActiveTasks.length) {
+                    console.log(`Active tasks changed: ${previousActiveTasks.length} -> ${currentActiveTasks.length}`);
+                }
             } else {
                 // Handle case where response is not an array
                 console.error('Expected array of tasks but got:', response);
@@ -91,28 +133,48 @@ const TasksList: React.FC = () => {
             setLoading(false);
         }
     };
-    
-    // Effect to load tasks on component mount
+      // Effect to load tasks on component mount and pagination/filter changes
     useEffect(() => {
+        // Only fetch tasks when pagination or filters change, not when tasks array changes
         fetchTasks(pagination.current, pagination.pageSize, statusFilter);
-    }, []);
-      // Function to handle table change (pagination, filters, sorter)
+        
+        // No need for auto-refresh here, we'll use individual task updates instead
+    }, [pagination.current, pagination.pageSize, statusFilter]);    // Refresh tasks when account changes
+    useEffect(() => {
+        if (currentAccount) {
+            console.log('Account changed in TasksList, refreshing tasks...');
+            
+            // Clear API cache for tasks to ensure fresh data
+            clearApiCachePattern(/^tasks_/);
+            
+            // Reset pagination and filters when account changes
+            setPagination({
+                current: 1,
+                pageSize: 10,
+                total: 0
+            });
+            setTasks([]); // Clear existing tasks
+            setStatusFilter(undefined); // Reset status filter
+            fetchTasks(1, 10, undefined);
+        }
+    }, [currentAccount?.id]);
+    
+    // Function to handle table change (pagination, filters, sorter)
     const handleTableChange = (paginationParams: any) => {
         fetchTasks(paginationParams.current, paginationParams.pageSize, statusFilter);
     };
-    
-    // Function to apply filters
-    const applyFilters = () => {
+      // Function to apply filters with debouncing
+    const applyFilters = useCallback(() => {
         fetchTasks(1, pagination.pageSize, statusFilter);
-    };
+    }, [pagination.pageSize, statusFilter]);
     
     // Function to reset filters
-    const resetFilters = () => {
+    const resetFilters = useCallback(() => {
         setStatusFilter(undefined);
         setSearchTerm('');
         setDateRange(null);
         fetchTasks(1, pagination.pageSize);
-    };
+    }, [pagination.pageSize]);
     
     // Function to show task details in drawer
     const showTaskDetails = (task: Task) => {
@@ -168,7 +230,8 @@ const TasksList: React.FC = () => {
         const date = new Date(dateString);
         return date.toLocaleString();
     };
-      // Table columns definition
+    
+    // Table columns definition
     const columns = [
         {
             title: 'Task ID',
@@ -180,22 +243,30 @@ const TasksList: React.FC = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            render: (status: string) => (
-                <Tag color={
-                    status === 'COMPLETED' ? 'success' :
-                    status === 'FAILED' ? 'error' :
-                    status === 'PENDING' ? 'default' :
-                    status === 'PROCESSING' ? 'processing' :
-                    'warning'
-                } icon={
-                    status === 'COMPLETED' ? <CheckCircleOutlined /> :
-                    status === 'FAILED' ? <CloseCircleOutlined /> :
-                    status === 'PENDING' ? <ClockCircleOutlined /> :
-                    status === 'PROCESSING' ? <SyncOutlined spin /> :
-                    <WarningOutlined />
-                }>
-                    {status}
-                </Tag>
+            render: (status: string, record: Task) => (
+                <Space direction="vertical" size="small">
+                    <Tag color={
+                        status === 'COMPLETED' ? 'success' :
+                        status === 'FAILED' ? 'error' :
+                        status === 'PENDING' ? 'default' :
+                        status === 'QUEUED' ? 'processing' :
+                        status === 'PROCESSING' ? 'processing' :
+                        status === 'CANCELLED' ? 'default' :
+                        'warning'
+                    } icon={
+                        status === 'COMPLETED' ? <CheckCircleOutlined /> :
+                        status === 'FAILED' ? <CloseCircleOutlined /> :
+                        status === 'PENDING' ? <ClockCircleOutlined /> :
+                        status === 'QUEUED' ? <ClockCircleOutlined /> :
+                        status === 'PROCESSING' ? <SyncOutlined spin /> :
+                        status === 'CANCELLED' ? <StopOutlined /> :
+                        <WarningOutlined />                    }>
+                        {status}
+                    </Tag>
+                    {record.queue_position !== undefined && (status === 'PENDING' || status === 'QUEUED') && (
+                        <Tag color="blue" className={styles.queuePositionTag}>Queue Position: {record.queue_position}</Tag>
+                    )}
+                </Space>
             ),
         },
         {
@@ -257,8 +328,7 @@ const TasksList: React.FC = () => {
                         icon={<InfoCircleOutlined />}
                     >
                         Details
-                    </Button>
-                    {record.result_url && (
+                    </Button>                    {record.result_url && (
                         <Button 
                             type="link" 
                             size="small" 
@@ -268,10 +338,197 @@ const TasksList: React.FC = () => {
                             View Result
                         </Button>
                     )}
+                    {(record.status === 'PENDING' || record.status === 'QUEUED' || record.status === 'PROCESSING') && (
+                        <Popconfirm
+                            title="Are you sure you want to cancel this task?"
+                            onConfirm={() => handleCancelTask(record.task_id)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button 
+                                type="primary" 
+                                danger 
+                                size="small" 
+                                icon={<StopOutlined />}
+                            >
+                                Cancel
+                            </Button>
+                        </Popconfirm>
+                    )}
                 </Space>
             ),
         },
     ];
+      // Function to handle task cancellation
+    const handleCancelTask = async (taskId: string) => {
+        try {
+            const response = await cancelTask(taskId);
+            if (response.success) {
+                message.success('Task cancellation requested successfully');
+                
+                // Update just this task instead of refetching all tasks
+                setTasks(prevTasks => 
+                    prevTasks.map(task => 
+                        task.task_id === taskId 
+                            ? { ...task, status: 'CANCELLED' } 
+                            : task
+                    )
+                );
+                
+                // After a brief delay, get the actual updated task to ensure we have accurate data
+                setTimeout(async () => {
+                    await updateTaskStatus(taskId);
+                }, 1000);
+            } else {
+                message.error(response.message || 'Failed to cancel task');
+            }
+        } catch (error) {
+            console.error('Error cancelling task:', error);
+            message.error('An error occurred while trying to cancel the task');
+        }
+    };// Function to fetch queue position for pending/queued tasks
+    const fetchQueuePositions = async () => {
+        try {
+            // Only check status for tasks that are still active
+            const activeTasks = tasks.filter(taskNeedsQueuePositionUpdate);
+            
+            if (activeTasks.length === 0) {
+                // No active tasks, clear polling interval
+                if (pollingInterval) {
+                    clearInterval(pollingInterval);
+                    setPollingInterval(null);
+                }
+                return;
+            }
+            
+            // Process active tasks in batches to reduce API calls
+            const batchSize = 3; // Process 3 tasks at a time
+            const taskBatches = [];
+            
+            // Create batches of tasks
+            for (let i = 0; i < activeTasks.length; i += batchSize) {
+                taskBatches.push(activeTasks.slice(i, i + batchSize));
+            }
+            
+            // Process each batch sequentially
+            for (const batch of taskBatches) {
+                await Promise.all(batch.map(async (task) => {
+                    try {
+                        // First update the task status
+                        const updatedTask = await updateTaskStatus(task.task_id);
+                        
+                        // If task is no longer active, don't fetch queue position
+                        if (!updatedTask || !taskNeedsQueuePositionUpdate(updatedTask)) {
+                            return;
+                        }
+                        
+                        // Only fetch queue position for tasks that are still active
+                        const queueStatus = await getQueueStatus(task.task_id);
+                        if (queueStatus.success && queueStatus.data) {
+                            const { queue_position } = queueStatus.data;
+                            
+                            if (queue_position !== undefined) {
+                                // Update the task with queue position
+                                setTasks(prevTasks => 
+                                    prevTasks.map(t => 
+                                        t.task_id === task.task_id 
+                                            ? { ...t, queue_position } 
+                                            : t
+                                    )
+                                );
+                            }
+                        }
+                    } catch (error) {
+                        console.error(`Error processing task ${task.task_id}:`, error);
+                    }
+                }));
+                
+                // Add a small delay between batches to avoid overwhelming the server
+                if (taskBatches.length > 1) {
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+            }
+        } catch (error) {
+            console.error('Error in fetchQueuePositions:', error);
+        }
+    };    // Function to check if a task needs queue position updates
+    const taskNeedsQueuePositionUpdate = (task: Task): boolean => {
+        return (
+            task.status === 'PENDING' || 
+            task.status === 'QUEUED' || 
+            task.status === 'PROCESSING'
+        );
+    };
+    
+    // Optimize polling for queue positions of active tasks
+    useEffect(() => {
+        // Only poll for active tasks and if we're not already loading
+        const activeTasks = tasks.filter(taskNeedsQueuePositionUpdate);
+        const hasActiveTasks = activeTasks.length > 0;
+        
+        console.log(`Active tasks count: ${activeTasks.length}`);
+        
+        // Clear existing interval if it exists
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            setPollingInterval(null);
+        }
+        
+        // If there are active tasks, start polling with an adaptive interval
+        if (hasActiveTasks && !loading) {
+            // Calculate an adaptive polling interval based on the number of active tasks
+            // More tasks = longer interval to reduce server load
+            const baseInterval = 15000; // 15 seconds base
+            const adaptiveInterval = Math.min(
+                baseInterval + (activeTasks.length * 1000), // Add 1s per active task
+                30000 // Cap at 30 seconds max
+            );
+            
+            console.log(`Setting up polling with ${adaptiveInterval}ms interval`);
+            
+            // Initial poll after a short delay
+            const initialPoll = setTimeout(() => {
+                fetchQueuePositions();
+            }, 1000);
+            
+            // Then set up the regular interval
+            const interval = setInterval(() => {
+                if (!loading) {
+                    fetchQueuePositions();
+                }
+            }, adaptiveInterval);
+            
+            setPollingInterval(interval);
+            
+            // Cleanup function
+            return () => {
+                clearTimeout(initialPoll);
+                clearInterval(interval);
+            };
+        }
+        
+        // No cleanup needed if we didn't set up polling
+    }, [
+        // Only re-run when these dependencies change
+        tasks.filter(taskNeedsQueuePositionUpdate).length, // Number of active tasks
+        loading
+    ]);
+      // Function to update individual task status
+    const updateTaskStatus = async (taskId: string) => {
+        try {
+            const taskResponse = await getTaskStatus(taskId);
+            // Only update the specific task in the tasks array
+            setTasks(prevTasks => 
+                prevTasks.map(task => 
+                    task.task_id === taskId ? { ...task, ...taskResponse } : task
+                )
+            );
+            return taskResponse;
+        } catch (error) {
+            console.error(`Error updating task ${taskId}:`, error);
+            return null;
+        }
+    };
     
     return (
         <div className={styles.tasksListContainer}>
@@ -354,24 +611,33 @@ const TasksList: React.FC = () => {
             >
                 {selectedTask && (
                     <div>
-                        <div className={styles.taskDetailHeader}>
-                            <div>
+                        <div className={styles.taskDetailHeader}>                            <div>
                                 <strong>Status:</strong>{' '}
                                 <Tag color={
                                     selectedTask.status === 'COMPLETED' ? 'success' :
                                     selectedTask.status === 'FAILED' ? 'error' :
                                     selectedTask.status === 'PENDING' ? 'default' :
+                                    selectedTask.status === 'QUEUED' ? 'processing' :
                                     selectedTask.status === 'PROCESSING' ? 'processing' :
+                                    selectedTask.status === 'CANCELLED' ? 'default' :
                                     'warning'
                                 } icon={
                                     selectedTask.status === 'COMPLETED' ? <CheckCircleOutlined /> :
                                     selectedTask.status === 'FAILED' ? <CloseCircleOutlined /> :
                                     selectedTask.status === 'PENDING' ? <ClockCircleOutlined /> :
+                                    selectedTask.status === 'QUEUED' ? <ClockCircleOutlined /> :
                                     selectedTask.status === 'PROCESSING' ? <SyncOutlined spin /> :
+                                    selectedTask.status === 'CANCELLED' ? <StopOutlined /> :
                                     <WarningOutlined />
                                 }>
                                     {selectedTask.status}
-                                </Tag>
+                                </Tag>                                
+                                {selectedTask.queue_position !== undefined && 
+                                 (selectedTask.status === 'PENDING' || selectedTask.status === 'QUEUED') && (
+                                    <Tag color="blue" className={styles.queuePositionTag}>
+                                        Queue Position: {selectedTask.queue_position}
+                                    </Tag>
+                                )}
                             </div>
                             <div>
                                 <strong>Progress:</strong>{' '}
@@ -466,6 +732,24 @@ const TasksList: React.FC = () => {
                                         })}
                                     </Timeline>
                                 </div>
+                            </div>
+                        )}
+                        {(selectedTask.status === 'PENDING' || selectedTask.status === 'QUEUED' || selectedTask.status === 'PROCESSING') && (
+                            <div className={styles.actionSection} style={{ marginTop: '16px' }}>
+                                <Popconfirm
+                                    title="Cancel Task"
+                                    description="Are you sure you want to cancel this task?"
+                                    onConfirm={() => {
+                                        handleCancelTask(selectedTask.task_id);
+                                        closeTaskDetails();
+                                    }}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button type="primary" danger icon={<StopOutlined />}>
+                                        Cancel Task
+                                    </Button>
+                                </Popconfirm>
                             </div>
                         )}
                     </div>

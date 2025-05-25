@@ -104,7 +104,7 @@ const resolutionOptions = [
 
 const App: React.FC = () => {
     const { setVideoUrl, setLoading, setError, videoUrl, setTaskStatus, taskStatus } = useVideoStore();
-    const { fetchAccounts: refreshAccounts } = useAccountStore(); // Get fetchAccounts action
+    const { refreshAccountData } = useAccountStore(); // Get refreshAccountData function
     const { t } = useTranslation();
     const [form] = Form.useForm();
     const [allVoiceList, setAllVoiceList] = useState<voiceList[]>([]);
@@ -292,9 +292,10 @@ const App: React.FC = () => {
                 setError(errorMsg);
                 message.error(`Error: ${errorMsg}`, 10);
                 return;
-            }
+            }            console.log('Video generation initiated:', res);
 
-            console.log('Video generation initiated:', res);
+            // Refresh account data to update credits
+            refreshAccountData();
 
             // Start polling with the received task_id
             startPolling(res.data.task_id);
@@ -303,12 +304,10 @@ const App: React.FC = () => {
             // But we'll keep this code for backward compatibility
             if (res.data?.video_url) {
                 setVideoUrl(res.data.video_url);
-            }
-
-            // Display message that the video generation is in progress
+            }            // Display message that the video generation is in progress
             message.info('Video generation has started in the background. You can track its progress below.', 5);
             // Refresh account details to update credit balance
-            refreshAccounts();
+            refreshAccountData();
 
         }).catch(err => {
             resetGenerationState();

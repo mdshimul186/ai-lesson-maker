@@ -7,7 +7,7 @@ import { useAccountStore } from '../stores';
 const PaymentSuccessPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { fetchAccounts } = useAccountStore();
+  const { refreshAccountData } = useAccountStore();
   const [loading, setLoading] = React.useState(true);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -42,12 +42,10 @@ const PaymentSuccessPage: React.FC = () => {
           payment_id: paymentId,
           payer_id: payerId,
           token: token || undefined
-        });
-
-        if (result.status === 'completed') {
+        });        if (result.status === 'completed') {
           console.log('Payment completed successfully');
           setSuccess(true);
-          await fetchAccounts();
+          await refreshAccountData();
         } else {
           setError(result.error_message || 'Payment failed');
         }

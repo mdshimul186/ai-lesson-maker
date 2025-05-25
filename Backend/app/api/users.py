@@ -73,9 +73,16 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     
     # Check if the user has verified their email
     if not user.is_verified:
+        # Send verification email if not verified
+        try:
+            await user_service.resend_verification_email(user.email)
+            logger.info(f"Verification email sent to {user.email}")
+        except Exception as e:
+            logger.error(f"Failed to send verification email to {user.email}: {e}")
+        
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Email not verified",
+            detail="Email not verified. A verification email has been sent to your email address.",
             headers={"WWW-Authenticate": "Bearer"},
         )
     

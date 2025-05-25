@@ -23,6 +23,7 @@ interface AccountState {
   fetchCreditPackages: () => Promise<void>;
   purchaseCredits: (packageId: string, accountId: string) => Promise<{redirectUrl?: string, error?: string}>;
   handlePaymentExecution: (paymentId: string, payerId: string) => Promise<{ success: boolean; status?: string; error?: string; paymentResponse?: IPaymentExecutionResponse }>;
+  refreshAccountData: () => Promise<void>; // New function to refresh all account data
   fetchTransactions: (accountId?: string) => Promise<void>;
   resetPaymentStatus: () => void; // New action to reset payment status
   
@@ -72,8 +73,7 @@ export const useAccountStore = create<AccountState>((set, get) => ({
       });
     }
   },
-  
-  setCurrentAccount: (accountId: string) => {
+    setCurrentAccount: (accountId: string) => {
     const currentAccountId = get().currentAccount?.id;
     const account = get().accounts.find(a => a.id === accountId);
     if (account) {
@@ -81,9 +81,6 @@ export const useAccountStore = create<AccountState>((set, get) => ({
       set({ currentAccount: { ...account } }); // Create a new object to trigger re-renders
       localStorage.setItem('currentAccountId', accountId);
       get().fetchAccountDetails(accountId);
-      if (currentAccountId !== accountId) {
-        window.location.reload();
-      }
     } else {
       get().fetchAccountDetails(accountId).then(fetchedAccount => {
         if (fetchedAccount) {
@@ -117,8 +114,7 @@ export const useAccountStore = create<AccountState>((set, get) => ({
     
     set(state => ({ ...state, isLoading: true, error: null }));
     
-    try {
-      const detailedAccount = await accountService.getAccount(accountId);
+    try {      const detailedAccount = await accountService.getAccount(accountId);
       set(state => ({
         ...state,
         accounts: state.accounts.map(acc => acc.id === accountId ? detailedAccount : acc),
@@ -329,8 +325,21 @@ export const useAccountStore = create<AccountState>((set, get) => ({
   resetPaymentStatus: () => {
     set({ paymentCompleted: false });
   },
-
   clearError: () => {
     set({ error: null });
+  },
+
+  refreshAccountData: async () => {
+    // Get the current account ID
+    const currentAccountId = get().currentAccount?.id;
+    if (!currentAccountId) return;
+
+    // Refresh all account data
+    await get().fetchAccounts();
+    
+    // Ensure the current account is selected
+    if (get().accounts.some(a => a.id === currentAccountId)) {
+      await get().fetchAccountDetails(currentAccountId);
+    }
   },
 }));

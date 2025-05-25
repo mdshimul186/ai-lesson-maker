@@ -2,8 +2,36 @@ from fastapi import Header, HTTPException, Depends, status
 from typing import Annotated
 from app.services.account_service import AccountService
 from app.schemas.user import UserInDB
+from app.schemas.account import AccountResponse
 from app.api.users import get_current_active_user
 from loguru import logger
+
+async def get_current_account(
+    x_account_id: Annotated[str | None, Header(alias="X-Account-ID")] = None,
+    current_user: UserInDB = Depends(get_current_active_user),
+    account_service: AccountService = Depends(AccountService)
+) -> AccountResponse:
+    """Get the current account from X-Account-ID header, ensuring user has access"""
+    if not x_account_id:
+        logger.warning(f"X-Account-ID header is missing for user {current_user.id}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="X-Account-ID header is required."
+        )
+    
+    try:
+        account = await account_service.get_account_by_id(account_id=x_account_id, current_user_id=current_user.id)
+        logger.info(f"User {current_user.id} accessed account {x_account_id}")
+        return account
+    except HTTPException as e:
+        logger.warning(f"Access denied or account not found for user {current_user.id} and account {x_account_id}: {e.detail}")
+        raise e
+    except Exception as e:
+        logger.error(f"Error getting account {x_account_id} for user {current_user.id}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error getting account."
+        )
 
 async def get_valid_account_id(
     x_account_id: Annotated[str | None, Header(alias="X-Account-ID")] = None,

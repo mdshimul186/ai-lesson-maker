@@ -9,6 +9,17 @@ db = DataBase()
 async def get_database_client() -> AsyncIOMotorClient:
     return db.client
 
+async def get_database(): # Add this function
+    settings = get_settings()
+    # This is a simplified way to get the database name from the URL
+    # It assumes the database name is the path part of the URL, which is common.
+    # Example: mongodb://host:port/dbname
+    # If your URL structure is different, this might need adjustment.
+    db_name = settings.db_url.split("/")[-1].split("?")[0]
+    if not db_name:
+        raise ValueError("Database name could not be determined from DB_URL.")
+    return db.client[db_name]
+
 async def connect_to_mongo():
     settings = get_settings()
     db.client = AsyncIOMotorClient(settings.db_url)

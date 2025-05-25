@@ -19,11 +19,10 @@ const LoginForm: React.FC = () => {
       await login({
         email: values.email,
         password: values.password
-      });
-        // If no error and authentication successful
+      });      // If no error and authentication successful
       if (useAuthStore.getState().isAuthenticated) {
         message.success('Login successful!');
-        navigate('/');
+        navigate('/dashboard');
       } else if (useAuthStore.getState().needsVerification) {
         setEmailForResend(values.email);
         // Store the email for the verification page

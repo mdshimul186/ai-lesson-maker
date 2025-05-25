@@ -26,6 +26,7 @@ class Task(BaseModel):
     task_folder_content: Optional[Dict[str, Any]] = None # Full task folder content stored in DB
     error_message: Optional[str] = None
     error_details: Optional[Dict[str, Any]] = None
+    request_data: Optional[Dict[str, Any]] = None # Store the complete request body for video generation
 
     model_config = {
         "populate_by_name": True,
@@ -44,3 +45,24 @@ class TaskUpdate(BaseModel):
     error_message: Optional[str] = None
     error_details: Optional[Dict[str, Any]] = None
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class QueueStatus(BaseModel):
+    task_id: Optional[str] = None
+    status: Optional[str] = None
+    position: Optional[int] = None
+    created_at: Optional[datetime] = None
+    attempts: Optional[int] = None
+    current_processing: Optional[str] = None
+    total_queued: Optional[int] = None
+    total_processing: Optional[int] = None
+    is_processing: Optional[bool] = None
+
+class QueueItem(BaseModel):
+    task_id: str
+    user_id: str
+    account_id: str
+    status: str
+    created_at: datetime
+    updated_at: datetime
+    attempts: int = 0
+    last_error: Optional[str] = None

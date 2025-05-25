@@ -13,14 +13,13 @@ import CreditUsageGuide from '../CreditUsageGuide';
 
 const { Title, Text, Paragraph } = Typography;
 
-const AccountCredits: React.FC = () => {
-  const { 
+const AccountCredits: React.FC = () => {  const { 
     currentAccount, 
     creditPackages, 
     fetchCreditPackages, 
     purchaseCredits,
     isLoading, 
-    error 
+    error
   } = useAccountStore();
   
   const [selectedPackage, setSelectedPackage] = useState<any | null>(null);
@@ -29,6 +28,14 @@ const AccountCredits: React.FC = () => {
   useEffect(() => {
     fetchCreditPackages();
   }, [fetchCreditPackages]);
+  
+  // Refresh when account changes
+  useEffect(() => {
+    if (currentAccount) {
+      console.log('Account changed in AccountCredits, refreshing data...');
+      fetchCreditPackages();
+    }
+  }, [currentAccount?.id, fetchCreditPackages]);
   
   useEffect(() => {
     if (error) {

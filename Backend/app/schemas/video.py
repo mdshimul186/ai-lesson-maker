@@ -303,7 +303,7 @@ class VideoGenerateRequest(VideoParams):
     task_id: Optional[str] = None  # Added for task tracking
     test_mode: bool = Field(default=False, description="Whether it is test mode")
     segments: int = Field(default=3, ge=1, le=50, description="Number of segments")
-    language: str = Field(default="English", description="Story language")
+    language: str = Field(default="English", description="Course language")
     story_prompt: str = Field(description="Story prompt")  # Made required
     image_style: ImageStyle = Field(default=ImageStyle.realistic, description="Image style")
     voice_name: str = Field(default="zh-CN-XiaoxiaoNeural", description="Voice name")
