@@ -62,7 +62,8 @@ const LandingPage: React.FC = () => {
                             color: 'white',
                             fontWeight: 'bold',
                             height: '48px',
-                            padding: '0 32px'
+                            padding: '0 32px',
+                            backgroundColor: '#1890ff',
                         }}
                     >
                         Sign Up
