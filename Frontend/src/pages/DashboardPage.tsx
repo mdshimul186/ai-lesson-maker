@@ -23,9 +23,7 @@ const DashboardPage: React.FC = () => {
         pendingVideos: 0,
         availableCredits: 0,
         loading: true
-    });
-
-    // Tool cards data
+    });    // Tool cards data
     const tools = [
         {
             id: 'lesson-maker',
@@ -34,7 +32,16 @@ const DashboardPage: React.FC = () => {
             icon: <VideoCameraOutlined style={{ fontSize: '36px', color: '#1890ff' }} />,
             path: '/lesson-maker',
             available: true
-        },        {
+        },
+        {
+            id: 'animated-lesson-maker',
+            title: 'AI Animated Lesson Maker',
+            description: 'Create animated lessons with typing effects, drawing, and other animations right in your browser.',
+            icon: <PlayCircleOutlined style={{ fontSize: '36px', color: '#fa8c16' }} />,
+            path: '/animated-lesson-maker',
+            available: true
+        },
+        {
             id: 'course-maker',
             title: 'AI Course Maker',
             description: 'Build complete courses with multiple lessons and structured learning paths.',
@@ -50,7 +57,7 @@ const DashboardPage: React.FC = () => {
             path: '/tasks',
             available: true
         }
-    ];        // Fetch user stats on component mount and when currentAccount changes
+    ];// Fetch user stats on component mount and when currentAccount changes
     useEffect(() => {
         if (currentAccount) {
             console.log('Account changed, fetching stats...');

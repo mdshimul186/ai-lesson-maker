@@ -3,6 +3,7 @@ import { cachedApiCall, dedupedApiCall, throttledApiCall } from "../utils/apiUti
 import { useAccountStore } from "../stores";
 
 export * from './account';  // Export account and payment services
+export * from './animated_lesson';  // Export animated lesson services
 
 export async function getVoiceList(data: {area: string[]}): Promise<any> {
     return request<any>({

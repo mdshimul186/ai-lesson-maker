@@ -1,10 +1,12 @@
 import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union
 from app.db.mongodb_utils import get_collection
 from app.schemas.video import VideoGenerateRequest
+from app.schemas.animated_lesson import AnimatedLessonRequest
 from app.services.video import generate_video
+from app.services.animated_lesson_service import animated_lesson_service
 from app.services.upload_service import upload_directory_to_minio
 from app.services import task_service
 from app.config import get_settings
@@ -22,7 +24,7 @@ class VideoQueueService:
         self._current_task_id: Optional[str] = None
         self._queue_task: Optional[asyncio.Task] = None
         
-    async def add_to_queue(self, task_id: str, request: VideoGenerateRequest, user_id: str, account_id: str) -> None:
+    async def add_to_queue(self, task_id: str, request: Union[VideoGenerateRequest, AnimatedLessonRequest], user_id: str, account_id: str, task_type: str = "video") -> None:
         """Add a video generation task to the queue"""
         collection = await get_collection(VIDEO_QUEUE_COLLECTION)
         
@@ -31,6 +33,7 @@ class VideoQueueService:
             "user_id": user_id,
             "account_id": account_id,
             "request_data": request.model_dump(),
+            "task_type": task_type,  # Either "video" or "animated_lesson"
             "status": "QUEUED",
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow(),
@@ -39,12 +42,12 @@ class VideoQueueService:
         }
         
         await collection.insert_one(queue_item)
-        logger.info(f"Added task {task_id} to video processing queue")
+        logger.info(f"Added {task_type} task {task_id} to processing queue")
         
         # Update task status to queued
         await task_service.add_task_event(
             task_id=task_id, 
-            message="Task added to video processing queue", 
+            message=f"Task added to {task_type} processing queue", 
             status="QUEUED", 
             progress=1
         )
@@ -169,94 +172,110 @@ class VideoQueueService:
         return task
     
     async def _process_task(self, queue_item: Dict[str, Any]) -> None:
-        """Process a single video generation task"""
+        """Process a single task from the queue"""
         task_id = queue_item["task_id"]
+        task_type = queue_item.get("task_type", "video")  # Default to video if not specified
         self._current_task_id = task_id
         
         try:
-            logger.info(f"Starting video processing for task {task_id}")
+            logger.info(f"Starting {task_type} processing for task {task_id}")
             
             # Update task status to processing
             await task_service.add_task_event(
                 task_id=task_id,
-                message="Starting video generation process",
+                message=f"Starting {task_type} generation process",
                 status="PROCESSING",
                 progress=5
             )
             
-            # Reconstruct the request object
-            request_data = queue_item["request_data"]
-            request = VideoGenerateRequest(**request_data)
-            
-            # Generate the video
-            video_file_path = await generate_video(request, task_id)
-            local_task_dir = os.path.join(".", "tasks", task_id)
+            # Process based on task type
+            if task_type == "animated_lesson":
+                # Handle animated lesson task
+                from app.schemas.animated_lesson import AnimatedLessonRequest
+                request_data = queue_item["request_data"]
+                request = AnimatedLessonRequest(**request_data)
+                
+                # Process animated lesson using its service
+                result = await animated_lesson_service.process_animated_lesson_task(task_id, request)
+                
+                # Mark as completed
+                await self._mark_queue_item_completed(task_id)
+                
+                logger.info(f"Animated lesson task {task_id} completed successfully")
+            else:
+                # Handle regular video task
+                request_data = queue_item["request_data"]
+                request = VideoGenerateRequest(**request_data)
+                
+                # Generate the video
+                video_file_path = await generate_video(request, task_id)
+                local_task_dir = os.path.join(".", "tasks", task_id)
 
-            if not os.path.isdir(local_task_dir):
-                raise FileNotFoundError(f"Local task directory {local_task_dir} not found after video generation")
+                if not os.path.isdir(local_task_dir):
+                    raise FileNotFoundError(f"Local task directory {local_task_dir} not found after video generation")
 
-            # Upload to MinIO
-            await task_service.add_task_event(
-                task_id=task_id,
-                message=f"Video generation complete. Starting upload of task folder {local_task_dir} to MinIO",
-                progress=70
-            )
-
-            minio_bucket_name = get_settings().bucket_name
-            minio_task_prefix = f"tasks/{task_id}"
-
-            logger.info(f"Starting upload of directory {local_task_dir} to MinIO bucket '{minio_bucket_name}' under prefix '{minio_task_prefix}'")
-            uploaded_files_map = await upload_directory_to_minio(
-                directory_path=local_task_dir,
-                bucket_name=minio_bucket_name,
-                minio_prefix=minio_task_prefix
-            )
-            
-            logger.info(f"Successfully uploaded {len(uploaded_files_map)} files from {local_task_dir} to MinIO")
-            await task_service.add_task_event(
-                task_id=task_id,
-                message=f"Successfully uploaded {len(uploaded_files_map)} files to MinIO",
-                progress=90
-            )
-
-            # Find video URL
-            video_object_name_in_minio = f"{minio_task_prefix}/video.mp4"
-            video_url_in_minio = uploaded_files_map.get(video_object_name_in_minio)
-
-            if not video_url_in_minio:
-                public_url_base = get_settings().minio_public_endpoint.rstrip('/')
-                video_url_in_minio = f"{public_url_base}/{minio_bucket_name}/{video_object_name_in_minio}"
-                logger.warning(f"Main video URL not found directly in upload map, constructed as: {video_url_in_minio}")
-
-            # Clean up local files
-            await task_service.add_task_event(
-                task_id=task_id,
-                message="Local task folder cleanup starting",
-                progress=95
-            )
-            
-            # Save the task folder content to the database before deleting
-            await task_service.set_task_completed(
-                task_id=task_id,
-                result_url=video_url_in_minio,
-                task_folder_content=uploaded_files_map,
-                final_message="Video processing and MinIO upload complete"
-            )
-            
-            try:
-                shutil.rmtree(local_task_dir)
-                logger.info(f"Successfully deleted local task directory: {local_task_dir}")
-            except Exception as e_clean:
-                logger.error(f"Failed to delete local task directory {local_task_dir}: {e_clean}")
+                # Upload to MinIO
                 await task_service.add_task_event(
                     task_id=task_id,
-                    message=f"Failed to delete local task directory {local_task_dir}: {e_clean}. Manual cleanup may be required",
-                    status="COMPLETED_WITH_WARNINGS"
+                    message=f"Video generation complete. Starting upload of task folder {local_task_dir} to MinIO",
+                    progress=70
                 )
-            
-            # Mark queue item as completed
-            await self._mark_queue_item_completed(task_id)
-            logger.info(f"Successfully completed video processing for task {task_id}")
+
+                minio_bucket_name = get_settings().bucket_name
+                minio_task_prefix = f"tasks/{task_id}"
+
+                logger.info(f"Starting upload of directory {local_task_dir} to MinIO bucket '{minio_bucket_name}' under prefix '{minio_task_prefix}'")
+                uploaded_files_map = await upload_directory_to_minio(
+                    directory_path=local_task_dir,
+                    bucket_name=minio_bucket_name,
+                    minio_prefix=minio_task_prefix
+                )
+                
+                logger.info(f"Successfully uploaded {len(uploaded_files_map)} files from {local_task_dir} to MinIO")
+                await task_service.add_task_event(
+                    task_id=task_id,
+                    message=f"Successfully uploaded {len(uploaded_files_map)} files to MinIO",
+                    progress=90
+                )
+
+                # Find video URL
+                video_object_name_in_minio = f"{minio_task_prefix}/video.mp4"
+                video_url_in_minio = uploaded_files_map.get(video_object_name_in_minio)
+
+                if not video_url_in_minio:
+                    public_url_base = get_settings().minio_public_endpoint.rstrip('/')
+                    video_url_in_minio = f"{public_url_base}/{minio_bucket_name}/{video_object_name_in_minio}"
+                    logger.warning(f"Main video URL not found directly in upload map, constructed as: {video_url_in_minio}")
+
+                # Clean up local files
+                await task_service.add_task_event(
+                    task_id=task_id,
+                    message="Local task folder cleanup starting",
+                    progress=95
+                )
+                
+                # Save the task folder content to the database before deleting
+                await task_service.set_task_completed(
+                    task_id=task_id,
+                    result_url=video_url_in_minio,
+                    task_folder_content=uploaded_files_map,
+                    final_message="Video processing and MinIO upload complete"
+                )
+                
+                try:
+                    shutil.rmtree(local_task_dir)
+                    logger.info(f"Successfully deleted local task directory: {local_task_dir}")
+                except Exception as e_clean:
+                    logger.error(f"Failed to delete local task directory {local_task_dir}: {e_clean}")
+                    await task_service.add_task_event(
+                        task_id=task_id,
+                        message=f"Failed to delete local task directory {local_task_dir}: {e_clean}. Manual cleanup may be required",
+                        status="COMPLETED_WITH_WARNINGS"
+                    )
+                
+                # Mark queue item as completed
+                await self._mark_queue_item_completed(task_id)
+                logger.info(f"Successfully completed video processing for task {task_id}")
             
         except Exception as e:
             logger.error(f"Failed to process video task {task_id}: {e}")
@@ -584,7 +603,7 @@ class VideoQueueService:
         except Exception as e:
             logger.error(f"Failed to cleanup stuck tasks: {e}")
             return 0
-
+            
     async def cancel_task(self, task_id: str) -> bool:
         """
         Cancel a task in the queue
@@ -599,10 +618,10 @@ class VideoQueueService:
         
         try:
             # First check if the task is still in the queue (QUEUED status)
-            queue_collection = self.db[self.QUEUE_COLLECTION]
+            collection = await get_collection(VIDEO_QUEUE_COLLECTION)
             
             # Try to find and remove from queue
-            queue_result = await queue_collection.find_one_and_delete({"task_id": task_id, "status": "QUEUED"})
+            queue_result = await collection.find_one_and_delete({"task_id": task_id, "status": "QUEUED"})
             
             if queue_result:
                 # Successfully removed from queue, update task status
@@ -622,13 +641,13 @@ class VideoQueueService:
                 return True
             
             # If not in queue, check if it's currently processing
-            currently_processing = await queue_collection.find_one({"task_id": task_id, "status": "PROCESSING"})
+            currently_processing = await collection.find_one({"task_id": task_id, "status": "PROCESSING"})
             
             if currently_processing:
                 logger.info(f"Task {task_id} is currently processing, marking for cancellation")
                 # We can't immediately cancel a processing task, but we can mark it
                 # The processing loop will check for this flag
-                await queue_collection.update_one(
+                await collection.update_one(
                     {"task_id": task_id},
                     {"$set": {"cancel_requested": True}}
                 )
@@ -648,7 +667,6 @@ class VideoQueueService:
         except Exception as e:
             logger.error(f"Error cancelling task {task_id}: {str(e)}")
             return False
-        
 
 # Global instance
 video_queue_service = VideoQueueService()

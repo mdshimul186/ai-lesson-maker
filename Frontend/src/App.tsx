@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import CourseMakerPage from './pages/CourseMakerPage';
 import CreateCoursePage from './pages/CreateCoursePage';
 import CourseViewPage from './pages/CourseViewPage';
+import AnimatedLessonMakerPage from './pages/AnimatedLessonMakerPage';
 import LandingPage from './pages/LandingPage';
 import TasksPage from './pages/TasksPage';
 import LoginPage from './pages/LoginPage';
@@ -84,6 +85,11 @@ function App() {
             <Route path="/tasks" element={
               <ProtectedRoute>
                 <TasksPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/animated-lesson-maker" element={
+              <ProtectedRoute>
+                <AnimatedLessonMakerPage />
               </ProtectedRoute>
             } />
             <Route path="/account" element={

@@ -1,0 +1,157 @@
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+.canvasContainer {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #e1e4e8;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  background: #fafafa;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.sectionInfo {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f6f8fa;
+  border-radius: 6px;
+  border-left: 4px solid #1890ff;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 0;
+  text-align: center;
+  color: #8c8c8c;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .settings {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .progressContainer {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* Theme-specific styles */
+.darkTheme {
+  background: #1f1f1f;
+  color: #ffffff;
+}
+
+.darkTheme .canvas {
+  background: #2f2f2f;
+  border-color: #444;
+}
+
+.darkTheme .settings {
+  background: #2a2a2a;
+}
+
+.darkTheme .sectionInfo {
+  background: #2a2a2a;
+  border-left-color: #40a9ff;
+}
+
+/* Animation effects */
+.typingCursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.drawingCursor {
+  animation: pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+/* Smooth transitions */
+.canvas,
+.controls,
+.settings,
+.sectionInfo {
+  transition: all 0.3s ease;
+}
+
+/* Interactive elements */
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.progressContainer .ant-progress {
+  transition: all 0.3s ease;
+}
