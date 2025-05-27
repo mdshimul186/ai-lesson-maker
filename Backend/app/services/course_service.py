@@ -1,5 +1,6 @@
 import json
 import uuid
+import asyncio
 from typing import List, Optional, Dict, Any, Union
 from datetime import datetime
 from loguru import logger
@@ -259,13 +260,12 @@ Generate the course structure now.
             "created_at": now,
             "updated_at": now
         }
-        
-        # Save to database
+          # Save to database
         await self.collection.insert_one(course_doc)
         
         logger.info(f"Created course {course_id} with {len(chapters)} chapters and {total_lessons} lessons")
         
-        return self._doc_to_response(course_doc)
+        return await self._doc_to_response(course_doc)
 
     async def list_courses(
         self,
@@ -281,9 +281,7 @@ Generate the course structure now.
         # Build query
         query = {"account_id": account_id}
         if status:
-            query["status"] = status
-        
-        # Get total count
+            query["status"] = status        # Get total count
         total = await self.collection.count_documents(query)
         
         # Get paginated results
@@ -291,14 +289,13 @@ Generate the course structure now.
         cursor = self.collection.find(query).sort("created_at", -1).skip(skip).limit(page_size)
         courses = await cursor.to_list(length=page_size)
         
-        course_responses = [self._doc_to_response(doc) for doc in courses]
+        course_responses = await asyncio.gather(*[self._doc_to_response(doc) for doc in courses])
         
         return CourseListResponse(
             courses=course_responses,
             total=total,
             page=page,
-            page_size=page_size
-        )
+            page_size=page_size        )
 
     async def get_course(self, course_id: str, account_id: str) -> Optional[CourseResponse]:
         """Get a specific course by ID"""
@@ -313,7 +310,7 @@ Generate the course structure now.
         if not course_doc:
             return None
         
-        return self._doc_to_response(course_doc)
+        return await self._doc_to_response(course_doc)
 
     async def update_course(
         self,
@@ -332,6 +329,8 @@ Generate the course structure now.
             update_data["description"] = course_update.description
         if course_update.status is not None:
             update_data["status"] = course_update.status
+        if course_update.chapters is not None:
+            update_data["chapters"] = course_update.chapters
         
         if not update_data:
             return await self.get_course(course_id, account_id)
@@ -462,6 +461,99 @@ Generate the course structure now.
         
         return tasks
 
+    async def generate_lesson_video(
+        self,
+        course_id: str,
+        lesson_id: str,
+        account_id: str,
+        user_id: str
+    ) -> str:
+        """Generate video for a specific lesson"""
+        
+        await self._initialize_db()
+        
+        # Get course
+        course = await self.get_course(course_id, account_id)
+        if not course:
+            raise ValueError("Course not found")
+        
+        # Find the lesson
+        lesson = None
+        for chapter in course.chapters:
+            for ch_lesson in chapter.lessons:
+                if ch_lesson.id == lesson_id:
+                    lesson = ch_lesson
+                    break
+            if lesson:
+                break
+        
+        if not lesson:
+            raise ValueError("Lesson not found")
+        
+        # Check if lesson already has a task
+        if lesson.task_id:
+            raise ValueError("Lesson already has a video generation task")
+        
+        # Create a video generation request for the lesson
+        video_request = VideoGenerateRequest(
+            title=lesson.title,
+            script=lesson.content,
+            voice_id=course.voice_id,
+            story_prompt=lesson.title
+        )
+        
+        # Create a task for video generation
+        task_id = str(uuid.uuid4())
+        task_create_data = TaskCreate( 
+            task_id=task_id,
+            user_id=user_id,
+            account_id=account_id,
+            task_type="video_generation", 
+            request_data=video_request.model_dump() 
+        )
+        
+        try:
+            task = await self.task_service.create_task(
+                task_id=task_id,
+                user_id=user_id,
+                account_id=account_id,
+                initial_status=TaskStatus.PENDING,
+                request_data=task_create_data.model_dump()
+            )
+
+            await self.task_service.add_task_event(
+                task_id=task_id, 
+                message=f"Video generation request received for lesson: {lesson.title}", 
+                status="PENDING", 
+                progress=0
+            )
+            
+            # Add to processing queue
+            await video_queue_service.add_to_queue(
+                task_id=task_id,
+                request=video_request,
+                user_id=user_id,
+                account_id=account_id
+            )
+            
+            if task:
+                # Update the lesson in the database with the task_id
+                await self.collection.update_one(
+                    {"id": course_id, "chapters.lessons.id": lesson_id},
+                    {"$set": {"chapters.$[].lessons.$[j].task_id": task.task_id}},
+                    array_filters=[{"j.id": lesson_id}]
+                )
+                
+                logger.info(f"Created task {task.task_id} for lesson {lesson_id}")
+                return task.task_id
+            else:
+                logger.error(f"Failed to create task for lesson {lesson_id}")
+                raise ValueError("Failed to create video generation task")
+                        
+        except Exception as e:
+            logger.error(f"Error creating task for lesson {lesson_id}: {e}")
+            raise e
+
     async def get_course_progress(self, course_id: str, account_id: str) -> Dict[str, Any]:
         """Get progress of course lesson generation"""
         
@@ -497,44 +589,68 @@ Generate the course structure now.
         
         return {
             "course_id": course_id,
-            "total_lessons": total_lessons,
-            "completed_lessons": completed_lessons,
+            "total_lessons": total_lessons,            "completed_lessons": completed_lessons,
             "in_progress_lessons": in_progress_lessons,
             "failed_lessons": failed_lessons,
             "progress_percentage": round(progress_percentage, 2),
             "status": course.status
         }
 
-    def _doc_to_response(self, doc: Dict[str, Any]) -> CourseResponse:
+    async def _doc_to_response(self, doc: Dict[str, Any]) -> CourseResponse:
         """Convert database document to response model"""
         
         chapters = []
         for chapter_doc in doc.get("chapters", []):
             lessons = []
             for lesson_doc in chapter_doc.get("lessons", []):
+                # Get real-time task status if task_id exists
+                lesson_status = lesson_doc.get("status", "PENDING")
+                lesson_video_url = lesson_doc.get("video_url")
+                task_data = None
+                
+                if lesson_doc.get("task_id"):
+                    try:
+                        task = await self.task_service.get_task(lesson_doc["task_id"])
+                        if task:
+                            # Update lesson status from task status
+                            lesson_status = task.status
+                            # If task is completed and has result_url, use it as video_url
+                            if task.status == "COMPLETED" and task.result_url:
+                                lesson_video_url = task.result_url
+                            # Store task data for additional info
+                            task_data = {
+                                "status": task.status,                                "progress": task.progress,
+                                "error_message": task.error_message,
+                                "result_url": task.result_url,
+                                "updated_at": task.updated_at.isoformat() if task.updated_at else None
+                            }
+                    except Exception as e:
+                        logger.warning(f"Failed to fetch task {lesson_doc['task_id']} for lesson {lesson_doc['id']}: {e}")
+                
                 lessons.append(LessonResponse(
                     id=lesson_doc["id"],
-                    chapter_id=lesson_doc["chapter_id"],
+                    chapter_id=lesson_doc.get("chapter_id", chapter_doc["id"]),  # Use chapter ID if lesson doesn't have chapter_id
                     title=lesson_doc["title"],
-                    content=lesson_doc["content"],
-                    duration_minutes=lesson_doc["duration_minutes"],
-                    order=lesson_doc["order"],
-                    status=lesson_doc.get("status", "PENDING"), 
-                    video_url=lesson_doc.get("video_url"),
+                    content=lesson_doc.get("content", ""),
+                    duration_minutes=lesson_doc.get("duration_minutes"),
+                    order=lesson_doc.get("order", 0),
+                    status=lesson_status,
+                    video_url=lesson_video_url,
                     task_id=lesson_doc.get("task_id"),
-                    created_at=lesson_doc["created_at"],
-                    updated_at=lesson_doc["updated_at"]
+                    task_data=task_data,
+                    created_at=lesson_doc.get("created_at", datetime.utcnow()),
+                    updated_at=lesson_doc.get("updated_at", datetime.utcnow())
                 ))
             
             chapter = ChapterResponse(
                 id=chapter_doc["id"],
-                course_id=chapter_doc["course_id"],
+                course_id=chapter_doc.get("course_id", doc["id"]),  # Use course ID if chapter doesn't have course_id
                 title=chapter_doc["title"],
                 description=chapter_doc.get("description"),
-                order=chapter_doc["order"],
+                order=chapter_doc.get("order", 0),
                 lessons=lessons,
-                created_at=chapter_doc["created_at"],
-                updated_at=chapter_doc["updated_at"]
+                created_at=chapter_doc.get("created_at", datetime.utcnow()),
+                updated_at=chapter_doc.get("updated_at", datetime.utcnow())
             )
             chapters.append(chapter)
         

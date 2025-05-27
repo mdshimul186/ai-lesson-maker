@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 from datetime import datetime
 from enum import Enum
@@ -32,7 +32,10 @@ class LessonUpdate(BaseModel):
 class LessonResponse(LessonBase):
     id: str
     chapter_id: str
+    status: Optional[str] = Field(default="PENDING", description="Lesson status")
+    video_url: Optional[str] = None
     task_id: Optional[str] = None
+    task_data: Optional[Dict[str, Any]] = None  # Real-time task information
     created_at: datetime
     updated_at: datetime
 
@@ -95,6 +98,7 @@ class CourseUpdate(BaseModel):
     title: Optional[str] = Field(None, min_length=1, max_length=200)
     description: Optional[str] = None
     status: Optional[CourseStatus] = None
+    chapters: Optional[List[dict]] = None  # Allow updating course structure
 
 
 class CourseResponse(CourseBase):
@@ -119,3 +123,13 @@ class CourseListResponse(BaseModel):
 class GenerateLessonsRequest(BaseModel):
     course_id: str
     chapter_ids: Optional[List[str]] = None  # If None, generate for all chapters
+
+
+class GenerateLessonVideoRequest(BaseModel):
+    lesson_id: str
+
+
+class GenerateLessonVideoResponse(BaseModel):
+    task_id: str
+    message: str
+    lesson_id: str

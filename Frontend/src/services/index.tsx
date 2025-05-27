@@ -98,6 +98,26 @@ export async function generateVideo(data: VideoGenerateReq): Promise<VideoGenera
     });
 }
 
+// Generate individual lesson video
+export interface GenerateLessonVideoReq {
+    courseId: string;
+    lessonId: string;
+}
+
+export interface GenerateLessonVideoRes {
+    task_id: string;
+    message: string;
+    lesson_id: string;
+}
+
+export async function generateLessonVideo(data: GenerateLessonVideoReq): Promise<GenerateLessonVideoRes> {
+    return request<GenerateLessonVideoRes>({
+        url: `/api/courses/${data.courseId}/lessons/${data.lessonId}/generate-video`,
+        method: "post",
+        data: {},
+    });
+}
+
 export interface TaskEvent {
     timestamp: string;
     message: string;

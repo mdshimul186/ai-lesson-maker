@@ -2,7 +2,8 @@ from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, Query
 from app.schemas.course import (
     CourseGenerateRequest, CourseStructureResponse, CourseCreate, 
-    CourseResponse, CourseUpdate, CourseListResponse, GenerateLessonsRequest
+    CourseResponse, CourseUpdate, CourseListResponse, GenerateLessonsRequest,
+    GenerateLessonVideoResponse
 )
 from app.services.course_service import CourseService
 from app.api.dependencies import get_current_account
@@ -170,6 +171,33 @@ async def generate_course_lessons(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate lessons: {str(e)}")
+
+
+@router.post("/{course_id}/lessons/{lesson_id}/generate-video")
+async def generate_lesson_video(
+    course_id: str,
+    lesson_id: str,
+    current_user: UserInDB = Depends(get_current_active_user),
+    current_account: AccountResponse = Depends(get_current_account)
+):
+    """Generate video for a specific lesson."""
+    try:
+        course_service = CourseService()
+        task_id = await course_service.generate_lesson_video(
+            course_id=course_id,
+            lesson_id=lesson_id,
+            account_id=current_account.id,
+            user_id=current_user.id
+        )
+        return GenerateLessonVideoResponse(
+            task_id=task_id,
+            message="Video generation started successfully",
+            lesson_id=lesson_id
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate lesson video: {str(e)}")
 
 
 @router.get("/{course_id}/progress")

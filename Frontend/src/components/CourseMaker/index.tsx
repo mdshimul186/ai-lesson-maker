@@ -31,19 +31,13 @@ const { Title, Paragraph } = Typography;
 const CourseMaker: React.FC = () => {
     const navigate = useNavigate();
     const [courses, setCourses] = useState<CourseResponse[]>([]);
-    const [coursesLoading, setCoursesLoading] = useState(false);
-    const [pagination, setPagination] = useState({
+    const [coursesLoading, setCoursesLoading] = useState(false);    const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
         total: 0
     });
 
-    // Load courses when component mounts
-    useEffect(() => {
-        fetchCourses();
-    }, []);
-
-    // Fetch courses when pagination changes
+    // Load courses when component mounts or pagination changes
     useEffect(() => {
         fetchCourses();
     }, [pagination.current, pagination.pageSize]);
