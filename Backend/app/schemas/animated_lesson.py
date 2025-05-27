@@ -9,6 +9,23 @@ class RenderMode(str, Enum):
     MIXED = "mixed"
 
 
+class ContentBlock(BaseModel):
+    """Individual content block with animation"""
+    content: str = Field(..., description="Content text")
+    content_type: str = Field(..., description="Content type: text, paragraph, list, code, mermaid")
+    animation_type: str = Field(..., description="Animation type: typing, fade_in, slide_in, drawing")
+    duration: float = Field(default=3.0, description="Animation duration in seconds")
+    language: Optional[str] = Field(default=None, description="Programming language for code blocks")
+    mermaid_diagram: Optional[str] = Field(default=None, description="Mermaid diagram code")
+
+
+class AnimatedSection(BaseModel):
+    """Section with multiple content blocks"""
+    heading: str = Field(..., description="Section heading")
+    content_blocks: List[ContentBlock] = Field(..., description="Array of content blocks")
+    duration: float = Field(default=4.0, description="Total section duration")
+
+
 class AnimatedLessonRequest(BaseModel):
     """Animated Lesson Generation Request"""
     task_id: Optional[str] = None  # For task tracking

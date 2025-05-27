@@ -12,37 +12,67 @@ class AnimatedLessonService:
 
     async def generate_content(self, request: AnimatedLessonRequest) -> List[Dict[str, Any]]:
         """Generate lesson content based on the prompt"""
-        try:
-            # Create comprehensive system prompt for content generation
+        try:            # Create comprehensive system prompt for content generation
             system_prompt = """You are a professional educational content creator specializing in interactive animated lessons.
 
-Create educational content that will be rendered on a canvas with markdown formatting and animations. Structure your response as JSON with a "sections" array.
+Create educational content that will be rendered with multiple animated content blocks per slide. Structure your response as JSON with a "sections" array.
 
 Each section should have:
 - heading: Clear section title
-- content: Content using markdown formatting (headers, lists, bold, italic, code blocks)
-- content_type: "text", "diagram", "mermaid", "example", "summary", "code", or "mixed"
-- animation_type: Choose from "typing", "drawing", "fade_in", "slide_in", "zoom_in" based on content type
-- render_mode: "markdown", "mermaid", or "mixed"
-- mermaid_diagram: (if applicable) Valid mermaid diagram code
-- duration: Animation duration in seconds (2-8 seconds)
+- content_blocks: Array of content blocks with different animations
+- duration: Total section duration in seconds (4-10 seconds)
 
-Guidelines for animation selection:
-- "typing": Best for text explanations, definitions
-- "drawing": Best for diagrams, visual concepts, mermaid charts
-- "fade_in": Best for examples, summaries
-- "slide_in": Best for lists, step-by-step processes
-- "zoom_in": Best for highlighting important concepts
+Each content_block should have:
+- content: Content text (markdown supported for text/paragraph types)
+- content_type: "text", "paragraph", "list", "code", "mermaid"
+- animation_type: "typing", "fade_in", "slide_in", "drawing"
+- duration: Individual block duration (2-4 seconds)
+- language: (for code blocks) programming language
+- mermaid_diagram: (for mermaid blocks) Valid mermaid diagram code
 
-For diagrams, include both markdown content AND mermaid diagram code.
-Use mermaid for flowcharts, graphs, mind maps, timelines, etc.
+Content Type Guidelines:
+- "paragraph": For explanatory text with typing animation
+- "list": For bullet points with slide-in animation (one item at a time)  
+- "code": For code examples with typing animation
+- "mermaid": For diagrams with fade-in animation
+- "text": For simple text content
 
-Example mermaid syntax:
-```
-graph TD
-    A[Start] --> B[Process]
-    B --> C[End]
-```
+Animation Type Guidelines:
+- "typing": Character-by-character reveal (best for paragraphs and code)
+- "slide_in": Slide from left (best for lists - items appear one by one)
+- "fade_in": Fade in effect (best for mermaid diagrams)
+- "drawing": Progressive reveal effect
+
+Example structure:
+{
+  "sections": [
+    {
+      "heading": "Introduction to Topic",
+      "duration": 8,
+      "content_blocks": [
+        {
+          "content": "Welcome to this lesson about...",
+          "content_type": "paragraph", 
+          "animation_type": "typing",
+          "duration": 3
+        },
+        {
+          "content": "- Key concept 1\n- Key concept 2\n- Key concept 3",
+          "content_type": "list",
+          "animation_type": "slide_in", 
+          "duration": 3
+        },
+        {
+          "content": "graph TD\n    A[Start] --> B[Process]\n    B --> C[End]",
+          "content_type": "mermaid",
+          "animation_type": "fade_in",
+          "duration": 2,
+          "mermaid_diagram": "graph TD\n    A[Start] --> B[Process]\n    B --> C[End]"
+        }
+      ]
+    }
+  ]
+}
 
 Return valid JSON only."""
 
@@ -51,7 +81,14 @@ Return valid JSON only."""
 The content should be suitable for {request.render_mode} rendering mode.
 Theme: {request.theme}
 
-Structure the lesson with 4-8 sections that progressively build understanding. Include visual diagrams where helpful using mermaid syntax."""
+Structure the lesson with 4-8 sections that progressively build understanding. Each section should have multiple content blocks with different animations:
+
+1. Start each section with a paragraph explaining the concept (typing animation)
+2. Add lists for key points (slide-in animation, one item at a time) 
+3. Include code examples where relevant (typing animation)
+4. Add mermaid diagrams for visual concepts (fade-in animation)
+
+Make content engaging and educational. Use varied animations to create dynamic lessons."""
             
             messages = [
                 {"role": "system", "content": system_prompt},
@@ -68,25 +105,40 @@ Structure the lesson with 4-8 sections that progressively build understanding. I
             if not response.get("sections"):
                 logger.error(f"Invalid content generation response: {response}")
                 raise ValueError("LLM did not return properly structured content")
-                
-            # Ensure each section has required fields with defaults
+                  # Ensure each section has required fields with defaults
             for section in response["sections"]:
-                if "animation_type" not in section:
-                    # AI decides animation based on content type
-                    content_type = section.get("content_type", "text")
-                    if content_type in ["diagram", "mermaid"]:
-                        section["animation_type"] = "drawing"
-                    elif content_type in ["example", "summary"]:
-                        section["animation_type"] = "fade_in"
-                    elif content_type == "code":
-                        section["animation_type"] = "typing"
-                    else:
-                        section["animation_type"] = "slide_in"
+                # Ensure section has content_blocks array
+                if "content_blocks" not in section:
+                    # Convert old format to new format if needed
+                    content_blocks = [{
+                        "content": section.get("content", ""),
+                        "content_type": section.get("content_type", "text"),
+                        "animation_type": section.get("animation_type", "fade_in"),
+                        "duration": section.get("duration", 4.0)
+                    }]
+                    if section.get("mermaid_diagram"):
+                        content_blocks[-1]["mermaid_diagram"] = section["mermaid_diagram"]
+                    if section.get("content_type") == "code":
+                        content_blocks[-1]["language"] = "javascript"  # default language
+                    section["content_blocks"] = content_blocks
                 
-                # Set default values
-                section.setdefault("render_mode", request.render_mode)
+                # Validate and set defaults for content blocks
+                for block in section.get("content_blocks", []):
+                    block.setdefault("content_type", "text")
+                    block.setdefault("animation_type", "fade_in")
+                    block.setdefault("duration", 3.0)
+                    
+                    # Set default language for code blocks
+                    if block.get("content_type") == "code" and "language" not in block:
+                        block["language"] = "javascript"
+                
+                # Set section defaults
                 section.setdefault("duration", 4.0)
-                section.setdefault("content_type", "text")
+                
+                # Calculate total section duration from content blocks
+                if section.get("content_blocks"):
+                    total_duration = sum(block.get("duration", 3.0) for block in section["content_blocks"])
+                    section["duration"] = max(total_duration, 4.0)
             
             logger.info(f"Successfully generated content with {len(response['sections'])} sections")
             return response["sections"]

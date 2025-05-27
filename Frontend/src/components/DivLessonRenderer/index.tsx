@@ -9,23 +9,14 @@ import {
 } from '@ant-design/icons';
 import { marked } from 'marked';
 import mermaid from 'mermaid';
+import { AnimatedSection, ContentBlock } from '../../services/animated_lesson';
 import styles from './index.module.css';
 
 const { Text } = Typography;
 const { Option } = Select;
 
-interface Section {
-    heading: string;
-    content: string;
-    duration: number;
-    animation_type: string;
-    content_type: string;
-    render_mode: string;
-    mermaid_diagram?: string;
-}
-
 interface DivLessonRendererProps {
-    sections: Section[];
+    sections: AnimatedSection[];
     isLoading?: boolean;
 }
 
@@ -140,81 +131,104 @@ const DivLessonRenderer: React.FC<DivLessonRendererProps> = ({ sections, isLoadi
                 <div className={styles.title}>
                     {section.heading}
                 </div>
-                
-                {/* Content with animation */}
+                  {/* Content with animation - render content blocks */}
                 <div className={styles.content}>
-                    {renderAnimatedContent(section, progress)}
+                    {renderContentBlocks(section, progress)}
                 </div>
-                
-                {/* Mermaid diagram if present */}
-                {section.mermaid_diagram && section.render_mode !== 'markdown' && (
-                    <div className={styles.mermaidContainer} style={{ opacity: progress }}>
-                        <MermaidDiagram code={section.mermaid_diagram} />
-                    </div>
-                )}
             </div>
         );
     };
 
-    const renderAnimatedContent = (section: Section, progress: number) => {
-        const content = section.content;
-        const animationType = section.animation_type || 'fade_in';
+    const renderContentBlocks = (section: AnimatedSection, progress: number) => {
+        if (!section.content_blocks) return null;
         
-        // Extract code blocks
-        const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-        const parts = [];
-        let lastIndex = 0;
-        let match;
-        
-        while ((match = codeBlockRegex.exec(content)) !== null) {
-            // Add text before code block
-            if (match.index > lastIndex) {
-                parts.push({
-                    type: 'text',
-                    content: content.slice(lastIndex, match.index)
-                });
-            }
+        return section.content_blocks.map((block, blockIndex) => {
+            // Calculate individual block progress based on overall progress
+            const blockProgress = Math.max(0, Math.min(1, (progress * section.content_blocks!.length) - blockIndex));
             
-            // Add code block
-            parts.push({
-                type: 'code',
-                language: match[1] || 'text',
-                content: match[2]
-            });
-            
-            lastIndex = match.index + match[0].length;
-        }
-        
-        // Add remaining text
-        if (lastIndex < content.length) {
-            parts.push({
-                type: 'text',
-                content: content.slice(lastIndex)
-            });
-        }
-        
-        return parts.map((part, index) => (
-            <div key={index} className={styles.contentPart}>
-                {part.type === 'text' ? (
+            return (
+                <div key={blockIndex} className={styles.contentPart}>
+                    {renderContentBlock(block, blockProgress, blockIndex, section.content_blocks!.length)}
+                </div>
+            );
+        });
+    };
+
+    const renderContentBlock = (block: ContentBlock, progress: number, blockIndex: number, totalBlocks: number) => {
+        switch (block.content_type) {
+            case 'paragraph':
+                return (
                     <AnimatedText 
-                        text={part.content} 
-                        animationType={animationType}
+                        text={block.content} 
+                        animationType="typing"
                         progress={progress}
-                        partIndex={index}
-                        totalParts={parts.length}
+                        partIndex={blockIndex}
+                        totalParts={totalBlocks}
                     />
-                ) : (
+                );
+              case 'list':
+                return renderAnimatedList(block.content, progress);
+            
+            case 'code':
+                return (
                     <AnimatedCodeBlock
-                        language={part.language || 'text'}
-                        code={part.content}
-                        animationType={animationType}
+                        language={block.language || 'javascript'}
+                        code={block.content}
+                        animationType={block.animation_type}
                         progress={progress}
-                        partIndex={index}
-                        totalParts={parts.length}
+                        partIndex={blockIndex}
+                        totalParts={totalBlocks}
                     />
-                )}
+                );
+            
+            case 'mermaid':
+                return (
+                    <div className={styles.mermaidContainer} style={{ opacity: progress }}>
+                        <MermaidDiagram code={block.mermaid_diagram || block.content} />
+                    </div>
+                );
+            
+            case 'text':
+            default:
+                return (
+                    <AnimatedText 
+                        text={block.content} 
+                        animationType={block.animation_type}
+                        progress={progress}
+                        partIndex={blockIndex}
+                        totalParts={totalBlocks}
+                    />
+                );
+        }
+    };    const renderAnimatedList = (content: string, progress: number) => {
+        // Parse markdown-style list
+        const lines = content.split('\n').filter(line => line.trim());
+        const listItems = lines.map(line => line.replace(/^[-*+]\s*/, '').trim());
+        
+        return (
+            <div className={styles.animatedList}>
+                {listItems.map((item, itemIndex) => {
+                    // Each list item slides in sequentially
+                    const itemProgress = Math.max(0, Math.min(1, (progress * listItems.length) - itemIndex));
+                    const slideInStyle = {
+                        transform: `translateX(${(1 - itemProgress) * 50}px)`,
+                        opacity: itemProgress,
+                        transition: 'all 0.5s ease'
+                    };
+                    
+                    return (
+                        <div 
+                            key={itemIndex} 
+                            className={styles.listItem}
+                            style={slideInStyle}
+                        >
+                            <span className={styles.listBullet}>•</span>
+                            {item}
+                        </div>
+                    );
+                })}
             </div>
-        ));
+        );
     };
 
     if (isLoading) {
@@ -334,17 +348,15 @@ const DivLessonRenderer: React.FC<DivLessonRendererProps> = ({ sections, isLoadi
                             </Button>
                         </Space>
                     </Space>
-                </div>
-
-                {/* Section info */}
+                </div>                {/* Section info */}
                 {sections[currentSection] && (
                     <div className={styles.sectionInfo}>
                         <Space direction="vertical" style={{ width: '100%' }}>
                             <Text strong>{sections[currentSection].heading}</Text>
                             <Text type="secondary">
-                                Animation: {sections[currentSection].animation_type || 'default'} | 
-                                Type: {sections[currentSection].content_type || 'text'} |
-                                Mode: {sections[currentSection].render_mode || 'mixed'}
+                                Content Blocks: {sections[currentSection].content_blocks?.length || 0} | 
+                                Duration: {sections[currentSection].duration || 4}s |
+                                Types: {sections[currentSection].content_blocks?.map(block => block.content_type).join(', ') || 'none'}
                             </Text>
                         </Space>
                     </div>

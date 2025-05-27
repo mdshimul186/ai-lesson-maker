@@ -1,6 +1,23 @@
 
 import { request } from '../utils/request';
 
+// Content block interface for individual animated elements
+export interface ContentBlock {
+    content: string;
+    content_type: 'text' | 'list' | 'code' | 'mermaid' | 'paragraph';
+    animation_type: 'typing' | 'fade_in' | 'slide_in' | 'drawing';
+    duration?: number;
+    language?: string; // For code blocks
+    mermaid_diagram?: string; // For mermaid diagrams
+}
+
+// Section interface with multiple content blocks
+export interface AnimatedSection {
+    heading: string;
+    content_blocks: ContentBlock[];
+    duration: number;
+}
+
 export interface AnimatedLessonRequest {
     task_id?: string;
     title: string;
@@ -21,7 +38,7 @@ export interface AnimatedLessonResponse {
     success: boolean;
     data?: {
         task_id: string;
-        content?: any[];
+        content?: AnimatedSection[];
         video_url?: string;
         task_folder_content?: Record<string, string>;
     };
