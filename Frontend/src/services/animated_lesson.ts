@@ -32,6 +32,7 @@ export interface AnimatedLessonRequest {
     font_family?: string;
     background_color?: string;
     text_color?: string;
+    scenes?: number;
 }
 
 export interface AnimatedLessonResponse {

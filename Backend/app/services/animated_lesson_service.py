@@ -74,14 +74,15 @@ Example structure:
   ]
 }
 
-Return valid JSON only."""
-
+Return valid JSON only."""            # Get the number of scenes/sections to generate (default to 5 if not provided)
+            num_scenes = getattr(request, 'scenes', 5)
+            
             user_prompt = f"""Create educational content for a lesson titled '{request.title}' about '{request.prompt}' in {request.language} language.
 
 The content should be suitable for {request.render_mode} rendering mode.
 Theme: {request.theme}
 
-Structure the lesson with 4-8 sections that progressively build understanding. Each section should have multiple content blocks with different animations:
+Structure the lesson with exactly {num_scenes} sections that progressively build understanding. Each section should have multiple content blocks with different animations:
 
 1. Start each section with a paragraph explaining the concept (typing animation)
 2. Add lists for key points (slide-in animation, one item at a time) 

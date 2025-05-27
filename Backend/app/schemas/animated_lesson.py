@@ -32,6 +32,7 @@ class AnimatedLessonRequest(BaseModel):
     title: str = Field(..., description="Lesson title")
     description: Optional[str] = Field(default=None, description="Lesson description")
     prompt: str = Field(..., description="Content generation prompt")
+    scenes: int = Field(default=5, ge=1, le=25, description="Number of scenes/sections to generate")
     language: str = Field(default="English", description="Lesson language")
     render_mode: RenderMode = Field(default=RenderMode.MIXED, description="Content rendering mode")
     voice_name: str = Field(..., description="Voice name for narration")

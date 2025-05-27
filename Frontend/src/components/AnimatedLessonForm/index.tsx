@@ -12,7 +12,8 @@ import {
     Col,
     Progress,
     Timeline,
-    Radio
+    Radio,
+    InputNumber
 } from 'antd';
 import {
     PlaySquareOutlined,
@@ -36,6 +37,7 @@ type FieldType = {
     title: string;
     description?: string;
     prompt: string;
+    scenes: number;
     language?: string;
     voice_name: string;
     voice_rate: number;
@@ -249,13 +251,13 @@ const AnimatedLessonForm: React.FC = () => {
         setCurrentTaskId(null);
         message.loading('Initiating animated lesson generation...', 0);
 
-        const taskId = uuidv4();
-        // Prepare request payload
+        const taskId = uuidv4();        // Prepare request payload
         const payload = {
             task_id: taskId,
             title: values.title,
             description: values.description,
             prompt: values.prompt,
+            scenes: values.scenes,
             language: values.language,
             render_mode: values.render_mode,
             voice_name: values.voice_name,
@@ -305,6 +307,7 @@ const AnimatedLessonForm: React.FC = () => {
     };    const initialFormValues: Partial<FieldType> = {
         title: '',
         prompt: '',
+        scenes: 5,
         voice_rate: 1.0,
         include_subtitles: true,
         render_mode: 'mixed',
@@ -407,6 +410,15 @@ const AnimatedLessonForm: React.FC = () => {
                                 rows={4} 
                                 placeholder="E.g., Create a lesson about photosynthesis that explains how plants convert sunlight into energy. Include definitions, the chemical process, and why it's important." 
                             />
+                        </Form.Item>
+
+                        <Form.Item<FieldType>
+                            label="Number of Scenes"
+                            name="scenes"
+                            rules={[{ required: true, message: 'Please input the number of scenes (1-25)' }]}
+                            help="Each scene represents a segment in your lesson. More scenes allows for more detailed content."
+                        >
+                            <InputNumber min={1} max={25} style={{ width: '100%' }} />
                         </Form.Item>
                     </Card>                    <Card
                         title={<span><ToolOutlined /> Rendering Options</span>}

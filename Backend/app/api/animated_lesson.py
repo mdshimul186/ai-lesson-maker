@@ -20,14 +20,14 @@ async def generate_animated_lesson(
     account_id: str = Depends(get_valid_account_id)
 ):
     """Generate an animated lesson with browser-based animations"""
-    # Each animated lesson counts as 1 credit
+    # Credits based on the number of scenes requested
     try:
         lesson_info = request.title
         await deduct_credits_for_video(
             account_id=account_id,
             user_id=current_user.id,
             video_info=lesson_info,
-            num_scenes=1  # One credit per animated lesson
+            num_scenes=request.scenes  # Deduct credits based on number of scenes
         )
     except HTTPException as e:
         # If credit deduction fails, return the error immediately
@@ -51,11 +51,10 @@ async def generate_animated_lesson(
         account_id=account_id,
         initial_status="PENDING",
         request_data=request_data
-    )
-    
+    )    
     await task_service.add_task_event(
         task_id=task_id,
-        message=f"Animated lesson generation request received. 1 credit deducted.",
+        message=f"Animated lesson generation request received. {request.scenes} credits deducted.",
         status="PENDING",
         progress=0
     )
