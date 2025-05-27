@@ -308,7 +308,7 @@ class VideoGenerateRequest(VideoParams):
     image_style: ImageStyle = Field(default=ImageStyle.realistic, description="Image style")
     voice_name: str = Field(default="zh-CN-XiaoxiaoNeural", description="Voice name")
     voice_rate: float = Field(default=1.0, description="Voice rate")
-    resolution: Optional[str] = Field(default="1024*1024", description="Resolution")
+    resolution: Optional[str] = Field(default="1280*720", description="Resolution")
     include_subtitles: bool = Field(default=False, description="Whether to include subtitles")
     visual_content_in_language: bool = Field(default=False, description="Whether to include visual content in the same language")
     logo_url: Optional[str] = Field(default=None, description="Logo URL")

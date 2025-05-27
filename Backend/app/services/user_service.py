@@ -19,7 +19,7 @@ import string
 # JWT settings
 SECRET_KEY = os.getenv("SECRET_KEY", "mysecretkey12345")  # In production, use a secure secret
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 VERIFICATION_CODE_EXPIRE_HOURS = 24
 
 # Password hashing

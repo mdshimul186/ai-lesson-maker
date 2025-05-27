@@ -385,13 +385,13 @@ Generate the course structure now.
           # Create tasks for each lesson
         tasks = []
         for chapter in chapters_to_process:
-            for lesson in chapter.lessons:
-                # Create a video generation request for the lesson
+            for lesson in chapter.lessons:                # Create a video generation request for the lesson
                 video_request = VideoGenerateRequest(
                     title=lesson.title,
                     script=lesson.content,
-                    voice_id=course.voice_id,
-                    story_prompt=lesson.title  # Using lesson title as the story prompt as a fallback
+                    voice_name=course.voice_id,
+                    story_prompt=lesson.title,  # Using lesson title as the story prompt as a fallback
+                    resolution="1280*720"  # Set default resolution to 1280x720
                 )
                 
                 # Create a task for video generation
@@ -493,21 +493,20 @@ Generate the course structure now.
         # Check if lesson already has a task
         if lesson.task_id:
             raise ValueError("Lesson already has a video generation task")
-        
-        # Create a video generation request for the lesson
+          # Create a video generation request for the lesson
         video_request = VideoGenerateRequest(
             title=lesson.title,
             script=lesson.content,
-            voice_id=course.voice_id,
-            story_prompt=lesson.title
+            voice_name=course.voice_id,
+            story_prompt=lesson.title,
+            resolution="1280*720"  # Set default resolution to 1280x720
         )
         
         # Create a task for video generation
         task_id = str(uuid.uuid4())
         task_create_data = TaskCreate( 
             task_id=task_id,
-            user_id=user_id,
-            account_id=account_id,
+            user_id=user_id,            account_id=account_id,
             task_type="video_generation", 
             request_data=video_request.model_dump() 
         )
@@ -549,7 +548,6 @@ Generate the course structure now.
             else:
                 logger.error(f"Failed to create task for lesson {lesson_id}")
                 raise ValueError("Failed to create video generation task")
-                        
         except Exception as e:
             logger.error(f"Error creating task for lesson {lesson_id}: {e}")
             raise e
@@ -565,8 +563,7 @@ Generate the course structure now.
         completed_lessons = 0
         in_progress_lessons = 0
         failed_lessons = 0
-        
-        # Check task status for each lesson
+          # Check task status for each lesson
         for chapter in course.chapters:
             for lesson in chapter.lessons:
                 if lesson.task_id:
@@ -589,17 +586,50 @@ Generate the course structure now.
         
         return {
             "course_id": course_id,
-            "total_lessons": total_lessons,            "completed_lessons": completed_lessons,
+            "total_lessons": total_lessons,
+            "completed_lessons": completed_lessons,
             "in_progress_lessons": in_progress_lessons,
             "failed_lessons": failed_lessons,
             "progress_percentage": round(progress_percentage, 2),
             "status": course.status
         }
 
+    def _calculate_course_status(self, lesson_statuses: List[str], default_status: str) -> str:
+        """
+        Dynamically calculate the course status based on lesson task statuses.
+        
+        Args:
+            lesson_statuses: List of lesson statuses (e.g. ["COMPLETED", "PENDING", ...])
+            default_status: Default status to use if there are no lessons
+            
+        Returns:
+            Updated course status
+        """
+        if not lesson_statuses:
+            return default_status
+            
+        # Count statuses
+        total = len(lesson_statuses)
+        completed = lesson_statuses.count("COMPLETED")
+        failed = lesson_statuses.count("FAILED")
+        in_progress = sum(1 for status in lesson_statuses if status in ["PENDING", "IN_PROGRESS"])
+        
+        # Determine course status
+        if total == completed:
+            return "completed"
+        elif in_progress > 0:
+            return "generating"
+        elif failed > 0 and in_progress == 0 and completed < total:
+            return "failed"
+        else:
+            return default_status
+
     async def _doc_to_response(self, doc: Dict[str, Any]) -> CourseResponse:
         """Convert database document to response model"""
         
         chapters = []
+        all_lesson_statuses = []
+        
         for chapter_doc in doc.get("chapters", []):
             lessons = []
             for lesson_doc in chapter_doc.get("lessons", []):
@@ -619,7 +649,8 @@ Generate the course structure now.
                                 lesson_video_url = task.result_url
                             # Store task data for additional info
                             task_data = {
-                                "status": task.status,                                "progress": task.progress,
+                                "status": task.status,
+                                "progress": task.progress,
                                 "error_message": task.error_message,
                                 "result_url": task.result_url,
                                 "updated_at": task.updated_at.isoformat() if task.updated_at else None
@@ -627,25 +658,26 @@ Generate the course structure now.
                     except Exception as e:
                         logger.warning(f"Failed to fetch task {lesson_doc['task_id']} for lesson {lesson_doc['id']}: {e}")
                 
+                # Track lesson status for course status calculation
+                all_lesson_statuses.append(lesson_status)
+                
                 lessons.append(LessonResponse(
                     id=lesson_doc["id"],
                     chapter_id=lesson_doc.get("chapter_id", chapter_doc["id"]),  # Use chapter ID if lesson doesn't have chapter_id
                     title=lesson_doc["title"],
                     content=lesson_doc.get("content", ""),
-                    duration_minutes=lesson_doc.get("duration_minutes"),
-                    order=lesson_doc.get("order", 0),
+                    duration_minutes=lesson_doc.get("duration_minutes"),                    order=lesson_doc.get("order", 0),
                     status=lesson_status,
                     video_url=lesson_video_url,
                     task_id=lesson_doc.get("task_id"),
                     task_data=task_data,
                     created_at=lesson_doc.get("created_at", datetime.utcnow()),
-                    updated_at=lesson_doc.get("updated_at", datetime.utcnow())
-                ))
+                    updated_at=lesson_doc.get("updated_at", datetime.utcnow())                ))
             
             chapter = ChapterResponse(
                 id=chapter_doc["id"],
                 course_id=chapter_doc.get("course_id", doc["id"]),  # Use course ID if chapter doesn't have course_id
-                title=chapter_doc["title"],
+                title=chapter_doc.get("title", "Untitled Chapter"),  # Ensure title has a default value
                 description=chapter_doc.get("description"),
                 order=chapter_doc.get("order", 0),
                 lessons=lessons,
@@ -653,6 +685,9 @@ Generate the course structure now.
                 updated_at=chapter_doc.get("updated_at", datetime.utcnow())
             )
             chapters.append(chapter)
+        
+        # Calculate dynamic course status based on lesson task statuses
+        course_status = self._calculate_course_status(all_lesson_statuses, doc.get("status", "draft"))
         
         return CourseResponse(
             id=doc["id"],
@@ -665,7 +700,7 @@ Generate the course structure now.
             voice_id=doc["voice_id"],
             target_audience=doc.get("target_audience"),
             difficulty_level=doc.get("difficulty_level"),
-            status=doc["status"],
+            status=course_status,
             chapters=chapters,
             total_lessons=doc.get("total_lessons", 0),
             estimated_duration_minutes=doc.get("estimated_duration_minutes", 0),
