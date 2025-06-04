@@ -16,7 +16,8 @@ from app.schemas.course import (
 from app.schemas.task import TaskCreate
 from app.schemas.video import VideoGenerateRequest
 from app.db.mongodb_utils import get_database
-from app.services.video_queue_service import video_queue_service
+from app.services.task_queue_service import task_queue_service
+from app.models.task_types import TaskType
 
 
 class CourseService:
@@ -281,22 +282,77 @@ Generate the course structure now.
         # Build query
         query = {"account_id": account_id}
         if status:
-            query["status"] = status        # Get total count
+            query["status"] = status
+            
+        # Get total count
         total = await self.collection.count_documents(query)
-        
-        # Get paginated results
+          # Get paginated results with projection to minimize data transfer
         skip = (page - 1) * page_size
-        cursor = self.collection.find(query).sort("created_at", -1).skip(skip).limit(page_size)
+        projection = {
+            "id": 1, 
+            "user_id": 1, 
+            "account_id": 1, 
+            "title": 1, 
+            "description": 1,
+            "prompt": 1,
+            "language": 1,
+            "voice_id": 1,
+            "target_audience": 1,
+            "difficulty_level": 1,
+            "status": 1,
+            "total_lessons": 1,
+            "estimated_duration_minutes": 1,
+            "created_at": 1,
+            "updated_at": 1,
+            "chapters.id": 1,
+            "chapters.title": 1,
+            "chapters.description": 1,
+            "chapters.order": 1,
+            "chapters.created_at": 1,
+            "chapters.updated_at": 1,
+            "chapters.lessons.id": 1,
+            "chapters.lessons.title": 1,
+            "chapters.lessons.status": 1,
+            "chapters.lessons.video_url": 1,
+            "chapters.lessons.task_id": 1,
+            "chapters.lessons.order": 1,
+            "chapters.lessons.duration_minutes": 1,
+            "chapters.lessons.created_at": 1,
+            "chapters.lessons.updated_at": 1
+        }
+        cursor = self.collection.find(query, projection).sort("created_at", -1).skip(skip).limit(page_size)
         courses = await cursor.to_list(length=page_size)
         
-        course_responses = await asyncio.gather(*[self._doc_to_response(doc) for doc in courses])
+        # Collect all task IDs from all lessons in all courses to fetch in one query
+        task_ids = []
+        for course in courses:
+            for chapter in course.get("chapters", []):
+                for lesson in chapter.get("lessons", []):
+                    if lesson.get("task_id"):
+                        task_ids.append(lesson["task_id"])
+        
+        # Fetch all tasks in a single query if there are any tasks
+        tasks_map = {}
+        if task_ids:
+            task_collection = self.db.tasks
+            tasks_cursor = task_collection.find({"task_id": {"$in": task_ids}})
+            tasks = await tasks_cursor.to_list(length=None)
+            
+            # Create a map of task_id to task data for quick lookup
+            for task in tasks:
+                tasks_map[task["task_id"]] = task
+          # Process courses with the pre-fetched tasks
+        course_responses = await asyncio.gather(*[
+            self._doc_to_response(doc, tasks_map) for doc in courses
+        ])
         
         return CourseListResponse(
             courses=course_responses,
             total=total,
             page=page,
-            page_size=page_size        )
-
+            page_size=page_size
+        )
+        
     async def get_course(self, course_id: str, account_id: str) -> Optional[CourseResponse]:
         """Get a specific course by ID"""
         
@@ -309,8 +365,26 @@ Generate the course structure now.
         
         if not course_doc:
             return None
+            
+        # Collect all task IDs from all lessons in the course
+        task_ids = []
+        for chapter in course_doc.get("chapters", []):
+            for lesson in chapter.get("lessons", []):
+                if lesson.get("task_id"):
+                    task_ids.append(lesson["task_id"])
         
-        return await self._doc_to_response(course_doc)
+        # Fetch all tasks in a single query if there are any tasks
+        tasks_map = {}
+        if task_ids:
+            task_collection = self.db.tasks
+            tasks_cursor = task_collection.find({"task_id": {"$in": task_ids}})
+            tasks = await tasks_cursor.to_list(length=None)
+            
+            # Create a map of task_id to task data for quick lookup
+            for task in tasks:
+                tasks_map[task["task_id"]] = task
+        
+        return await self._doc_to_response(course_doc, tasks_map)
 
     async def update_course(
         self,
@@ -419,13 +493,13 @@ Generate the course structure now.
                         status="PENDING", 
                         progress=0
                     )
-                    
-                    # Add to processing queue
-                    await video_queue_service.add_to_queue(
+                      # Add to processing queue
+                    await task_queue_service.add_to_queue(
                         task_id=task_id,
-                        request=video_request,  # Pass the VideoGenerateRequest object directly
+                        request_data=video_request.model_dump(),  # Pass serialized request data
                         user_id=user_id,
-                        account_id=account_id
+                        account_id=account_id,
+                        task_type=TaskType.VIDEO.value
                     )
                     
                     if task:
@@ -445,22 +519,20 @@ Generate the course structure now.
                     logger.error(f"Error creating task for lesson {lesson.id}: {e}")
 
         logger.info(f"Created {len(tasks)} lesson generation tasks for course {course_id}")
-        
-        # Ensure queue processing is started after creating all tasks
+          # Ensure queue processing is started after creating all tasks
         if tasks:
             try:
-                logger.info("Ensuring video queue processing is started...")
-                await video_queue_service.start_processing()
-                
-                # Check queue status for debugging
-                queue_status = await video_queue_service.get_queue_status()
+                logger.info("Ensuring task queue processing is started...")
+                await task_queue_service.start_processing()
+                  # Check queue status for debugging
+                queue_status = await task_queue_service.get_queue_status()
                 logger.info(f"Queue status after course lesson generation: {queue_status}")
                 
             except Exception as e:
                 logger.error(f"Error starting queue processing: {e}")
         
         return tasks
-
+        
     async def generate_lesson_video(
         self,
         course_id: str,
@@ -476,13 +548,17 @@ Generate the course structure now.
         course = await self.get_course(course_id, account_id)
         if not course:
             raise ValueError("Course not found")
-        
-        # Find the lesson
+          # Find the lesson
         lesson = None
-        for chapter in course.chapters:
-            for ch_lesson in chapter.lessons:
+        chapter_index = None
+        lesson_index = None
+        
+        for i, chapter in enumerate(course.chapters):
+            for j, ch_lesson in enumerate(chapter.lessons):
                 if ch_lesson.id == lesson_id:
                     lesson = ch_lesson
+                    chapter_index = i
+                    lesson_index = j
                     break
             if lesson:
                 break
@@ -490,10 +566,22 @@ Generate the course structure now.
         if not lesson:
             raise ValueError("Lesson not found")
         
-        # Check if lesson already has a task
+        # Check if there's an active task for this lesson in the queue
         if lesson.task_id:
-            raise ValueError("Lesson already has a video generation task")
-          # Create a video generation request for the lesson
+            # Get current task status
+            try:
+                task = await self.task_service.get_task(lesson.task_id)
+                # If task is still processing, don't allow regeneration
+                if task and task.status in ["PENDING", "IN_PROGRESS", "QUEUED"]:
+                    # Cancel the existing task first before regenerating
+                    await task_queue_service.cancel_task(task.task_id)
+                    logger.info(f"Canceled existing task {task.task_id} for lesson {lesson_id} to allow regeneration")
+            except Exception as e:
+                logger.error(f"Error checking existing task status: {e}")
+                # Continue with regeneration even if we can't cancel the old task
+                pass
+                
+        # Create a video generation request for the lesson
         video_request = VideoGenerateRequest(
             title=lesson.title,
             script=lesson.content,
@@ -506,7 +594,8 @@ Generate the course structure now.
         task_id = str(uuid.uuid4())
         task_create_data = TaskCreate( 
             task_id=task_id,
-            user_id=user_id,            account_id=account_id,
+            user_id=user_id,
+            account_id=account_id,
             task_type="video_generation", 
             request_data=video_request.model_dump() 
         )
@@ -528,18 +617,29 @@ Generate the course structure now.
             )
             
             # Add to processing queue
-            await video_queue_service.add_to_queue(
+            await task_queue_service.add_to_queue(
                 task_id=task_id,
-                request=video_request,
+                request_data=video_request.model_dump(),
                 user_id=user_id,
-                account_id=account_id
+                account_id=account_id,
+                task_type=TaskType.VIDEO.value
             )
             
             if task:
                 # Update the lesson in the database with the task_id
+                # If regenerating, also clear the existing video_url
+                update_fields = {
+                    "chapters.$[].lessons.$[j].task_id": task.task_id,
+                    "chapters.$[].lessons.$[j].status": "pending"
+                }
+                
+                # Clear the video_url if it exists (regeneration case)
+                if lesson.video_url:
+                    update_fields["chapters.$[].lessons.$[j].video_url"] = None
+                
                 await self.collection.update_one(
                     {"id": course_id, "chapters.lessons.id": lesson_id},
-                    {"$set": {"chapters.$[].lessons.$[j].task_id": task.task_id}},
+                    {"$set": update_fields},
                     array_filters=[{"j.id": lesson_id}]
                 )
                 
@@ -624,7 +724,7 @@ Generate the course structure now.
         else:
             return default_status
 
-    async def _doc_to_response(self, doc: Dict[str, Any]) -> CourseResponse:
+    async def _doc_to_response(self, doc: Dict[str, Any], tasks_map: Optional[Dict[str, Any]] = None) -> CourseResponse:
         """Convert database document to response model"""
         
         chapters = []
@@ -639,24 +739,19 @@ Generate the course structure now.
                 task_data = None
                 
                 if lesson_doc.get("task_id"):
-                    try:
-                        task = await self.task_service.get_task(lesson_doc["task_id"])
-                        if task:
-                            # Update lesson status from task status
-                            lesson_status = task.status
-                            # If task is completed and has result_url, use it as video_url
-                            if task.status == "COMPLETED" and task.result_url:
-                                lesson_video_url = task.result_url
-                            # Store task data for additional info
-                            task_data = {
-                                "status": task.status,
-                                "progress": task.progress,
-                                "error_message": task.error_message,
-                                "result_url": task.result_url,
-                                "updated_at": task.updated_at.isoformat() if task.updated_at else None
-                            }
-                    except Exception as e:
-                        logger.warning(f"Failed to fetch task {lesson_doc['task_id']} for lesson {lesson_doc['id']}: {e}")
+                    if tasks_map and lesson_doc["task_id"] in tasks_map:
+                        # Update lesson status from pre-fetched task data
+                        task = tasks_map[lesson_doc["task_id"]]
+                        lesson_status = task["status"]
+                        if lesson_status == "COMPLETED" and task.get("result_url"):
+                            lesson_video_url = task["result_url"]
+                        task_data = {
+                            "status": task["status"],
+                            "progress": task["progress"],
+                            "error_message": task.get("error_message"),
+                            "result_url": task.get("result_url"),
+                            "updated_at": task.get("updated_at")
+                        }
                 
                 # Track lesson status for course status calculation
                 all_lesson_statuses.append(lesson_status)

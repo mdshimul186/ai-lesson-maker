@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 import shutil
 import os
 import tempfile
-from app.services.upload_service import upload_file_to_minio, generate_unique_object_name, SUPPORTED_IMAGE_TYPES, SUPPORTED_VIDEO_TYPES
+from app.services.upload_service import upload_file_to_s3, generate_unique_object_name, SUPPORTED_IMAGE_TYPES, SUPPORTED_VIDEO_TYPES
 from app.config import get_settings
 from loguru import logger
 
@@ -24,13 +24,11 @@ async def upload_file(file: UploadFile = File(...) ):
     try:
         with open(temp_file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        logger.info(f"Temporary file saved at: {temp_file_path}")
-
-        # Generate a unique object name for MinIO to prevent overwrites and organize files
+        logger.info(f"Temporary file saved at: {temp_file_path}")        # Generate a unique object name for S3 to prevent overwrites and organize files
         # The original filename's extension is preserved.
         object_name = generate_unique_object_name(file.filename if file.filename else "default_filename")
         
-        file_url = await upload_file_to_minio(file_path=temp_file_path, object_name=object_name, content_type=file.content_type)
+        file_url = await upload_file_to_s3(file_path=temp_file_path, object_name=object_name, content_type=file.content_type)
         
         return JSONResponse(content={"message": "File uploaded successfully", "url": file_url, "filename": file.filename, "object_name": object_name, "content_type": file.content_type}, status_code=200)
     except ValueError as ve:

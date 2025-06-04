@@ -28,4 +28,4 @@ COPY . /app/
 ENV PYTHONUNBUFFERED=1
 
 # Set the default command to start the Uvicorn service
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-exclude", "/app/tasks"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-exclude", "tasks"]

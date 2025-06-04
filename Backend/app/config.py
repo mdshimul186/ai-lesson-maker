@@ -28,11 +28,13 @@ class Settings(BaseSettings):
 
     text_llm_model: str = "gpt-4o"
     image_llm_model: str = "dall-e-3"
-    minio_endpoint: str = ""
-    minio_access_key: str = "minioadmin"
-    minio_secret_key: str = "minioadmin"
+    
+    # S3/Storage Configuration
+    s3_access_key_id: str = ""
+    s3_secret_key: str = ""
+    s3_origin_endpoint: str = ""
     bucket_name: str = "mermaid-images"
-    minio_public_endpoint: str = ""
+    
     db_url: str = ""
     sendgrid_api_key: str= ""
     sendgrid_sender_email: str = ""

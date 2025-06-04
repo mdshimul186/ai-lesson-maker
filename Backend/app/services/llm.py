@@ -23,6 +23,7 @@ import uuid
 import os
 import time
 from playwright.sync_api import sync_playwright
+from app.services.upload_service import upload_file_to_s3, generate_unique_object_name
 
 settings = get_settings()
 
@@ -211,11 +212,10 @@ class LLMService:
                 elif len(other_keys) > 1:
                     raise ValueError(f"Unexpected extra keys: {other_keys}. Only one non-'text' key is allowed.")
             return data
-        elif isinstance(data, list):
-            return [self.normalize_keys(item) for item in data]
+        elif isinstance(data, list):            return [self.normalize_keys(item) for item in data]
         else:
             raise TypeError("Input must be a dict or list of dicts")
-
+            
     async def generate_image(self, *, prompt: str, image_llm_provider: str = None, image_llm_model: str = None, resolution: str = "1280*720") -> str:
         """Generate image from markdown content"""
         image_llm_provider = image_llm_provider or settings.image_provider
@@ -224,7 +224,7 @@ class LLMService:
         try:
             if image_llm_provider == "openai":
                 # Generate a temporary local file
-                object_name = f"{uuid.uuid4()}.png"
+                object_name = generate_unique_object_name("image.png")
                 local_file = tempfile.NamedTemporaryFile(suffix=os.path.splitext(object_name)[1], delete=False)
                 local_file_path = local_file.name
                 local_file.close()
@@ -234,36 +234,11 @@ class LLMService:
                 # Use the headless browser markdown renderer
                 await self.markdown_to_image(prompt, local_file_path, width, height)
 
-                # logger.info(f"Generated image file: {local_file_path}")
-                minio_endpoint = settings.minio_endpoint
-                minio_access_key = settings.minio_access_key
-                minio_secret_key = settings.minio_secret_key
-
-
-                # Upload to S3/MinIO
-                s3 = boto3.client(
-                    's3',
-                    endpoint_url=minio_endpoint,
-                    aws_access_key_id=minio_access_key,
-                    aws_secret_access_key=minio_secret_key,
-                    region_name='us-east-1',
-                )
-
-                bucket_name = settings.bucket_name
-
-                # Create bucket if not exists
-                try:
-                    s3.create_bucket(Bucket=bucket_name)
-                except s3.exceptions.BucketAlreadyOwnedByYou:
-                    pass
-                except s3.exceptions.BucketAlreadyExists:
-                    pass
-
-                # Upload the image file
-                with open(local_file_path, 'rb') as image_file:
-                    s3.upload_fileobj(image_file, bucket_name, object_name)
-                    # construct URL using configured MinIO endpoint
-                    url = f"{minio_endpoint}/{bucket_name}/{object_name}"
+                logger.info(f"Generated image file: {local_file_path}")
+                
+                # Upload the image file using the upload service
+                content_type = "image/png"
+                url = await upload_file_to_s3(local_file_path, object_name, content_type)
 
                 return url
 

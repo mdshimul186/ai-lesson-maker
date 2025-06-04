@@ -37,7 +37,8 @@ import {
     CourseResponse,
     getCourseProgress,
     updateCourse,
-    generateLessonVideo
+    generateLessonVideo,
+    getTaskStatus
 } from '../../services/index';
 import { useAccountStore } from '../../stores';
 import styles from './index.module.css';
@@ -113,6 +114,12 @@ const DraggableLesson: React.FC<DraggableLessonProps> = ({
             icon: <VideoCameraOutlined />,
             onClick: () => onGenerateVideo(lesson, lessonIndex, chapterIndex)
         }] : []),
+        ...((lesson.video_url || lesson.task_id) ? [{
+            key: 'regenerate',
+            label: 'Regenerate',
+            icon: <ReloadOutlined />,
+            onClick: () => onGenerateVideo(lesson, lessonIndex, chapterIndex)
+        }] : []),
         {
             key: 'delete',
             label: 'Delete Lesson',
@@ -146,8 +153,7 @@ const DraggableLesson: React.FC<DraggableLessonProps> = ({
             onClick={() => onSelect(lesson)}
         >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-                <HolderOutlined style={{ color: '#999' }} />
-                {lesson.video_url ? (
+                <HolderOutlined style={{ color: '#999' }} />                {lesson.video_url ? (
                     <VideoCameraOutlined style={{ color: '#52c41a' }} />
                 ) : (
                     <FileTextOutlined style={{ color: '#666' }} />
@@ -166,8 +172,7 @@ const DraggableLesson: React.FC<DraggableLessonProps> = ({
                     <Tag color="blue">
                         Draft
                     </Tag>
-                )}
-            </div>
+                )}            </div>
             <Dropdown menu={{ items: dropdownItems }} trigger={['click']}>
                 <Button type="text" size="small" icon={<MoreOutlined />} />
             </Dropdown>
@@ -359,8 +364,7 @@ const CourseView: React.FC = () => {
         
         saveTimeoutRef.current = setTimeout(() => {
             saveCourseToDatabase(updatedCourse);
-        }, 1000);
-    }, [saveCourseToDatabase]);    const fetchProgressInBackground = useCallback(async (courseData: CourseResponse) => {
+        }, 1000);    }, [saveCourseToDatabase]);    const fetchProgressInBackground = useCallback(async (courseData: CourseResponse) => {
         // Only fetch progress if course is generating or completed
         if (!courseId) return;
         
@@ -368,6 +372,17 @@ const CourseView: React.FC = () => {
         const currentAccount = useAccountStore.getState().currentAccount;
         if (!currentAccount || !currentAccount.id) {
             console.log("Cannot fetch progress: No account ID available");
+            return;
+        }
+          // Check if there are any incomplete lessons before making API calls
+        const hasIncompleteLessons = courseData.chapters.some(chapter => 
+            chapter.lessons.some((lesson: any) => 
+                lesson.task_id && (!lesson.status || lesson.status !== 'completed')
+            )
+        );
+        
+        if (!hasIncompleteLessons) {
+            console.log("Skipping progress API call: No incomplete lessons");
             return;
         }
         
@@ -411,7 +426,7 @@ const CourseView: React.FC = () => {
                 setIsProgressLoading(false);
             }
         }
-    }, [courseId, isProgressLoading, selectedLesson]);    const fetchCourseData = async () => {
+    }, [courseId, isProgressLoading, selectedLesson]);const fetchCourseData = async () => {
         if (!courseId) return;
         
         // Get current account from store
@@ -425,15 +440,25 @@ const CourseView: React.FC = () => {
         }
         
         setLoading(true);
-        try {
-            const courseData = await getCourse(courseId);
+        try {            const courseData = await getCourse(courseId);
             setCourse(courseData);
             
-            // Call progress API in background without blocking UI
-            // Use setTimeout to ensure this runs after the main UI update
-            progressTimeoutRef.current = setTimeout(() => {
-                fetchProgressInBackground(courseData);
-            }, 100); // Small delay to ensure UI renders first
+            // Check if there are any incomplete lessons before calling progress API
+            const hasIncompleteLessons = courseData.chapters.some(chapter => 
+                chapter.lessons.some((lesson: any) => 
+                    lesson.task_id && (!lesson.status || lesson.status !== 'completed')
+                )
+            );
+            
+            if (hasIncompleteLessons) {
+                // Call progress API in background without blocking UI
+                // Use setTimeout to ensure this runs after the main UI update
+                progressTimeoutRef.current = setTimeout(() => {
+                    fetchProgressInBackground(courseData);
+                }, 100); // Small delay to ensure UI renders first
+            } else {
+                console.log("Skipping initial progress API call: No incomplete lessons");
+            }
             
         } catch (error) {
             console.error('Failed to fetch course:', error);
@@ -477,20 +502,31 @@ const CourseView: React.FC = () => {
         
         // Return cleanup function to unsubscribe when component unmounts
         return () => unsubscribe();
-    }, [courseId]);
-
-    // Auto-refresh progress for generating courses
+    }, [courseId]);    // Auto-refresh progress for generating courses
     useEffect(() => {
         let intervalId: number;
         
-        if (course?.status === 'generating') {
-            // Refresh progress every 8 seconds for generating courses (increased to reduce API calls)
-            intervalId = setInterval(() => {
-                // Double check if course still exists and not already loading
-                if (course && !isProgressLoading) {
-                    fetchProgressInBackground(course);
-                }
-            }, 8000); // Increased from 5 to 8 seconds
+        if (course?.status === 'generating' || course?.status === 'completed') {
+            // Check if there are any incomplete lessons
+            const hasIncompleteLessons = course.chapters.some(chapter => 
+                chapter.lessons.some((lesson: any) => 
+                    lesson.task_id && (!lesson.status || lesson.status !== 'completed')
+                )
+            );
+            
+            // Only set up polling if there are incomplete lessons
+            if (hasIncompleteLessons) {
+                console.log("Setting up progress polling for incomplete lessons");
+                // Refresh progress every 8 seconds for courses with incomplete lessons
+                intervalId = setInterval(() => {
+                    // Double check if course still exists and not already loading
+                    if (course && !isProgressLoading) {
+                        fetchProgressInBackground(course);
+                    }
+                }, 8000); // Increased from 5 to 8 seconds
+            } else {
+                console.log("Skipping progress polling: No incomplete lessons");
+            }
         }
           return () => {
             if (intervalId) {
@@ -701,8 +737,7 @@ const CourseView: React.FC = () => {
             message.success(`${addModalType} added successfully`);        } catch (error) {
             console.error('Failed to add:', error);
             message.error('Failed to add. Please try again.');
-        }
-    };    const handleGenerateLessonVideo = async (lesson: any, lessonIndex: number, chapterIndex: number) => {
+        }    };    const handleGenerateLessonVideo = async (lesson: any, lessonIndex: number, chapterIndex: number) => {
         if (!course || !courseId) return;
         
         try {
@@ -723,13 +758,57 @@ const CourseView: React.FC = () => {
             const updatedCourse = { ...course, chapters: newChapters };
             setCourse(updatedCourse);
             
-            message.success('Video generation started successfully');
+            // Different message depending on whether this is a new generation or regeneration
+            const isRegeneration = lesson.video_url || (lesson.task_id && lesson.task_id !== response.task_id);
+            message.success(isRegeneration ? 'Lesson regeneration started successfully' : 'Video generation started successfully');
+            
+            // Start tracking the task immediately to show progress
+            const taskInfo = await getTaskStatus(response.task_id);
+            console.log('Initial task status:', taskInfo);
+            
+            // Set up frequent initial polling to show immediate progress
+            let checkCount = 0;
+            const initialCheckInterval = setInterval(async () => {
+                try {
+                    checkCount++;
+                    const updatedTaskInfo = await getTaskStatus(response.task_id);
+                    
+                    // Update the lesson status based on task status
+                    const refreshedChapters = [...course.chapters];
+                    refreshedChapters[chapterIndex].lessons[lessonIndex] = {
+                        ...refreshedChapters[chapterIndex].lessons[lessonIndex],
+                        status: updatedTaskInfo.status === 'COMPLETED' ? 'completed' : 
+                               updatedTaskInfo.status === 'FAILED' ? 'failed' : 'processing',
+                        progress: updatedTaskInfo.progress || 0
+                    };
+                    
+                    setCourse({ ...course, chapters: refreshedChapters });                    
+                    // If status is completed or failed, or we've checked 5 times, stop polling
+                    if (updatedTaskInfo.status === 'COMPLETED' || updatedTaskInfo.status === 'FAILED' || checkCount >= 5) {
+                        clearInterval(initialCheckInterval);
+                        
+                        if (updatedTaskInfo.status === 'COMPLETED') {
+                            // Fetch the course again to get the updated video URL
+                            const updatedCourse = await getCourse(courseId);
+                            setCourse(updatedCourse);
+                            
+                            // No need to continue polling for completed tasks
+                            message.success('Video generation completed successfully');
+                        } else if (updatedTaskInfo.status === 'FAILED') {
+                            message.error('Video generation failed');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking task status:', error);
+                    clearInterval(initialCheckInterval);
+                }
+            }, 2000); // Check every 2 seconds initially
         } catch (error) {
             console.error('Failed to generate lesson video:', error);
             message.error('Failed to start video generation');
         } finally {
             setLoading(false);
-        }    };
+        }};
 
     const handleBackToCourses = () => {
         navigate('/course-maker');

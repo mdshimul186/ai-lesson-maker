@@ -7,7 +7,7 @@ from app.schemas.video import VideoGenerateRequest
 from app.schemas.animated_lesson import AnimatedLessonRequest
 from app.services.video import generate_video
 from app.services.animated_lesson_service import animated_lesson_service
-from app.services.upload_service import upload_directory_to_minio
+from app.services.upload_service import upload_directory_to_s3
 from app.services import task_service
 from app.config import get_settings
 import os
@@ -214,38 +214,35 @@ class VideoQueueService:
                 if not os.path.isdir(local_task_dir):
                     raise FileNotFoundError(f"Local task directory {local_task_dir} not found after video generation")
 
-                # Upload to MinIO
+                # Upload to S3
                 await task_service.add_task_event(
-                    task_id=task_id,
-                    message=f"Video generation complete. Starting upload of task folder {local_task_dir} to MinIO",
+                    task_id=task_id,                    message=f"Video generation complete. Starting upload of task folder {local_task_dir} to S3",
                     progress=70
                 )
 
-                minio_bucket_name = get_settings().bucket_name
-                minio_task_prefix = f"tasks/{task_id}"
+                s3_bucket_name = get_settings().bucket_name
+                s3_task_prefix = f"tasks/{task_id}"
 
-                logger.info(f"Starting upload of directory {local_task_dir} to MinIO bucket '{minio_bucket_name}' under prefix '{minio_task_prefix}'")
-                uploaded_files_map = await upload_directory_to_minio(
+                logger.info(f"Starting upload of directory {local_task_dir} to S3 bucket '{s3_bucket_name}' under prefix '{s3_task_prefix}'")
+                uploaded_files_map = await upload_directory_to_s3(
                     directory_path=local_task_dir,
-                    bucket_name=minio_bucket_name,
-                    minio_prefix=minio_task_prefix
+                    bucket_name=s3_bucket_name,
+                    s3_prefix=s3_task_prefix
                 )
                 
-                logger.info(f"Successfully uploaded {len(uploaded_files_map)} files from {local_task_dir} to MinIO")
+                logger.info(f"Successfully uploaded {len(uploaded_files_map)} files from {local_task_dir} to S3")
                 await task_service.add_task_event(
                     task_id=task_id,
-                    message=f"Successfully uploaded {len(uploaded_files_map)} files to MinIO",
+                    message=f"Successfully uploaded {len(uploaded_files_map)} files to S3",
                     progress=90
-                )
+                )                # Find video URL
+                video_object_name_in_s3 = f"{s3_task_prefix}/video.mp4"
+                video_url_in_s3 = uploaded_files_map.get(video_object_name_in_s3)
 
-                # Find video URL
-                video_object_name_in_minio = f"{minio_task_prefix}/video.mp4"
-                video_url_in_minio = uploaded_files_map.get(video_object_name_in_minio)
-
-                if not video_url_in_minio:
-                    public_url_base = get_settings().minio_public_endpoint.rstrip('/')
-                    video_url_in_minio = f"{public_url_base}/{minio_bucket_name}/{video_object_name_in_minio}"
-                    logger.warning(f"Main video URL not found directly in upload map, constructed as: {video_url_in_minio}")
+                if not video_url_in_s3:
+                    public_url_base = get_settings().s3_origin_endpoint.rstrip('/')
+                    video_url_in_s3 = f"{public_url_base}/{video_object_name_in_s3}"
+                    logger.warning(f"Main video URL not found directly in upload map, constructed as: {video_url_in_s3}")
 
                 # Clean up local files
                 await task_service.add_task_event(
@@ -253,13 +250,12 @@ class VideoQueueService:
                     message="Local task folder cleanup starting",
                     progress=95
                 )
-                
-                # Save the task folder content to the database before deleting
+                  # Save the task folder content to the database before deleting
                 await task_service.set_task_completed(
                     task_id=task_id,
-                    result_url=video_url_in_minio,
+                    result_url=video_url_in_s3,
                     task_folder_content=uploaded_files_map,
-                    final_message="Video processing and MinIO upload complete"
+                    final_message="Video processing and S3 upload complete"
                 )
                 
                 try:
@@ -322,22 +318,21 @@ class VideoQueueService:
             
             # Update task status to failed
             error_details = {"error_type": "VideoProcessingError", "details": error_message, "attempts": attempts}
-            
-            # Try to save any partial results to MinIO
+              # Try to save any partial results to S3
             local_task_dir_on_error = os.path.join(".", "tasks", task_id)
             if os.path.isdir(local_task_dir_on_error):
                 try:
-                    minio_bucket_name = get_settings().bucket_name
-                    minio_task_prefix = f"tasks/{task_id}"
+                    s3_bucket_name = get_settings().bucket_name
+                    s3_task_prefix = f"tasks/{task_id}"
                     
-                    partial_files_map = await upload_directory_to_minio(
+                    partial_files_map = await upload_directory_to_s3(
                         directory_path=local_task_dir_on_error,
-                        bucket_name=minio_bucket_name,
-                        minio_prefix=minio_task_prefix
+                        bucket_name=s3_bucket_name,
+                        s3_prefix=s3_task_prefix
                     )
                     
                     if partial_files_map:
-                        logger.info(f"Saved {len(partial_files_map)} partial files from failed task to MinIO")
+                        logger.info(f"Saved {len(partial_files_map)} partial files from failed task to S3")
                         await task_service.set_task_failed(
                             task_id=task_id,
                             error_message=f"Failed to generate video after {attempts} attempts: {error_message}",
@@ -351,7 +346,7 @@ class VideoQueueService:
                             error_details=error_details
                         )
                 except Exception as e_upload_error:
-                    logger.error(f"Failed to upload partial results to MinIO: {e_upload_error}")
+                    logger.error(f"Failed to upload partial results to S3: {e_upload_error}")
                     await task_service.set_task_failed(
                         task_id=task_id,
                         error_message=f"Failed to generate video after {attempts} attempts: {error_message}",

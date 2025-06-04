@@ -18,19 +18,19 @@ from app.config import get_settings
 
 logger = logging.getLogger(__name__)
 
-# Transforms a public MinIO URL to an internal MinIO URL.
-# If the input URL does not match the public MinIO endpoint, it's returned unchanged.
+# Transforms a public S3 URL to handle different endpoints if needed.
+# If the input URL does not match the public S3 endpoint, it's returned unchanged.
 def _get_internal_asset_url(public_url: Optional[str]) -> Optional[str]:
     if not public_url:
         return None
     settings = get_settings()
-    public_endpoint = settings.minio_public_endpoint.rstrip('/')
-    internal_endpoint = settings.minio_endpoint.rstrip('/')
+    public_endpoint = settings.s3_origin_endpoint.rstrip('/')
     
+    # For S3/DigitalOcean Spaces, we typically use the same endpoint for both public and internal access
+    # Just return the original URL since we don't need internal/external transformation for S3
     if public_url.startswith(public_endpoint):
-        internal_url = public_url.replace(public_endpoint, internal_endpoint, 1)
-        logger.info(f"Transformed public URL {public_url} to internal URL {internal_url}")
-        return internal_url
+        logger.info(f"S3 URL validated: {public_url}")
+        return public_url
     return public_url
 
 # Checks a video file for the presence and properties of video and audio streams using ffprobe.

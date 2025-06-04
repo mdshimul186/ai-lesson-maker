@@ -10,16 +10,17 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 async def test_queue_system():
-    """Test the video queue system functionality"""
+    """Test the task queue system functionality"""
     try:
-        from app.services.video_queue_service import video_queue_service
+        from app.services.task_queue_service import task_queue_service
         from app.schemas.video import VideoGenerateRequest
+        from app.models.task_types import TaskType
         
-        print("Testing video queue system...")
+        print("Testing task queue system...")
         
         # Test getting queue status
         print("\n1. Getting initial queue status...")
-        status = await video_queue_service.get_queue_status()
+        status = await task_queue_service.get_queue_status()
         print(f"Queue status: {status}")
         
         # Test creating a sample request (don't actually process it)
@@ -40,10 +41,10 @@ async def test_queue_system():
         
         # Test getting queue list
         print("\n3. Getting queue list...")
-        queue_list = await video_queue_service.get_queue_list(limit=10)
+        queue_list = await task_queue_service.get_queue_list(limit=10, task_type=TaskType.VIDEO.value)
         print(f"Current queue items: {len(queue_list)}")
         
-        print("\n✅ Video queue system test completed successfully!")
+        print("\n✅ Task queue system test completed successfully!")
         
     except ImportError as e:
         print(f"❌ Import error: {e}")

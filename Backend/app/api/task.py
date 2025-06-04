@@ -3,9 +3,11 @@ from typing import List, Optional
 
 from app.schemas.task import Task as TaskSchema, TaskCreate
 from app.services import task_service
+from app.services.task_queue_service import task_queue_service  # Updated import
 from app.api.users import get_current_active_user  # Import dependency
 from app.schemas.user import UserInDB  # Import UserInDB
 from app.api.dependencies import get_optional_account_id  # Import account dependency
+from app.models.task_types import TaskType
 
 router = APIRouter()
 
@@ -240,3 +242,85 @@ async def update_task_progress_api(
         raise HTTPException(status_code=500, detail="Failed to update task progress")
     
     return updated_task
+
+@router.get("/queue/status")
+async def get_queue_status_api(
+    task_id: Optional[str] = Query(None, description="Optional task ID to get specific task status"),
+    current_user: UserInDB = Depends(get_current_active_user),
+    account_id: Optional[str] = Depends(get_optional_account_id)
+):
+    """Get current queue status or specific task status"""
+    try:
+        status = await task_queue_service.get_queue_status(task_id)
+        return {"success": True, "data": status}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get queue status: {str(e)}")
+
+@router.get("/queue/list")
+async def get_queue_list_api(
+    limit: int = Query(50, ge=1, le=100, description="Maximum number of items to return"),
+    skip: int = Query(0, ge=0, description="Number of items to skip"),
+    task_type: Optional[str] = Query(None, description="Filter by task type"),
+    status: Optional[str] = Query(None, description="Filter by status"),
+    current_user: UserInDB = Depends(get_current_active_user),
+    account_id: Optional[str] = Depends(get_optional_account_id)
+):
+    """Get list of tasks in queue with filtering and pagination"""
+    try:
+        # Validate task_type if provided
+        if task_type and not any(task_type == t.value for t in TaskType):
+            raise HTTPException(status_code=400, detail=f"Invalid task type: {task_type}")
+        
+        tasks = await task_queue_service.get_queue_list(
+            limit=limit,
+            skip=skip,
+            task_type=task_type,
+            status=status
+        )
+        
+        # Filter tasks by user_id and optionally account_id
+        filtered_tasks = []
+        for task in tasks:
+            if task.get("user_id") == current_user.id:
+                if account_id is None or task.get("account_id") == account_id:
+                    filtered_tasks.append(task)
+        
+        return {
+            "success": True,
+            "data": {
+                "tasks": filtered_tasks,
+                "total": len(filtered_tasks),
+                "limit": limit,
+                "skip": skip
+            }
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get queue list: {str(e)}")
+
+@router.get("/types")
+async def get_supported_task_types():
+    """Get list of supported task types and their configurations"""
+    from app.services.task_processor_factory import TaskProcessorFactory
+    from app.models.task_types import TASK_CONFIGS
+    
+    supported_types = TaskProcessorFactory.get_supported_task_types()
+    
+    return {
+        "success": True,
+        "data": {
+            "supported_types": supported_types,
+            "configurations": {
+                task_type: {
+                    "max_attempts": config.max_attempts,
+                    "timeout_minutes": config.timeout_minutes,
+                    "priority": config.priority.value,
+                    "requires_credits": config.requires_credits,
+                    "estimated_duration_minutes": config.estimated_duration_minutes
+                }
+                for task_type, config in TASK_CONFIGS.items()
+                if task_type.value in supported_types
+            }
+        }
+    }

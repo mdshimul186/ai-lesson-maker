@@ -1,12 +1,13 @@
 from fastapi import APIRouter, HTTPException, Query, Depends
 import logging
-from app.services.video_queue_service import video_queue_service
+from app.services.task_queue_service import task_queue_service
 from app.schemas.video import VideoGenerateRequest, VideoGenerateResponse, VideoGenerateData
 from app.services import task_service
 from app.services.credit_service import deduct_credits_for_video
 from app.api.users import get_current_active_user
 from app.schemas.user import UserInDB as User
 from app.api.dependencies import get_valid_account_id
+from app.models.task_types import TaskType
 import uuid
 from typing import List, Dict, Any
 
@@ -59,14 +60,13 @@ async def generate_video_endpoint(
         message=f"Video generation request received. {request.segments} credits deducted (1 per scene).", 
         status="PENDING", 
         progress=0
-    )
-
-    # Add to processing queue
-    await video_queue_service.add_to_queue(
+    )    # Add to processing queue
+    await task_queue_service.add_to_queue(
         task_id=task_id,
-        request=request,
+        request_data=request_data,
         user_id=current_user.id,
-        account_id=account_id
+        account_id=account_id,
+        task_type=TaskType.VIDEO.value
     )
 
     # Return immediately with task ID
@@ -87,7 +87,7 @@ async def get_queue_status(
 ):
     """Get current queue status or specific task status"""
     try:
-        status = await video_queue_service.get_queue_status(task_id)
+        status = await task_queue_service.get_queue_status(task_id)
         return {"success": True, "data": status}
     except Exception as e:
         logger.error(f"Failed to get queue status: {e}")
@@ -102,7 +102,7 @@ async def get_queue_list(
 ):
     """Get list of tasks in queue with pagination (admin only for now)"""
     try:
-        queue_list = await video_queue_service.get_queue_list(limit=limit, skip=skip)
+        queue_list = await task_queue_service.get_queue_list(limit=limit, skip=skip, task_type=TaskType.VIDEO.value)
         return {"success": True, "data": queue_list}
     except Exception as e:
         logger.error(f"Failed to get queue list: {e}")
@@ -115,7 +115,7 @@ async def start_queue_processing(
 ):
     """Start queue processing (admin only)"""
     try:
-        await video_queue_service.start_processing()
+        await task_queue_service.start_processing()
         return {"success": True, "message": "Queue processing started"}
     except Exception as e:
         logger.error(f"Failed to start queue processing: {e}")
@@ -128,7 +128,7 @@ async def stop_queue_processing(
 ):
     """Stop queue processing (admin only)"""
     try:
-        await video_queue_service.stop_processing()
+        await task_queue_service.stop_processing()
         return {"success": True, "message": "Queue processing stopped"}
     except Exception as e:
         logger.error(f"Failed to stop queue processing: {e}")
@@ -141,7 +141,7 @@ async def resume_queue_processing(
 ):
     """Resume queue processing after restart (admin only)"""
     try:
-        await video_queue_service.resume_processing_on_startup()
+        await task_queue_service.start_processing()
         return {"success": True, "message": "Queue processing resumed"}
     except Exception as e:
         logger.error(f"Failed to resume queue processing: {e}")
@@ -153,12 +153,11 @@ async def queue_dashboard(
     account_id: str = Depends(get_valid_account_id)
 ):
     """Get comprehensive queue dashboard information"""
-    try:
-        # Get overall queue status
-        status = await video_queue_service.get_queue_status()
+    try:        # Get overall queue status
+        status = await task_queue_service.get_queue_status()
         
         # Get recent queue items
-        recent_items = await video_queue_service.get_queue_list(limit=20)
+        recent_items = await task_queue_service.get_queue_list(limit=20, task_type=TaskType.VIDEO.value)
         
         # Calculate some statistics
         queued_count = sum(1 for item in recent_items if item['status'] == 'QUEUED')
@@ -192,7 +191,14 @@ async def queue_health_check(
 ):
     """Get health status of the video queue system"""
     try:
-        health_status = await video_queue_service.health_check()
+        # Basic health check using queue status
+        status = await task_queue_service.get_queue_status()
+        health_status = {
+            "status": "healthy" if status.get("is_processing") is not None else "unhealthy",
+            "is_processing": status.get("is_processing", False),
+            "current_task": status.get("current_processing"),
+            "supported_types": status.get("supported_task_types", [])
+        }
         return {"success": True, "data": health_status}
     except Exception as e:
         logger.error(f"Failed to get queue health: {e}")
@@ -206,12 +212,8 @@ async def cleanup_stuck_tasks(
 ):
     """Clean up tasks stuck in processing state (admin only)"""
     try:
-        cleaned_count = await video_queue_service.cleanup_stuck_tasks(max_processing_time_minutes)
-        return {
-            "success": True, 
-            "message": f"Cleaned up {cleaned_count} stuck tasks",
-            "cleaned_count": cleaned_count
-        }
+        result = await task_queue_service.cleanup_stuck_tasks(max_processing_time_minutes)
+        return result
     except Exception as e:
         logger.error(f"Failed to cleanup stuck tasks: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to cleanup stuck tasks: {str(e)}")
@@ -267,21 +269,9 @@ async def cancel_task(
             return {
                 "success": False,
                 "message": f"Cannot cancel task with status {task.status}"
-            }
-        
-        # Attempt to cancel the task
-        result = await video_queue_service.cancel_task(task_id)
-        
-        if result:
-            return {
-                "success": True,
-                "message": "Task cancellation successful"
-            }
-        else:
-            return {
-                "success": False,
-                "message": "Task cancellation failed - task may be already processing or not found in queue"
-            }
+            }        # Attempt to cancel the task
+        result = await task_queue_service.cancel_task(task_id)
+        return result
             
     except HTTPException:
         raise

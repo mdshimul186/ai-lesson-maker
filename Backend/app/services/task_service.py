@@ -8,7 +8,15 @@ from app.schemas.task import Task, TaskEvent, TaskCreate
 
 TASKS_COLLECTION = "tasks"
 
-async def create_task(task_id: str, user_id: str, account_id: str, initial_status: str = "PENDING", request_data: Optional[Dict[str, Any]] = None) -> Task:
+async def create_task(
+    task_id: str, 
+    user_id: str, 
+    account_id: str, 
+    initial_status: str = "PENDING", 
+    request_data: Optional[Dict[str, Any]] = None,
+    task_type: str = "video",
+    priority: str = "normal"
+) -> Task:
     """
     Create a new task or return existing one if task_id already exists.
     """
@@ -23,6 +31,8 @@ async def create_task(task_id: str, user_id: str, account_id: str, initial_statu
         task_id=task_id,
         user_id=user_id,
         account_id=account_id,
+        task_type=task_type,
+        priority=priority,
         status=initial_status,
         progress=0.0,
         created_at=datetime.utcnow(),

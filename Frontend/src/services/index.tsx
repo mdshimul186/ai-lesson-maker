@@ -1,6 +1,15 @@
 import { request } from "../utils/request";
 import { cachedApiCall, dedupedApiCall, throttledApiCall } from "../utils/apiUtils";
 import { useAccountStore } from "../stores";
+import { 
+    Task, 
+    StoryGenerationRequest, 
+    StoryGenerationResponse,
+    ImageGenerationRequest,
+    ImageGenerationResponse,
+    VoiceGenerationRequest,
+    VoiceGenerationResponse
+} from "../interfaces";
 
 export * from './account';  // Export account and payment services
 export * from './animated_lesson';  // Export animated lesson services
@@ -119,26 +128,6 @@ export async function generateLessonVideo(data: GenerateLessonVideoReq): Promise
     });
 }
 
-export interface TaskEvent {
-    timestamp: string;
-    message: string;
-    details?: any;
-}
-
-export interface Task {
-    task_id: string;
-    status: string;
-    progress: number;
-    events: TaskEvent[];
-    created_at: string;
-    updated_at: string;
-    result_url?: string;
-    error_message?: string;
-    error_details?: any;
-    task_folder_content?: Record<string, any>;
-    queue_position?: number;
-}
-
 export async function getTaskStatus(taskId: string): Promise<Task> {
     // Use deduped API call to prevent multiple simultaneous requests for the same task
     return dedupedApiCall(`task_status_${taskId}`, () => 
@@ -199,8 +188,8 @@ export async function cancelTask(taskId: string): Promise<{ success: boolean, me
 
 export async function getQueueStatus(taskId?: string): Promise<{ success: boolean, data: any }> {
     const url = taskId 
-        ? `/api/video/queue/status?task_id=${taskId}`
-        : '/api/video/queue/status';
+        ? `/api/tasks/queue/status?task_id=${taskId}`
+        : '/api/tasks/queue/status';
     
     // Throttle queue status checks to prevent too many calls
     const result = await throttledApiCall(`queue_status_${taskId || 'all'}`, () =>
@@ -333,6 +322,70 @@ export async function generateCourseLessons(courseId: string, chapterIds?: strin
 export async function getCourseProgress(courseId: string): Promise<any> {
     return request<any>({
         url: `/api/courses/${courseId}/progress`,
+        method: "get",
+    });
+}
+
+// Story Generation API
+export async function generateStory(data: StoryGenerationRequest): Promise<StoryGenerationResponse> {
+    return request<StoryGenerationResponse>({
+        url: "/api/story/generate",
+        method: "post",
+        data,
+    });
+}
+
+// Image Generation API
+export async function generateImage(data: ImageGenerationRequest): Promise<ImageGenerationResponse> {
+    return request<ImageGenerationResponse>({
+        url: "/api/image/generate",
+        method: "post",
+        data,
+    });
+}
+
+// Voice Generation API
+export async function generateVoice(data: VoiceGenerationRequest): Promise<VoiceGenerationResponse> {
+    return request<VoiceGenerationResponse>({
+        url: "/api/voice-generation/generate",
+        method: "post",
+        data,
+    });
+}
+
+// Additional Queue Management Functions
+
+export async function getQueueList(params?: { 
+    limit?: number; 
+    skip?: number; 
+    task_type?: string; 
+    status?: string 
+}): Promise<{ success: boolean, data: any }> {
+    const queryParams = new URLSearchParams();
+    if (params?.limit) {
+        queryParams.append('limit', params.limit.toString());
+    }
+    if (params?.skip) {
+        queryParams.append('skip', params.skip.toString());
+    }
+    if (params?.task_type) {
+        queryParams.append('task_type', params.task_type);
+    }
+    if (params?.status) {
+        queryParams.append('status', params.status);
+    }
+    
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    
+    return request<{ success: boolean, data: any }>({
+        url: `/api/tasks/queue/list${queryString}`,
+        method: "get",
+    });
+}
+
+export async function getSupportedTaskTypes(): Promise<{ success: boolean, data: any }> {
+    return request<{ success: boolean, data: any }>({
+        url: "/api/tasks/types",
         method: "get",
     });
 }

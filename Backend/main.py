@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import api_router
 from app.db.mongodb_utils import connect_to_mongo, close_mongo_connection
-from app.services.video_queue_service import video_queue_service
+from app.services.task_queue_service import task_queue_service
 import os
 
 app = FastAPI(
@@ -33,13 +33,18 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     await connect_to_mongo()
-    # Resume video queue processing after server restart
-    await video_queue_service.resume_processing_on_startup()
+    
+    # Create database indexes for better performance
+    from app.db.create_indexes import create_indexes
+    await create_indexes()
+    
+    # Resume task queue processing after server restart
+    await task_queue_service.start_processing()
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    # Stop video queue processing gracefully
-    await video_queue_service.stop_processing()
+    # Stop task queue processing gracefully
+    await task_queue_service.stop_processing()
     await close_mongo_connection()
 
 if not os.path.exists('tasks'):

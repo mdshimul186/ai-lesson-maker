@@ -92,7 +92,7 @@ Standard task tracking with events, progress, status, etc.
   "progress": 0.0,
   "created_at": "datetime",
   "updated_at": "datetime",
-  "result_url": "minio_url",
+  "result_url": "s3_url",
   "task_folder_content": {},
   "error_message": "error_text",
   "error_details": {},
@@ -137,7 +137,7 @@ Specialized queue management:
    - Get oldest queued item
    - Mark as PROCESSING
    - Generate video
-   - Upload to MinIO
+   - Upload to S3
    - Mark as COMPLETED
    - Clean up local files
 
@@ -145,7 +145,7 @@ Specialized queue management:
    - Increment attempt counter
    - If under max attempts: requeue
    - If max attempts reached: mark as FAILED
-   - Save partial results to MinIO if possible
+   - Save partial results to S3 if possible
 
 4. **Server Restart**
    - Find tasks stuck in PROCESSING
@@ -232,7 +232,7 @@ console.log(`Processing: ${stats.statistics.processing}`);
 3. **High failure rate**
    - Check system resources (disk space, memory)
    - Verify FFmpeg installation
-   - Check MinIO connectivity
+   - Check S3 connectivity
 
 ### Logs
 Check application logs for detailed error information:

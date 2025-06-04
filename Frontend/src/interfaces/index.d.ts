@@ -88,3 +88,74 @@ export interface IPaymentExecutionResponse {
   redirect_url?: string | null;
   error_message?: string | null;
 }
+
+// Task Management Interfaces
+export interface Task {
+    task_id: string;
+    status: string;
+    progress: number;
+    events: TaskEvent[];
+    created_at: string;
+    updated_at: string;
+    result_url?: string;
+    error_message?: string;
+    error_details?: any;
+    task_folder_content?: Record<string, any>;
+    queue_position?: number;
+}
+
+export interface TaskEvent {
+    timestamp: string;
+    message: string;
+    details?: any;
+}
+
+// Story Generation Interfaces
+export interface StoryGenerationRequest {
+    prompt: string;
+    story_type?: string; // adventure, mystery, comedy, educational, etc.
+    target_audience?: string; // children, teenagers, adults
+    language?: string;
+    length?: string; // short, medium, long
+    task_id?: string;
+}
+
+export interface StoryGenerationResponse {
+    success: boolean;
+    task_id: string;
+    message: string;
+}
+
+// Image Generation Interfaces
+export interface ImageGenerationRequest {
+    prompt: string;
+    style?: string; // realistic, artistic, cartoon, photographic, etc.
+    resolution?: string; // 512x512, 1024x1024, 1024x1792, etc.
+    num_images?: number; // Number of images to generate (1-10)
+    quality?: string; // draft, standard, high
+    task_id?: string;
+}
+
+export interface ImageGenerationResponse {
+    success: boolean;
+    task_id: string;
+    message: string;
+}
+
+// Voice Generation Interfaces
+export interface VoiceGenerationRequest {
+    text: string;
+    voice_name?: string;
+    language?: string;
+    rate?: number; // Speech rate (0.5 to 2.0)
+    pitch?: number; // Pitch adjustment (-50 to +50)
+    volume?: number; // Volume (0.0 to 1.0)
+    output_format?: string; // mp3, wav, ogg
+    task_id?: string;
+}
+
+export interface VoiceGenerationResponse {
+    success: boolean;
+    task_id: string;
+    message: string;
+}

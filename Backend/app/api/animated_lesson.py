@@ -1,12 +1,13 @@
 from fastapi import APIRouter, HTTPException, Depends
 import logging
 from app.schemas.animated_lesson import AnimatedLessonRequest, AnimatedLessonResponse, AnimatedLessonData
-from app.services.video_queue_service import video_queue_service
+from app.services.task_queue_service import task_queue_service
 from app.services import task_service
 from app.services.credit_service import deduct_credits_for_video
 from app.api.users import get_current_active_user
 from app.schemas.user import UserInDB as User
 from app.api.dependencies import get_valid_account_id
+from app.models.task_types import TaskType
 import uuid
 
 logger = logging.getLogger(__name__)
@@ -57,15 +58,13 @@ async def generate_animated_lesson(
         message=f"Animated lesson generation request received. {request.scenes} credits deducted.",
         status="PENDING",
         progress=0
-    )
-
-    # Add to processing queue with special animation type flag
-    await video_queue_service.add_to_queue(
+    )    # Add to processing queue with special animation type flag
+    await task_queue_service.add_to_queue(
         task_id=task_id,
-        request=request,
+        request_data=request_data,
         user_id=current_user.id,
         account_id=account_id,
-        task_type="animated_lesson"
+        task_type=TaskType.ANIMATED_LESSON.value
     )
 
     # Return immediately with task ID
