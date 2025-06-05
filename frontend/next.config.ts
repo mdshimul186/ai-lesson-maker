@@ -11,10 +11,13 @@ const nextConfig: NextConfig = {
       };
     }
     
-    // Ensure path aliases work properly in all environments
+    // Ensure path aliases work properly in all environments, including Docker
     config.resolve.alias = {
       ...config.resolve.alias,
       "@": path.resolve(__dirname, "./src"),
+      "@/lib": path.resolve(__dirname, "./src/lib"),
+      "@/components": path.resolve(__dirname, "./src/components"),
+      "@/utils": path.resolve(__dirname, "./src/utils"),
     };
     
     return config;

@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "plugins": [
       {
@@ -22,6 +23,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/lib/*": ["./src/lib/*"],
+      "@/lib/utils": ["./src/lib/utils"],
       "@/components/*": ["./src/components/*"],
       "@/utils/*": ["./src/utils/*"]
     }
