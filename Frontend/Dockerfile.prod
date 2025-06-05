@@ -15,6 +15,7 @@ COPY tsconfig.json ./
 COPY next.config.ts ./
 COPY postcss.config.mjs ./
 COPY components.json ./
+COPY next-env.d.ts ./
 
 # Copy the rest of the application code to the working directory
 COPY . .
