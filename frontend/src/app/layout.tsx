@@ -6,7 +6,7 @@ import "./globals.css";
 import '../locales'; // Initialize i18n
 import { Layout } from 'antd';
 import AppHeader from '../components/AppHeader';
-import { useAuthStore } from '../stores';
+import { useAuthStore } from '@/stores';
 import { useEffect } from 'react';
 
 const geistSans = Geist({

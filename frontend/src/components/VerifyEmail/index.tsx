@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, Typography, Button, Result, Spin, Form, Input, message } from 'antd';
-import { useAuthStore } from '../../stores';
+import { useAuthStore } from '@/stores';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CheckCircleOutlined, SafetyOutlined } from '@ant-design/icons';

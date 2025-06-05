@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import CourseMaker from '../../components/CourseMaker';
+import CourseMaker from '@/components/CourseMaker';
 
 const CourseMakerPage: React.FC = () => {
     return (

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAccountStore } from '../stores/useAccountStore'; // Import useAccountStore
+import { useAccountStore } from '@/stores/useAccountStore'; // Import useAccountStore
 import { IAccount } from '../interfaces'; // Import IAccount type
 
 interface RequestConfig {

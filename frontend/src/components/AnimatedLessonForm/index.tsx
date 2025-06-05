@@ -22,11 +22,11 @@ import {
     ToolOutlined,
     FileTextOutlined
 } from '@ant-design/icons';
-import { getVoiceList, getTaskStatus, generateAnimatedLesson } from '../../services/index';
-import { TaskEvent } from '../../interfaces/index';
+import { getVoiceList, getTaskStatus, generateAnimatedLesson } from '@/services/index';
+import { TaskEvent } from '@/interfaces/index';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './index.module.css';
-import { useVideoStore, useAccountStore } from "../../stores/index";
+import { useVideoStore, useAccountStore } from "@/stores/index";
 
 const { Title } = Typography;
 const { TextArea } = Input;

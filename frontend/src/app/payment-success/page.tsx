@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, Suspense } from 'react';
 import { Result, Button, Card, Spin } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { paymentService } from '../../services';
-import { useAccountStore } from '../../stores';
+import { paymentService } from '@/services';
+import { useAccountStore } from '@/stores';
 
 function PaymentSuccessContent() {
   const router = useRouter();

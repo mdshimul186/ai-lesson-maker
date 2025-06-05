@@ -41,8 +41,8 @@ import {
     updateCourse,
     generateLessonVideo,
     getTaskStatus
-} from '../../services/index';
-import { useAccountStore } from '../../stores';
+} from '@/services/index';
+import { useAccountStore } from '@/stores';
 import styles from './index.module.css';
 
 

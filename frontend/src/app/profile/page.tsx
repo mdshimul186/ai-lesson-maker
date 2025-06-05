@@ -9,7 +9,7 @@ import {
     CheckCircleOutlined,
     ClockCircleOutlined
 } from '@ant-design/icons';
-import { useAuthStore, useAccountStore } from '../../stores';
+import { useAuthStore, useAccountStore } from '@/stores';
 
 // Simple date formatting utility
 function formatDate(dateString: string): string {
