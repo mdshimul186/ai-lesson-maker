@@ -23,7 +23,7 @@ COPY . .
 RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 # Expose the port that the app will run on
-EXPOSE 4001
+EXPOSE 4005
 
 # Set the environment variable for the app's production mode
 ENV NODE_ENV=production
