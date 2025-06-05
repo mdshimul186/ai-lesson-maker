@@ -30,8 +30,8 @@ const DivLessonRenderer: React.FC<DivLessonRendererProps> = ({ sections, isLoadi
     const [autoProgress, setAutoProgress] = useState(true);
     
     const containerRef = useRef<HTMLDivElement>(null);
-    const animationRef = useRef<number>();
-    const timeoutRef = useRef<number>();
+    const animationRef = useRef<number | null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Initialize mermaid
     useEffect(() => {

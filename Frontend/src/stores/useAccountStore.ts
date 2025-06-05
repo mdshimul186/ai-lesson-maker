@@ -47,9 +47,8 @@ export const useAccountStore = create<AccountState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const accounts = await accountService.getUserAccounts();
-      
-      // Determine current account without triggering additional API calls
-      const currentAccountId = localStorage.getItem('currentAccountId');
+        // Determine current account without triggering additional API calls
+      const currentAccountId = typeof window !== 'undefined' ? localStorage.getItem('currentAccountId') : null;
       const newCurrentAccount = currentAccountId 
         ? accounts.find(a => a.id === currentAccountId) 
         : get().currentAccount 

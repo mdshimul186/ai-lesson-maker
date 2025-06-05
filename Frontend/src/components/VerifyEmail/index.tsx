@@ -1,7 +1,11 @@
+"use client"
+
+
 import React, { useState, useEffect } from 'react';
 import { Card, Typography, Button, Result, Spin, Form, Input, message } from 'antd';
 import { useAuthStore } from '../../stores';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { CheckCircleOutlined, SafetyOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
@@ -11,16 +15,22 @@ const VerifyEmail: React.FC = () => {
   const [verifying, setVerifying] = useState(false);
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [form] = Form.useForm();
-  const navigate = useNavigate();
-  const email = localStorage.getItem('unverifiedEmail');
+  const router = useRouter();
 
   useEffect(() => {
-    // If no email in storage, check if we need to show a message
-    if (!email) {
-      message.info('Please enter the verification code sent to your email');
+    // Access localStorage only on the client side
+    if (typeof window !== 'undefined') {
+      const unverifiedEmail = localStorage.getItem('unverifiedEmail');
+      setEmail(unverifiedEmail);
+      
+      // If no email in storage, check if we need to show a message
+      if (!unverifiedEmail) {
+        message.info('Please enter the verification code sent to your email');
+      }
     }
-  }, [email]);
+  }, []);
 
   const handleVerify = async (values: { verificationCode: string }) => {
     setVerifying(true);
@@ -33,13 +43,14 @@ const VerifyEmail: React.FC = () => {
       
       // Show success message
       message.success('Email verified successfully!');
-      
-      // Clear unverified email from storage
-      localStorage.removeItem('unverifiedEmail');
+        // Clear unverified email from storage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('unverifiedEmail');
+      }
       
       // Redirect to home page after a short delay
       setTimeout(() => {
-        navigate('/');
+        router.push('/dashboard');
       }, 1500);
     } catch (err) {
       setError('Verification failed. The code may be invalid or expired.');
@@ -65,7 +76,7 @@ const VerifyEmail: React.FC = () => {
           title="Email Verified Successfully!"
           subTitle="Your email has been verified. You can now login to your account."
           extra={[
-            <Link to="/login" key="login">
+            <Link href="/login" key="login">
               <Button type="primary">
                 Go to Login
               </Button>

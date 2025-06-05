@@ -17,7 +17,7 @@ import {
     PlaySquareOutlined,
     BookOutlined
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { 
     getCourseList,
     CourseResponse,
@@ -29,7 +29,7 @@ import styles from './index.module.css';
 const { Title, Paragraph } = Typography;
 
 const CourseMaker: React.FC = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [courses, setCourses] = useState<CourseResponse[]>([]);
     const [coursesLoading, setCoursesLoading] = useState(false);    const [pagination, setPagination] = useState({
         current: 1,
@@ -60,11 +60,11 @@ const CourseMaker: React.FC = () => {
     };
 
     const handleCreateNewCourse = () => {
-        navigate('/course-maker/create');
+        router.push('/course-maker/create');
     };
 
     const handleViewCourseDetails = (course: CourseResponse) => {
-        navigate(`/course/${course.id}`);
+        router.push(`/course/${course.id}`);
     };
 
     const handleDeleteCourse = async (courseId: string) => {

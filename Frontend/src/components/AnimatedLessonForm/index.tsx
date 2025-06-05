@@ -23,6 +23,7 @@ import {
     FileTextOutlined
 } from '@ant-design/icons';
 import { getVoiceList, getTaskStatus, generateAnimatedLesson } from '../../services/index';
+import { TaskEvent } from '../../interfaces/index';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './index.module.css';
 import { useVideoStore, useAccountStore } from "../../stores/index";
@@ -339,10 +340,9 @@ const AnimatedLessonForm: React.FC = () => {
                                     status={taskStatus.status === 'FAILED' ? 'exception' : taskStatus.status === 'COMPLETED' ? 'success' : 'active'}
                                     strokeColor={taskStatus.status === 'FAILED' ? 'red' : undefined}
                                 />
-                                <Title level={5} style={{ marginTop: 16, marginBottom: 8 }}>Events:</Title>
-                                {taskStatus.events && taskStatus.events.length > 0 ? (
+                                <Title level={5} style={{ marginTop: 16, marginBottom: 8 }}>Events:</Title>                                {taskStatus.events && taskStatus.events.length > 0 ? (
                                     <Timeline style={{ marginTop: 10, maxHeight: '200px', overflowY: 'auto', paddingLeft: '5px' }}>
-                                        {taskStatus.events.slice().reverse().map((event, index) => (
+                                        {taskStatus.events.slice().reverse().map((event: any, index: number) => (
                                             <Timeline.Item
                                                 key={`${event.timestamp}-${index}`}
                                                 color={taskStatus.status === 'FAILED' && taskStatus.events.length - 1 - index === 0 && taskStatus.progress < 100 ? 'red' : 'blue'}

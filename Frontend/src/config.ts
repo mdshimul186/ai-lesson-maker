@@ -1,7 +1,7 @@
 // Configuration variables for the frontend application
 
 // API base URL from environment variable
-export const apiBaseUrl = import.meta.env.VITE_API_ROOT_URL || '';
+export const apiBaseUrl = process.env.NEXT_PUBLIC_API_ROOT_URL || 'http://localhost:8000';
 
 // Other configuration constants can be added here
 export const DEFAULT_LANGUAGE = 'English';

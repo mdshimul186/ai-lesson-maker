@@ -19,7 +19,7 @@ import {
     PlayCircleOutlined,
     BookOutlined
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { createCourse, generateCourseLessons, getCourseProgress, CourseCreateRequest } from '../../services/index';
 
 import styles from './index.module.css';
@@ -77,12 +77,12 @@ const CourseGeneration: React.FC<CourseGenerationProps> = ({
     formData,
     onBack
 }) => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [isGenerating, setIsGenerating] = useState(false);
     const [courseTasks, setCourseTasks] = useState<CourseTask[]>([]);
     const [courseId, setCourseId] = useState<string | null>(null);
     const [overallProgress, setOverallProgress] = useState(0);
-    const [progressInterval, setProgressInterval] = useState<number | null>(null);
+    const [progressInterval, setProgressInterval] = useState<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         // Initialize course tasks from structure
@@ -147,77 +147,15 @@ const CourseGeneration: React.FC<CourseGenerationProps> = ({
             message.success('Course created successfully! Starting lesson generation...');
 
 
-            // Start generating lessons using backend API
-            console.log('Generating lessons for course:', createdCourse.id);
+            // Start generating lessons using backend API            console.log('Generating lessons for course:', createdCourse.id);
             await generateCourseLessons(createdCourse.id);
 
             // Navigate back to course list after a short delay
             setTimeout(() => {
-                navigate('/course-maker');
+                router.push('/course-maker');
             }, 2000);
 
-            return;
-
-            // Start polling for progress
-            const interval = setInterval(async () => {
-                try {
-                    console.log('Checking progress for course:', createdCourse.id);
-                    const progress = await getCourseProgress(createdCourse.id);
-                    console.log('Progress:', progress);
-
-                    // Update overall progress
-                    setOverallProgress(progress.progress_percentage);
-
-                    // Update individual task status based on progress
-                    const updatedTasks = [...courseTasks];
-
-                    // Mark tasks as completed based on progress
-                    const completedCount = Math.floor(progress.completed_lessons);
-                    const inProgressCount = Math.floor(progress.in_progress_lessons);
-
-                    for (let i = 0; i < updatedTasks.length; i++) {
-                        if (i < completedCount) {
-                            updatedTasks[i] = {
-                                ...updatedTasks[i],
-                                status: 'completed',
-                                progress: 100,
-                                taskId: `task-${i}`
-                            };
-                        } else if (i < completedCount + inProgressCount) {
-                            updatedTasks[i] = {
-                                ...updatedTasks[i],
-                                status: 'processing',
-                                progress: 50
-                            };
-                        }
-                    }
-
-                    setCourseTasks(updatedTasks);
-                    // Stop polling when complete
-                    if (progress.progress_percentage >= 100) {
-                        clearInterval(interval);
-                        setProgressInterval(null);
-                        message.success('All lessons generated successfully!');
-
-                        // Navigate back to course list after a short delay
-                        setTimeout(() => {
-                            navigate('/course-maker');
-                        }, 2000);
-                    }
-                } catch (error) {
-                    console.error('Error checking progress:', error);
-                }
-            }, 2000); // Poll every 2 seconds
-
-            setProgressInterval(interval);
-
-            // Clear interval after 10 minutes to prevent infinite polling
-            setTimeout(() => {
-                if (interval) {
-                    clearInterval(interval);
-                    setProgressInterval(null);
-                }
-            }, 600000);
+            // The code below is unreachable due to the return statement above and has been removed.
 
         } catch (error) {
             console.error('Error during course generation:', error);
@@ -378,16 +316,15 @@ const CourseGeneration: React.FC<CourseGenerationProps> = ({
                         </Button>
                     )}
                     {overallProgress === 100 && (
-                        <Space>
-                            <Button
+                        <Space>                            <Button
                                 type="primary"
-                                onClick={() => navigate('/course-maker')}
+                                onClick={() => router.push('/course-maker')}
                             >
                                 Back to Course List
                             </Button>
                             {courseId && (
                                 <Button
-                                    onClick={() => navigate(`/course/${courseId}`)}
+                                    onClick={() => router.push(`/course/${courseId}`)}
                                 >
                                     View Course
                                 </Button>

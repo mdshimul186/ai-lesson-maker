@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { 
-    Card, 
-    Typography, 
-    Space, 
+import {
+    Card,
+    Typography,
+    Space,
     Button,
     Tag,
     Spin,
@@ -16,7 +16,8 @@ import {
     Input,
     Dropdown
 } from 'antd';
-import {    BookOutlined, 
+import {
+    BookOutlined,
     ArrowLeftOutlined,
     FolderOutlined,
     FileTextOutlined,
@@ -29,10 +30,11 @@ import {    BookOutlined,
     HolderOutlined,
     MoreOutlined
 } from '@ant-design/icons';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { 
+import {
     getCourse,
     CourseResponse,
     getCourseProgress,
@@ -101,7 +103,7 @@ const DraggableLesson: React.FC<DraggableLessonProps> = ({
                 draggedItem.chapterIndex = chapterIndex;
             }
         },
-    });    const dropdownItems = [
+    }); const dropdownItems = [
         {
             key: 'edit',
             label: 'Edit Lesson',
@@ -137,7 +139,9 @@ const DraggableLesson: React.FC<DraggableLessonProps> = ({
 
     return (
         <div
-            ref={(node) => drag(drop(node))}
+            ref={node => {
+                drag(drop(node));
+            }}
             style={{
                 opacity: isDragging ? 0.5 : 1,
                 cursor: 'move',
@@ -159,11 +163,11 @@ const DraggableLesson: React.FC<DraggableLessonProps> = ({
                     <FileTextOutlined style={{ color: '#666' }} />
                 )}                <span>Lesson {lessonIndex + 1}: {lesson.title}</span>
                 {lesson.task_id ? (
-                    <Tag 
+                    <Tag
                         color={
-                            lesson.status === 'completed' ? 'success' : 
-                            lesson.status === 'processing' ? 'processing' : 
-                            lesson.status === 'failed' ? 'error' : 'default'
+                            lesson.status === 'completed' ? 'success' :
+                                lesson.status === 'processing' ? 'processing' :
+                                    lesson.status === 'failed' ? 'error' : 'default'
                         }
                     >
                         {lesson.status || 'pending'}
@@ -258,7 +262,9 @@ const DraggableChapter: React.FC<DraggableChapterProps> = ({
 
     return (
         <div
-            ref={(node) => drag(drop(node))}
+            ref={node => {
+                drag(drop(node));
+            }}
             style={{
                 opacity: isDragging ? 0.5 : 1,
                 margin: '16px 0',
@@ -288,19 +294,19 @@ const DraggableChapter: React.FC<DraggableChapterProps> = ({
                 </Dropdown>
             </div>
             <div style={{ padding: '8px' }}>                {chapter.lessons?.map((lesson: any, lessonIndex: number) => (
-                    <DraggableLesson
-                        key={`lesson-${chapterIndex}-${lessonIndex}`}
-                        lesson={lesson}
-                        lessonIndex={lessonIndex}
-                        chapterIndex={chapterIndex}
-                        onMove={onLessonMove}
-                        onEdit={onLessonEdit}
-                        onDelete={onLessonDelete}
-                        onSelect={onLessonSelect}
-                        onGenerateVideo={onLessonGenerateVideo}
-                        isSelected={selectedLesson && selectedLesson.id === lesson.id}
-                    />
-                )) || []}
+                <DraggableLesson
+                    key={`lesson-${chapterIndex}-${lessonIndex}`}
+                    lesson={lesson}
+                    lessonIndex={lessonIndex}
+                    chapterIndex={chapterIndex}
+                    onMove={onLessonMove}
+                    onEdit={onLessonEdit}
+                    onDelete={onLessonDelete}
+                    onSelect={onLessonSelect}
+                    onGenerateVideo={onLessonGenerateVideo}
+                    isSelected={selectedLesson && selectedLesson.id === lesson.id}
+                />
+            )) || []}
                 <Button
                     type="dashed"
                     icon={<PlusOutlined />}
@@ -316,7 +322,7 @@ const DraggableChapter: React.FC<DraggableChapterProps> = ({
 
 const CourseView: React.FC = () => {
     const { courseId } = useParams<{ courseId: string }>();
-    const navigate = useNavigate();
+    const router = useRouter();
     const [course, setCourse] = useState<CourseResponse | null>(null);
     const [courseProgress, setCourseProgress] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -324,20 +330,20 @@ const CourseView: React.FC = () => {
     const [isProgressLoading, setIsProgressLoading] = useState(false);
     const progressTimeoutRef = useRef<number | null>(null);
     const lastProgressCallRef = useRef<number>(0);
-    
+
     // Enhanced state for new features
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editModalData, setEditModalData] = useState<EditModalData | null>(null);
-    const [addModalVisible, setAddModalVisible] = useState(false);    const [addModalType, setAddModalType] = useState<'chapter' | 'lesson'>('chapter');
-    const [selectedChapterForLesson, setSelectedChapterForLesson] = useState<number | null>(null);    const [form] = Form.useForm();
+    const [addModalVisible, setAddModalVisible] = useState(false); const [addModalType, setAddModalType] = useState<'chapter' | 'lesson'>('chapter');
+    const [selectedChapterForLesson, setSelectedChapterForLesson] = useState<number | null>(null); const [form] = Form.useForm();
 
     // Debounced save to prevent too many API calls
     const saveTimeoutRef = useRef<number | null>(null);
-    
+
     // Save course data to database
     const saveCourseToDatabase = useCallback(async (updatedCourse: CourseResponse) => {
         if (!courseId || !updatedCourse) return;
-        
+
         try {
             const updateData = {
                 title: updatedCourse.title,
@@ -347,7 +353,7 @@ const CourseView: React.FC = () => {
                 voice_id: updatedCourse.voice_id,
                 chapters: updatedCourse.chapters
             };
-            
+
             await updateCourse(courseId, updateData);
             message.success('Changes saved successfully');
         } catch (error) {
@@ -361,55 +367,57 @@ const CourseView: React.FC = () => {
         if (saveTimeoutRef.current) {
             clearTimeout(saveTimeoutRef.current);
         }
-        
-        saveTimeoutRef.current = setTimeout(() => {
+
+        saveTimeoutRef.current = window.setTimeout(() => {
             saveCourseToDatabase(updatedCourse);
-        }, 1000);    }, [saveCourseToDatabase]);    const fetchProgressInBackground = useCallback(async (courseData: CourseResponse) => {
+        }, 1000);
+    }, [saveCourseToDatabase]);
+    const fetchProgressInBackground = useCallback(async (courseData: CourseResponse) => {
         // Only fetch progress if course is generating or completed
         if (!courseId) return;
-        
+
         // Check if account ID is available
         const currentAccount = useAccountStore.getState().currentAccount;
         if (!currentAccount || !currentAccount.id) {
             console.log("Cannot fetch progress: No account ID available");
             return;
         }
-          // Check if there are any incomplete lessons before making API calls
-        const hasIncompleteLessons = courseData.chapters.some(chapter => 
-            chapter.lessons.some((lesson: any) => 
+        // Check if there are any incomplete lessons before making API calls
+        const hasIncompleteLessons = courseData.chapters.some(chapter =>
+            chapter.lessons.some((lesson: any) =>
                 lesson.task_id && (!lesson.status || lesson.status !== 'completed')
             )
         );
-        
+
         if (!hasIncompleteLessons) {
             console.log("Skipping progress API call: No incomplete lessons");
             return;
         }
-        
+
         if (courseData.status === 'generating' || courseData.status === 'completed') {
             const now = Date.now();
             // Debounce: prevent calls if less than 2 seconds since last call
             if (isProgressLoading || (now - lastProgressCallRef.current < 2000)) {
                 return;
             }
-            
+
             lastProgressCallRef.current = now;
-            
+
             // Clear any pending timeout
             if (progressTimeoutRef.current) {
                 clearTimeout(progressTimeoutRef.current);
                 progressTimeoutRef.current = null;
             }
-            
+
             setIsProgressLoading(true);
             try {
                 const progress = await getCourseProgress(courseId!);
                 setCourseProgress(progress);
-                
+
                 // Also refresh course data to get updated video URLs
                 const updatedCourseData = await getCourse(courseId!);
                 setCourse(updatedCourseData);
-                
+
                 // Update selected lesson if it was updated
                 if (selectedLesson) {
                     const updatedLesson = updatedCourseData.chapters
@@ -426,40 +434,41 @@ const CourseView: React.FC = () => {
                 setIsProgressLoading(false);
             }
         }
-    }, [courseId, isProgressLoading, selectedLesson]);const fetchCourseData = async () => {
+    }, [courseId, isProgressLoading, selectedLesson]); const fetchCourseData = async () => {
         if (!courseId) return;
-        
+
         // Get current account from store
         const currentAccount = useAccountStore.getState().currentAccount;
-        
+
         // Don't proceed if no account ID is available
         if (!currentAccount || !currentAccount.id) {
             console.log("Cannot fetch course data: No account ID available");
             message.error("Account information not available. Please try again.");
             return;
         }
-        
+
         setLoading(true);
-        try {            const courseData = await getCourse(courseId);
+        try {
+            const courseData = await getCourse(courseId);
             setCourse(courseData);
-            
+
             // Check if there are any incomplete lessons before calling progress API
-            const hasIncompleteLessons = courseData.chapters.some(chapter => 
-                chapter.lessons.some((lesson: any) => 
+            const hasIncompleteLessons = courseData.chapters.some(chapter =>
+                chapter.lessons.some((lesson: any) =>
                     lesson.task_id && (!lesson.status || lesson.status !== 'completed')
                 )
             );
-            
+
             if (hasIncompleteLessons) {
                 // Call progress API in background without blocking UI
                 // Use setTimeout to ensure this runs after the main UI update
-                progressTimeoutRef.current = setTimeout(() => {
+                progressTimeoutRef.current = window.setTimeout(() => {
                     fetchProgressInBackground(courseData);
                 }, 100); // Small delay to ensure UI renders first
             } else {
                 console.log("Skipping initial progress API call: No incomplete lessons");
             }
-            
+
         } catch (error) {
             console.error('Failed to fetch course:', error);
             message.error('Failed to load course data');
@@ -472,11 +481,11 @@ const CourseView: React.FC = () => {
     let fetchCourseDataCalled = useRef(false);
     useEffect(() => {
         const currentAccount = useAccountStore.getState().currentAccount;
-        
+
         if (courseId && currentAccount && !fetchCourseDataCalled.current) {
             fetchCourseData();
         }
-        
+
         // Cleanup function
         return () => {
             if (progressTimeoutRef.current) {
@@ -499,26 +508,26 @@ const CourseView: React.FC = () => {
                 fetchCourseData();
             }
         });
-        
+
         // Return cleanup function to unsubscribe when component unmounts
         return () => unsubscribe();
     }, [courseId]);    // Auto-refresh progress for generating courses
     useEffect(() => {
         let intervalId: number;
-        
+
         if (course?.status === 'generating' || course?.status === 'completed') {
             // Check if there are any incomplete lessons
-            const hasIncompleteLessons = course.chapters.some(chapter => 
-                chapter.lessons.some((lesson: any) => 
+            const hasIncompleteLessons = course.chapters.some(chapter =>
+                chapter.lessons.some((lesson: any) =>
                     lesson.task_id && (!lesson.status || lesson.status !== 'completed')
                 )
             );
-            
+
             // Only set up polling if there are incomplete lessons
             if (hasIncompleteLessons) {
                 console.log("Setting up progress polling for incomplete lessons");
                 // Refresh progress every 8 seconds for courses with incomplete lessons
-                intervalId = setInterval(() => {
+                intervalId = window.setInterval(() => {
                     // Double check if course still exists and not already loading
                     if (course && !isProgressLoading) {
                         fetchProgressInBackground(course);
@@ -528,7 +537,7 @@ const CourseView: React.FC = () => {
                 console.log("Skipping progress polling: No incomplete lessons");
             }
         }
-          return () => {
+        return () => {
             if (intervalId) {
                 clearInterval(intervalId);
             }
@@ -546,45 +555,45 @@ const CourseView: React.FC = () => {
     // Sort lessons within chapters by order
     const sortLessons = useCallback((lessons: any[]) => {
         if (!lessons) return [];
-        
+
         return [...lessons].sort((a, b) => {
             return (a.order || 0) - (b.order || 0);
         });
     }, []);    // Chapter movement
     const moveChapter = useCallback((dragIndex: number, hoverIndex: number) => {
         if (!course) return;
-        
+
         const newChapters = [...course.chapters];
         const draggedChapter = newChapters[dragIndex];
         newChapters.splice(dragIndex, 1);
         newChapters.splice(hoverIndex, 0, draggedChapter);
-        
+
         const updatedCourse = { ...course, chapters: newChapters };
         setCourse(updatedCourse);
-        
+
         // Use debounced save for drag operations
         saveCourseDebounced(updatedCourse);
     }, [course, saveCourseDebounced]);
 
     // Lesson movement
     const moveLesson = useCallback((
-        dragLessonIndex: number, 
-        hoverLessonIndex: number, 
-        dragChapterIndex: number, 
+        dragLessonIndex: number,
+        hoverLessonIndex: number,
+        dragChapterIndex: number,
         hoverChapterIndex: number
     ) => {
         if (!course) return;
-        
+
         const newChapters = [...course.chapters];
-          // Remove lesson from source chapter
+        // Remove lesson from source chapter
         const draggedLesson = newChapters[dragChapterIndex].lessons[dragLessonIndex];
         newChapters[dragChapterIndex].lessons.splice(dragLessonIndex, 1);
-        
+
         // Add lesson to target chapter
         newChapters[hoverChapterIndex].lessons.splice(hoverLessonIndex, 0, draggedLesson);
-          const updatedCourse = { ...course, chapters: newChapters };
+        const updatedCourse = { ...course, chapters: newChapters };
         setCourse(updatedCourse);
-        
+
         // Use debounced save for drag operations
         saveCourseDebounced(updatedCourse);
     }, [course, saveCourseDebounced]);
@@ -619,12 +628,12 @@ const CourseView: React.FC = () => {
     };    // Delete handlers
     const handleDeleteChapter = (chapterIndex: number) => {
         if (!course) return;
-        
+
         const newChapters = [...course.chapters];
         newChapters.splice(chapterIndex, 1);
         const updatedCourse = { ...course, chapters: newChapters };
         setCourse(updatedCourse);
-        
+
         // Save to database
         saveCourseToDatabase(updatedCourse);
         message.success('Chapter deleted successfully');
@@ -632,12 +641,12 @@ const CourseView: React.FC = () => {
 
     const handleDeleteLesson = (lessonIndex: number, chapterIndex: number) => {
         if (!course) return;
-        
+
         const newChapters = [...course.chapters];
         newChapters[chapterIndex].lessons.splice(lessonIndex, 1);
         const updatedCourse = { ...course, chapters: newChapters };
         setCourse(updatedCourse);
-        
+
         // Save to database
         saveCourseToDatabase(updatedCourse);
         message.success('Lesson deleted successfully');
@@ -659,29 +668,29 @@ const CourseView: React.FC = () => {
     const handleEditModalOk = async () => {
         try {
             const values = await form.validateFields();
-            
+
             if (!course || !editModalData) return;
-            
+
             const newCourse = { ...course };
-            
+
             if (editModalData.type === 'chapter' && editModalData.chapterIndex !== undefined) {
                 newCourse.chapters[editModalData.chapterIndex] = {
                     ...newCourse.chapters[editModalData.chapterIndex],
                     ...values
                 };
-            } else if (editModalData.type === 'lesson' && 
-                      editModalData.chapterIndex !== undefined && 
-                      editModalData.lessonIndex !== undefined) {
+            } else if (editModalData.type === 'lesson' &&
+                editModalData.chapterIndex !== undefined &&
+                editModalData.lessonIndex !== undefined) {
                 newCourse.chapters[editModalData.chapterIndex].lessons[editModalData.lessonIndex] = {
                     ...newCourse.chapters[editModalData.chapterIndex].lessons[editModalData.lessonIndex],
                     ...values
                 };
             }
-            
+
             setCourse(newCourse);
             setEditModalVisible(false);
             setEditModalData(null);
-            
+
             // Save to database
             await saveCourseToDatabase(newCourse);
             message.success(`${editModalData.type} updated successfully`);
@@ -694,10 +703,10 @@ const CourseView: React.FC = () => {
     const handleAddModalOk = async () => {
         try {
             const values = await form.validateFields();
-            
+
             if (!course) return;
-              const newCourse = { ...course };
-              if (addModalType === 'chapter') {
+            const newCourse = { ...course };
+            if (addModalType === 'chapter') {
                 const newChapter = {
                     id: `chapter-${Date.now()}`,
                     course_id: courseId,
@@ -728,25 +737,27 @@ const CourseView: React.FC = () => {
                 };
                 newCourse.chapters[selectedChapterForLesson].lessons.push(newLesson);
             }
-              setCourse(newCourse);
+            setCourse(newCourse);
             setAddModalVisible(false);
             setSelectedChapterForLesson(null);
-            
+
             // Save to database
             await saveCourseToDatabase(newCourse);
-            message.success(`${addModalType} added successfully`);        } catch (error) {
+            message.success(`${addModalType} added successfully`);
+        } catch (error) {
             console.error('Failed to add:', error);
             message.error('Failed to add. Please try again.');
-        }    };    const handleGenerateLessonVideo = async (lesson: any, lessonIndex: number, chapterIndex: number) => {
+        }
+    }; const handleGenerateLessonVideo = async (lesson: any, lessonIndex: number, chapterIndex: number) => {
         if (!course || !courseId) return;
-        
+
         try {
             setLoading(true);
             const response = await generateLessonVideo({
                 courseId: courseId,
                 lessonId: lesson.id
             });
-            
+
             // Update the lesson with the task_id
             const newChapters = [...course.chapters];
             newChapters[chapterIndex].lessons[lessonIndex] = {
@@ -754,44 +765,44 @@ const CourseView: React.FC = () => {
                 task_id: response.task_id,
                 status: 'pending'
             };
-            
+
             const updatedCourse = { ...course, chapters: newChapters };
             setCourse(updatedCourse);
-            
+
             // Different message depending on whether this is a new generation or regeneration
             const isRegeneration = lesson.video_url || (lesson.task_id && lesson.task_id !== response.task_id);
             message.success(isRegeneration ? 'Lesson regeneration started successfully' : 'Video generation started successfully');
-            
+
             // Start tracking the task immediately to show progress
             const taskInfo = await getTaskStatus(response.task_id);
             console.log('Initial task status:', taskInfo);
-            
+
             // Set up frequent initial polling to show immediate progress
             let checkCount = 0;
             const initialCheckInterval = setInterval(async () => {
                 try {
                     checkCount++;
                     const updatedTaskInfo = await getTaskStatus(response.task_id);
-                    
+
                     // Update the lesson status based on task status
                     const refreshedChapters = [...course.chapters];
                     refreshedChapters[chapterIndex].lessons[lessonIndex] = {
                         ...refreshedChapters[chapterIndex].lessons[lessonIndex],
-                        status: updatedTaskInfo.status === 'COMPLETED' ? 'completed' : 
-                               updatedTaskInfo.status === 'FAILED' ? 'failed' : 'processing',
+                        status: updatedTaskInfo.status === 'COMPLETED' ? 'completed' :
+                            updatedTaskInfo.status === 'FAILED' ? 'failed' : 'processing',
                         progress: updatedTaskInfo.progress || 0
                     };
-                    
-                    setCourse({ ...course, chapters: refreshedChapters });                    
+
+                    setCourse({ ...course, chapters: refreshedChapters });
                     // If status is completed or failed, or we've checked 5 times, stop polling
                     if (updatedTaskInfo.status === 'COMPLETED' || updatedTaskInfo.status === 'FAILED' || checkCount >= 5) {
                         clearInterval(initialCheckInterval);
-                        
+
                         if (updatedTaskInfo.status === 'COMPLETED') {
                             // Fetch the course again to get the updated video URL
                             const updatedCourse = await getCourse(courseId);
                             setCourse(updatedCourse);
-                            
+
                             // No need to continue polling for completed tasks
                             message.success('Video generation completed successfully');
                         } else if (updatedTaskInfo.status === 'FAILED') {
@@ -808,10 +819,9 @@ const CourseView: React.FC = () => {
             message.error('Failed to start video generation');
         } finally {
             setLoading(false);
-        }};
-
-    const handleBackToCourses = () => {
-        navigate('/course-maker');
+        }
+    }; const handleBackToCourses = () => {
+        router.push('/course-maker');
     };
 
     // Debug: Log when selectedLesson changes
@@ -853,25 +863,25 @@ const CourseView: React.FC = () => {
                 <Card className={styles.mainCard}>
                     {/* Header */}
                     <div style={{ marginBottom: '24px' }}>
-                        <Button 
+                        <Button
                             icon={<ArrowLeftOutlined />}
                             onClick={handleBackToCourses}
                             style={{ marginBottom: '16px' }}
                         >
                             Back to Courses
                         </Button>
-                        
+
                         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                             <Title level={2}>
                                 <BookOutlined style={{ color: '#52c41a', marginRight: '12px' }} />
                                 {course.title}
                             </Title>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px' }}>
-                                <Tag 
+                                <Tag
                                     color={
-                                        course.status === 'completed' ? 'success' : 
-                                        course.status === 'generating' ? 'processing' : 
-                                        course.status === 'failed' ? 'error' : 'default'
+                                        course.status === 'completed' ? 'success' :
+                                            course.status === 'generating' ? 'processing' :
+                                                course.status === 'failed' ? 'error' : 'default'
                                     }
                                     style={{ fontSize: '14px', padding: '4px 12px' }}
                                 >
@@ -922,7 +932,7 @@ const CourseView: React.FC = () => {
                         {course.status === 'generating' && courseProgress && (
                             <div style={{ marginBottom: '24px' }}>
                                 <h4>Generation Progress</h4>
-                                <Progress 
+                                <Progress
                                     percent={Math.round((courseProgress.completed_lessons / courseProgress.total_lessons) * 100)}
                                     status={courseProgress.failed_lessons > 0 ? 'exception' : 'active'}
                                     strokeColor={{
@@ -940,9 +950,9 @@ const CourseView: React.FC = () => {
                                 </p>
                             </div>
                         )}                        {/* Toolbar */}
-                        <div style={{ 
-                            display: 'flex', 
-                            justifyContent: 'flex-end', 
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
                             alignItems: 'center',
                             marginBottom: '16px',
                             padding: '12px',
@@ -950,13 +960,13 @@ const CourseView: React.FC = () => {
                             borderRadius: '6px'
                         }}>
                             <Space>
-                                <Button 
+                                <Button
                                     type="default"
                                     icon={<PlusOutlined />}
                                     onClick={handleAddChapter}
                                 >
                                     Add Chapter
-                                </Button>                                <Button 
+                                </Button>                                <Button
                                     type="primary"
                                     icon={<ReloadOutlined />}
                                     onClick={fetchCourseData}
@@ -980,33 +990,33 @@ const CourseView: React.FC = () => {
                                         </Button>
                                     </Empty>
                                 ) : (
-                                    sortedChapters.map((chapter: any, chapterIndex: number) => (                                        <DraggableChapter
-                                            key={`chapter-${chapterIndex}`}
-                                            chapter={chapter}
-                                            chapterIndex={chapterIndex}
-                                            onMove={moveChapter}
-                                            onEdit={handleEditChapter}
-                                            onDelete={handleDeleteChapter}
-                                            onAddLesson={handleAddLesson}
-                                            onLessonMove={moveLesson}
-                                            onLessonEdit={handleEditLesson}
-                                            onLessonDelete={handleDeleteLesson}
-                                            onLessonSelect={setSelectedLesson}
-                                            onLessonGenerateVideo={handleGenerateLessonVideo}
-                                            selectedLesson={selectedLesson}
-                                        />
+                                    sortedChapters.map((chapter: any, chapterIndex: number) => (<DraggableChapter
+                                        key={`chapter-${chapterIndex}`}
+                                        chapter={chapter}
+                                        chapterIndex={chapterIndex}
+                                        onMove={moveChapter}
+                                        onEdit={handleEditChapter}
+                                        onDelete={handleDeleteChapter}
+                                        onAddLesson={handleAddLesson}
+                                        onLessonMove={moveLesson}
+                                        onLessonEdit={handleEditLesson}
+                                        onLessonDelete={handleDeleteLesson}
+                                        onLessonSelect={setSelectedLesson}
+                                        onLessonGenerateVideo={handleGenerateLessonVideo}
+                                        selectedLesson={selectedLesson}
+                                    />
                                     ))
                                 )}
                             </Card>
                         </Col>                        {/* Lesson Details */}
                         <Col xs={24} lg={12}>
-                            <Card 
-                                title="Lesson Details" 
+                            <Card
+                                title="Lesson Details"
                                 size="small"
                                 extra={
-                                    <Button 
-                                        icon={<ReloadOutlined />} 
-                                        size="small" 
+                                    <Button
+                                        icon={<ReloadOutlined />}
+                                        size="small"
                                         onClick={fetchCourseData}
                                         loading={loading}
                                         title="Refresh course data"
@@ -1016,7 +1026,7 @@ const CourseView: React.FC = () => {
                                 {selectedLesson ? (
                                     <div>
                                         <Title level={4}>{selectedLesson.title}</Title>
-                                        
+
                                         {selectedLesson.description && (
                                             <div style={{ marginBottom: '16px' }}>
                                                 <strong>Description:</strong>
@@ -1027,10 +1037,10 @@ const CourseView: React.FC = () => {
                                         {selectedLesson.content && (
                                             <div style={{ marginBottom: '16px' }}>
                                                 <strong>Content:</strong>
-                                                <div style={{ 
-                                                    marginTop: '8px', 
-                                                    padding: '12px', 
-                                                    backgroundColor: '#f5f5f5', 
+                                                <div style={{
+                                                    marginTop: '8px',
+                                                    padding: '12px',
+                                                    backgroundColor: '#f5f5f5',
                                                     borderRadius: '6px',
                                                     maxHeight: '200px',
                                                     overflowY: 'auto'
@@ -1042,33 +1052,33 @@ const CourseView: React.FC = () => {
                                         {selectedLesson.video_url && (
                                             <div style={{ marginTop: '16px' }}>
                                                 <strong>Generated Video:</strong>
-                                                <div style={{ marginTop: '8px' }}>                                                    <video 
-                                                        key={selectedLesson.id} // Force re-render when lesson changes
-                                                        controls 
-                                                        style={{ width: '100%', maxHeight: '300px' }}
-                                                        poster={selectedLesson.thumbnail_url}
-                                                        onLoadStart={() => console.log('Video loading started for lesson:', selectedLesson.id)}
-                                                        onLoadedData={() => console.log('Video loaded for lesson:', selectedLesson.id)}
-                                                    >
-                                                        <source src={selectedLesson.video_url} type="video/mp4" />
-                                                        Your browser does not support the video tag.
-                                                    </video>
+                                                <div style={{ marginTop: '8px' }}>                                                    <video
+                                                    key={selectedLesson.id} // Force re-render when lesson changes
+                                                    controls
+                                                    style={{ width: '100%', maxHeight: '300px' }}
+                                                    poster={selectedLesson.thumbnail_url}
+                                                    onLoadStart={() => console.log('Video loading started for lesson:', selectedLesson.id)}
+                                                    onLoadedData={() => console.log('Video loaded for lesson:', selectedLesson.id)}
+                                                >
+                                                    <source src={selectedLesson.video_url} type="video/mp4" />
+                                                    Your browser does not support the video tag.
+                                                </video>
                                                 </div>
-                                                
+
                                                 {/* Download Options */}
                                                 <div style={{ marginTop: '12px' }}>
                                                     <Space>
-                                                        <Button 
+                                                        <Button
                                                             icon={<DownloadOutlined />}
-                                                            href={selectedLesson.video_url} 
+                                                            href={selectedLesson.video_url}
                                                             download={`${selectedLesson.title}.mp4`}
                                                         >
                                                             Download Video
                                                         </Button>
                                                         {selectedLesson.audio_url && (
-                                                            <Button 
+                                                            <Button
                                                                 icon={<DownloadOutlined />}
-                                                                href={selectedLesson.audio_url} 
+                                                                href={selectedLesson.audio_url}
                                                                 download={`${selectedLesson.title}.mp3`}
                                                             >
                                                                 Download Audio
@@ -1082,13 +1092,13 @@ const CourseView: React.FC = () => {
                                         {/* Status Info */}
                                         {selectedLesson.task_id && (
                                             <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#f0f0f0', borderRadius: '6px' }}>
-                                                <strong>Task Status:</strong> 
-                                                <Tag 
+                                                <strong>Task Status:</strong>
+                                                <Tag
                                                     style={{ marginLeft: '8px' }}
                                                     color={
-                                                        selectedLesson.status === 'completed' ? 'success' : 
-                                                        selectedLesson.status === 'processing' ? 'processing' : 
-                                                        selectedLesson.status === 'failed' ? 'error' : 'default'
+                                                        selectedLesson.status === 'completed' ? 'success' :
+                                                            selectedLesson.status === 'processing' ? 'processing' :
+                                                                selectedLesson.status === 'failed' ? 'error' : 'default'
                                                     }
                                                 >
                                                     {selectedLesson.status || 'pending'}
@@ -1097,7 +1107,7 @@ const CourseView: React.FC = () => {
                                         )}
                                     </div>
                                 ) : (
-                                    <Empty 
+                                    <Empty
                                         description="Select a lesson from the structure to view details"
                                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                                     />

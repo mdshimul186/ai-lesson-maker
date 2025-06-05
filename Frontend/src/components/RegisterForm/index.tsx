@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Space } from 'antd';
 import { useAuthStore } from '../../stores';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { UserOutlined, LockOutlined, MailOutlined, UserAddOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
 const RegisterForm: React.FC = () => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { isLoading, error, register } = useAuthStore();
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
@@ -36,7 +37,7 @@ const RegisterForm: React.FC = () => {
         localStorage.setItem('unverifiedEmail', values.email);
         
         // Redirect to verification page immediately
-        navigate('/verify-email');
+        router.push('/verify-email');
       }
     } catch (err) {
       console.error('Registration failed:', err);
@@ -57,8 +58,7 @@ const RegisterForm: React.FC = () => {
         <div style={{ textAlign: 'center' }}>
           <Title level={4} style={{ color: 'green' }}>Registration Successful!</Title>
           <Text>Please check your email to verify your account.</Text>
-          <div style={{ marginTop: 20 }}>
-            <Link to="/login">
+          <div style={{ marginTop: 20 }}>            <Link href="/login">
               <Button type="primary">Go to Login</Button>
             </Link>
           </div>
@@ -166,7 +166,7 @@ const RegisterForm: React.FC = () => {
           )}
 
           <div style={{ textAlign: 'center' }}>
-            Already have an account? <Link to="/login">Login</Link>
+            Already have an account? <Link href="/login">Login</Link>
           </div>
         </Form>
       )}

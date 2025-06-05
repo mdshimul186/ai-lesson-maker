@@ -10,7 +10,7 @@ interface RequestConfig {
     params?: object;
 }
 
-const baseUrl = import.meta.env.VITE_API_ROOT_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_ROOT_URL;
 
 export function request<T>(config: RequestConfig): Promise<T> {
     return new Promise(async (resolve, reject) => {
@@ -31,12 +31,10 @@ export function request<T>(config: RequestConfig): Promise<T> {
                     }
                 );
             });
-        };
-
-        try {
+        };        try {
             const currentAccount = await waitForAccount(); // Wait until account is set
 
-            const token = localStorage.getItem('token'); // Get token from localStorage
+            const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null; // Get token from localStorage only on client side
             const headers: Record<string, string> = {
                 ...config.headers as Record<string, string>,
             };

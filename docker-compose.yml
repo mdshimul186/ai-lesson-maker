@@ -14,10 +14,9 @@ services:
       - app-network
     depends_on:
       - frontend
-
   frontend:
     build:
-      context: ./Frontend
+      context: ./frontend
       dockerfile: Dockerfile
     deploy:
       resources:
@@ -28,13 +27,15 @@ services:
     ports:
       - "4001:4001"
     volumes:
-      - ./Frontend:/app       # 挂载源代码
+      - ./frontend:/app       # 挂载源代码
       - /app/node_modules     # 防止覆盖容器内的 node_modules
+      - /app/.next            # 防止覆盖 Next.js 缓存
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - NODE_ENV=development
     networks:
       - app-network
-    command: ["npm", "run", "dev", "--", "--host"]
 
 networks:
   app-network:

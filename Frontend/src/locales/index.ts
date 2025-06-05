@@ -14,7 +14,7 @@ const resources = {
 
 i18n.use(initReactI18next).init({
     resources,
-    lng: localStorage.getItem('lang') || 'en',
+    lng: typeof window !== 'undefined' ? (localStorage.getItem('lang') || 'en') : 'en',
     fallbackLng: 'en',
     interpolation: {
         escapeValue: false

@@ -1,7 +1,10 @@
+'use client';
+
 import React from 'react';
 import { Layout, Menu, Button, Dropdown, Space, Avatar, Divider } from 'antd';
 import type { MenuProps } from 'antd';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore, useAccountStore } from '../../stores';
 import { 
   UserOutlined, 
@@ -19,14 +22,14 @@ import AccountSelector from '../AccountSelector';
 const { Header } = Layout;
 
 const AppHeader: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, user, logout } = useAuthStore();
   const { currentAccount } = useAccountStore();
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    router.push('/login');
   };
 
   const items: MenuProps['items'] = [
@@ -34,13 +37,13 @@ const AppHeader: React.FC = () => {
       key: 'profile',
       label: <span>Profile</span>,
       icon: <UserOutlined />,
-      onClick: () => navigate('/profile'),
+      onClick: () => router.push('/profile'),
     },
     {
       key: 'account',
       label: <span>Account Settings</span>,
       icon: <SettingOutlined />,
-      onClick: () => navigate('/account'),
+      onClick: () => router.push('/account'),
     },
     {
       type: 'divider',
@@ -52,7 +55,6 @@ const AppHeader: React.FC = () => {
       onClick: handleLogout,
     },
   ];
-
   return (
     <Header 
       style={{ 
@@ -66,8 +68,9 @@ const AppHeader: React.FC = () => {
         top: 0,
         zIndex: 100,
       }}
-    >      <div className="logo" style={{ fontSize: '20px', fontWeight: 'bold' }}>
-        <Link to={isAuthenticated ? "/dashboard" : "/"} style={{ color: '#fff', display: 'flex', alignItems: 'center' }}>
+    >
+      <div className="logo" style={{ fontSize: '20px', fontWeight: 'bold' }}>
+        <Link href={isAuthenticated ? "/dashboard" : "/"} style={{ color: '#fff', display: 'flex', alignItems: 'center' }}>
           <IdcardOutlined style={{ fontSize: '24px', marginRight: '10px' }} />
           AI Lesson Maker
         </Link>
@@ -82,22 +85,22 @@ const AppHeader: React.FC = () => {
           border: 'none',
           color: '#fff'
         }}
-        selectedKeys={[location.pathname]}
+        selectedKeys={[pathname]}
         theme="dark"
       >
         {isAuthenticated && (
           <>
             <Menu.Item key="/dashboard" icon={<DashboardOutlined />}>
-              <Link to="/dashboard">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </Menu.Item>
             <Menu.Item key="/lesson-maker" icon={<VideoCameraOutlined />}>
-              <Link to="/lesson-maker">Lesson Maker</Link>
+              <Link href="/lesson-maker">Lesson Maker</Link>
             </Menu.Item>
-            <Menu.Item key="/course-maker" icon={<BookOutlined />}>
-              <Link to="/course-maker">Course Maker</Link>
+            <Menu.Item key="/courses" icon={<BookOutlined />}>
+              <Link href="/courses">Course Maker</Link>
             </Menu.Item>
             <Menu.Item key="/tasks" icon={<HistoryOutlined />}>
-              <Link to="/tasks">Tasks</Link>
+              <Link href="/tasks">Tasks</Link>
             </Menu.Item>
           </>
         )}
@@ -113,7 +116,7 @@ const AppHeader: React.FC = () => {
             </Badge> */}
           </>
         )}
-          {isAuthenticated ? (
+        {isAuthenticated ? (
           <Dropdown menu={{ items }} trigger={['click']}>
             <a onClick={(e) => e.preventDefault()} style={{ cursor: 'pointer' }}>
               <Space>
@@ -142,10 +145,10 @@ const AppHeader: React.FC = () => {
         ) : (
           <Space>
             <Button type="link" style={{ color: '#fff' }}>
-              <Link to="/login">Login</Link>
+              <Link href="/login">Login</Link>
             </Button>
             <Button type="primary" style={{ background: '#fff', color: '#1890ff', border: 'none', fontWeight: '500' }}>
-              <Link to="/register">Register</Link>
+              <Link href="/register">Register</Link>
             </Button>
           </Space>
         )}

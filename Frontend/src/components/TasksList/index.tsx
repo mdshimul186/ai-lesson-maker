@@ -22,7 +22,7 @@ import {
     message
 } from 'antd';
 import { 
-    Task, 
+    TaskEvent, 
     getAllTasks, 
     cancelTask, 
     getQueueStatus, 
@@ -54,7 +54,7 @@ const { RangePicker } = DatePicker;
 
 const TasksList: React.FC = () => {
     // State for tasks and pagination
-    const [tasks, setTasks] = useState<Task[]>([]);
+    const [tasks, setTasks] = useState<TaskEvent[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [pagination, setPagination] = useState({
         current: 1,
@@ -77,7 +77,7 @@ const TasksList: React.FC = () => {
     const { currentAccount } = useAccountStore();
 
     // State for task details drawer
-    const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+    const [selectedTask, setSelectedTask] = useState<TaskEvent | null>(null);
     const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
       // Function to fetch tasks
     const fetchTasks = async (page = 1, pageSize = 10, status?: string) => {
@@ -177,7 +177,7 @@ const TasksList: React.FC = () => {
     }, [pagination.pageSize]);
     
     // Function to show task details in drawer
-    const showTaskDetails = (task: Task) => {
+    const showTaskDetails = (task: TaskEvent) => {
         setSelectedTask(task);
         setDrawerVisible(true);
     };
@@ -237,13 +237,13 @@ const TasksList: React.FC = () => {
             title: 'Task ID',
             dataIndex: 'task_id',
             key: 'task_id',
-            render: (text: string, record: Task) => <a onClick={() => showTaskDetails(record)}>{text.substring(0, 8)}...</a>,
+            render: (text: string, record: TaskEvent) => <a onClick={() => showTaskDetails(record)}>{text.substring(0, 8)}...</a>,
         },
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            render: (status: string, record: Task) => (
+            render: (status: string, record: TaskEvent) => (
                 <Space direction="vertical" size="small">
                     <Tag color={
                         status === 'COMPLETED' ? 'success' :
@@ -273,7 +273,7 @@ const TasksList: React.FC = () => {
             title: 'Progress',
             dataIndex: 'progress',
             key: 'progress',
-            render: (progress: number, record: Task) => (
+            render: (progress: number, record: TaskEvent) => (
                 <Progress 
                     percent={progress} 
                     size="small" 
@@ -284,26 +284,26 @@ const TasksList: React.FC = () => {
                     }
                 />
             ),
-            sorter: (a: Task, b: Task) => a.progress - b.progress,
+            sorter: (a: TaskEvent, b: TaskEvent) => a.progress - b.progress,
         },
         {
             title: 'Created At',
             dataIndex: 'created_at',
             key: 'created_at',
             render: (date: string) => formatDate(date),
-            sorter: (a: Task, b: Task) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+            sorter: (a: TaskEvent, b: TaskEvent) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
         },
         {
             title: 'Updated At',
             dataIndex: 'updated_at',
             key: 'updated_at',
             render: (date: string) => formatDate(date),
-            sorter: (a: Task, b: Task) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime(),
+            sorter: (a: TaskEvent, b: TaskEvent) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime(),
         },
         {
             title: 'Files',
             key: 'files',
-            render: (_: any, record: Task) => (
+            render: (_: any, record: TaskEvent) => (
                 record.task_folder_content ? (
                     <Button 
                         type="link"
@@ -319,7 +319,7 @@ const TasksList: React.FC = () => {
         {
             title: 'Actions',
             key: 'actions',
-            render: (_: any, record: Task) => (
+            render: (_: any, record: TaskEvent) => (
                 <Space size="small">
                     <Button 
                         type="primary" 
@@ -452,7 +452,7 @@ const TasksList: React.FC = () => {
             console.error('Error in fetchQueuePositions:', error);
         }
     };    // Function to check if a task needs queue position updates
-    const taskNeedsQueuePositionUpdate = (task: Task): boolean => {
+    const taskNeedsQueuePositionUpdate = (task: TaskEvent): boolean => {
         return (
             task.status === 'PENDING' || 
             task.status === 'QUEUED' || 
@@ -698,7 +698,7 @@ const TasksList: React.FC = () => {
                                 <Title level={4}>Event Log:</Title>
                                 <div className={styles.timelineContainer}>
                                     <Timeline mode="left">
-                                        {selectedTask.events.map((event, index) => {
+                                        {selectedTask.events.map((event: TaskEvent, index:number) => {
                                             // Determine color based on event message content
                                             let color = 'blue';
                                             if (event.message.toLowerCase().includes('error') || event.message.toLowerCase().includes('fail')) {

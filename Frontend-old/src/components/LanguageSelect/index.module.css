@@ -1,0 +1,10 @@
+.languageCon {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+.changeText {
+    margin-right: 10px;
+}

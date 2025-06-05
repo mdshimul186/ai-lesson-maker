@@ -1,0 +1,32 @@
+1
+00:00:00,100 --> 00:00:01,350
+Before diving into Docker
+
+2
+00:00:01,587 --> 00:00:03,362
+you must install it on your system
+
+3
+00:00:04,375 --> 00:00:08,100
+Docker provides versions for different operating systems such as Windows
+
+4
+00:00:08,300 --> 00:00:08,875
+macOS
+
+5
+00:00:09,325 --> 00:00:09,900
+and Linux
+
+6
+00:00:11,050 --> 00:00:14,387
+Each platform has specific installation requirements and steps
+
+7
+00:00:14,912 --> 00:00:15,550
+but initially
+
+8
+00:00:15,800 --> 00:00:22,413
+you need to ensure your system meets Docker’s prerequisites like hardware requirements and necessary system configurations
+

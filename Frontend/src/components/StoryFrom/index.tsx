@@ -32,10 +32,11 @@ import {
     VideoCameraAddOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { getVoiceList, generateVideo, uploadFile, getTaskStatus, Task, VideoGenerateReq } from '../../services/index';
+import { getVoiceList, generateVideo, uploadFile, getTaskStatus, VideoGenerateReq, TaskEvent } from '../../services/index';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './index.module.css';
 import { useVideoStore, useAccountStore } from "../../stores/index"; // Import useAccountStore
+import { Task } from '@/interfaces';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -417,7 +418,7 @@ const App: React.FC = () => {
                                 <Title level={5} style={{ marginTop: 16, marginBottom: 8 }}>Events:</Title>
                                 {taskStatus.events && taskStatus.events.length > 0 ? (
                                     <Timeline style={{ marginTop: 10, maxHeight: '200px', overflowY: 'auto', paddingLeft: '5px' }}>
-                                        {taskStatus.events.slice().reverse().map((event, index) => (
+                                        {taskStatus.events.slice().reverse().map((event: TaskEvent, index: number) => (
                                             <Timeline.Item
                                                 key={`${event.timestamp}-${index}`}
                                                 color={taskStatus.status === 'FAILED' && taskStatus.events.length - 1 - index === 0 && taskStatus.progress < 100 ? 'red' : 'blue'}

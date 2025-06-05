@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Modal } from 'antd';
 import { useAuthStore } from '../../stores';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
 const LoginForm: React.FC = () => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { isLoading, error, needsVerification, login, resendVerification, resetNeedsVerification, unverifiedEmail } = useAuthStore();
   const [emailForResend, setEmailForResend] = useState(unverifiedEmail || '');
   const [resendModalVisible, setResendModalVisible] = useState(false);
@@ -22,14 +23,14 @@ const LoginForm: React.FC = () => {
       });      // If no error and authentication successful
       if (useAuthStore.getState().isAuthenticated) {
         message.success('Login successful!');
-        navigate('/dashboard');
+        router.push('/dashboard');
       } else if (useAuthStore.getState().needsVerification) {
         setEmailForResend(values.email);
         // Store the email for the verification page
         localStorage.setItem('unverifiedEmail', values.email);
         // Redirect to verification page immediately
         message.info('Please verify your email before logging in');
-        navigate('/verify-email');
+        router.push('/verify-email');
       }
     } catch (err: any) {
       message.error('Login failed. Please check your credentials.');
@@ -108,10 +109,8 @@ const LoginForm: React.FC = () => {
             <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>
               {error}
             </div>
-          )}
-
-          <div style={{ textAlign: 'center' }}>
-            Don't have an account? <Link to="/register">Register</Link>
+          )}          <div style={{ textAlign: 'center' }}>
+            Don't have an account? <Link href="/register">Register</Link>
           </div>
         </Form>
       </Card>

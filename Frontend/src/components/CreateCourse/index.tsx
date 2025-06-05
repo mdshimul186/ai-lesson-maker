@@ -16,12 +16,10 @@ import {
 import { 
     BookOutlined, 
     TranslationOutlined, 
-    AudioOutlined,
-    PlaySquareOutlined,
+    AudioOutlined,    PlaySquareOutlined,
     SettingOutlined,
     ReloadOutlined
 } from '@ant-design/icons';
-// import { useNavigate } from 'react-router-dom';
 import { 
     getVoiceList, 
     generateCourseStructure, 

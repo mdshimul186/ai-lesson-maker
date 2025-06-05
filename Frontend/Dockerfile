@@ -5,16 +5,16 @@ FROM node:22
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY package*.json /app/
-
-# Remove node_modules only, keep package-lock.json
-RUN rm -rf node_modules
+COPY package*.json ./
 
 # Install dependencies using npm ci (ensure consistent versions)
-RUN npm i --include=dev
+RUN npm ci
 
 # Copy the rest of the frontend project files
-COPY . /app/
+COPY . .
+
+# Expose the port
+EXPOSE 4001
 
 # Start the frontend development server
 CMD ["npm", "run", "dev"]

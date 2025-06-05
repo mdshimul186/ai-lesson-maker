@@ -47,16 +47,16 @@ interface AuthState {
   resetNeedsVerification: () => void;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_ROOT_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_ROOT_URL;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
-  token: localStorage.getItem('token'),
+  token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
   isLoading: false,
   error: null,
-  isAuthenticated: !!localStorage.getItem('token'),
+  isAuthenticated: typeof window !== 'undefined' ? !!localStorage.getItem('token') : false,
   needsVerification: false,
-  unverifiedEmail: localStorage.getItem('unverifiedEmail'),
+  unverifiedEmail: typeof window !== 'undefined' ? localStorage.getItem('unverifiedEmail') : null,
   
   login: async (credentials) => {
     set({ isLoading: true, error: null });

@@ -29,6 +29,10 @@ export async function getLLMProviders(): Promise<any> {
     });
 }
 
+export type TaskEvent = any
+
+
+
 // Define the structure for the video generation request payload
 export interface VideoGenerateReq {
     // Core content
