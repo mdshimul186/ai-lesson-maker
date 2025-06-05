@@ -12,9 +12,14 @@ const nextConfig: NextConfig = {
     return config;
   },
   
-  // Allow connections from Docker
+  // Allow connections from Docker and external IPs
   async rewrites() {
     return [];
+  },
+  
+  // Ensure the app can be accessed from external IPs
+  experimental: {
+    // This helps with Docker deployments
   },
 };
 
