@@ -29,4 +29,4 @@ EXPOSE 4001
 ENV NODE_ENV=production
 
 # Start the app with the "start" script defined in package.json
-CMD npx next start -p 4001 -H 0.0.0.0
+CMD ["npm", "start"]
