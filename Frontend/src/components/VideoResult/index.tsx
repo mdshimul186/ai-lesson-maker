@@ -18,7 +18,8 @@ import {
     Sparkles,
     Video,
     Calendar,
-    Share2
+    Share2,
+    Copy
 } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { Progress } from '../ui/progress';
@@ -26,6 +27,7 @@ import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { toast } from 'sonner';
 
 export default function VideoResult() {
     const { videoUrl, isLoading, error, taskStatus } = useVideoStore();
@@ -62,7 +64,11 @@ export default function VideoResult() {
         return (
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button variant="link" size="sm">
+                    <Button 
+                        variant="link" 
+                        size="sm"
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 p-0 h-auto font-medium"
+                    >
                         View All Files
                     </Button>
                 </DialogTrigger>
@@ -84,7 +90,12 @@ export default function VideoResult() {
                                             <p className="text-sm text-gray-500">{key}</p>
                                         </div>
                                     </div>
-                                    <Button variant="outline" size="sm" asChild>
+                                    <Button 
+                                        variant="outline" 
+                                        size="sm" 
+                                        className="hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-300 dark:border-slate-600"
+                                        asChild
+                                    >
                                         <a href={url as string} target="_blank" rel="noopener noreferrer">
                                             <ExternalLink className="h-4 w-4 mr-2" />
                                             Open
@@ -228,26 +239,26 @@ export default function VideoResult() {
 
             {/* Enhanced Video player */}
             {!isLoading && !error && videoUrl && (
-                <Card className="shadow-2xl border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
-                    <CardHeader className="pb-6 bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm">
+                <Card className="shadow-2xl border-0 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-slate-800 dark:text-white overflow-hidden">
+                    <CardHeader className="pb-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 dark:from-green-500/20 dark:to-emerald-500/20 backdrop-blur-sm">
                         <CardTitle className="flex items-center gap-4">
                             <div className="p-3 bg-gradient-to-br from-green-400 via-emerald-500 to-green-600 rounded-2xl shadow-xl">
                                 <CheckCircle2 className="h-7 w-7 text-white" />
                             </div>
                             <div>
-                                <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-green-100 bg-clip-text text-transparent">
+                                <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 via-slate-600 to-green-600 dark:from-white dark:via-green-100 dark:to-green-100 bg-clip-text text-transparent">
                                     🎉 Your Lesson is Ready!
                                 </h2>
                                 <div className="flex items-center gap-3 mt-2">
-                                    <Badge className="bg-green-500/20 text-green-300 border-green-400/30">
+                                    <Badge className="bg-green-500/20 text-green-700 dark:text-green-300 border-green-400/30">
                                         <Sparkles className="h-3 w-3 mr-1" />
                                         AI Generated
                                     </Badge>
-                                    <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30">
+                                    <Badge className="bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-400/30">
                                         <Video className="h-3 w-3 mr-1" />
                                         HD Quality
                                     </Badge>
-                                    <Badge className="bg-purple-500/20 text-purple-300 border-purple-400/30">
+                                    <Badge className="bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-400/30">
                                         <Calendar className="h-3 w-3 mr-1" />
                                         Ready Now
                                     </Badge>
@@ -257,7 +268,7 @@ export default function VideoResult() {
                     </CardHeader>
                     <CardContent className="space-y-8 p-8">
                         {/* Enhanced Video Player */}
-                        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-black to-slate-900 shadow-2xl border border-white/10">
+                        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-black to-slate-900 shadow-2xl border border-slate-200 dark:border-white/10">
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none z-10"></div>
                             <video ref={videoRef} controls className="w-full h-auto max-h-[600px] object-contain">
                                 <source src={videoUrl} type="video/mp4" />
@@ -269,35 +280,50 @@ export default function VideoResult() {
                         <div className="flex flex-wrap gap-4">
                             <Button 
                                 size="lg"
-                                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 flex items-center gap-3 px-6 py-3 rounded-xl shadow-xl"
+                                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white flex items-center gap-3 px-6 py-3 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
                                 onClick={() => window.open(videoUrl, '_blank')}
                             >
                                 <Eye className="h-5 w-5" />
                                 View Full Screen
                             </Button>
+                            
                             <Button 
                                 size="lg"
-                                variant="outline" 
-                                className="border-white/30 text-white hover:bg-white/20 flex items-center gap-3 px-6 py-3 rounded-xl backdrop-blur-sm"
+                                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white border-0 flex items-center gap-3 px-6 py-3 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
                                 onClick={() => {
                                     const link = document.createElement('a');
                                     link.href = videoUrl;
                                     link.download = `ai-lesson-${Date.now()}.mp4`;
                                     link.click();
+                                    toast.success('Download started!', {
+                                        description: 'Your lesson video is being downloaded.',
+                                        duration: 3000,
+                                    });
                                 }}
                             >
                                 <Download className="h-5 w-5" />
                                 Download Lesson
                             </Button>
+                            
                             <Button 
                                 size="lg"
-                                variant="outline" 
-                                className="border-white/30 text-white hover:bg-white/20 flex items-center gap-3 px-6 py-3 rounded-xl backdrop-blur-sm"
+                                variant="outline"
+                                className="border-2 border-slate-300 dark:border-white/30 text-slate-700 dark:text-white bg-white/90 dark:bg-transparent hover:bg-slate-50 dark:hover:bg-white/20 hover:border-slate-400 dark:hover:border-white/50 flex items-center gap-3 px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                                 onClick={() => {
-                                    navigator.clipboard.writeText(videoUrl);
+                                    navigator.clipboard.writeText(videoUrl).then(() => {
+                                        toast.success('Link copied to clipboard!', {
+                                            description: 'You can now share your lesson video link.',
+                                            duration: 3000,
+                                        });
+                                    }).catch(() => {
+                                        toast.error('Failed to copy link', {
+                                            description: 'Please try again or copy the link manually.',
+                                            duration: 3000,
+                                        });
+                                    });
                                 }}
                             >
-                                <Share2 className="h-5 w-5" />
+                                <Copy className="h-5 w-5" />
                                 Copy Link
                             </Button>
                         </div>

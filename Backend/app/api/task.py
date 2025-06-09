@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List, Optional
+import asyncio
 
 from app.schemas.task import Task as TaskSchema, TaskCreate
 from app.services import task_service
@@ -38,7 +39,7 @@ async def get_task_status_api(
     
     return task
 
-@router.get("/", response_model=List[TaskSchema])
+@router.get("/")
 async def get_all_tasks_api(
     current_user: UserInDB = Depends(get_current_active_user), 
     account_id: Optional[str] = Depends(get_optional_account_id),
@@ -47,7 +48,7 @@ async def get_all_tasks_api(
     status: Optional[str] = Query(default=None, description="Filter tasks by status (PENDING, PROCESSING, COMPLETED, FAILED)")
 ):
     """
-    Retrieve all tasks for the current user, optionally filtered by account_id from header and status.
+    Retrieve all tasks for the current user with pagination and total count, optionally filtered by account_id from header and status.
     
     Args:
         current_user: The currently authenticated user.
@@ -57,7 +58,7 @@ async def get_all_tasks_api(
         status: Optional filter for task status (e.g. PENDING, PROCESSING, COMPLETED, FAILED)
         
     Returns:
-        List of Task objects
+        Object containing tasks list and total count
     """
     # Validate status if provided
     valid_statuses = ["PENDING", "PROCESSING", "COMPLETED", "FAILED"]
@@ -67,13 +68,28 @@ async def get_all_tasks_api(
             detail=f"Invalid status '{status}'. Valid statuses are: {', '.join(valid_statuses)}"
         )
     
-    return await task_service.get_all_tasks(
-        user_id=current_user.id, 
-        account_id=account_id, 
-        limit=limit, 
-        skip=skip, 
-        status_filter=status
+    # Get tasks and total count in parallel for better performance
+    tasks, total_count = await asyncio.gather(
+        task_service.get_all_tasks(
+            user_id=current_user.id, 
+            account_id=account_id, 
+            limit=limit, 
+            skip=skip, 
+            status_filter=status
+        ),
+        task_service.get_task_count(
+            user_id=current_user.id,
+            account_id=account_id,
+            status_filter=status
+        )
     )
+    
+    return {
+        "tasks": tasks,
+        "total": total_count,
+        "limit": limit,
+        "skip": skip
+    }
 
 @router.post("/", response_model=TaskSchema, status_code=201)
 async def create_new_task_api(

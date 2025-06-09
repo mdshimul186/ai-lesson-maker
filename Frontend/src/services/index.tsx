@@ -153,7 +153,7 @@ export async function uploadFile(formData: FormData): Promise<{ success: boolean
     });
 }
 
-export async function getAllTasks(params?: { limit?: number, skip?: number, status?: string }): Promise<Task[]> {
+export async function getAllTasks(params?: { limit?: number, skip?: number, status?: string }): Promise<{ tasks: Task[], total: number, limit: number, skip: number }> {
     // Build query parameters (accountId is now sent via X-Account-ID header automatically)
     const queryParams = new URLSearchParams();
     if (params?.limit) {
@@ -175,7 +175,7 @@ export async function getAllTasks(params?: { limit?: number, skip?: number, stat
     // This prevents hammering the server with duplicate requests while
     // still ensuring data is reasonably fresh
     return cachedApiCall(cacheKey, () => 
-        request<Task[]>({
+        request<{ tasks: Task[], total: number, limit: number, skip: number }>({
             url: `/api/tasks${queryString}`,
             method: "get",
         }), 
@@ -390,6 +390,21 @@ export async function getQueueList(params?: {
 export async function getSupportedTaskTypes(): Promise<{ success: boolean, data: any }> {
     return request<{ success: boolean, data: any }>({
         url: "/api/tasks/types",
+        method: "get",
+    });
+}
+
+export async function getTaskCount(params?: { status?: string }): Promise<{ total: number }> {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+    if (params?.status) {
+        queryParams.append('status', params.status);
+    }
+    
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    
+    return request<{ total: number }>({
+        url: `/api/tasks/count/total${queryString}`,
         method: "get",
     });
 }

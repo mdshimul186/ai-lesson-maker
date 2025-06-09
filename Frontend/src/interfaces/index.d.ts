@@ -92,15 +92,26 @@ export interface IPaymentExecutionResponse {
 // Task Management Interfaces
 export interface Task {
     task_id: string;
+    user_id: string;
+    account_id: string;
+    task_type?: string;
+    priority?: string;
     status: string;
-    progress: number;
     events: TaskEvent[];
+    progress: number;
     created_at: string;
     updated_at: string;
     result_url?: string;
+    task_folder_content?: Record<string, any>;
     error_message?: string;
     error_details?: any;
-    task_folder_content?: Record<string, any>;
+    request_data?: Record<string, any>;
+    estimated_completion?: string;
+    // Computed properties for display
+    story_prompt?: string;
+    segments?: number;
+    language?: string;
+    resolution?: string;
     queue_position?: number;
 }
 

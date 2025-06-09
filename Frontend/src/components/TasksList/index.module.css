@@ -48,6 +48,43 @@
     border-radius: 8px;
 }
 
+/* Custom line clamp utility for better text truncation */
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+/* Enhanced skeleton animation */
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* Smooth view transitions */
+.view-transition {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Enhanced mobile responsive table */
+@media (max-width: 768px) {
+    .tasksTable {
+        font-size: 14px;
+    }
+}
+
 .eventMessage {
     margin: 0;
 }

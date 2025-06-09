@@ -78,7 +78,8 @@ export default function DashboardPage() {
         setStats(prev => ({ ...prev, loading: true }));
         try {
             // Get actual pending videos count from the tasks API
-            const tasks = await getAllTasks();
+            const response = await getAllTasks();
+            const tasks = response.tasks;
             
             // Count pending, queued, and processing tasks
             const pendingCount = tasks.filter(task => 
@@ -116,7 +117,8 @@ export default function DashboardPage() {
         
         try {
             // Get actual pending videos count from the tasks API
-            const tasks = await getAllTasks();
+            const response = await getAllTasks();
+            const tasks = response.tasks;
             
             // Count pending, queued, and processing tasks
             const pendingCount = tasks.filter(task => 

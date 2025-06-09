@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import StoryForm from '../../components/StoryFrom';
+import StoryForm from '../../components/LessonForm';
 import VideoResult from '../../components/VideoResult';
 import { Button } from '../../components/ui/button';
 import { List, ArrowLeft, Sparkles, Video, Wand2, PlayCircle, Stars, Zap } from 'lucide-react';
@@ -81,7 +81,7 @@ export default function LessonFormPage() {
                     
                     <div className="relative z-10 p-10">
                         {/* Enhanced welcome message card with glass morphism */}
-                        <div className="mb-10 p-8 bg-gradient-to-br from-background/90 via-card/95 to-background/85 dark:from-card/90 dark:via-background/95 dark:to-card/85 rounded-3xl shadow-2xl border border-border backdrop-blur-lg">
+                        <div className="mb-10 p-8 bg-gradient-to-br from-background/90 via-card/95 to-background/85 dark:from-card/90 dark:via-background/95 dark:to-card/85 rounded-3xl border border-border">
                             <div className="flex items-center gap-6">
                                 <div className="p-4 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-2xl shadow-xl">
                                     <Video className="h-8 w-8 text-white" />

@@ -221,7 +221,7 @@ const App: React.FC = () => {
     const startPolling = (taskId: string) => {
         stopPolling();
 
-        const initialStatus: Task = {
+        const initialStatus: Partial<Task> = {
             task_id: taskId,
             status: 'PENDING',
             progress: 0,
@@ -239,8 +239,8 @@ const App: React.FC = () => {
             updated_at: new Date().toISOString()
         };
 
-        setTaskStatus(initialStatus);
-        useVideoStore.getState().setTaskStatus(initialStatus);
+        setTaskStatus(initialStatus as Task);
+        useVideoStore.getState().setTaskStatus(initialStatus as Task);
         setCurrentTaskId(taskId);
         setError(null);
         useVideoStore.getState().setError(null);
@@ -414,13 +414,11 @@ const App: React.FC = () => {
 
     return (
         <div className="h-full overflow-y-auto bg-background dark:bg-card">
-            <div className="p-4 space-y-4">
-            
-
+            <div className="max-w-4xl mx-auto p-6 space-y-6">
                 {renderProgressCard()}
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onFinish)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onFinish)} className="space-y-6">
                         {/* Enhanced Scene Details Card */}
                         <Card className="border border-border bg-background/95 dark:bg-card/95 hover:shadow-sm transition-all duration-300">
                             <CardHeader className="pb-2">
@@ -440,7 +438,7 @@ const App: React.FC = () => {
                                     name="story_prompt"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-foreground font-semibold text-base flex items-center gap-2 mb-1.5">
+                                            <FormLabel className="text-foreground font-semibold text-base flex items-center gap-2 mb-2">
                                                 <ImageIcon className="h-4 w-4 text-blue-500" />
                                                 Lesson Topic & Instructions
                                             </FormLabel>
@@ -465,7 +463,7 @@ const App: React.FC = () => {
                                     name="segments"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-foreground font-semibold text-base flex items-center gap-2 mb-1.5">
+                                            <FormLabel className="text-foreground font-semibold text-base flex items-center gap-2 mb-2">
                                                 <Video className="h-4 w-4 text-purple-500" />
                                                 Number of Scenes (1-50)
                                             </FormLabel>
@@ -474,7 +472,7 @@ const App: React.FC = () => {
                                                     type="number" 
                                                     min="1" 
                                                     max="50"
-                                                    className="bg-background/90 dark:bg-card/90 border-border focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 text-base rounded-xl shadow-sm"
+                                                    className="bg-background/90 dark:bg-card/90 border-border focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 text-base rounded-xl shadow-sm h-12"
                                                     {...field}
                                                     onChange={(e) => field.onChange(parseInt(e.target.value))}
                                                 />
@@ -499,38 +497,41 @@ const App: React.FC = () => {
                                     <span className="text-lg">Video Configuration</span>
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4">
+                            <CardContent className="space-y-6">
                                 <div>
-                                    <Label className="text-foreground font-medium mb-2 block flex items-center gap-2">
+                                    <Label className="text-foreground font-semibold mb-3 block flex items-center gap-2">
                                         <Monitor className="h-4 w-4" />
                                         Video Format & Quality
                                     </Label>
                                     <RadioGroup 
                                         value={resolutionType} 
                                         onValueChange={handleResolutionTypeChange}
-                                        className="grid grid-cols-3 gap-3"
+                                        className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"
                                     >
                                         {resolutionOptions.map((option) => (
-                                            <div key={option.type} className="flex items-center space-x-2 p-3 border border-border rounded-lg hover:border-blue-300 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all duration-200">
-                                                <RadioGroupItem value={option.type} id={option.type} />
-                                                <Label htmlFor={option.type} className="flex items-center gap-2 cursor-pointer">
+                                            <div key={option.type} className="flex items-center space-x-3 p-4 border border-border rounded-xl hover:border-blue-400/70 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all duration-300 cursor-pointer">
+                                                <RadioGroupItem value={option.type} id={option.type} className="text-blue-600" />
+                                                <Label htmlFor={option.type} className="flex items-center gap-3 cursor-pointer">
                                                     {option.icon}
-                                                    <span className="text-sm font-medium">{option.label}</span>
+                                                    <span className="text-sm font-semibold">{option.label}</span>
                                                 </Label>
                                             </div>
                                         ))}
                                     </RadioGroup>
                                     
                                     <Select value={selectedResolution} onValueChange={setSelectedResolution}>
-                                        <SelectTrigger className="mt-4 bg-background/80 dark:bg-card/80 border-border">
-                                            <SelectValue />
+                                        <SelectTrigger className="bg-background/80 dark:bg-card/80 border-border h-12 rounded-xl text-base">
+                                            <SelectValue placeholder="Select resolution" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {resolutionOptions
                                                 .find(opt => opt.type === resolutionType)
                                                 ?.options.map((res) => (
                                                     <SelectItem key={res.value} value={res.value}>
-                                                        {res.label}
+                                                        <div className="flex items-center gap-2">
+                                                            <span>{res.label}</span>
+                                                            <Badge variant="outline" className="text-xs">{res.quality}</Badge>
+                                                        </div>
                                                     </SelectItem>
                                                 ))
                                             }
@@ -558,14 +559,17 @@ const App: React.FC = () => {
                                         name="language"
                                         render={({ field }) => (
                                             <FormItem className="flex flex-col">
-                                                <FormLabel className="text-foreground font-medium mb-1.5">Video Language</FormLabel>
+                                                <FormLabel className="text-foreground font-semibold mb-2 flex items-center gap-2">
+                                                    <Languages className="h-4 w-4" />
+                                                    Video Language
+                                                </FormLabel>
                                                 <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
                                                     <PopoverTrigger asChild>
                                                         <Button
                                                             variant="outline"
                                                             role="combobox"
                                                             aria-expanded={languageOpen}
-                                                            className="w-full justify-between bg-background/80 dark:bg-card/80 border-border text-left font-normal h-10"
+                                                            className="w-full justify-between bg-background/80 dark:bg-card/80 border-border text-left font-normal h-12 rounded-xl"
                                                         >
                                                             {field.value ? field.value : "Select language..."}
                                                             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -619,7 +623,7 @@ const App: React.FC = () => {
                                         name="voice_name"
                                         render={({ field }) => (
                                             <FormItem className="flex flex-col">
-                                                <FormLabel className="text-foreground font-medium mb-1.5 flex items-center gap-2">
+                                                <FormLabel className="text-foreground font-semibold mb-2 flex items-center gap-2">
                                                     <Volume2 className="h-4 w-4" />
                                                     Voice
                                                 </FormLabel>
@@ -629,7 +633,7 @@ const App: React.FC = () => {
                                                             variant="outline"
                                                             role="combobox"
                                                             aria-expanded={voiceOpen}
-                                                            className="w-full justify-between bg-background/80 dark:bg-card/80 border-border text-left font-normal h-10"
+                                                            className="w-full justify-between bg-background/80 dark:bg-card/80 border-border text-left font-normal h-12 rounded-xl"
                                                             disabled={!form.watch('language')}
                                                         >
                                                             {field.value ? nowVoiceList.find((voice) => voice.name === field.value)?.displayName : "Select voice..."}
@@ -693,49 +697,229 @@ const App: React.FC = () => {
                                     <span className="text-lg">Additional Options</span>
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <FormField
-                                        control={form.control}
-                                        name="include_subtitles"
-                                        render={({ field }) => (
-                                            <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/60 dark:bg-card/60">
-                                                <div className="space-y-0.5">
-                                                    <FormLabel className="text-base font-medium">Include Subtitles</FormLabel>
-                                                    <div className="text-sm text-muted-foreground">
-                                                        Add captions to your video
+                            <CardContent className="space-y-6">
+                                {/* Upload Fields */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {/* Logo Upload */}
+                                    <div className="space-y-3">
+                                        <Label className="text-sm font-semibold flex items-center gap-2">
+                                            <ImageIcon className="w-4 h-4 text-blue-500" />
+                                            Logo (Optional)
+                                        </Label>
+                                        <div className="border-2 border-dashed border-border rounded-xl p-4 text-center hover:border-blue-400/50 hover:bg-blue-50/50 dark:hover:bg-blue-950/10 transition-all duration-300 min-h-[110px] flex flex-col justify-center">
+                                            {logoUrl ? (
+                                                <div className="space-y-3">
+                                                    <img src={logoUrl} alt="Logo" className="w-full h-14 object-contain rounded-lg mx-auto bg-background/50" />
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => setLogoUrl(undefined)}
+                                                        className="w-full text-xs h-8 hover:bg-destructive hover:text-destructive-foreground"
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-3">
+                                                    <Upload className="w-5 h-5 mx-auto text-muted-foreground" />
+                                                    <div>
+                                                        <Input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) handleFileUpload(file, 'logo');
+                                                            }}
+                                                            disabled={uploadingLogo}
+                                                            className="hidden"
+                                                            id="logo-upload"
+                                                        />
+                                                        <Label
+                                                            htmlFor="logo-upload"
+                                                            className="cursor-pointer text-xs text-muted-foreground hover:text-blue-600 transition-colors font-medium"
+                                                        >
+                                                            {uploadingLogo ? (
+                                                                <div className="flex items-center justify-center gap-2">
+                                                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                                                    Uploading...
+                                                                </div>
+                                                            ) : (
+                                                                "Click to upload image"
+                                                            )}
+                                                        </Label>
                                                     </div>
                                                 </div>
-                                                <FormControl>
-                                                    <Switch
-                                                        checked={field.value}
-                                                        onCheckedChange={field.onChange}
-                                                    />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
+                                            )}
+                                        </div>
+                                    </div>
 
-                                    <FormField
-                                        control={form.control}
-                                        name="visual_content_in_language"
-                                        render={({ field }) => (
-                                            <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/60 dark:bg-card/60">
-                                                <div className="space-y-0.5">
-                                                    <FormLabel className="text-base font-medium">Localize Visuals</FormLabel>
-                                                    <div className="text-sm text-muted-foreground">
-                                                        Generate visuals in selected language
+                                    {/* Intro Video Upload */}
+                                    <div className="space-y-3">
+                                        <Label className="text-sm font-semibold flex items-center gap-2">
+                                            <Video className="w-4 h-4 text-green-500" />
+                                            Intro Video (Optional)
+                                        </Label>
+                                        <div className="border-2 border-dashed border-border rounded-xl p-4 text-center hover:border-green-400/50 hover:bg-green-50/50 dark:hover:bg-green-950/10 transition-all duration-300 min-h-[110px] flex flex-col justify-center">
+                                            {introVideoUrl ? (
+                                                <div className="space-y-3">
+                                                    <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg mx-auto w-fit">
+                                                        <Video className="w-5 h-5 text-green-600 dark:text-green-400" />
+                                                    </div>
+                                                    <p className="text-xs text-foreground font-medium">Video uploaded</p>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => setIntroVideoUrl(undefined)}
+                                                        className="w-full text-xs h-8 hover:bg-destructive hover:text-destructive-foreground"
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-3">
+                                                    <Upload className="w-5 h-5 mx-auto text-muted-foreground" />
+                                                    <div>
+                                                        <Input
+                                                            type="file"
+                                                            accept="video/*"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) handleFileUpload(file, 'intro');
+                                                            }}
+                                                            disabled={uploadingIntro}
+                                                            className="hidden"
+                                                            id="intro-upload"
+                                                        />
+                                                        <Label
+                                                            htmlFor="intro-upload"
+                                                            className="cursor-pointer text-xs text-muted-foreground hover:text-green-600 transition-colors font-medium"
+                                                        >
+                                                            {uploadingIntro ? (
+                                                                <div className="flex items-center justify-center gap-2">
+                                                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                                                    Uploading...
+                                                                </div>
+                                                            ) : (
+                                                                "Click to upload video"
+                                                            )}
+                                                        </Label>
                                                     </div>
                                                 </div>
-                                                <FormControl>
-                                                    <Switch
-                                                        checked={field.value}
-                                                        onCheckedChange={field.onChange}
-                                                    />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Outro Video Upload */}
+                                    <div className="space-y-3">
+                                        <Label className="text-sm font-semibold flex items-center gap-2">
+                                            <Video className="w-4 h-4 text-purple-500" />
+                                            Outro Video (Optional)
+                                        </Label>
+                                        <div className="border-2 border-dashed border-border rounded-xl p-4 text-center hover:border-purple-400/50 hover:bg-purple-50/50 dark:hover:bg-purple-950/10 transition-all duration-300 min-h-[110px] flex flex-col justify-center">
+                                            {outroVideoUrl ? (
+                                                <div className="space-y-3">
+                                                    <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg mx-auto w-fit">
+                                                        <Video className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                                    </div>
+                                                    <p className="text-xs text-foreground font-medium">Video uploaded</p>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => setOutroVideoUrl(undefined)}
+                                                        className="w-full text-xs h-8 hover:bg-destructive hover:text-destructive-foreground"
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-3">
+                                                    <Upload className="w-5 h-5 mx-auto text-muted-foreground" />
+                                                    <div>
+                                                        <Input
+                                                            type="file"
+                                                            accept="video/*"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) handleFileUpload(file, 'outro');
+                                                            }}
+                                                            disabled={uploadingOutro}
+                                                            className="hidden"
+                                                            id="outro-upload"
+                                                        />
+                                                        <Label
+                                                            htmlFor="outro-upload"
+                                                            className="cursor-pointer text-xs text-muted-foreground hover:text-purple-600 transition-colors font-medium"
+                                                        >
+                                                            {uploadingOutro ? (
+                                                                <div className="flex items-center justify-center gap-2">
+                                                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                                                    Uploading...
+                                                                </div>
+                                                            ) : (
+                                                                "Click to upload video"
+                                                            )}
+                                                        </Label>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Settings Switches */}
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <Settings className="h-4 w-4 text-gray-600" />
+                                        <h4 className="font-semibold text-sm text-foreground">Video Settings</h4>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <FormField
+                                            control={form.control}
+                                            name="include_subtitles"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-row items-center justify-between rounded-xl border border-border p-5 bg-background/60 dark:bg-card/60 hover:bg-background/80 dark:hover:bg-card/80 transition-all duration-300">
+                                                    <div className="space-y-1">
+                                                        <FormLabel className="text-base font-semibold">Include Subtitles</FormLabel>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            Add captions to your video for accessibility
+                                                        </div>
+                                                    </div>
+                                                    <FormControl>
+                                                        <Switch
+                                                            checked={field.value}
+                                                            onCheckedChange={field.onChange}
+                                                            className="ml-4"
+                                                        />
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="visual_content_in_language"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-row items-center justify-between rounded-xl border border-border p-5 bg-background/60 dark:bg-card/60 hover:bg-background/80 dark:hover:bg-card/80 transition-all duration-300">
+                                                    <div className="space-y-1">
+                                                        <FormLabel className="text-base font-semibold">Localize Visuals</FormLabel>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            Generate visuals in selected language
+                                                        </div>
+                                                    </div>
+                                                    <FormControl>
+                                                        <Switch
+                                                            checked={field.value}
+                                                            onCheckedChange={field.onChange}
+                                                            className="ml-4"
+                                                        />
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
