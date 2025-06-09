@@ -1,17 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Layout } from 'antd';
 import LoginForm from '../../components/LoginForm';
-
-const { Content } = Layout;
 
 export default function LoginPage() {
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Content style={{ padding: '24px' }}>
+    <div className="min-h-screen bg-background">
+      <div className="p-6">
         <LoginForm />
-      </Content>
-    </Layout>
+      </div>
+    </div>
   );
 }

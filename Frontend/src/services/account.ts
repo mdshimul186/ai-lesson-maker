@@ -53,10 +53,18 @@ export interface PaymentResponse {
 // API base URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_ROOT_URL;
 
+// Helper function to safely get token from localStorage
+const getToken = (): string => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('token') || '';
+  }
+  return '';
+};
+
 // Account service
 export const accountService = {  // Get all accounts for the current user
   getUserAccounts: async (): Promise<IAccount[]> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.get(`${API_BASE_URL}/api/accounts`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -64,7 +72,7 @@ export const accountService = {  // Get all accounts for the current user
   },
   // Get a specific account by ID
   getAccount: async (accountId: string): Promise<IAccount> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.get(`${API_BASE_URL}/api/accounts/${accountId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -72,7 +80,7 @@ export const accountService = {  // Get all accounts for the current user
   },
   // Create a new account
   createAccount: async (accountData: CreateAccountData): Promise<IAccount> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.post(`${API_BASE_URL}/api/accounts`, accountData, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -80,7 +88,7 @@ export const accountService = {  // Get all accounts for the current user
   },
   // Update an account
   updateAccount: async (accountId: string, updateData: UpdateAccountData): Promise<IAccount> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.put(`${API_BASE_URL}/api/accounts/${accountId}`, updateData, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -88,7 +96,7 @@ export const accountService = {  // Get all accounts for the current user
   },
   // Invite a member to a team account
   inviteMember: async (accountId: string, email: string, role?: string): Promise<any> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const inviteData: InviteMemberData = { email, role };
     const response = await axios.post(`${API_BASE_URL}/api/accounts/${accountId}/members/invite`, inviteData, {
       headers: { Authorization: `Bearer ${token}` }
@@ -97,7 +105,7 @@ export const accountService = {  // Get all accounts for the current user
   },
   // Accept or reject an invitation
   respondToInvitation: async (invitationId: string, accept: boolean): Promise<any> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.post(
       `${API_BASE_URL}/api/accounts/invitations/respond?accept=${accept}`,
       { invitation_id: invitationId }, // Send invitation_id in the body
@@ -107,7 +115,7 @@ export const accountService = {  // Get all accounts for the current user
   },
   // Remove a member from an account
   removeMember: async (accountId: string, memberUserId: string): Promise<any> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.delete(`${API_BASE_URL}/api/accounts/${accountId}/members/${memberUserId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -118,7 +126,7 @@ export const accountService = {  // Get all accounts for the current user
 // Payment service
 export const paymentService = {  // Get available credit packages
   getCreditPackages: async (): Promise<ICreditPackage[]> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.get(`${API_BASE_URL}/api/payments/packages`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -126,7 +134,7 @@ export const paymentService = {  // Get available credit packages
   },
   // Create a payment
   createPayment: async (paymentData: CreatePaymentData): Promise<PaymentResponse> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     const response = await axios.post(`${API_BASE_URL}/api/payments/create`, paymentData, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -135,7 +143,7 @@ export const paymentService = {  // Get available credit packages
 
   // Execute a payment after approval
   executePayment: async (verifyData: PaymentVerifyData): Promise<PaymentResponse> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     
     try {
       const response = await axios.post(`${API_BASE_URL}/api/payments/execute`, verifyData, {
@@ -150,7 +158,7 @@ export const paymentService = {  // Get available credit packages
   },
   // Verify payment status directly with backend
   verifyPaymentStatus: async (paymentId: string): Promise<PaymentResponse> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     try {
       const response = await axios.get(`${API_BASE_URL}/api/payments/verify/${paymentId}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -164,7 +172,7 @@ export const paymentService = {  // Get available credit packages
   
   // Mark a payment as successful in the database when we get PAYMENT_ALREADY_DONE
   markPaymentCompleted: async (paymentId: string, payerId: string, errorData: any): Promise<any> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     try {
       const response = await axios.post(
         `${API_BASE_URL}/api/payments/mark-as-completed`,
@@ -183,7 +191,7 @@ export const paymentService = {  // Get available credit packages
   },
   // Get transaction history
   getTransactions: async (accountId?: string): Promise<ITransaction[]> => {
-    const token = localStorage.getItem('token') || '';
+    const token = getToken();
     let url = `${API_BASE_URL}/api/payments/transactions`;
     if (accountId) {
       url += `?account_id=${accountId}`;

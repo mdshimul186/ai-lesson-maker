@@ -1,134 +1,140 @@
 import React from 'react';
-import { Card, Typography, Steps, Divider, Row, Col, Tag } from 'antd';
-import { VideoCameraOutlined, CreditCardOutlined, PlayCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
-
-const { Title, Paragraph, Text } = Typography;
-const { Step } = Steps;
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { CreditCard, Video, Play, CheckCircle } from 'lucide-react';
 
 const CreditUsageGuide: React.FC = () => {
   return (
-    <Card style={{ borderRadius: 8, marginBottom: 24 }}>
-      <Title level={4}>
-        <CreditCardOutlined /> Understanding Credit Usage
-      </Title>
+    <Card className="p-6 border border-border bg-background dark:bg-card/95">
+      <div className="flex items-center space-x-2 mb-4">
+        <CreditCard className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <h4 className="text-lg font-semibold text-foreground">Understanding Credit Usage</h4>
+      </div>
       
-      <Paragraph type="secondary" style={{ marginBottom: 20 }}>
+      <p className="text-muted-foreground mb-6">
         Learn how credits work and how to get the most value from your AI Lesson Maker account.
-      </Paragraph>
+      </p>
       
-      <Divider orientation="left">Credit System</Divider>
-      
-      <Row gutter={[16, 24]} style={{ marginBottom: 24 }}>
-        <Col xs={24} md={12}>
-          <Card 
-            title={<Text strong>1 Credit = 1 Scene</Text>} 
-            bordered={false} 
-            style={{ background: '#f0f7ff', height: '100%' }}
-          >
-            <Paragraph>
+      {/* Credit System */}
+      <div className="mb-6">
+        <h5 className="font-semibold mb-4 text-foreground">Credit System</h5>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <Card className="p-4 bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900">
+            <h6 className="font-semibold mb-2 text-blue-900 dark:text-blue-300">1 Credit = 1 Scene</h6>
+            <p className="text-sm text-muted-foreground mb-3">
               Each scene in your lesson uses exactly one credit. A scene typically includes:
-            </Paragraph>
-            <ul>
-              <li>A slide with visual content</li>
-              <li>Narration for that slide</li>
-              <li>Animations and transitions</li>
+            </p>
+            <ul className="text-sm space-y-1 mb-3 text-blue-800 dark:text-blue-300">
+              <li>• A slide with visual content</li>
+              <li>• Narration for that slide</li>
+              <li>• Animations and transitions</li>
             </ul>
-            <Paragraph>
-              <Text type="secondary">Example: A 10-scene lesson will require 10 credits.</Text>
-            </Paragraph>
+            <p className="text-xs text-muted-foreground">
+              Example: A 10-scene lesson will require 10 credits.
+            </p>
           </Card>
-        </Col>
-        
-        <Col xs={24} md={12}>
-          <Card 
-            title={<Text strong>Scene Length Flexibility</Text>} 
-            bordered={false}
-            style={{ background: '#f6ffed', height: '100%' }}
-          >
-            <Paragraph>
+          
+          <Card className="p-4 bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-900">
+            <h6 className="font-semibold mb-2 text-green-900 dark:text-green-300">Scene Length Flexibility</h6>
+            <p className="text-sm text-muted-foreground mb-3">
               Scene length is flexible and can vary based on:
-            </Paragraph>
-            <ul>
-              <li>The amount of content in each scene</li>
-              <li>The narration speed setting</li>
-              <li>Your preferred pacing</li>
+            </p>
+            <ul className="text-sm space-y-1 mb-3 text-green-800 dark:text-green-300">
+              <li>• The amount of content in each scene</li>
+              <li>• The narration speed setting</li>
+              <li>• Your preferred pacing</li>
             </ul>
-            <Paragraph>
-              <Text type="secondary">Scene duration typically ranges from 10-30 seconds.</Text>
-            </Paragraph>
+            <p className="text-xs text-muted-foreground">
+              Scene duration typically ranges from 10-30 seconds.
+            </p>
           </Card>
-        </Col>
-      </Row>
+        </div>
+      </div>
       
-      <Divider orientation="left">How to Create Scenes</Divider>
+      {/* How to Create Scenes */}
+      <div className="mb-6">
+        <h5 className="font-semibold mb-4 text-foreground">How to Create Scenes</h5>
+        
+        <div className="space-y-4">
+          <div className="flex items-start space-x-3">
+            <div className="bg-blue-100 dark:bg-blue-900/50 rounded-full p-2">
+              <Video className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h6 className="font-medium text-foreground">1. Plan Your Lesson</h6>
+              <p className="text-sm text-muted-foreground">
+                Outline the key points you want to cover in your lesson and estimate how many scenes you'll need.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-start space-x-3">
+            <div className="bg-blue-100 dark:bg-blue-900/50 rounded-full p-2">
+              <Play className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h6 className="font-medium text-foreground">2. Create Scenes</h6>
+              <p className="text-sm text-muted-foreground">
+                When creating your lesson, break down your content into logical segments or slides. Each segment will become a scene.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-start space-x-3">
+            <div className="bg-blue-100 dark:bg-blue-900/50 rounded-full p-2">
+              <CheckCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h6 className="font-medium text-foreground">3. Generate Video</h6>
+              <p className="text-sm text-muted-foreground">
+                Credits are only deducted when you finalize and generate your video. You can edit your scenes without using additional credits.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       
-      <Steps 
-        direction="vertical" 
-        current={-1} 
-        style={{ marginBottom: 24 }}
-      >
-        <Step 
-          title="Plan Your Lesson" 
-          description="Outline the key points you want to cover in your lesson and estimate how many scenes you'll need." 
-          icon={<VideoCameraOutlined />} 
-        />
-        <Step 
-          title="Create Scenes" 
-          description="When creating your lesson, break down your content into logical segments or slides. Each segment will become a scene." 
-          icon={<PlayCircleOutlined />} 
-        />
-        <Step 
-          title="Generate Video" 
-          description="Credits are only deducted when you finalize and generate your video. You can edit your scenes without using additional credits." 
-          icon={<CheckCircleOutlined />} 
-        />
-      </Steps>
-      
-      <Divider orientation="left">Recommended Scene Counts</Divider>
-      
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={8}>
-          <Card bordered={false} style={{ background: '#f9f9f9', textAlign: 'center', height: '100%' }}>
-            <Title level={4} style={{ margin: 0 }}>3-5</Title>
-            <Text>scenes</Text>
-            <Divider style={{ margin: '12px 0' }} />
-            <Tag color="blue">Short Lessons</Tag>
-            <Paragraph style={{ marginTop: 12 }}>
+      {/* Recommended Scene Counts */}
+      <div className="mb-6">
+        <h5 className="font-semibold mb-4 text-foreground">Recommended Scene Counts</h5>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card className="p-4 bg-muted/50 dark:bg-card/80 text-center border border-border">
+            <div className="text-2xl font-bold mb-1 text-foreground">3-5</div>
+            <div className="text-sm text-muted-foreground mb-3">scenes</div>
+            <Badge variant="outline" className="mb-3 text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400">Short Lessons</Badge>
+            <p className="text-xs text-muted-foreground">
               Quick concepts, definitions, or simple explanations
-            </Paragraph>
+            </p>
           </Card>
-        </Col>
-        
-        <Col xs={24} sm={8}>
-          <Card bordered={false} style={{ background: '#f9f9f9', textAlign: 'center', height: '100%' }}>
-            <Title level={4} style={{ margin: 0 }}>6-10</Title>
-            <Text>scenes</Text>
-            <Divider style={{ margin: '12px 0' }} />
-            <Tag color="green">Standard Lessons</Tag>
-            <Paragraph style={{ marginTop: 12 }}>
+          
+          <Card className="p-4 bg-muted/50 dark:bg-card/80 text-center border border-border">
+            <div className="text-2xl font-bold mb-1 text-foreground">6-10</div>
+            <div className="text-sm text-muted-foreground mb-3">scenes</div>
+            <Badge variant="outline" className="mb-3 text-green-600 dark:text-green-400 border-green-600 dark:border-green-400">Standard Lessons</Badge>
+            <p className="text-xs text-muted-foreground">
               Complete topics with examples and detailed explanations
-            </Paragraph>
+            </p>
           </Card>
-        </Col>
-        
-        <Col xs={24} sm={8}>
-          <Card bordered={false} style={{ background: '#f9f9f9', textAlign: 'center', height: '100%' }}>
-            <Title level={4} style={{ margin: 0 }}>11-20</Title>
-            <Text>scenes</Text>
-            <Divider style={{ margin: '12px 0' }} />
-            <Tag color="purple">Comprehensive Lessons</Tag>
-            <Paragraph style={{ marginTop: 12 }}>
+          
+          <Card className="p-4 bg-muted/50 dark:bg-card/80 text-center border border-border">
+            <div className="text-2xl font-bold mb-1 text-foreground">11-20</div>
+            <div className="text-sm text-muted-foreground mb-3">scenes</div>
+            <Badge variant="outline" className="mb-3 text-purple-600 dark:text-purple-400 border-purple-600 dark:border-purple-400">Comprehensive Lessons</Badge>
+            <p className="text-xs text-muted-foreground">
               In-depth tutorials or complex subject matter
-            </Paragraph>
+            </p>
           </Card>
-        </Col>
-      </Row>
+        </div>
+      </div>
       
-      <Divider />
+      <Separator />
       
-      <Paragraph type="secondary" style={{ textAlign: 'center' }}>
+      <p className="text-sm text-muted-foreground text-center mt-4">
         Still have questions about credits? Check the FAQ tab or contact our support team.
-      </Paragraph>
+      </p>
     </Card>
   );
 };

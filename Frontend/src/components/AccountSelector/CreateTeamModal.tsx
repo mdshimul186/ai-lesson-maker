@@ -1,6 +1,23 @@
-import React from 'react';
-import { Modal, Form, Input, Button, message } from 'antd';
+'use client';
+
+import React, { useState } from 'react';
 import { useAccountStore } from '../../stores';
+import { toast } from 'sonner';
+
+// shadcn/ui components
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
+import { Loader2 } from 'lucide-react';
 
 interface CreateTeamModalProps {
   visible: boolean;
@@ -8,60 +25,109 @@ interface CreateTeamModalProps {
 }
 
 const CreateTeamModal: React.FC<CreateTeamModalProps> = ({ visible, onClose }) => {
-  const [form] = Form.useForm();
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [nameError, setNameError] = useState('');
   const { createTeamAccount, isLoading } = useAccountStore();
   
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Reset errors
+    setNameError('');
+    
+    // Validate
+    if (!name.trim()) {
+      setNameError('Please enter a team name');
+      return;
+    }
+    
     try {
-      const values = await form.validateFields();
-      await createTeamAccount(values.name, values.description);
-      message.success('Team account created successfully');
-      form.resetFields();
+      await createTeamAccount(name.trim(), description.trim());
+      toast.success('Team account created successfully');
+      
+      // Reset form
+      setName('');
+      setDescription('');
+      setNameError('');
       onClose();
     } catch (error) {
       console.error('Failed to create team account:', error);
+      toast.error('Failed to create team account');
     }
+  };
+
+  const handleClose = () => {
+    setName('');
+    setDescription('');
+    setNameError('');
+    onClose();
   };
   
   return (
-    <Modal
-      title="Create Team Account"
-      visible={visible}
-      onCancel={onClose}
-      footer={[
-        <Button key="cancel" onClick={onClose}>
-          Cancel
-        </Button>,
-        <Button 
-          key="submit" 
-          type="primary" 
-          loading={isLoading}
-          onClick={handleSubmit}
-        >
-          Create
-        </Button>
-      ]}
-    >
-      <Form
-        form={form}
-        layout="vertical"
-      >
-        <Form.Item
-          name="name"
-          label="Team Name"
-          rules={[{ required: true, message: 'Please enter a team name' }]}
-        >
-          <Input placeholder="Enter team name" />
-        </Form.Item>
+    <Dialog open={visible} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Create Team Account</DialogTitle>
+          <DialogDescription>
+            Create a new team account to collaborate with others and share credits.
+          </DialogDescription>
+        </DialogHeader>
         
-        <Form.Item
-          name="description"
-          label="Description"
-        >
-          <Input.TextArea placeholder="Enter team description (optional)" rows={4} />
-        </Form.Item>
-      </Form>
-    </Modal>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="team-name">Team Name *</Label>
+            <Input
+              id="team-name"
+              type="text"
+              placeholder="Enter team name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={nameError ? 'border-red-500' : ''}
+            />
+            {nameError && (
+              <p className="text-sm text-red-500">{nameError}</p>
+            )}
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="team-description">Description</Label>
+            <Textarea
+              id="team-description"
+              placeholder="Enter team description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+            />
+          </div>
+          
+          <DialogFooter className="gap-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleClose}
+              disabled={isLoading}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={isLoading}
+              className="min-w-20"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                'Create'
+              )}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

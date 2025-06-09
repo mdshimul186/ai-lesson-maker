@@ -5,12 +5,7 @@ import CourseView from '../../../components/CourseView';
 
 const CoursePage: React.FC = () => {
     return (
-        <div style={{
-            width: "100%",
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-        }}>
+        <div className="w-full flex flex-col items-center">
             <CourseView />
         </div>
     );

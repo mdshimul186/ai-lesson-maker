@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useEffect, useRef, Suspense } from 'react';
-import { Result, Button, Card, Spin } from 'antd';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { paymentService } from '@/services';
 import { useAccountStore } from '@/stores';
+import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 function PaymentSuccessContent() {
   const router = useRouter();
@@ -65,49 +67,69 @@ function PaymentSuccessContent() {
 
   if (loading) {
     return (
-      <Card style={{ textAlign: 'center', margin: '50px auto', maxWidth: 500 }}>
-        <Spin size="large" />
-        <div style={{ marginTop: 20 }}>
-          <h3>Processing your payment...</h3>
-          <p>Please wait while we confirm your payment.</p>
-        </div>
-      </Card>
+      <div className="flex justify-center items-center min-h-[400px]">
+        <Card className="w-full max-w-md p-8 text-center">
+          <div className="flex flex-col items-center space-y-4">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Processing your payment...</h3>
+              <p className="text-muted-foreground">Please wait while we confirm your payment.</p>
+            </div>
+          </div>
+        </Card>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Result
-        status="error"
-        title="Payment Error"
-        subTitle={error}
-        extra={[
-          <Button type="primary" key="retry" onClick={() => router.push('/account')}>
-            Go to Account
-          </Button>,
-          <Button key="dashboard" onClick={() => router.push('/dashboard')}>
-            Back to Dashboard
-          </Button>
-        ]}
-      />
+      <div className="flex justify-center items-center min-h-[400px]">
+        <Card className="w-full max-w-md p-8 text-center">
+          <div className="flex flex-col items-center space-y-6">
+            <div className="bg-red-100 rounded-full p-3">
+              <XCircle className="h-12 w-12 text-red-600" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold">Payment Error</h2>
+              <p className="text-muted-foreground">{error}</p>
+            </div>
+            <div className="flex flex-col space-y-3 w-full">
+              <Button onClick={() => router.push('/account')} className="w-full">
+                Go to Account
+              </Button>
+              <Button variant="outline" onClick={() => router.push('/dashboard')} className="w-full">
+                Back to Dashboard
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
     );
   }
 
   if (success) {
     return (
-      <Result
-        status="success"
-        title="Payment Successful!"
-        subTitle="Your payment has been processed successfully. Credits have been added to your account."
-        extra={[
-          <Button type="primary" key="account" onClick={() => router.push('/account')}>
-            View Account
-          </Button>,
-          <Button key="dashboard" onClick={() => router.push('/dashboard')}>
-            Back to Dashboard
-          </Button>
-        ]}
-      />
+      <div className="flex justify-center items-center min-h-[400px]">
+        <Card className="w-full max-w-md p-8 text-center">
+          <div className="flex flex-col items-center space-y-6">
+            <div className="bg-green-100 rounded-full p-3">
+              <CheckCircle className="h-12 w-12 text-green-600" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold">Payment Successful!</h2>
+              <p className="text-muted-foreground">Your payment has been processed successfully. Credits have been added to your account.</p>
+            </div>
+            <div className="flex flex-col space-y-3 w-full">
+              <Button onClick={() => router.push('/account')} className="w-full">
+                View Account
+              </Button>
+              <Button variant="outline" onClick={() => router.push('/dashboard')} className="w-full">
+                Back to Dashboard
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
     );
   }
   return null;
@@ -116,13 +138,17 @@ function PaymentSuccessContent() {
 export default function PaymentSuccessPage() {
   return (
     <Suspense fallback={
-      <Card style={{ textAlign: 'center', margin: '50px auto', maxWidth: 500 }}>
-        <Spin size="large" />
-        <div style={{ marginTop: 20 }}>
-          <h3>Loading...</h3>
-          <p>Please wait while we load your payment information.</p>
-        </div>
-      </Card>
+      <div className="flex justify-center items-center min-h-[400px]">
+        <Card className="w-full max-w-md p-8 text-center">
+          <div className="flex flex-col items-center space-y-4">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Loading...</h3>
+              <p className="text-muted-foreground">Please wait while we load your payment information.</p>
+            </div>
+          </div>
+        </Card>
+      </div>
     }>
       <PaymentSuccessContent />
     </Suspense>

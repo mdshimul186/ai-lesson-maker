@@ -1,39 +1,62 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-    Card,
-    Typography,
-    Space,
-    Button,
-    Tag,
-    Spin,
-    message,
-    Progress,
-    Row,
-    Col,
-    Empty,
-    Modal,
-    Form,
-    Input,
-    Dropdown
-} from 'antd';
-import {
-    BookOutlined,
-    ArrowLeftOutlined,
-    FolderOutlined,
-    FileTextOutlined,
-    VideoCameraOutlined,
-    DownloadOutlined,
-    ReloadOutlined,
-    EditOutlined,
-    DeleteOutlined,
-    PlusOutlined,
-    HolderOutlined,
-    MoreOutlined
-} from '@ant-design/icons';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+    BookOpen,
+    ArrowLeft,
+    Folder,
+    FileText,
+    Video,
+    Download,
+    RotateCw,
+    Edit,
+    Trash2,
+    Plus,
+    GripVertical,
+    MoreVertical,
+    Play,
+    Clock,
+    CheckCircle,
+    AlertCircle
+} from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
+// shadcn/ui components
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Skeleton } from '../ui/skeleton';
+import { Separator } from '../ui/separator';
+import { Progress } from '../ui/progress';
+import { 
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuSeparator
+} from '../ui/dropdown-menu';
+import { 
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '../ui/alert-dialog';
+import { 
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from '../ui/dialog';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { toast } from 'sonner';
+
 import {
     getCourse,
     CourseResponse,
@@ -43,11 +66,6 @@ import {
     getTaskStatus
 } from '@/services/index';
 import { useAccountStore } from '@/stores';
-import styles from './index.module.css';
-
-
-const { Title, Paragraph } = Typography;
-const { TextArea } = Input;
 
 // Item types for drag and drop
 const ItemTypes = {
@@ -103,83 +121,116 @@ const DraggableLesson: React.FC<DraggableLessonProps> = ({
                 draggedItem.chapterIndex = chapterIndex;
             }
         },
-    }); const dropdownItems = [
-        {
-            key: 'edit',
-            label: 'Edit Lesson',
-            icon: <EditOutlined />,
-            onClick: () => onEdit(lesson, lessonIndex, chapterIndex)
-        },
-        ...((!lesson.task_id && !lesson.video_url) ? [{
-            key: 'generate-video',
-            label: 'Generate Video',
-            icon: <VideoCameraOutlined />,
-            onClick: () => onGenerateVideo(lesson, lessonIndex, chapterIndex)
-        }] : []),
-        ...((lesson.video_url || lesson.task_id) ? [{
-            key: 'regenerate',
-            label: 'Regenerate',
-            icon: <ReloadOutlined />,
-            onClick: () => onGenerateVideo(lesson, lessonIndex, chapterIndex)
-        }] : []),
-        {
-            key: 'delete',
-            label: 'Delete Lesson',
-            icon: <DeleteOutlined />,
-            danger: true,
-            onClick: () => {
-                Modal.confirm({
-                    title: 'Delete Lesson',
-                    content: 'Are you sure you want to delete this lesson?',
-                    onOk: () => onDelete(lessonIndex, chapterIndex)
-                });
-            }
+    });
+
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+    const getStatusBadge = () => {
+        if (lesson.task_id) {
+            const status = lesson.status || 'pending';
+            const statusConfig = {
+                completed: { variant: 'default' as const, icon: CheckCircle, text: 'Completed' },
+                processing: { variant: 'secondary' as const, icon: Clock, text: 'Processing' },
+                failed: { variant: 'destructive' as const, icon: AlertCircle, text: 'Failed' },
+                pending: { variant: 'outline' as const, icon: Clock, text: 'Pending' }
+            };
+            const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
+            const IconComponent = config.icon;
+            return (
+                <Badge variant={config.variant} className="flex items-center gap-1">
+                    <IconComponent className="w-3 h-3" />
+                    {config.text}
+                </Badge>
+            );
         }
-    ];
+        return <Badge variant="secondary">Draft</Badge>;
+    };
 
     return (
         <div
             ref={node => {
                 drag(drop(node));
             }}
-            style={{
-                opacity: isDragging ? 0.5 : 1,
-                cursor: 'move',
-                padding: '8px',
-                margin: '4px 0',
-                backgroundColor: isSelected ? '#e6f7ff' : '#fafafa',
-                border: isSelected ? '1px solid #1890ff' : '1px solid #d9d9d9',
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-            }}
+            className={`
+                p-3 m-1 rounded-lg border transition-all duration-200 cursor-move
+                ${isDragging ? 'opacity-50' : 'opacity-100'}
+                ${isSelected 
+                    ? 'border-primary bg-primary/10 shadow-md dark:bg-primary/20' 
+                    : 'border-border bg-muted hover:bg-card hover:border-border'
+                }
+            `}
             onClick={() => onSelect(lesson)}
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-                <HolderOutlined style={{ color: '#999' }} />                {lesson.video_url ? (
-                    <VideoCameraOutlined style={{ color: '#52c41a' }} />
-                ) : (
-                    <FileTextOutlined style={{ color: '#666' }} />
-                )}                <span>Lesson {lessonIndex + 1}: {lesson.title}</span>
-                {lesson.task_id ? (
-                    <Tag
-                        color={
-                            lesson.status === 'completed' ? 'success' :
-                                lesson.status === 'processing' ? 'processing' :
-                                    lesson.status === 'failed' ? 'error' : 'default'
-                        }
-                    >
-                        {lesson.status || 'pending'}
-                    </Tag>
-                ) : (
-                    <Tag color="blue">
-                        Draft
-                    </Tag>
-                )}            </div>
-            <Dropdown menu={{ items: dropdownItems }} trigger={['click']}>
-                <Button type="text" size="small" icon={<MoreOutlined />} />
-            </Dropdown>
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 flex-1">
+                    <GripVertical className="w-4 h-4 text-muted-foreground" />
+                    {lesson.video_url ? (
+                        <Video className="w-4 h-4 text-green-500" />
+                    ) : (
+                        <FileText className="w-4 h-4 text-muted-foreground" />
+                    )}
+                    <span className="text-sm font-medium">
+                        Lesson {lessonIndex + 1}: {lesson.title}
+                    </span>
+                    {getStatusBadge()}
+                </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreVertical className="w-4 h-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => onEdit(lesson, lessonIndex, chapterIndex)}>
+                            <Edit className="w-4 h-4 mr-2" />
+                            Edit Lesson
+                        </DropdownMenuItem>
+                        {(!lesson.task_id && !lesson.video_url) && (
+                            <DropdownMenuItem onClick={() => onGenerateVideo(lesson, lessonIndex, chapterIndex)}>
+                                <Video className="w-4 h-4 mr-2" />
+                                Generate Video
+                            </DropdownMenuItem>
+                        )}
+                        {(lesson.video_url || lesson.task_id) && (
+                            <DropdownMenuItem onClick={() => onGenerateVideo(lesson, lessonIndex, chapterIndex)}>
+                                <RotateCw className="w-4 h-4 mr-2" />
+                                Regenerate
+                            </DropdownMenuItem>
+                        )}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem 
+                            onClick={() => setShowDeleteDialog(true)}
+                            className="text-red-600"
+                        >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete Lesson
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Lesson</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to delete this lesson? This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={() => {
+                                onDelete(lessonIndex, chapterIndex);
+                                setShowDeleteDialog(false);
+                            }}
+                            className="bg-red-600 hover:bg-red-700"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 };
@@ -232,218 +283,169 @@ const DraggableChapter: React.FC<DraggableChapterProps> = ({
         },
     });
 
-    const dropdownItems = [
-        {
-            key: 'addLesson',
-            label: 'Add Lesson',
-            icon: <PlusOutlined />,
-            onClick: () => onAddLesson(chapterIndex)
-        },
-        {
-            key: 'edit',
-            label: 'Edit Chapter',
-            icon: <EditOutlined />,
-            onClick: () => onEdit(chapter, chapterIndex)
-        },
-        {
-            key: 'delete',
-            label: 'Delete Chapter',
-            icon: <DeleteOutlined />,
-            danger: true,
-            onClick: () => {
-                Modal.confirm({
-                    title: 'Delete Chapter',
-                    content: 'Are you sure you want to delete this chapter and all its lessons?',
-                    onOk: () => onDelete(chapterIndex)
-                });
-            }
-        }
-    ];
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     return (
-        <div
+        <Card
             ref={node => {
                 drag(drop(node));
             }}
-            style={{
-                opacity: isDragging ? 0.5 : 1,
-                margin: '16px 0',
-                border: '1px solid #d9d9d9',
-                borderRadius: '8px',
-                backgroundColor: '#fff'
-            }}
+            className={`mb-4 transition-all duration-200 ${
+                isDragging ? 'opacity-50 rotate-2 shadow-lg' : 'opacity-100'
+            }`}
         >
-            <div style={{
-                padding: '12px 16px',
-                backgroundColor: '#fafafa',
-                borderBottom: '1px solid #d9d9d9',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'move'
-            }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <HolderOutlined style={{ color: '#999' }} />
-                    <FolderOutlined style={{ color: '#1890ff' }} />
-                    <span style={{ fontWeight: 'bold' }}>
-                        Chapter {chapterIndex + 1}: {chapter.title}
-                    </span>
+            <CardHeader className="pb-3 bg-muted dark:bg-card border-b cursor-move">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <GripVertical className="w-4 h-4 text-muted-foreground" />
+                        <Folder className="w-5 h-5 text-primary" />
+                        <CardTitle className="text-lg">
+                            Chapter {chapterIndex + 1}: {chapter.title}
+                        </CardTitle>
+                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <MoreVertical className="w-4 h-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => onAddLesson(chapterIndex)}>
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add Lesson
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => onEdit(chapter, chapterIndex)}>
+                                <Edit className="w-4 h-4 mr-2" />
+                                Edit Chapter
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem 
+                                onClick={() => setShowDeleteDialog(true)}
+                                className="text-red-600"
+                            >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Delete Chapter
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
-                <Dropdown menu={{ items: dropdownItems }} trigger={['click']}>
-                    <Button type="text" size="small" icon={<MoreOutlined />} />
-                </Dropdown>
-            </div>
-            <div style={{ padding: '8px' }}>                {chapter.lessons?.map((lesson: any, lessonIndex: number) => (
-                <DraggableLesson
-                    key={`lesson-${chapterIndex}-${lessonIndex}`}
-                    lesson={lesson}
-                    lessonIndex={lessonIndex}
-                    chapterIndex={chapterIndex}
-                    onMove={onLessonMove}
-                    onEdit={onLessonEdit}
-                    onDelete={onLessonDelete}
-                    onSelect={onLessonSelect}
-                    onGenerateVideo={onLessonGenerateVideo}
-                    isSelected={selectedLesson && selectedLesson.id === lesson.id}
-                />
-            )) || []}
-                <Button
-                    type="dashed"
-                    icon={<PlusOutlined />}
-                    style={{ width: '100%', marginTop: '8px' }}
-                    onClick={() => onAddLesson(chapterIndex)}
-                >
-                    Add Lesson
-                </Button>
-            </div>
-        </div>
+            </CardHeader>
+            <CardContent className="p-2">
+                {chapter.lessons?.map((lesson: any, lessonIndex: number) => (
+                    <DraggableLesson
+                        key={`lesson-${chapterIndex}-${lessonIndex}`}
+                        lesson={lesson}
+                        lessonIndex={lessonIndex}
+                        chapterIndex={chapterIndex}
+                        onMove={onLessonMove}
+                        onEdit={onLessonEdit}
+                        onDelete={onLessonDelete}
+                        onSelect={onLessonSelect}
+                        onGenerateVideo={onLessonGenerateVideo}
+                        isSelected={selectedLesson?.id === lesson.id}
+                    />
+                ))}
+            </CardContent>
+
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Chapter</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to delete this chapter and all its lessons? This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={() => {
+                                onDelete(chapterIndex);
+                                setShowDeleteDialog(false);
+                            }}
+                            className="bg-red-600 hover:bg-red-700"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </Card>
     );
 };
 
+// Main CourseView Component
 const CourseView: React.FC = () => {
-    const { courseId } = useParams<{ courseId: string }>();
+    const params = useParams();
     const router = useRouter();
+    const courseId = params?.courseId as string;
+
+    // State
     const [course, setCourse] = useState<CourseResponse | null>(null);
-    const [courseProgress, setCourseProgress] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [selectedLesson, setSelectedLesson] = useState<any>(null);
-    const [isProgressLoading, setIsProgressLoading] = useState(false);
-    const progressTimeoutRef = useRef<number | null>(null);
-    const lastProgressCallRef = useRef<number>(0);
-
-    // Enhanced state for new features
-    const [editModalVisible, setEditModalVisible] = useState(false);
     const [editModalData, setEditModalData] = useState<EditModalData | null>(null);
-    const [addModalVisible, setAddModalVisible] = useState(false); const [addModalType, setAddModalType] = useState<'chapter' | 'lesson'>('chapter');
-    const [selectedChapterForLesson, setSelectedChapterForLesson] = useState<number | null>(null); const [form] = Form.useForm();
+    const [editForm, setEditForm] = useState({ title: '', description: '', content: '' });
+    const [courseProgress, setCourseProgress] = useState<any>(null);
+    const [isProgressLoading, setIsProgressLoading] = useState(false);
+    const [addChapterDialogOpen, setAddChapterDialogOpen] = useState(false);
+    const [addChapterForm, setAddChapterForm] = useState({ title: '', description: '' });
+    const [addLessonDialogOpen, setAddLessonDialogOpen] = useState(false);
+    const [addLessonForm, setAddLessonForm] = useState({ title: '', description: '', content: '' });
+    const [addLessonChapterIndex, setAddLessonChapterIndex] = useState<number>(0);
 
-    // Debounced save to prevent too many API calls
-    const saveTimeoutRef = useRef<number | null>(null);
+    // Refs for managing API calls
+    const lastProgressCallRef = useRef<number>(0);
+    const progressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const fetchCourseDataCalled = useRef(false);
 
-    // Save course data to database
-    const saveCourseToDatabase = useCallback(async (updatedCourse: CourseResponse) => {
-        if (!courseId || !updatedCourse) return;
+    // Background progress fetching
+    const fetchProgressInBackground = useCallback(async (courseData?: CourseResponse) => {
+        if (!courseId) return;
 
+        const now = Date.now();
+        if (isProgressLoading || (now - lastProgressCallRef.current < 2000)) {
+            return;
+        }
+
+        lastProgressCallRef.current = now;
+
+        if (progressTimeoutRef.current) {
+            clearTimeout(progressTimeoutRef.current);
+            progressTimeoutRef.current = null;
+        }
+
+        setIsProgressLoading(true);
         try {
-            const updateData = {
-                title: updatedCourse.title,
-                description: updatedCourse.description,
-                prompt: updatedCourse.prompt,
-                language: updatedCourse.language,
-                voice_id: updatedCourse.voice_id,
-                chapters: updatedCourse.chapters
-            };
+            const progress = await getCourseProgress(courseId);
+            setCourseProgress(progress);
 
-            await updateCourse(courseId, updateData);
-            message.success('Changes saved successfully');
-        } catch (error) {
-            console.error('Failed to save course:', error);
-            message.error('Failed to save changes');
-        }
-    }, [courseId]);
+            const updatedCourseData = await getCourse(courseId);
+            setCourse(updatedCourseData);
 
-    // Debounced save for drag operations (saves after 1 second of no changes)
-    const saveCourseDebounced = useCallback((updatedCourse: CourseResponse) => {
-        if (saveTimeoutRef.current) {
-            clearTimeout(saveTimeoutRef.current);
-        }
-
-        saveTimeoutRef.current = window.setTimeout(() => {
-            saveCourseToDatabase(updatedCourse);
-        }, 1000);
-    }, [saveCourseToDatabase]);
-    const fetchProgressInBackground = useCallback(async (courseData: CourseResponse) => {
-        // Only fetch progress if course is generating or completed
-        if (!courseId) return;
-
-        // Check if account ID is available
-        const currentAccount = useAccountStore.getState().currentAccount;
-        if (!currentAccount || !currentAccount.id) {
-            console.log("Cannot fetch progress: No account ID available");
-            return;
-        }
-        // Check if there are any incomplete lessons before making API calls
-        const hasIncompleteLessons = courseData.chapters.some(chapter =>
-            chapter.lessons.some((lesson: any) =>
-                lesson.task_id && (!lesson.status || lesson.status !== 'completed')
-            )
-        );
-
-        if (!hasIncompleteLessons) {
-            console.log("Skipping progress API call: No incomplete lessons");
-            return;
-        }
-
-        if (courseData.status === 'generating' || courseData.status === 'completed') {
-            const now = Date.now();
-            // Debounce: prevent calls if less than 2 seconds since last call
-            if (isProgressLoading || (now - lastProgressCallRef.current < 2000)) {
-                return;
-            }
-
-            lastProgressCallRef.current = now;
-
-            // Clear any pending timeout
-            if (progressTimeoutRef.current) {
-                clearTimeout(progressTimeoutRef.current);
-                progressTimeoutRef.current = null;
-            }
-
-            setIsProgressLoading(true);
-            try {
-                const progress = await getCourseProgress(courseId!);
-                setCourseProgress(progress);
-
-                // Also refresh course data to get updated video URLs
-                const updatedCourseData = await getCourse(courseId!);
-                setCourse(updatedCourseData);
-
-                // Update selected lesson if it was updated
-                if (selectedLesson) {
-                    const updatedLesson = updatedCourseData.chapters
-                        .flatMap(chapter => chapter.lessons)
-                        .find(lesson => lesson.id === selectedLesson.id);
-                    if (updatedLesson) {
-                        setSelectedLesson(updatedLesson);
-                    }
+            if (selectedLesson) {
+                const updatedLesson = updatedCourseData.chapters
+                    .flatMap(chapter => chapter.lessons)
+                    .find(lesson => lesson.id === selectedLesson.id);
+                if (updatedLesson) {
+                    setSelectedLesson(updatedLesson);
                 }
-            } catch (error) {
-                console.log('Could not fetch progress:', error);
-                // Silently fail for progress API to not block UI
-            } finally {
-                setIsProgressLoading(false);
             }
+        } catch (error) {
+            console.log('Could not fetch progress:', error);
+        } finally {
+            setIsProgressLoading(false);
         }
-    }, [courseId, isProgressLoading, selectedLesson]); const fetchCourseData = async () => {
+    }, [courseId, isProgressLoading, selectedLesson]);
+
+    // Fetch course data
+    const fetchCourseData = async () => {
         if (!courseId) return;
 
-        // Get current account from store
         const currentAccount = useAccountStore.getState().currentAccount;
-
-        // Don't proceed if no account ID is available
         if (!currentAccount || !currentAccount.id) {
             console.log("Cannot fetch course data: No account ID available");
-            message.error("Account information not available. Please try again.");
+            toast.error("Account information not available. Please try again.");
             return;
         }
 
@@ -452,7 +454,6 @@ const CourseView: React.FC = () => {
             const courseData = await getCourse(courseId);
             setCourse(courseData);
 
-            // Check if there are any incomplete lessons before calling progress API
             const hasIncompleteLessons = courseData.chapters.some(chapter =>
                 chapter.lessons.some((lesson: any) =>
                     lesson.task_id && (!lesson.status || lesson.status !== 'completed')
@@ -460,33 +461,26 @@ const CourseView: React.FC = () => {
             );
 
             if (hasIncompleteLessons) {
-                // Call progress API in background without blocking UI
-                // Use setTimeout to ensure this runs after the main UI update
-                progressTimeoutRef.current = window.setTimeout(() => {
+                progressTimeoutRef.current = setTimeout(() => {
                     fetchProgressInBackground(courseData);
-                }, 100); // Small delay to ensure UI renders first
-            } else {
-                console.log("Skipping initial progress API call: No incomplete lessons");
+                }, 100);
             }
-
         } catch (error) {
             console.error('Failed to fetch course:', error);
-            message.error('Failed to load course data');
+            toast.error('Failed to load course data');
         } finally {
-            // Only hide loading for the main course API call
             setLoading(false);
         }
-    };// Use effect to check if account is ready before fetching data
+    };
 
-    let fetchCourseDataCalled = useRef(false);
+    // Initialize data
     useEffect(() => {
         const currentAccount = useAccountStore.getState().currentAccount;
-
         if (courseId && currentAccount && !fetchCourseDataCalled.current) {
             fetchCourseData();
+            fetchCourseDataCalled.current = true;
         }
 
-        // Cleanup function
         return () => {
             if (progressTimeoutRef.current) {
                 clearTimeout(progressTimeoutRef.current);
@@ -497,85 +491,18 @@ const CourseView: React.FC = () => {
                 saveTimeoutRef.current = null;
             }
         };
-    }, [courseId, useAccountStore.getState().currentAccount]);
+    }, [courseId]);
 
-    // Subscribe to account store changes
-    useEffect(() => {
-        // This will run when the component mounts
-        const unsubscribe = useAccountStore.subscribe((state) => {
-            // When account becomes available and we have a courseId, fetch data
-            if (state.currentAccount && courseId && !course) {
-                fetchCourseData();
-            }
-        });
-
-        // Return cleanup function to unsubscribe when component unmounts
-        return () => unsubscribe();
-    }, [courseId]);    // Auto-refresh progress for generating courses
-    useEffect(() => {
-        let intervalId: number;
-
-        if (course?.status === 'generating' || course?.status === 'completed') {
-            // Check if there are any incomplete lessons
-            const hasIncompleteLessons = course.chapters.some(chapter =>
-                chapter.lessons.some((lesson: any) =>
-                    lesson.task_id && (!lesson.status || lesson.status !== 'completed')
-                )
-            );
-
-            // Only set up polling if there are incomplete lessons
-            if (hasIncompleteLessons) {
-                console.log("Setting up progress polling for incomplete lessons");
-                // Refresh progress every 8 seconds for courses with incomplete lessons
-                intervalId = window.setInterval(() => {
-                    // Double check if course still exists and not already loading
-                    if (course && !isProgressLoading) {
-                        fetchProgressInBackground(course);
-                    }
-                }, 8000); // Increased from 5 to 8 seconds
-            } else {
-                console.log("Skipping progress polling: No incomplete lessons");
-            }
-        }
-        return () => {
-            if (intervalId) {
-                clearInterval(intervalId);
-            }
-            if (progressTimeoutRef.current) {
-                clearTimeout(progressTimeoutRef.current);
-                progressTimeoutRef.current = null;
-            }
-            if (saveTimeoutRef.current) {
-                clearTimeout(saveTimeoutRef.current);
-                saveTimeoutRef.current = null;
-            }
-        };
-    }, [course?.status, isProgressLoading, fetchProgressInBackground, course]);
-
-    // Sort lessons within chapters by order
-    const sortLessons = useCallback((lessons: any[]) => {
-        if (!lessons) return [];
-
-        return [...lessons].sort((a, b) => {
-            return (a.order || 0) - (b.order || 0);
-        });
-    }, []);    // Chapter movement
+    // Drag and drop handlers
     const moveChapter = useCallback((dragIndex: number, hoverIndex: number) => {
         if (!course) return;
-
+        const draggedChapter = course.chapters[dragIndex];
         const newChapters = [...course.chapters];
-        const draggedChapter = newChapters[dragIndex];
         newChapters.splice(dragIndex, 1);
         newChapters.splice(hoverIndex, 0, draggedChapter);
+        setCourse({ ...course, chapters: newChapters });
+    }, [course]);
 
-        const updatedCourse = { ...course, chapters: newChapters };
-        setCourse(updatedCourse);
-
-        // Use debounced save for drag operations
-        saveCourseDebounced(updatedCourse);
-    }, [course, saveCourseDebounced]);
-
-    // Lesson movement
     const moveLesson = useCallback((
         dragLessonIndex: number,
         hoverLessonIndex: number,
@@ -583,605 +510,604 @@ const CourseView: React.FC = () => {
         hoverChapterIndex: number
     ) => {
         if (!course) return;
-
-        const newChapters = [...course.chapters];
-        // Remove lesson from source chapter
-        const draggedLesson = newChapters[dragChapterIndex].lessons[dragLessonIndex];
-        newChapters[dragChapterIndex].lessons.splice(dragLessonIndex, 1);
-
-        // Add lesson to target chapter
-        newChapters[hoverChapterIndex].lessons.splice(hoverLessonIndex, 0, draggedLesson);
-        const updatedCourse = { ...course, chapters: newChapters };
-        setCourse(updatedCourse);
-
-        // Use debounced save for drag operations
-        saveCourseDebounced(updatedCourse);
-    }, [course, saveCourseDebounced]);
+        const newCourse = { ...course };
+        const draggedLesson = newCourse.chapters[dragChapterIndex].lessons[dragLessonIndex];
+        
+        // Remove from source
+        newCourse.chapters[dragChapterIndex].lessons.splice(dragLessonIndex, 1);
+        
+        // Add to destination
+        newCourse.chapters[hoverChapterIndex].lessons.splice(hoverLessonIndex, 0, draggedLesson);
+        
+        setCourse(newCourse);
+    }, [course]);
 
     // Edit handlers
-    const handleEditChapter = (chapter: any, chapterIndex: number) => {
-        setEditModalData({
-            type: 'chapter',
-            data: chapter,
-            chapterIndex
-        });
-        setEditModalVisible(true);
-        form.setFieldsValue({
-            title: chapter.title,
-            description: chapter.description
+    const handleEdit = (type: 'chapter' | 'lesson', data: any, chapterIndex?: number, lessonIndex?: number) => {
+        setEditModalData({ type, data, chapterIndex, lessonIndex });
+        setEditForm({
+            title: data.title || '',
+            description: data.description || '',
+            content: data.content || ''
         });
     };
 
-    const handleEditLesson = (lesson: any, lessonIndex: number, chapterIndex: number) => {
-        setEditModalData({
-            type: 'lesson',
-            data: lesson,
-            lessonIndex,
-            chapterIndex
-        });
-        setEditModalVisible(true);
-        form.setFieldsValue({
-            title: lesson.title,
-            description: lesson.description,
-            content: lesson.content
-        });
-    };    // Delete handlers
-    const handleDeleteChapter = (chapterIndex: number) => {
-        if (!course) return;
+    const handleSaveEdit = async () => {
+        if (!editModalData || !course) return;
 
-        const newChapters = [...course.chapters];
-        newChapters.splice(chapterIndex, 1);
-        const updatedCourse = { ...course, chapters: newChapters };
-        setCourse(updatedCourse);
-
-        // Save to database
-        saveCourseToDatabase(updatedCourse);
-        message.success('Chapter deleted successfully');
-    };
-
-    const handleDeleteLesson = (lessonIndex: number, chapterIndex: number) => {
-        if (!course) return;
-
-        const newChapters = [...course.chapters];
-        newChapters[chapterIndex].lessons.splice(lessonIndex, 1);
-        const updatedCourse = { ...course, chapters: newChapters };
-        setCourse(updatedCourse);
-
-        // Save to database
-        saveCourseToDatabase(updatedCourse);
-        message.success('Lesson deleted successfully');
-    };
-
-    // Add handlers
-    const handleAddChapter = () => {
-        setAddModalType('chapter');
-        setAddModalVisible(true);
-        form.resetFields();
-    };
-
-    const handleAddLesson = (chapterIndex: number) => {
-        setAddModalType('lesson');
-        setSelectedChapterForLesson(chapterIndex);
-        setAddModalVisible(true);
-        form.resetFields();
-    };    // Modal handlers
-    const handleEditModalOk = async () => {
         try {
-            const values = await form.validateFields();
-
-            if (!course || !editModalData) return;
-
             const newCourse = { ...course };
-
+            
             if (editModalData.type === 'chapter' && editModalData.chapterIndex !== undefined) {
                 newCourse.chapters[editModalData.chapterIndex] = {
                     ...newCourse.chapters[editModalData.chapterIndex],
-                    ...values
+                    title: editForm.title,
+                    description: editForm.description
                 };
-            } else if (editModalData.type === 'lesson' &&
-                editModalData.chapterIndex !== undefined &&
-                editModalData.lessonIndex !== undefined) {
+            } else if (editModalData.type === 'lesson' && editModalData.chapterIndex !== undefined && editModalData.lessonIndex !== undefined) {
                 newCourse.chapters[editModalData.chapterIndex].lessons[editModalData.lessonIndex] = {
                     ...newCourse.chapters[editModalData.chapterIndex].lessons[editModalData.lessonIndex],
-                    ...values
+                    title: editForm.title,
+                    description: editForm.description,
+                    content: editForm.content
                 };
             }
 
             setCourse(newCourse);
-            setEditModalVisible(false);
+            await updateCourse(courseId, newCourse);
+            
             setEditModalData(null);
-
-            // Save to database
-            await saveCourseToDatabase(newCourse);
-            message.success(`${editModalData.type} updated successfully`);
+            setEditForm({ title: '', description: '', content: '' });
+            toast.success(`${editModalData.type === 'chapter' ? 'Chapter' : 'Lesson'} updated successfully`);
         } catch (error) {
             console.error('Failed to update:', error);
-            message.error('Failed to update. Please try again.');
+            toast.error('Failed to save changes');
         }
     };
 
-    const handleAddModalOk = async () => {
+    // Delete handlers
+    const handleDeleteChapter = async (chapterIndex: number) => {
+        if (!course) return;
+        
         try {
-            const values = await form.validateFields();
-
-            if (!course) return;
             const newCourse = { ...course };
-            if (addModalType === 'chapter') {
-                const newChapter = {
-                    id: `chapter-${Date.now()}`,
-                    course_id: courseId,
-                    title: values.title,
-                    description: values.description || '',
-                    lessons: [],
-                    order: newCourse.chapters.length,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                };
-                newCourse.chapters.push(newChapter);
-            } else if (addModalType === 'lesson' && selectedChapterForLesson !== null) {
-                const chapterId = newCourse.chapters[selectedChapterForLesson].id;
-                const newLesson = {
-                    id: `lesson-${Date.now()}`,
-                    chapter_id: chapterId,
-                    title: values.title,
-                    description: values.description || '',
-                    content: values.content || '',
-                    duration_minutes: null,
-                    order: newCourse.chapters[selectedChapterForLesson].lessons.length,
-                    status: 'PENDING',
-                    video_url: null,
-                    task_id: null,
-                    task_data: null,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                };
-                newCourse.chapters[selectedChapterForLesson].lessons.push(newLesson);
-            }
+            newCourse.chapters.splice(chapterIndex, 1);
             setCourse(newCourse);
-            setAddModalVisible(false);
-            setSelectedChapterForLesson(null);
-
-            // Save to database
-            await saveCourseToDatabase(newCourse);
-            message.success(`${addModalType} added successfully`);
+            await updateCourse(courseId, newCourse);
+            toast.success('Chapter deleted successfully');
         } catch (error) {
-            console.error('Failed to add:', error);
-            message.error('Failed to add. Please try again.');
+            console.error('Failed to delete chapter:', error);
+            toast.error('Failed to delete chapter');
         }
-    }; const handleGenerateLessonVideo = async (lesson: any, lessonIndex: number, chapterIndex: number) => {
-        if (!course || !courseId) return;
-
-        try {
-            setLoading(true);
-            const response = await generateLessonVideo({
-                courseId: courseId,
-                lessonId: lesson.id
-            });
-
-            // Update the lesson with the task_id
-            const newChapters = [...course.chapters];
-            newChapters[chapterIndex].lessons[lessonIndex] = {
-                ...lesson,
-                task_id: response.task_id,
-                status: 'pending'
-            };
-
-            const updatedCourse = { ...course, chapters: newChapters };
-            setCourse(updatedCourse);
-
-            // Different message depending on whether this is a new generation or regeneration
-            const isRegeneration = lesson.video_url || (lesson.task_id && lesson.task_id !== response.task_id);
-            message.success(isRegeneration ? 'Lesson regeneration started successfully' : 'Video generation started successfully');
-
-            // Start tracking the task immediately to show progress
-            const taskInfo = await getTaskStatus(response.task_id);
-            console.log('Initial task status:', taskInfo);
-
-            // Set up frequent initial polling to show immediate progress
-            let checkCount = 0;
-            const initialCheckInterval = setInterval(async () => {
-                try {
-                    checkCount++;
-                    const updatedTaskInfo = await getTaskStatus(response.task_id);
-
-                    // Update the lesson status based on task status
-                    const refreshedChapters = [...course.chapters];
-                    refreshedChapters[chapterIndex].lessons[lessonIndex] = {
-                        ...refreshedChapters[chapterIndex].lessons[lessonIndex],
-                        status: updatedTaskInfo.status === 'COMPLETED' ? 'completed' :
-                            updatedTaskInfo.status === 'FAILED' ? 'failed' : 'processing',
-                        progress: updatedTaskInfo.progress || 0
-                    };
-
-                    setCourse({ ...course, chapters: refreshedChapters });
-                    // If status is completed or failed, or we've checked 5 times, stop polling
-                    if (updatedTaskInfo.status === 'COMPLETED' || updatedTaskInfo.status === 'FAILED' || checkCount >= 5) {
-                        clearInterval(initialCheckInterval);
-
-                        if (updatedTaskInfo.status === 'COMPLETED') {
-                            // Fetch the course again to get the updated video URL
-                            const updatedCourse = await getCourse(courseId);
-                            setCourse(updatedCourse);
-
-                            // No need to continue polling for completed tasks
-                            message.success('Video generation completed successfully');
-                        } else if (updatedTaskInfo.status === 'FAILED') {
-                            message.error('Video generation failed');
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error checking task status:', error);
-                    clearInterval(initialCheckInterval);
-                }
-            }, 2000); // Check every 2 seconds initially
-        } catch (error) {
-            console.error('Failed to generate lesson video:', error);
-            message.error('Failed to start video generation');
-        } finally {
-            setLoading(false);
-        }
-    }; const handleBackToCourses = () => {
-        router.push('/course-maker');
     };
 
-    // Debug: Log when selectedLesson changes
-    useEffect(() => {
-        console.log('Selected lesson changed:', selectedLesson);
-        if (selectedLesson?.video_url) {
-            console.log('Video URL:', selectedLesson.video_url);
+    const handleDeleteLesson = async (lessonIndex: number, chapterIndex: number) => {
+        if (!course) return;
+        
+        try {
+            const newCourse = { ...course };
+            newCourse.chapters[chapterIndex].lessons.splice(lessonIndex, 1);
+            setCourse(newCourse);
+            await updateCourse(courseId, newCourse);
+            toast.success('Lesson deleted successfully');
+        } catch (error) {
+            console.error('Failed to delete lesson:', error);
+            toast.error('Failed to delete lesson');
         }
-    }, [selectedLesson]);
+    };
+
+    // Add lesson handler
+    const handleAddLesson = (chapterIndex: number) => {
+        setAddLessonForm({ title: '', description: '', content: '' });
+        setAddLessonChapterIndex(chapterIndex);
+        setAddLessonDialogOpen(true);
+    };
+
+    // Submit add lesson
+    const handleSubmitAddLesson = async () => {
+        if (!course || !addLessonForm.title.trim()) {
+            toast.error('Please enter a lesson title');
+            return;
+        }
+        
+        const newLesson = {
+            id: `lesson-${Date.now()}`,
+            title: addLessonForm.title.trim(),
+            description: addLessonForm.description.trim(),
+            content: addLessonForm.content.trim(),
+            order: course.chapters[addLessonChapterIndex].lessons.length + 1
+        };
+
+        try {
+            const newCourse = { ...course };
+            newCourse.chapters[addLessonChapterIndex].lessons.push(newLesson);
+            setCourse(newCourse);
+            await updateCourse(courseId, newCourse);
+            setAddLessonDialogOpen(false);
+            setAddLessonForm({ title: '', description: '', content: '' });
+            toast.success('Lesson added successfully');
+        } catch (error) {
+            console.error('Failed to add lesson:', error);
+            toast.error('Failed to add lesson');
+        }
+    };
+
+    // Add chapter handler
+    const handleAddChapter = () => {
+        setAddChapterForm({ title: '', description: '' });
+        setAddChapterDialogOpen(true);
+    };
+
+    // Submit add chapter
+    const handleSubmitAddChapter = async () => {
+        if (!course || !addChapterForm.title.trim()) {
+            toast.error('Please enter a chapter title');
+            return;
+        }
+        
+        const newChapter = {
+            id: `chapter-${Date.now()}`,
+            title: addChapterForm.title.trim(),
+            description: addChapterForm.description.trim(),
+            lessons: [],
+            order: course.chapters.length + 1
+        };
+
+        try {
+            const newCourse = { ...course };
+            newCourse.chapters.push(newChapter);
+            setCourse(newCourse);
+            await updateCourse(courseId, newCourse);
+            setAddChapterDialogOpen(false);
+            setAddChapterForm({ title: '', description: '' });
+            toast.success('Chapter added successfully');
+        } catch (error) {
+            console.error('Failed to add chapter:', error);
+            toast.error('Failed to add chapter');
+        }
+    };
+
+    // Generate video handler
+    const handleGenerateVideo = async (lesson: any, lessonIndex: number, chapterIndex: number) => {
+        try {
+            await generateLessonVideo(lesson.id);
+            toast.success('Video generation started');
+            
+            // Start polling for updates
+            setTimeout(() => {
+                fetchProgressInBackground();
+            }, 1000);
+        } catch (error) {
+            console.error('Failed to generate video:', error);
+            toast.error('Failed to start video generation');
+        }
+    };
 
     if (loading) {
         return (
-            <div style={{ textAlign: 'center', padding: '50px' }}>
-                <Spin size="large" />
-                <p style={{ marginTop: '16px' }}>Loading course data...</p>
+            <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 dark:from-background dark:via-background dark:to-card/30">
+                {/* Header Skeleton */}
+                <div className="bg-background dark:bg-card border-b shadow-sm">
+                    <div className="max-w-6xl mx-auto p-6">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <Skeleton className="h-10 w-24" /> {/* Back button */}
+                                <div className="h-6 w-px bg-border" />
+                                <div className="flex items-center gap-3">
+                                    <Skeleton className="h-6 w-6 rounded" /> {/* Icon */}
+                                    <div>
+                                        <Skeleton className="h-8 w-80 mb-1" /> {/* Title */}
+                                        <Skeleton className="h-4 w-96" /> {/* Description */}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Content Skeleton */}
+                <div className="max-w-6xl mx-auto p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Course Structure Skeleton */}
+                        <div className="lg:col-span-2 space-y-4">
+                            <Card>
+                                <CardHeader>
+                                    <div className="flex items-center gap-2">
+                                        <Skeleton className="h-5 w-5 rounded" />
+                                        <Skeleton className="h-6 w-40" />
+                                    </div>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    {/* Chapter Skeletons */}
+                                    {[1, 2, 3].map(i => (
+                                        <Card key={i} className="border border-border">
+                                            <CardHeader className="pb-3 bg-muted dark:bg-card border-b">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <Skeleton className="h-4 w-4" /> {/* Grip */}
+                                                        <Skeleton className="h-5 w-5 rounded" /> {/* Folder icon */}
+                                                        <Skeleton className="h-6 w-48" /> {/* Chapter title */}
+                                                    </div>
+                                                    <Skeleton className="h-8 w-8 rounded" /> {/* Menu button */}
+                                                </div>
+                                            </CardHeader>
+                                            <CardContent className="pt-4 space-y-2">
+                                                {/* Lesson Skeletons */}
+                                                {[1, 2, 3].map(j => (
+                                                    <div key={j} className="flex items-center justify-between p-3 rounded-lg border border-border">
+                                                        <div className="flex items-center gap-3 flex-1">
+                                                            <Skeleton className="h-4 w-4" /> {/* Grip */}
+                                                            <Skeleton className="h-4 w-4 rounded" /> {/* File icon */}
+                                                            <Skeleton className="h-4 w-64" /> {/* Lesson title */}
+                                                            <Skeleton className="h-5 w-16 rounded-full" /> {/* Status badge */}
+                                                        </div>
+                                                        <Skeleton className="h-8 w-8 rounded" /> {/* Menu button */}
+                                                    </div>
+                                                ))}
+                                            </CardContent>
+                                        </Card>
+                                    ))}
+                                    
+                                    {/* Add Chapter Button Skeleton */}
+                                    <div className="mt-4 pt-4 border-t border-border">
+                                        <Skeleton className="h-10 w-full rounded-md" />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* Lesson Details Panel Skeleton */}
+                        <div className="space-y-4">
+                            <Card>
+                                <CardHeader>
+                                    <div className="flex items-center gap-2">
+                                        <Skeleton className="h-5 w-5 rounded" />
+                                        <Skeleton className="h-6 w-32" />
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-center py-8">
+                                        <Skeleton className="h-12 w-12 mx-auto mb-3 rounded" />
+                                        <Skeleton className="h-4 w-48 mx-auto" />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 
     if (!course) {
         return (
-            <div style={{ textAlign: 'center', padding: '50px' }}>
-                <Empty description="Course not found" />
-                <Button type="primary" onClick={handleBackToCourses}>
-                    Back to Courses
-                </Button>
+            <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 dark:from-background dark:via-background dark:to-card/30 flex items-center justify-center">
+                <Card className="max-w-md mx-auto text-center">
+                    <CardContent className="p-8">
+                        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                        <h2 className="text-xl font-semibold mb-2">Course Not Found</h2>
+                        <p className="text-muted-foreground mb-4">The course you're looking for doesn't exist or has been deleted.</p>
+                        <Button onClick={() => router.push('/courses')}>
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            Back to Courses
+                        </Button>
+                    </CardContent>
+                </Card>
             </div>
         );
     }
 
-    const sortedChapters = course.chapters?.map(chapter => ({
-        ...chapter,
-        lessons: sortLessons(chapter.lessons || [])
-    })) || [];
-
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className={styles.courseViewContainer}>
-                <Card className={styles.mainCard}>
-                    {/* Header */}
-                    <div style={{ marginBottom: '24px' }}>
-                        <Button
-                            icon={<ArrowLeftOutlined />}
-                            onClick={handleBackToCourses}
-                            style={{ marginBottom: '16px' }}
-                        >
-                            Back to Courses
-                        </Button>
-
-                        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                            <Title level={2}>
-                                <BookOutlined style={{ color: '#52c41a', marginRight: '12px' }} />
-                                {course.title}
-                            </Title>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px' }}>
-                                <Tag
-                                    color={
-                                        course.status === 'completed' ? 'success' :
-                                            course.status === 'generating' ? 'processing' :
-                                                course.status === 'failed' ? 'error' : 'default'
-                                    }
-                                    style={{ fontSize: '14px', padding: '4px 12px' }}
-                                >
-                                    {course.status.toUpperCase()}
-                                </Tag>
-                            </div>
-                        </div>
-
-                        {/* Course Info */}
-                        <Row gutter={24} style={{ marginBottom: '16px' }}>
-                            <Col xs={24}>
-                                {course.description && (
-                                    <Paragraph style={{ textAlign: 'center', fontSize: '16px', color: '#666' }}>
-                                        {course.description}
-                                    </Paragraph>
-                                )}
-                            </Col>
-                        </Row>
-
-                        <Row gutter={24} style={{ marginBottom: '24px' }}>
-                            <Col xs={24} sm={6}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <strong>Language</strong>
-                                    <div>{course.language}</div>
-                                </div>
-                            </Col>
-                            <Col xs={24} sm={6}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <strong>Total Lessons</strong>
-                                    <div>{course.total_lessons}</div>
-                                </div>
-                            </Col>
-                            <Col xs={24} sm={6}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <strong>Duration</strong>
-                                    <div>{course.estimated_duration_minutes} min</div>
-                                </div>
-                            </Col>
-                            <Col xs={24} sm={6}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <strong>Created</strong>
-                                    <div>{new Date(course.created_at).toLocaleDateString()}</div>
-                                </div>
-                            </Col>
-                        </Row>
-
-                        {/* Progress Bar */}
-                        {course.status === 'generating' && courseProgress && (
-                            <div style={{ marginBottom: '24px' }}>
-                                <h4>Generation Progress</h4>
-                                <Progress
-                                    percent={Math.round((courseProgress.completed_lessons / courseProgress.total_lessons) * 100)}
-                                    status={courseProgress.failed_lessons > 0 ? 'exception' : 'active'}
-                                    strokeColor={{
-                                        '0%': '#108ee9',
-                                        '100%': '#87d068',
-                                    }}
-                                />
-                                <p style={{ marginTop: '8px', textAlign: 'center' }}>
-                                    {courseProgress.completed_lessons} of {courseProgress.total_lessons} lessons completed
-                                    {courseProgress.failed_lessons > 0 && (
-                                        <span style={{ color: '#ff4d4f', marginLeft: '16px' }}>
-                                            ({courseProgress.failed_lessons} failed)
-                                        </span>
-                                    )}
-                                </p>
-                            </div>
-                        )}                        {/* Toolbar */}
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                            marginBottom: '16px',
-                            padding: '12px',
-                            backgroundColor: '#fafafa',
-                            borderRadius: '6px'
-                        }}>
-                            <Space>
+            <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 dark:from-background dark:via-background dark:to-card/30">
+                {/* Header */}
+                <div className="bg-background dark:bg-card border-b shadow-sm">
+                    <div className="max-w-6xl mx-auto p-6">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
                                 <Button
-                                    type="default"
-                                    icon={<PlusOutlined />}
-                                    onClick={handleAddChapter}
+                                    variant="outline"
+                                    onClick={() => router.push('/courses')}
+                                    className="flex items-center gap-2"
                                 >
-                                    Add Chapter
-                                </Button>                                <Button
-                                    type="primary"
-                                    icon={<ReloadOutlined />}
-                                    onClick={fetchCourseData}
-                                    loading={loading}
-                                >
-                                    Refresh Course
+                                    <ArrowLeft className="w-4 h-4" />
+                                    Back to Courses
                                 </Button>
-                            </Space>
+                                <Separator orientation="vertical" className="h-6" />
+                                <div className="flex items-center gap-3">
+                                    <BookOpen className="w-6 h-6 text-primary" />
+                                    <div>
+                                        <h1 className="text-2xl font-bold text-foreground">{course.title}</h1>
+                                        <p className="text-muted-foreground">{course.description}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    {/* Main Content */}
-                    <Row gutter={24}>
-                        {/* Course Structure with Drag & Drop */}
-                        <Col xs={24} lg={12}>
-                            <Card title="Course Structure" size="small">
-                                {sortedChapters.length === 0 ? (
-                                    <Empty description="No chapters yet">
-                                        <Button type="primary" icon={<PlusOutlined />} onClick={handleAddChapter}>
-                                            Add First Chapter
+                {/* Main Content */}
+                <div className="max-w-6xl mx-auto p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Course Structure */}
+                        <div className="lg:col-span-2 space-y-4">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <Folder className="w-5 h-5 text-primary" />
+                                        Course Structure
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    {course.chapters?.map((chapter: any, chapterIndex: number) => (
+                                        <DraggableChapter
+                                            key={`chapter-${chapterIndex}`}
+                                            chapter={chapter}
+                                            chapterIndex={chapterIndex}
+                                            onMove={moveChapter}
+                                            onEdit={(chapter, index) => handleEdit('chapter', chapter, index)}
+                                            onDelete={handleDeleteChapter}
+                                            onAddLesson={handleAddLesson}
+                                            onLessonMove={moveLesson}
+                                            onLessonEdit={(lesson, lessonIndex, chapterIndex) => 
+                                                handleEdit('lesson', lesson, chapterIndex, lessonIndex)
+                                            }
+                                            onLessonDelete={handleDeleteLesson}
+                                            onLessonSelect={setSelectedLesson}
+                                            onLessonGenerateVideo={handleGenerateVideo}
+                                            selectedLesson={selectedLesson}
+                                        />
+                                    ))}
+                                    
+                                    {/* Add Chapter Button */}
+                                    <div className="mt-4 pt-4 border-t border-border">
+                                        <Button
+                                            variant="outline"
+                                            className="w-full"
+                                            onClick={handleAddChapter}
+                                        >
+                                            <Plus className="w-4 h-4 mr-2" />
+                                            Add New Chapter
                                         </Button>
-                                    </Empty>
-                                ) : (
-                                    sortedChapters.map((chapter: any, chapterIndex: number) => (<DraggableChapter
-                                        key={`chapter-${chapterIndex}`}
-                                        chapter={chapter}
-                                        chapterIndex={chapterIndex}
-                                        onMove={moveChapter}
-                                        onEdit={handleEditChapter}
-                                        onDelete={handleDeleteChapter}
-                                        onAddLesson={handleAddLesson}
-                                        onLessonMove={moveLesson}
-                                        onLessonEdit={handleEditLesson}
-                                        onLessonDelete={handleDeleteLesson}
-                                        onLessonSelect={setSelectedLesson}
-                                        onLessonGenerateVideo={handleGenerateLessonVideo}
-                                        selectedLesson={selectedLesson}
-                                    />
-                                    ))
-                                )}
-                            </Card>
-                        </Col>                        {/* Lesson Details */}
-                        <Col xs={24} lg={12}>
-                            <Card
-                                title="Lesson Details"
-                                size="small"
-                                extra={
-                                    <Button
-                                        icon={<ReloadOutlined />}
-                                        size="small"
-                                        onClick={fetchCourseData}
-                                        loading={loading}
-                                        title="Refresh course data"
-                                    />
-                                }
-                            >
-                                {selectedLesson ? (
-                                    <div>
-                                        <Title level={4}>{selectedLesson.title}</Title>
-
-                                        {selectedLesson.description && (
-                                            <div style={{ marginBottom: '16px' }}>
-                                                <strong>Description:</strong>
-                                                <p style={{ marginTop: '8px' }}>{selectedLesson.description}</p>
-                                            </div>
-                                        )}
-
-                                        {selectedLesson.content && (
-                                            <div style={{ marginBottom: '16px' }}>
-                                                <strong>Content:</strong>
-                                                <div style={{
-                                                    marginTop: '8px',
-                                                    padding: '12px',
-                                                    backgroundColor: '#f5f5f5',
-                                                    borderRadius: '6px',
-                                                    maxHeight: '200px',
-                                                    overflowY: 'auto'
-                                                }}>
-                                                    {selectedLesson.content}
-                                                </div>
-                                            </div>
-                                        )}                                        {/* Video Player */}
-                                        {selectedLesson.video_url && (
-                                            <div style={{ marginTop: '16px' }}>
-                                                <strong>Generated Video:</strong>
-                                                <div style={{ marginTop: '8px' }}>                                                    <video
-                                                    key={selectedLesson.id} // Force re-render when lesson changes
-                                                    controls
-                                                    style={{ width: '100%', maxHeight: '300px' }}
-                                                    poster={selectedLesson.thumbnail_url}
-                                                    onLoadStart={() => console.log('Video loading started for lesson:', selectedLesson.id)}
-                                                    onLoadedData={() => console.log('Video loaded for lesson:', selectedLesson.id)}
-                                                >
-                                                    <source src={selectedLesson.video_url} type="video/mp4" />
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                                </div>
-
-                                                {/* Download Options */}
-                                                <div style={{ marginTop: '12px' }}>
-                                                    <Space>
-                                                        <Button
-                                                            icon={<DownloadOutlined />}
-                                                            href={selectedLesson.video_url}
-                                                            download={`${selectedLesson.title}.mp4`}
-                                                        >
-                                                            Download Video
-                                                        </Button>
-                                                        {selectedLesson.audio_url && (
-                                                            <Button
-                                                                icon={<DownloadOutlined />}
-                                                                href={selectedLesson.audio_url}
-                                                                download={`${selectedLesson.title}.mp3`}
-                                                            >
-                                                                Download Audio
-                                                            </Button>
-                                                        )}
-                                                    </Space>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Status Info */}
-                                        {selectedLesson.task_id && (
-                                            <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#f0f0f0', borderRadius: '6px' }}>
-                                                <strong>Task Status:</strong>
-                                                <Tag
-                                                    style={{ marginLeft: '8px' }}
-                                                    color={
-                                                        selectedLesson.status === 'completed' ? 'success' :
-                                                            selectedLesson.status === 'processing' ? 'processing' :
-                                                                selectedLesson.status === 'failed' ? 'error' : 'default'
-                                                    }
-                                                >
-                                                    {selectedLesson.status || 'pending'}
-                                                </Tag>
-                                            </div>
-                                        )}
                                     </div>
-                                ) : (
-                                    <Empty
-                                        description="Select a lesson from the structure to view details"
-                                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                    />
-                                )}
+                                </CardContent>
                             </Card>
-                        </Col>
-                    </Row>
+                        </div>
 
-                    {/* Edit Modal */}
-                    <Modal
-                        title={`Edit ${editModalData?.type || ''}`}
-                        open={editModalVisible}
-                        onOk={handleEditModalOk}
-                        onCancel={() => setEditModalVisible(false)}
-                        width={600}
-                    >
-                        <Form form={form} layout="vertical">
-                            <Form.Item
-                                name="title"
-                                label="Title"
-                                rules={[{ required: true, message: 'Please enter a title' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                name="description"
-                                label="Description"
-                            >
-                                <TextArea rows={3} />
-                            </Form.Item>
+                        {/* Lesson Details Panel */}
+                        <div className="space-y-4">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <FileText className="w-5 h-5 text-primary" />
+                                        Lesson Details
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    {selectedLesson ? (
+                                        <div className="space-y-4">
+                                            <div>
+                                                <h3 className="font-semibold text-lg">{selectedLesson.title}</h3>
+                                                <p className="text-muted-foreground text-sm mt-1">{selectedLesson.description}</p>
+                                            </div>
+                                            
+                                            {selectedLesson.content && (
+                                                <div>
+                                                    <h4 className="font-medium text-sm text-foreground mb-2">Content:</h4>
+                                                    <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">
+                                                        {selectedLesson.content}
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            {selectedLesson.video_url && (
+                                                <div>
+                                                    <h4 className="font-medium text-sm text-foreground mb-2">Video:</h4>
+                                                    <div className="bg-black rounded-lg overflow-hidden">
+                                                        <video 
+                                                            controls 
+                                                            className="w-full"
+                                                            src={selectedLesson.video_url}
+                                                        />
+                                                    </div>
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="mt-2 w-full"
+                                                        onClick={() => window.open(selectedLesson.video_url, '_blank')}
+                                                    >
+                                                        <Download className="w-4 h-4 mr-2" />
+                                                        Download Video
+                                                    </Button>
+                                                </div>
+                                            )}
+
+                                            {selectedLesson.task_id && !selectedLesson.video_url && (
+                                                <div className="text-center py-4">
+                                                    <Clock className="w-8 h-8 text-primary mx-auto mb-2" />
+                                                    <p className="text-sm text-muted-foreground">Video generation in progress...</p>
+                                                </div>
+                                            )}
+
+                                            {!selectedLesson.task_id && !selectedLesson.video_url && (
+                                                <Button
+                                                    className="w-full"
+                                                    onClick={() => {
+                                                        const chapterIndex = course.chapters.findIndex((c: any) => 
+                                                            c.lessons.some((l: any) => l.id === selectedLesson.id)
+                                                        );
+                                                        const lessonIndex = course.chapters[chapterIndex]?.lessons.findIndex((l: any) => 
+                                                            l.id === selectedLesson.id
+                                                        );
+                                                        if (chapterIndex !== -1 && lessonIndex !== -1) {
+                                                            handleGenerateVideo(selectedLesson, lessonIndex, chapterIndex);
+                                                        }
+                                                    }}
+                                                >
+                                                    <Play className="w-4 h-4 mr-2" />
+                                                    Generate Video
+                                                </Button>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-8 text-muted-foreground">
+                                            <FileText className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
+                                            <p>Select a lesson to view details</p>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Edit Modal */}
+                <Dialog open={!!editModalData} onOpenChange={() => setEditModalData(null)}>
+                    <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                            <DialogTitle>
+                                Edit {editModalData?.type === 'chapter' ? 'Chapter' : 'Lesson'}
+                            </DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="text-sm font-medium text-foreground mb-1 block">
+                                    Title *
+                                </label>
+                                <Input
+                                    value={editForm.title}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
+                                    placeholder="Enter title"
+                                />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-foreground mb-1 block">
+                                    Description *
+                                </label>
+                                <Textarea
+                                    value={editForm.description}
+                                    onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                                    placeholder="Enter description"
+                                    rows={3}
+                                />
+                            </div>
                             {editModalData?.type === 'lesson' && (
-                                <Form.Item
-                                    name="content"
-                                    label="Content"
-                                >
-                                    <TextArea rows={6} />
-                                </Form.Item>
+                                <div>
+                                    <label className="text-sm font-medium text-foreground mb-1 block">
+                                        Content
+                                    </label>
+                                    <Textarea
+                                        value={editForm.content}
+                                        onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
+                                        placeholder="Enter lesson content"
+                                        rows={5}
+                                    />
+                                </div>
                             )}
-                        </Form>
-                    </Modal>
+                        </div>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setEditModalData(null)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleSaveEdit}>
+                                Save Changes
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
-                    {/* Add Modal */}
-                    <Modal
-                        title={`Add ${addModalType}`}
-                        open={addModalVisible}
-                        onOk={handleAddModalOk}
-                        onCancel={() => setAddModalVisible(false)}
-                        width={600}
-                    >
-                        <Form form={form} layout="vertical">
-                            <Form.Item
-                                name="title"
-                                label="Title"
-                                rules={[{ required: true, message: 'Please enter a title' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                name="description"
-                                label="Description"
-                            >
-                                <TextArea rows={3} />
-                            </Form.Item>
-                            {addModalType === 'lesson' && (
-                                <Form.Item
-                                    name="content"
-                                    label="Content"
-                                >
-                                    <TextArea rows={6} />
-                                </Form.Item>
-                            )}
-                        </Form>
-                    </Modal>
-                </Card>
+                {/* Add Chapter Dialog */}
+                <Dialog open={addChapterDialogOpen} onOpenChange={setAddChapterDialogOpen}>
+                    <DialogContent className="max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>Add New Chapter</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="text-sm font-medium text-foreground mb-1 block">
+                                    Chapter Title *
+                                </label>
+                                <Input
+                                    value={addChapterForm.title}
+                                    onChange={(e) => setAddChapterForm(prev => ({ ...prev, title: e.target.value }))}
+                                    placeholder="Enter chapter title"
+                                    autoFocus
+                                />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-foreground mb-1 block">
+                                    Chapter Description
+                                </label>
+                                <Textarea
+                                    value={addChapterForm.description}
+                                    onChange={(e) => setAddChapterForm(prev => ({ ...prev, description: e.target.value }))}
+                                    placeholder="Enter chapter description"
+                                    rows={3}
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setAddChapterDialogOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleSubmitAddChapter} disabled={!addChapterForm.title.trim()}>
+                                Add Chapter
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Add Lesson Dialog */}
+                <Dialog open={addLessonDialogOpen} onOpenChange={setAddLessonDialogOpen}>
+                    <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                            <DialogTitle>Add New Lesson</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="text-sm font-medium text-foreground mb-1 block">
+                                    Lesson Title *
+                                </label>
+                                <Input
+                                    value={addLessonForm.title}
+                                    onChange={(e) => setAddLessonForm(prev => ({ ...prev, title: e.target.value }))}
+                                    placeholder="Enter lesson title"
+                                    autoFocus
+                                />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-foreground mb-1 block">
+                                    Lesson Description
+                                </label>
+                                <Textarea
+                                    value={addLessonForm.description}
+                                    onChange={(e) => setAddLessonForm(prev => ({ ...prev, description: e.target.value }))}
+                                    placeholder="Enter lesson description"
+                                    rows={3}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium text-foreground mb-1 block">
+                                    Lesson Content
+                                </label>
+                                <Textarea
+                                    value={addLessonForm.content}
+                                    onChange={(e) => setAddLessonForm(prev => ({ ...prev, content: e.target.value }))}
+                                    placeholder="Enter lesson content"
+                                    rows={5}
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setAddLessonDialogOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleSubmitAddLesson} disabled={!addLessonForm.title.trim()}>
+                                Add Lesson
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
         </DndProvider>
     );

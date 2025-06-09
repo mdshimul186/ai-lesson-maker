@@ -1,28 +1,33 @@
 'use client';
 
 import React from 'react';
-import { Card, Button } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import CreateCourse from '../../../components/CreateCourse';
+
+// shadcn/ui components
+import { Button } from '../../../components/ui/button';
+import { Card, CardContent } from '../../../components/ui/card';
 
 const CreateCoursePage: React.FC = () => {
     const router = useRouter();
 
     return (
-        <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-            <Card>
-                <div style={{ marginBottom: '16px' }}>
+        <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 dark:from-background dark:via-background dark:to-card/30 p-6">
+            <div className="max-w-7xl mx-auto">
+                <div className="mb-6">
                     <Button 
-                        icon={<ArrowLeftOutlined />}
+                        variant="outline"
                         onClick={() => router.push('/course-maker')}
+                        className="flex items-center gap-2"
                     >
+                        <ArrowLeft className="w-4 h-4" />
                         Back to Course List
                     </Button>
                 </div>
                 
                 <CreateCourse />
-            </Card>
+            </div>
         </div>
     );
 };

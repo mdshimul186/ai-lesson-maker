@@ -1,175 +1,195 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, Typography, message, Space } from 'antd';
 import { useAuthStore } from '../../stores';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { UserOutlined, LockOutlined, MailOutlined, UserAddOutlined } from '@ant-design/icons';
-
-const { Title, Text } = Typography;
+import { User, Lock, Mail, UserPlus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { toast } from 'sonner';
 
 const RegisterForm: React.FC = () => {
-  const [form] = Form.useForm();
   const router = useRouter();
   const { isLoading, error, register } = useAuthStore();
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
-  const onFinish = async (values: any) => {
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     // Check if passwords match
-    if (values.password !== values.confirmPassword) {
-      message.error('Passwords do not match');
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    // Basic validation
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters!');
       return;
     }
 
     try {
       await register({
-        email: values.email,
-        password: values.password,
-        first_name: values.firstName,
-        last_name: values.lastName
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,
+        last_name: formData.lastName
       });
-        // Check if there was an error
+      // Check if there was an error
       if (!useAuthStore.getState().error) {
         setRegistrationSuccess(true);
-        message.success('Registration successful! Please verify your email with the code we sent you.');
-        form.resetFields();
+        toast.success('Registration successful! Please verify your email with the code we sent you.');
         
         // Store the email for verification
-        localStorage.setItem('unverifiedEmail', values.email);
+        localStorage.setItem('unverifiedEmail', formData.email);
         
         // Redirect to verification page immediately
         router.push('/verify-email');
       }
     } catch (err) {
       console.error('Registration failed:', err);
-      message.error('Registration failed. Please try again.');
+      toast.error('Registration failed. Please try again.');
     }
   };
 
   return (
-    <Card style={{ maxWidth: 500, margin: '0 auto', marginTop: 50, boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <Title level={2}>
-          <UserAddOutlined /> Register
-        </Title>
-        <Text type="secondary">Create a new account to get started</Text>
-      </div>
+    <Card className="max-w-md mx-auto mt-12 shadow-lg">
+      <CardHeader className="text-center">
+        <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+          <UserPlus className="h-6 w-6" /> Register
+        </CardTitle>
+        <CardDescription>Create a new account to get started</CardDescription>
+      </CardHeader>
 
-      {registrationSuccess ? (
-        <div style={{ textAlign: 'center' }}>
-          <Title level={4} style={{ color: 'green' }}>Registration Successful!</Title>
-          <Text>Please check your email to verify your account.</Text>
-          <div style={{ marginTop: 20 }}>            <Link href="/login">
-              <Button type="primary">Go to Login</Button>
+      <CardContent>
+        {registrationSuccess ? (
+          <div className="text-center space-y-4">
+            <h4 className="text-lg font-semibold text-green-600">Registration Successful!</h4>
+            <p className="text-gray-600">Please check your email to verify your account.</p>
+            <Link href="/login">
+              <Button className="w-full">Go to Login</Button>
             </Link>
           </div>
-        </div>
-      ) : (
-        <Form
-          form={form}
-          name="register_form"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          layout="vertical"
-        >
-          <Space direction="horizontal" style={{ width: '100%', justifyContent: 'space-between' }}>
-            <Form.Item
-              name="firstName"
-              rules={[{ required: true, message: 'Please input your first name!' }]}
-              style={{ width: '100%' }}
-            >
-              <Input 
-                prefix={<UserOutlined />} 
-                placeholder="First Name" 
-                size="large"
-              />
-            </Form.Item>
+        ) : (
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="firstName"
+                    placeholder="First Name"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
 
-            <Form.Item
-              name="lastName"
-              rules={[{ required: true, message: 'Please input your last name!' }]}
-              style={{ width: '100%' }}
-            >
-              <Input 
-                prefix={<UserOutlined />} 
-                placeholder="Last Name" 
-                size="large"
-              />
-            </Form.Item>
-          </Space>
-
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Please input your email!' },
-              { type: 'email', message: 'Please enter a valid email!' }
-            ]}
-          >
-            <Input 
-              prefix={<MailOutlined />} 
-              placeholder="Email" 
-              size="large"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            rules={[
-              { required: true, message: 'Please input your password!' },
-              { min: 8, message: 'Password must be at least 8 characters!' }
-            ]}
-          >
-            <Input.Password 
-              prefix={<LockOutlined />} 
-              placeholder="Password" 
-              size="large"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="confirmPassword"
-            dependencies={['password']}
-            rules={[
-              { required: true, message: 'Please confirm your password!' },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error('The two passwords do not match!'));
-                },
-              }),
-            ]}
-          >
-            <Input.Password 
-              prefix={<LockOutlined />} 
-              placeholder="Confirm Password" 
-              size="large"
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
-              style={{ width: '100%' }} 
-              size="large"
-              loading={isLoading}
-            >
-              Register
-            </Button>
-          </Form.Item>
-
-          {error && (
-            <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>
-              {error}
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="lastName"
+                    placeholder="Last Name"
+                    value={formData.lastName}
+                    onChange={(e) => handleInputChange('lastName', e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
             </div>
-          )}
 
-          <div style={{ textAlign: 'center' }}>
-            Already have an account? <Link href="/login">Login</Link>
-          </div>
-        </Form>
-      )}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating Account...' : 'Register'}
+            </Button>
+
+            {error && (
+              <Alert className="mt-4">
+                <AlertDescription className="text-red-600">
+                  {error}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="text-center text-sm text-gray-600">
+              Already have an account?{' '}
+              <Link href="/login" className="text-blue-600 hover:underline">
+                Login
+              </Link>
+            </div>
+          </form>
+        )}
+      </CardContent>
     </Card>
   );
 };

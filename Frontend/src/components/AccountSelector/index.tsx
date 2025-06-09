@@ -1,7 +1,29 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
-import { Menu, Dropdown, Button, Badge, Spin, message } from 'antd';
-import { DownOutlined, TeamOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import { useAccountStore } from '../../stores';
+import { toast } from 'sonner';
+import { 
+  User, 
+  Users, 
+  Plus, 
+  ChevronDown,
+  Loader2
+} from 'lucide-react';
+
+// shadcn/ui components
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+
+import CreateTeamModal from './CreateTeamModal';
+
 // Define Account type locally if not exported from services
 type Account = {
     id: string;
@@ -9,7 +31,6 @@ type Account = {
     type: 'personal' | 'team';
     credits: number;
 };
-import CreateTeamModal from './CreateTeamModal';
 
 const AccountSelector: React.FC = () => {
     const {
@@ -22,6 +43,7 @@ const AccountSelector: React.FC = () => {
     } = useAccountStore();
 
     const [createTeamModalVisible, setCreateTeamModalVisible] = useState(false);
+
     useEffect(() => {
         // Only fetch accounts if we don't already have any loaded
         if (accounts.length === 0 && !isLoading) {
@@ -31,15 +53,17 @@ const AccountSelector: React.FC = () => {
 
     useEffect(() => {
         if (error) {
-            message.error(error);
+            toast.error(error);
         }
     }, [error]);
 
     // Check if we have a saved account ID in localStorage
     useEffect(() => {
-        const savedAccountId = localStorage.getItem('currentAccountId');
-        if (savedAccountId && accounts.some(a => a.id === savedAccountId)) {
-            setCurrentAccount(savedAccountId);
+        if (typeof window !== 'undefined') {
+            const savedAccountId = localStorage.getItem('currentAccountId');
+            if (savedAccountId && accounts.some(a => a.id === savedAccountId)) {
+                setCurrentAccount(savedAccountId);
+            }
         }
     }, [accounts, setCurrentAccount]);
 
@@ -52,62 +76,83 @@ const AccountSelector: React.FC = () => {
     };
 
     const renderAccountIcon = (account: Account) => {
-        return account.type === 'personal' ? <UserOutlined /> : <TeamOutlined />;
+        return account.type === 'personal' ? 
+            <User className="w-4 h-4" /> : 
+            <Users className="w-4 h-4" />;
     };
 
-    const menu = (
-        <Menu>
-            {accounts.map(account => (
-                <Menu.Item
-                    key={account.id}
-                    onClick={() => handleAccountChange(account.id)}
-                    icon={renderAccountIcon(account)}
-                >
-                    {account.name}
-                    <Badge
-                        count={account.credits}
-                        style={{
-                            backgroundColor: account.credits > 0 ? '#52c41a' : '#ff4d4f',
-                            marginLeft: 8
-                        }}
-                        overflowCount={999}
-                    />
-                </Menu.Item>
-            ))}
-            <Menu.Divider />
-            <Menu.Item key="create-team" onClick={handleCreateTeam} icon={<PlusOutlined />}>
-                Create Team Account
-            </Menu.Item>
-        </Menu>
-    );
+    const getCreditsColor = (credits: number) => {
+        return credits > 0 ? 'bg-green-500' : 'bg-red-500';
+    };
 
     if (isLoading && accounts.length === 0) {
-        return <Spin size="small" />;
+        return (
+            <div className="flex items-center text-white/80">
+                <Loader2 className="w-4 h-4 animate-spin" />
+            </div>
+        );
     }
 
     return (
         <>
-            <Dropdown overlay={menu} trigger={['click']}>
-                <Button>
-                    {currentAccount ? (
-                        <>
-                            {renderAccountIcon(currentAccount)}
-                            <span style={{ margin: '0 8px' }}>{currentAccount.name}</span>
-                            {/* <Badge 
-                count={currentAccount.credits} 
-                style={{ 
-                  backgroundColor: currentAccount.credits > 0 ? '#52c41a' : '#ff4d4f',
-                  marginRight: 8
-                }} 
-                overflowCount={999}
-              /> */}
-                        </>
-                    ) : (
-                        'Select Account'
-                    )}
-                    <DownOutlined />
-                </Button>
-            </Dropdown>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button 
+                        variant="ghost" 
+                        className="text-white hover:text-blue-100 hover:bg-white/10 space-x-2 backdrop-blur-sm border border-white/20 rounded-full px-3 py-2 transition-all duration-300 shadow-lg max-w-[200px]"
+                    >
+                        {currentAccount ? (
+                            <>
+                                {renderAccountIcon(currentAccount)}
+                                <span className="hidden sm:inline truncate max-w-[80px]">{currentAccount.name}</span>
+                                <Badge 
+                                    variant="secondary"
+                                    className={`${getCreditsColor(currentAccount.credits)} text-white border-0 shadow-sm font-semibold flex-shrink-0`}
+                                >
+                                    {currentAccount.credits}
+                                </Badge>
+                            </>
+                        ) : (
+                            <>
+                                <User className="w-4 h-4" />
+                                <span className="hidden sm:inline truncate">Select Account</span>
+                            </>
+                        )}
+                        <ChevronDown className="w-4 h-4 flex-shrink-0" />
+                    </Button>
+                </DropdownMenuTrigger>
+                
+                <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-lg border border-border/50 shadow-xl">
+                    {accounts.map(account => (
+                        <DropdownMenuItem
+                            key={account.id}
+                            onClick={() => handleAccountChange(account.id)}
+                            className="flex items-center justify-between cursor-pointer hover:bg-accent/50 transition-colors"
+                        >
+                            <div className="flex items-center space-x-2 min-w-0 flex-1">
+                                {renderAccountIcon(account)}
+                                <span className="font-medium truncate">{account.name}</span>
+                            </div>
+                            <Badge 
+                                variant="secondary"
+                                className={`${getCreditsColor(account.credits)} text-white text-xs shadow-sm font-semibold flex-shrink-0 ml-2`}
+                            >
+                                {account.credits}
+                            </Badge>
+                        </DropdownMenuItem>
+                    ))}
+                    
+                    <DropdownMenuSeparator />
+                    
+                    <DropdownMenuItem 
+                        onClick={handleCreateTeam}
+                        className="flex items-center space-x-2 cursor-pointer hover:bg-accent/50 transition-colors"
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span>Create Team Account</span>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             <CreateTeamModal
                 visible={createTeamModalVisible}

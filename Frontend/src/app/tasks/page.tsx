@@ -1,19 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Layout } from 'antd';
 import TasksList from '../../components/TasksList';
-
-const { Content } = Layout;
 
 export default function TasksPage() {
   return (
-    <Layout style={{
-      width: "100vw"
-    }}>
-      <Content style={{ padding: '0 50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="w-screen">
+      <div className="px-12 flex flex-col items-center">
         <TasksList />
-      </Content>
-    </Layout>
+      </div>
+    </div>
   );
 }

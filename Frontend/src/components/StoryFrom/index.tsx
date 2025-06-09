@@ -1,60 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { FormProps, RadioChangeEvent } from 'antd';
 import {
-    Button,
-    Form,
-    Input,
-    Select,
-    message,
-    Typography,
-    Card,
-    Radio,
-    Switch,
-    Row,
-    Col,
-    InputNumber,
+    Play,
+    Languages,
+    Highlighter,
+    Settings,
+    Image as ImageIcon,
+    Monitor,
+    Smartphone,
+    Square,
     Upload,
-    Spin,
-    Progress,
-    Timeline
-} from 'antd';
-import {
-    PlaySquareOutlined,
-    AudioOutlined,
-    TranslationOutlined,
-    HighlightOutlined,
-    SettingOutlined,
-    PictureOutlined,
-    FullscreenOutlined,
-    MobileOutlined,
-    BorderOutlined,
-    UploadOutlined,
-    VideoCameraAddOutlined
-} from '@ant-design/icons';
+    Video,
+    Clock,
+    CheckCircle2,
+    XCircle,
+    Loader2,
+    Wand2,
+    Volume2,
+    ChevronDown,
+    Check
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getVoiceList, generateVideo, uploadFile, getTaskStatus, VideoGenerateReq, TaskEvent } from '../../services/index';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './index.module.css';
-import { useVideoStore, useAccountStore } from "../../stores/index"; // Import useAccountStore
+import { useVideoStore, useAccountStore } from "../../stores/index";
 import { Task } from '@/interfaces';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Switch } from '../ui/switch';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Progress } from '../ui/progress';
+import { Badge } from '../ui/badge';
+import { Label } from '../ui/label';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
-const { Title } = Typography;
-const { Option } = Select;
+const formSchema = z.object({
+    resolution: z.string().optional(),
+    segments: z.number().min(1).max(50),
+    language: z.string().min(1, "Language is required"),
+    story_prompt: z.string().min(1, "Story prompt is required"),
+    voice_name: z.string().min(1, "Voice name is required"),
+    include_subtitles: z.boolean(),
+    visual_content_in_language: z.boolean(),
+    logo_url: z.string().optional(),
+    intro_video_url: z.string().optional(),
+    outro_video_url: z.string().optional(),
+});
 
-type FieldType = {
-    resolution?: string;
-    segments: number;
-    language?: string;
-    story_prompt?: string;
-    image_style?: string;
-    voice_name: string;
-    voice_rate: number;
-    include_subtitles: boolean;
-    visual_content_in_language: boolean;
-    logo_url?: string;
-    intro_video_url?: string;
-    outro_video_url?: string;
-};
+type FieldType = z.infer<typeof formSchema>;
 
 type voiceList = {
     displayName: string;
@@ -76,7 +78,7 @@ const getUniqueLanguageList = (list: voiceList[]) => {
 const resolutionOptions = [
     {
         type: 'landscape',
-        icon: <FullscreenOutlined />,
+        icon: <Monitor className="h-4 w-4" />,
         label: 'Landscape',
         options: [
             { value: '1280*720', label: 'HD (1280×720)', quality: 'HD' },
@@ -85,7 +87,7 @@ const resolutionOptions = [
     },
     {
         type: 'portrait',
-        icon: <MobileOutlined />,
+        icon: <Smartphone className="h-4 w-4" />,
         label: 'Portrait',
         options: [
             { value: '720*1280', label: 'HD (720×1280)', quality: 'HD' },
@@ -94,7 +96,7 @@ const resolutionOptions = [
     },
     {
         type: 'square',
-        icon: <BorderOutlined />,
+        icon: <Square className="h-4 w-4" />,
         label: 'Square',
         options: [
             { value: '720*720', label: 'HD (720×720)', quality: 'HD' },
@@ -105,9 +107,24 @@ const resolutionOptions = [
 
 const App: React.FC = () => {
     const { setVideoUrl, setLoading, setError, videoUrl, setTaskStatus, taskStatus } = useVideoStore();
-    const { refreshAccountData } = useAccountStore(); // Get refreshAccountData function
+    const { refreshAccountData } = useAccountStore();
     const { t } = useTranslation();
-    const [form] = Form.useForm();
+    const form = useForm<FieldType>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            resolution: '1280*720',
+            segments: 5,
+            language: '',
+            story_prompt: '',
+            voice_name: '',
+            include_subtitles: true,
+            visual_content_in_language: true,
+            logo_url: undefined,
+            intro_video_url: undefined,
+            outro_video_url: undefined,
+        }
+    });
+    
     const [allVoiceList, setAllVoiceList] = useState<voiceList[]>([]);
     const [nowVoiceList, setNowVoiceList] = useState<voiceList[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -121,25 +138,18 @@ const App: React.FC = () => {
     const [uploadingOutro, setUploadingOutro] = useState(false);
 
     const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
+    const [languageOpen, setLanguageOpen] = useState(false);
+    const [voiceOpen, setVoiceOpen] = useState(false);
     const pollingIntervalIdRef = useRef<number | null>(null);
 
     useEffect(() => {
         getVoiceList({ area: [] }).then(res => {
             if (res?.voices?.length > 0) {
                 setAllVoiceList(res?.voices as any[]);
-                // const initialLanguage = getUniqueLanguageList(res?.voices as any[])[0];
-                // if (initialLanguage) {
-                //     const filteredVoices = (res?.voices as any[]).filter(v => v.language === initialLanguage);
-                //     setNowVoiceList(filteredVoices);
-                //     form.setFieldsValue({
-                //         language: initialLanguage,
-                //         voice_name: filteredVoices[0]?.name,
-                //     });
-                // }
             }
         }).catch(err => {
             console.log(err);
-            message.error("Failed to load voice list.");
+            toast.error("Failed to load voice list.");
         });
 
         return () => {
@@ -149,12 +159,12 @@ const App: React.FC = () => {
         };
     }, []);
 
-    useEffect(() => {
-        if (!videoUrl && !isGenerating) {
-            setCurrentTaskId(null);
-            setTaskStatus(null);
-        }
-    }, [videoUrl, isGenerating]);
+    const resetGenerationState = () => {
+        setIsGenerating(false);
+        setLoading(false);
+        setCurrentTaskId(null);
+        stopPolling();
+    };
 
     const stopPolling = () => {
         if (pollingIntervalIdRef.current) {
@@ -163,71 +173,54 @@ const App: React.FC = () => {
         }
     };
 
-    const resetGenerationState = () => {
-        setIsGenerating(false);
-        setLoading(false);
-        stopPolling();
-        setCurrentTaskId(null);
-        // Don't clear video URL or task status if there's a successful result
-    }; const fetchTaskStatus = async (taskId: string) => {
+    const fetchTaskStatus = async (taskId: string) => {
         try {
             const status = await getTaskStatus(taskId);
+            console.log('Task status:', status);
 
-            // Check if this is a status change from the previous state
-            const previousStatus = useVideoStore.getState().taskStatus?.status;
-            const statusChanged = previousStatus && previousStatus !== status.status;
+            if (status) {
+                setTaskStatus(status);
+                useVideoStore.getState().setTaskStatus(status);
 
-            // Update local component state
-            setTaskStatus(status);
-            // Update the global store task status for VideoResult component
-            useVideoStore.getState().setTaskStatus(status);
-
-            // Keep loading state while task is in progress
-            setLoading(true);
-
-            // If status just changed, show appropriate notification
-            if (statusChanged) {
-                message.info(`Video generation status changed to: ${status.status}`, 3);
-            }
-
-            if (status.status === 'COMPLETED' || status.status === 'FAILED') {
-                resetGenerationState();
-                message.destroy();
                 if (status.status === 'COMPLETED') {
-                    message.success('Video generated successfully!');
-                    // Look for result_url or find video URL in task_folder_content
+                    stopPolling();
+                    setIsGenerating(false);
+                    setLoading(false);
+                    toast.success('Video generated successfully!');
+                    
                     if (status.result_url) {
                         setVideoUrl(status.result_url);
                     } else if (status.task_folder_content) {
-                        // Find the video URL in the task folder content
                         const videoKeys = Object.keys(status.task_folder_content).filter(key =>
                             key.endsWith('.mp4') || key.endsWith('video.mp4'));
                         if (videoKeys.length > 0) {
                             setVideoUrl(status.task_folder_content[videoKeys[0]]);
                         }
                     }
-                    if (status.task_folder_content) {
-                        console.log("Task folder content:", status.task_folder_content);
-                    }
-                } else {
+                } else if (status.status === 'FAILED') {
+                    stopPolling();
+                    setIsGenerating(false);
+                    setLoading(false);
                     const errorMsg = status.error_message || 'Video generation failed';
-                    setError(errorMsg + (status.error_details ? ` Details: ${typeof status.error_details === 'string' ? status.error_details : JSON.stringify(status.error_details)}` : ''));
-                    message.error(`Video generation failed: ${errorMsg}`, 10);
+                    setError(errorMsg);
+                    toast.error(`Video generation failed: ${errorMsg}`);
                 }
             }
         } catch (error: any) {
-            console.error('Failed to fetch task status:', error); if (error?.response?.status === 404) {
+            console.error('Failed to fetch task status:', error);
+            if (error?.response?.status === 404) {
                 resetGenerationState();
                 setError('Failed to fetch task status: Task ID not found.');
-                message.error('Failed to fetch task status: Task ID not found.', 10);
+                toast.error('Failed to fetch task status: Task ID not found.');
             } else {
-                message.warning('Could not fetch task status, will retry...', 3);
+                toast.warning('Could not fetch task status, will retry...');
             }
         }
-    }; const startPolling = (taskId: string) => {
+    };
+
+    const startPolling = (taskId: string) => {
         stopPolling();
 
-        // Create initial task status to show right away
         const initialStatus: Task = {
             task_id: taskId,
             status: 'PENDING',
@@ -246,37 +239,29 @@ const App: React.FC = () => {
             updated_at: new Date().toISOString()
         };
 
-        // Set this initial status both locally and in the store
         setTaskStatus(initialStatus);
         useVideoStore.getState().setTaskStatus(initialStatus);
-
         setCurrentTaskId(taskId);
-        // Clear error state when starting a new polling session
         setError(null);
-        // Clear any global store errors 
         useVideoStore.getState().setError(null);
         fetchTaskStatus(taskId);
-        pollingIntervalIdRef.current = window.setInterval(() => fetchTaskStatus(taskId), 2000); // Faster polling (2s)
+        pollingIntervalIdRef.current = window.setInterval(() => fetchTaskStatus(taskId), 2000);
     };
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish = (values: FieldType) => {
         setIsGenerating(true);
         setLoading(true);
         setError(null);
         setVideoUrl('');
         setTaskStatus(null);
         setCurrentTaskId(null);
-        message.loading('Initiating video generation...', 0);
+        toast.loading('Initiating video generation...');
 
         const taskId = uuidv4();
-        // Use type assertion to bypass TypeScript checks for fields that aren't 
-        // explicitly defined in the interface but accepted by the API
         const payload = {
             story_prompt: values.story_prompt,
             segments: values.segments,
-            image_style: values.image_style,
             voice_name: values.voice_name,
-            voice_rate: values.voice_rate,
             task_id: taskId,
             resolution: selectedResolution,
             logo_url: logoUrl,
@@ -285,522 +270,515 @@ const App: React.FC = () => {
             video_language: values.language,
             subtitle_enabled: values.include_subtitles,
             visual_content_in_language: values.visual_content_in_language,
-        } as VideoGenerateReq; generateVideo(payload).then(res => {
-            message.destroy();
+        } as VideoGenerateReq; 
+        
+        generateVideo(payload).then(res => {
+            toast.dismiss();
             if (!res?.success || !res?.data?.task_id) {
                 resetGenerationState();
                 const errorMsg = res?.message || 'Failed to initiate video generation (Invalid response from server)';
                 setError(errorMsg);
-                message.error(`Error: ${errorMsg}`, 10);
+                toast.error(`Error: ${errorMsg}`);
                 return;
-            }            console.log('Video generation initiated:', res);
-
-            // Refresh account data to update credits
+            }
+            console.log('Video generation initiated:', res);
             refreshAccountData();
-
-            // Start polling with the received task_id
             startPolling(res.data.task_id);
-
-            // We don't expect video_url in the immediate response anymore since we're using background tasks
-            // But we'll keep this code for backward compatibility
-            if (res.data?.video_url) {
-                setVideoUrl(res.data.video_url);
-            }            // Display message that the video generation is in progress
-            message.info('Video generation has started in the background. You can track its progress below.', 5);
-            // Refresh account details to update credit balance
-            refreshAccountData();
-
-        }).catch(err => {
+            toast.success('Video generation has started in the background. You can track its progress below.');
+        }).catch(error => {
+            toast.dismiss();
             resetGenerationState();
-            const errorMsg = err?.message || err?.data?.message || 'Generate Video Failed (Network/Request Error)';
+            const errorMsg = error?.response?.data?.message || error?.message || 'Failed to initiate video generation';
             setError(errorMsg);
-            message.error(`Generate Video Failed: ${errorMsg}`, 10);
-            console.log('generateVideo err', err);
+            toast.error(`Generate Video Failed: ${errorMsg}`);
         });
     };
 
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-        message.error('Please fill all required fields correctly.');
-    };
-
-    const handleResolutionTypeChange = (e: RadioChangeEvent) => {
-        const type = e.target.value;
-        setResolutionType(type);
-        const defaultResolution = resolutionOptions.find(option => option.type === type)?.options[0].value;
+    const handleResolutionTypeChange = (value: string) => {
+        setResolutionType(value);
+        const selectedType = resolutionOptions.find(opt => opt.type === value);
+        const defaultResolution = selectedType?.options[0]?.value;
         setSelectedResolution(defaultResolution || '1920*1080');
-        form.setFieldsValue({ resolution: defaultResolution || '1920*1080' });
+        form.setValue('resolution', defaultResolution || '1920*1080');
     };
-
-    // const handleResolutionChange = (e: RadioChangeEvent) => {
-    //     setSelectedResolution(e.target.value);
-    //     form.setFieldsValue({ resolution: e.target.value });
-    // };
 
     const handleFileUpload = async (file: File, type: 'logo' | 'intro' | 'outro') => {
-        if (!file) return;
-
-        const isImage = file.type.startsWith('image/');
-        const isVideo = file.type.startsWith('video/');
-
-        if (type === 'logo' && !isImage) {
-            message.error('Logo must be an image file.');
+        if (type === 'logo' && !file.type.startsWith('image/')) {
+            toast.error('Logo must be an image file.');
             return;
         }
-        if ((type === 'intro' || type === 'outro') && !isVideo) {
-            message.error(`${type === 'intro' ? 'Intro' : 'Outro'} must be a video file.`);
+        if ((type === 'intro' || type === 'outro') && !file.type.startsWith('video/')) {
+            toast.error(`${type === 'intro' ? 'Intro' : 'Outro'} must be a video file.`);
             return;
         }
 
-        const formData = new FormData();
-        formData.append('file', file);
-
-        const setUploadingState = type === 'logo' ? setUploadingLogo : type === 'intro' ? setUploadingIntro : setUploadingOutro;
-        setUploadingState(true);
+        const setUploading = type === 'logo' ? setUploadingLogo : type === 'intro' ? setUploadingIntro : setUploadingOutro;
+        setUploading(true);
 
         try {
-            message.loading(`Uploading ${type}...`, 0);
-            const res = await uploadFile(formData);
-            message.destroy();
-
-            if (res && res.url) {
-                message.success(`${type.charAt(0).toUpperCase() + type.slice(1)} uploaded successfully!`);
-                if (type === 'logo') setLogoUrl(res.url);
-                if (type === 'intro') setIntroVideoUrl(res.url);
-                if (type === 'outro') setOutroVideoUrl(res.url);
+            const formData = new FormData();
+            formData.append('file', file);
+            const response = await uploadFile(formData);
+            if (response && response.url) {
+                if (type === 'logo') {
+                    setLogoUrl(response.url);
+                } else if (type === 'intro') {
+                    setIntroVideoUrl(response.url);
+                } else {
+                    setOutroVideoUrl(response.url);
+                }
+                toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} uploaded successfully!`);
             } else {
-                throw new Error(res?.message || `Failed to upload ${type}`);
+                toast.error(`Failed to upload ${type}.`);
             }
-        } catch (error: any) {
-            message.destroy();
-            message.error(`Failed to upload ${type}: ${error.message || JSON.stringify(error)}`, 10);
-            console.error(`Upload error (${type}):`, error);
+        } catch (error) {
+            console.error(`Error uploading ${type}:`, error);
+            toast.error(`Error uploading ${type}.`);
         } finally {
-            setUploadingState(false);
+            setUploading(false);
         }
     };
 
-    const initialFormValues: Partial<FieldType> = {
-        segments: 3,
-        story_prompt: '',
-        voice_rate: 1.0,
-        include_subtitles: false,
-        visual_content_in_language: false,
+    const renderProgressCard = () => {
+        if (!currentTaskId) return null;
 
+        return (
+            <Card className="mb-4 border border-border bg-background/95 dark:bg-card/95">
+                <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2">
+                        <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                            <Video className="h-4 w-4 text-white" />
+                        </div>
+                        <span className="text-lg">Video Generation Progress</span>
+                        {isGenerating && <Loader2 className="h-4 w-4 animate-spin text-blue-600 ml-2" />}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {taskStatus ? (
+                        <div className="space-y-3">
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span className="font-medium text-foreground">Task ID:</span> 
+                                    <span className="ml-2 text-muted-foreground font-mono text-xs">{currentTaskId}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="font-medium text-foreground">Status:</span>
+                                    <Badge 
+                                        variant={
+                                            taskStatus.status === 'FAILED' ? 'destructive' :
+                                            taskStatus.status === 'COMPLETED' ? 'default' : 'secondary'
+                                        }
+                                        className="flex items-center gap-1"
+                                    >
+                                        {taskStatus.status === 'FAILED' && <XCircle className="h-3 w-3" />}
+                                        {taskStatus.status === 'COMPLETED' && <CheckCircle2 className="h-3 w-3" />}
+                                        {taskStatus.status === 'PENDING' && <Clock className="h-3 w-3" />}
+                                        {taskStatus.status}
+                                    </Badge>
+                                </div>
+                            </div>
+                            
+                            <Progress 
+                                value={taskStatus.progress || 0} 
+                                className={`h-2 ${taskStatus.status === 'FAILED' ? 'bg-red-100' : 'bg-blue-100'}`}
+                            />
+                            
+                            <div>
+                                <h4 className="font-medium mb-2 text-foreground">Recent Events:</h4>
+                                <div className="max-h-32 overflow-y-auto space-y-2">
+                                    {taskStatus.events && taskStatus.events.length > 0 ? (
+                                        taskStatus.events.slice().reverse().map((event: TaskEvent, index: number) => (
+                                            <div 
+                                                key={`${event.timestamp}-${index}`}
+                                                className="border-l-2 border-blue-200 pl-4 py-2 text-sm bg-muted/50 dark:bg-card/50 rounded-r-lg"
+                                            >
+                                                <p className="text-foreground">{event.message}</p>
+                                                <span className="text-xs text-muted-foreground">
+                                                    {new Date(event.timestamp).toLocaleTimeString()}
+                                                </span>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-muted-foreground text-sm">No events recorded yet...</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-muted-foreground">Waiting for task to start and report status...</p>
+                    )}
+                </CardContent>
+            </Card>
+        );
     };
 
     return (
-        <div className={styles.formDiv}>
-            <Card
-                bordered={false}
-                className={styles.formCard}
-                style={{
-                    borderRadius: '12px',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                }}
-            >
+        <div className="h-full overflow-y-auto bg-background dark:bg-card">
+            <div className="p-4 space-y-4">
+            
 
-                {currentTaskId && (
-                    <Card
-                        title="Video Generation Progress"
-                        style={{ marginBottom: 24, borderColor: taskStatus?.status === 'FAILED' ? 'red' : '#1890ff' }}
-                        extra={isGenerating || (taskStatus && taskStatus.status !== 'COMPLETED' && taskStatus.status !== 'FAILED') ? <Spin /> : null}
-                    >
-                        {taskStatus ? (
-                            <div>
-                                <p><strong>Task ID:</strong> {currentTaskId}</p>
-                                <p><strong>Status:</strong> <span style={{ fontWeight: 'bold', color: taskStatus.status === 'FAILED' ? 'red' : taskStatus.status === 'COMPLETED' ? 'green' : 'inherit' }}>{taskStatus.status}</span></p>
-                                <Progress
-                                    percent={taskStatus.progress || 0}
-                                    status={taskStatus.status === 'FAILED' ? 'exception' : taskStatus.status === 'COMPLETED' ? 'success' : 'active'}
-                                    strokeColor={taskStatus.status === 'FAILED' ? 'red' : undefined}
+                {renderProgressCard()}
+
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onFinish)} className="space-y-4">
+                        {/* Enhanced Scene Details Card */}
+                        <Card className="border border-border bg-background/95 dark:bg-card/95 hover:shadow-sm transition-all duration-300">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="flex items-center gap-3 text-foreground">
+                                    <div className="p-2 bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 rounded-lg">
+                                        <Highlighter className="h-5 w-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <span className="text-lg">Lesson Content</span>
+                                        <p className="text-sm text-muted-foreground font-normal mt-1">Define your lesson topic and structure</p>
+                                    </div>
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                <FormField
+                                    control={form.control}
+                                    name="story_prompt"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-foreground font-semibold text-base flex items-center gap-2 mb-1.5">
+                                                <ImageIcon className="h-4 w-4 text-blue-500" />
+                                                Lesson Topic & Instructions
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Textarea 
+                                                    placeholder="Describe what you want to teach. E.g., 'Create a comprehensive Docker tutorial covering containers, images, and deployment with real-world examples'"
+                                                    rows={5}
+                                                    className="bg-background/90 dark:bg-card/90 border-border focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all duration-300 resize-none text-base rounded-xl shadow-sm"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                                                Be specific about your learning objectives and target audience for better results
+                                            </p>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
                                 />
-                                <Title level={5} style={{ marginTop: 16, marginBottom: 8 }}>Events:</Title>
-                                {taskStatus.events && taskStatus.events.length > 0 ? (
-                                    <Timeline style={{ marginTop: 10, maxHeight: '200px', overflowY: 'auto', paddingLeft: '5px' }}>
-                                        {taskStatus.events.slice().reverse().map((event: TaskEvent, index: number) => (
-                                            <Timeline.Item
-                                                key={`${event.timestamp}-${index}`}
-                                                color={taskStatus.status === 'FAILED' && taskStatus.events.length - 1 - index === 0 && taskStatus.progress < 100 ? 'red' : 'blue'}
-                                            >
-                                                <p style={{ margin: 0 }}><strong>{new Date(event.timestamp).toLocaleString()}</strong>: {event.message}</p>
-                                                {event.details && <pre style={{ fontSize: '0.8em', whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#f7f7f7', padding: '5px', borderRadius: '4px', marginTop: '4px' }}>{typeof event.details === 'object' ? JSON.stringify(event.details, null, 2) : event.details}</pre>}
-                                            </Timeline.Item>
+
+                                <FormField
+                                    control={form.control}
+                                    name="segments"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-foreground font-semibold text-base flex items-center gap-2 mb-1.5">
+                                                <Video className="h-4 w-4 text-purple-500" />
+                                                Number of Scenes (1-50)
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input 
+                                                    type="number" 
+                                                    min="1" 
+                                                    max="50"
+                                                    className="bg-background/90 dark:bg-card/90 border-border focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 text-base rounded-xl shadow-sm"
+                                                    {...field}
+                                                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                                                />
+                                            </FormControl>
+                                            <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                                                More scenes create longer, more detailed video content. Recommended: 5-15 scenes
+                                            </p>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </CardContent>
+                        </Card>
+
+                        {/* Video Configuration Card */}
+                        <Card className="border border-border bg-background/95 dark:bg-card/95 hover:shadow-sm transition-all duration-300">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="flex items-center gap-2 text-foreground">
+                                    <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                                        <Settings className="h-4 w-4 text-white" />
+                                    </div>
+                                    <span className="text-lg">Video Configuration</span>
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div>
+                                    <Label className="text-foreground font-medium mb-2 block flex items-center gap-2">
+                                        <Monitor className="h-4 w-4" />
+                                        Video Format & Quality
+                                    </Label>
+                                    <RadioGroup 
+                                        value={resolutionType} 
+                                        onValueChange={handleResolutionTypeChange}
+                                        className="grid grid-cols-3 gap-3"
+                                    >
+                                        {resolutionOptions.map((option) => (
+                                            <div key={option.type} className="flex items-center space-x-2 p-3 border border-border rounded-lg hover:border-blue-300 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all duration-200">
+                                                <RadioGroupItem value={option.type} id={option.type} />
+                                                <Label htmlFor={option.type} className="flex items-center gap-2 cursor-pointer">
+                                                    {option.icon}
+                                                    <span className="text-sm font-medium">{option.label}</span>
+                                                </Label>
+                                            </div>
                                         ))}
-                                    </Timeline>
+                                    </RadioGroup>
+                                    
+                                    <Select value={selectedResolution} onValueChange={setSelectedResolution}>
+                                        <SelectTrigger className="mt-4 bg-background/80 dark:bg-card/80 border-border">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {resolutionOptions
+                                                .find(opt => opt.type === resolutionType)
+                                                ?.options.map((res) => (
+                                                    <SelectItem key={res.value} value={res.value}>
+                                                        {res.label}
+                                                    </SelectItem>
+                                                ))
+                                            }
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Language & Voice Card */}
+                        <Card className="border border-border bg-background/95 dark:bg-card/95 hover:shadow-sm transition-all duration-300">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="flex items-center gap-2 text-foreground">
+                                    <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg">
+                                        <Languages className="h-4 w-4 text-white" />
+                                    </div>
+                                    <span className="text-lg">Language & Voice</span>
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Language Combobox */}
+                                    <FormField
+                                        control={form.control}
+                                        name="language"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-col">
+                                                <FormLabel className="text-foreground font-medium mb-1.5">Video Language</FormLabel>
+                                                <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            role="combobox"
+                                                            aria-expanded={languageOpen}
+                                                            className="w-full justify-between bg-background/80 dark:bg-card/80 border-border text-left font-normal h-10"
+                                                        >
+                                                            {field.value ? field.value : "Select language..."}
+                                                            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                                                        <Command className="rounded-lg border border-border">
+                                                            <CommandInput placeholder="Search languages..." className="h-9" />
+                                                            <CommandList>
+                                                                <CommandEmpty>No language found.</CommandEmpty>
+                                                                <CommandGroup className="max-h-[200px] overflow-auto">
+                                                                    {getUniqueLanguageList(allVoiceList).map((language) => (
+                                                                        <CommandItem
+                                                                            key={language}
+                                                                            value={language}
+                                                                            onSelect={(currentValue) => {
+                                                                                field.onChange(currentValue);
+                                                                                const filteredVoiceList = allVoiceList.filter(v => v.language === currentValue);
+                                                                                setNowVoiceList(filteredVoiceList);
+                                                                                form.setValue('voice_name', filteredVoiceList?.[0]?.name || '');
+                                                                                setLanguageOpen(false);
+                                                                            }}
+                                                                        >
+                                                                            <Check
+                                                                                className={`mr-2 h-4 w-4 ${
+                                                                                    field.value === language ? "opacity-100" : "opacity-0"
+                                                                                }`}
+                                                                            />
+                                                                            {language}
+                                                                        </CommandItem>
+                                                                    ))}
+                                                                </CommandGroup>
+                                                            </CommandList>
+                                                        </Command>
+                                                    </PopoverContent>
+                                                </Popover>
+                                                <FormControl>
+                                                    <input 
+                                                        className="hidden" 
+                                                        {...field} 
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {/* Voice Combobox */}
+                                    <FormField
+                                        control={form.control}
+                                        name="voice_name"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-col">
+                                                <FormLabel className="text-foreground font-medium mb-1.5 flex items-center gap-2">
+                                                    <Volume2 className="h-4 w-4" />
+                                                    Voice
+                                                </FormLabel>
+                                                <Popover open={voiceOpen} onOpenChange={setVoiceOpen}>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            role="combobox"
+                                                            aria-expanded={voiceOpen}
+                                                            className="w-full justify-between bg-background/80 dark:bg-card/80 border-border text-left font-normal h-10"
+                                                            disabled={!form.watch('language')}
+                                                        >
+                                                            {field.value ? nowVoiceList.find((voice) => voice.name === field.value)?.displayName : "Select voice..."}
+                                                            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                                                        <Command className="rounded-lg border border-border">
+                                                            <CommandInput placeholder="Search voices..." className="h-9" />
+                                                            <CommandList>
+                                                                <CommandEmpty>
+                                                                    {nowVoiceList.length === 0 ? "Select a language first." : "No voice found."}
+                                                                </CommandEmpty>
+                                                                <CommandGroup className="max-h-[200px] overflow-auto">
+                                                                    {nowVoiceList.map((voice) => (
+                                                                        <CommandItem
+                                                                            key={voice.name}
+                                                                            value={`${voice.displayName} ${voice.gender}`}
+                                                                            onSelect={() => {
+                                                                                field.onChange(voice.name);
+                                                                                setVoiceOpen(false);
+                                                                            }}
+                                                                        >
+                                                                            <Check
+                                                                                className={`mr-2 h-4 w-4 ${
+                                                                                    field.value === voice.name ? "opacity-100" : "opacity-0"
+                                                                                }`}
+                                                                            />
+                                                                            <div className="flex items-center gap-2">
+                                                                                <span className="text-xs px-2 py-1 bg-muted rounded">{voice.gender}</span>
+                                                                                <span className="truncate">{voice.displayName}</span>
+                                                                            </div>
+                                                                        </CommandItem>
+                                                                    ))}
+                                                                </CommandGroup>
+                                                            </CommandList>
+                                                        </Command>
+                                                    </PopoverContent>
+                                                </Popover>
+                                                <FormControl>
+                                                    <input 
+                                                        className="hidden" 
+                                                        {...field} 
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Additional Options Card */}
+                        <Card className="border border-border bg-background/95 dark:bg-card/95 hover:shadow-sm transition-all duration-300">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="flex items-center gap-2 text-foreground">
+                                    <div className="p-2 bg-gradient-to-br from-purple-500 to-violet-600 rounded-lg">
+                                        <Settings className="h-4 w-4 text-white" />
+                                    </div>
+                                    <span className="text-lg">Additional Options</span>
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <FormField
+                                        control={form.control}
+                                        name="include_subtitles"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/60 dark:bg-card/60">
+                                                <div className="space-y-0.5">
+                                                    <FormLabel className="text-base font-medium">Include Subtitles</FormLabel>
+                                                    <div className="text-sm text-muted-foreground">
+                                                        Add captions to your video
+                                                    </div>
+                                                </div>
+                                                <FormControl>
+                                                    <Switch
+                                                        checked={field.value}
+                                                        onCheckedChange={field.onChange}
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="visual_content_in_language"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-background/60 dark:bg-card/60">
+                                                <div className="space-y-0.5">
+                                                    <FormLabel className="text-base font-medium">Localize Visuals</FormLabel>
+                                                    <div className="text-sm text-muted-foreground">
+                                                        Generate visuals in selected language
+                                                    </div>
+                                                </div>
+                                                <FormControl>
+                                                    <Switch
+                                                        checked={field.value}
+                                                        onCheckedChange={field.onChange}
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Enhanced Generate Button */}
+                        <div className="pt-6">
+                            <Button 
+                                type="submit" 
+                                disabled={isGenerating}
+                                className="w-full h-16 text-xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-[1.02] rounded-2xl border-0"
+                            >
+                                {isGenerating ? (
+                                    <>
+                                        <Loader2 className="mr-3 h-6 w-6 animate-spin" />
+                                        <span className="bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                                            Generating Your Amazing Lesson...
+                                        </span>
+                                    </>
                                 ) : (
-                                    <p>No events logged yet. Waiting for processing to start...</p>
-                                )}
-                                {taskStatus.status === 'FAILED' && taskStatus.error_message && (
-                                    <div style={{ marginTop: 10, color: 'red', background: '#fff0f0', border: '1px solid red', padding: '10px', borderRadius: '4px' }}>
-                                        <p><strong>Error:</strong> {taskStatus.error_message}</p>
-                                        {taskStatus.error_details && <pre style={{ fontSize: '0.8em', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{typeof taskStatus.error_details === 'object' ? JSON.stringify(taskStatus.error_details, null, 2) : taskStatus.error_details}</pre>}
+                                    <div className="flex items-center gap-3">
+                                        <Wand2 className="h-6 w-6" />
+                                        <span className="bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                                            Create AI Lesson
+                                        </span>
+                                        <div className="flex items-center gap-1">
+                                            <div className="w-2 h-2 bg-background rounded-full animate-pulse"></div>
+                                            <div className="w-2 h-2 bg-background/80 dark:bg-card/80 rounded-full animate-pulse delay-150"></div>
+                                            <div className="w-2 h-2 bg-background/60 dark:bg-card/60 rounded-full animate-pulse delay-300"></div>
+                                        </div>
                                     </div>
                                 )}
-                            </div>
-                        ) : (
-                            <p>Waiting for task to start and report status...</p>
-                        )}
-                    </Card>
-                )}
-
-                <Form
-                    form={form}
-                    name="videoGeneratorForm"
-                    labelCol={{ span: 24 }}
-                    wrapperCol={{ span: 24 }}
-                    style={{ maxWidth: 900, width: '100%', margin: '0 auto' }}
-                    initialValues={initialFormValues}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    layout="vertical"
-                    size="large"
-                    autoComplete="off"
-                >
-
-
-                    <Card
-                        title={<span><HighlightOutlined /> Scene Details</span>}
-                        className={styles.sectionCard}
-                        style={{ marginBottom: 24, borderRadius: '8px' }}
-                    >
-
-                        <Form.Item<FieldType>
-                            label={t('Scene Prompt')}
-                            name="story_prompt"
-                            rules={[{ required: true, message: t('Please input the scene prompt!') }]}
-                        >
-                            <Input.TextArea rows={3} placeholder={t("Enter the topic of your video. E.g., 'Make a lecture on Docker'") as string} />
-                        </Form.Item>
-
-
-                        <Form.Item<FieldType>
-                            label="Number of Segments/Scenes"
-                            name="segments"
-                            rules={[{ required: true, message: 'Please input the number of segments (1-50)' }]}
-                        >
-                            <InputNumber min={1} max={50} style={{ width: '100%' }} />
-                        </Form.Item>
-                    </Card>
-
-                    <Card
-                        title={
-                            <span>
-                                <SettingOutlined /> Video Configuration
-                            </span>
-                        }
-                        className={styles.sectionCard}
-                        style={{ marginBottom: 24, borderRadius: '8px' }}
-                    >
-                        <Form.Item label="Orientation & Quality">
-                            <Radio.Group
-                                optionType="button"
-                                buttonStyle="solid"
-                                value={resolutionType}
-                                onChange={handleResolutionTypeChange}
-                                style={{ width: '100%', display: 'flex', marginBottom: 16 }}
-                            >
-                                {resolutionOptions.map(option => (
-                                    <Radio.Button
-                                        value={option.type}
-                                        key={option.type}
-                                        style={{
-                                            flex: 1,
-                                            textAlign: 'center',
-                                            height: 'auto',
-                                            minHeight: '80px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            flexDirection: 'column',
-                                            padding: '10px 5px'
-                                        }}
-                                    >
-                                        <div style={{ fontSize: '24px' }}>{option.icon}</div>
-                                        <div>{option.label}</div>
-                                    </Radio.Button>
-                                ))}
-                            </Radio.Group>
-                        </Form.Item>
-
-                        {/* <Form.Item<FieldType>
-                            label="Selected Resolution"
-                            name="resolution"
-                            rules={[{ required: true, message: 'Please select a resolution' }]}
-                        >
-                            <Radio.Group onChange={handleResolutionChange} value={selectedResolution} style={{ width: '100%' }}>
-                                <Row gutter={[16, 16]}>
-                                    {resolutionOptions
-                                        .find(option => option.type === resolutionType)
-                                        ?.options.map(resolution => (
-                                            <Col xs={24} sm={12} key={resolution.value}>
-                                                <Radio.Button
-                                                    value={resolution.value}
-                                                    style={{
-                                                        width: '100%',
-                                                        height: 'auto',
-                                                        minHeight: '60px',
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        position: 'relative',
-                                                        borderRadius: '8px',
-                                                        padding: '10px'
-                                                    }}
-                                                >
-                                                    <Badge.Ribbon
-                                                        text={resolution.quality}
-                                                        color="#1677ff"
-                                                        style={{
-                                                            display: selectedResolution === resolution.value ? 'block' : 'none',
-                                                            top: '-4px',
-                                                            right: '-4px'
-                                                        }}
-                                                    />
-                                                    <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                                                        {resolution.quality}
-                                                    </div>
-                                                    <div style={{ fontSize: '13px', color: '#666' }}>
-                                                        {resolution.label}
-                                                    </div>
-                                                    {selectedResolution === resolution.value && (
-                                                        <div style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', color: '#1677ff' }}>
-                                                            <CheckCircleFilled style={{ fontSize: '18px' }} />
-                                                        </div>
-                                                    )}
-                                                </Radio.Button>
-                                            </Col>
-                                        ))
-                                    }
-                                </Row>
-                            </Radio.Group>
-                        </Form.Item> */}
-
-                        <Row gutter={16}>
-                      
-                            <Col xs={24} sm={24}>
-                                <Form.Item<FieldType>
-                                    label="Include Subtitles"
-                                    name="include_subtitles"
-                                    valuePropName="checked"
-                                >
-                                    <Switch
-                                        checkedChildren="On"
-                                        unCheckedChildren="Off"
-                                    />
-                                </Form.Item>
-                            </Col>
-
-        
-                            <Col xs={24} sm={24}>
-                                <Form.Item<FieldType>
-                                    label="Visual Content in Language"
-                                    name="visual_content_in_language"
-                                    valuePropName="checked"
-                                >
-                                    <Switch
-                                        checkedChildren="On"
-                                        unCheckedChildren="Off"
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Card>
-
-                    <Card
-                        title={
-                            <span>
-                                <TranslationOutlined /> Language & Voice
-                            </span>
-                        }
-                        className={styles.sectionCard}
-                        style={{ marginBottom: 24, borderRadius: '8px' }}
-                    >
-                        <Row gutter={16}>
-                            <Col xs={24} sm={12}>
-                                <Form.Item<FieldType>
-                                    label={
-                                        <span>
-                                            <TranslationOutlined style={{ marginRight: 4 }} /> {t('storyForm.videoLanguage')}
-                                        </span>
-                                    }
-                                    name="language"
-                                    rules={[{ required: true, message: t('storyForm.videoLanguageMissMsg') }]}
-                                >
-                                    <Select
-                                        showSearch
-                                        placeholder="Select language"
-                                        onChange={(value) => {
-                                            const filteredVoiceList = allVoiceList.filter((voice) => {
-                                                return voice.language === value;
-                                            });
-                                            setNowVoiceList(filteredVoiceList);
-                                            form.setFieldsValue({
-                                                voice_name: filteredVoiceList?.[0]?.name,
-                                            });
-                                        }}
-                                        optionLabelProp="label"
-                                        style={{ width: '100%' }}
-                                        dropdownStyle={{ maxHeight: 300, overflowY: 'auto' }}
-                                    >
-                                        {
-                                            getUniqueLanguageList(allVoiceList).map((language) => (
-                                                <Option key={language} value={language} label={language}>
-                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <TranslationOutlined style={{ marginRight: 8 }} />
-                                                        <span>{language}</span>
-                                                    </div>
-                                                </Option>
-                                            ))
-                                        }
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={12}>
-                                <Form.Item<FieldType>
-                                    label={
-                                        <span>
-                                            <AudioOutlined style={{ marginRight: 4 }} /> {t('storyForm.voiceName')}
-                                        </span>
-                                    }
-                                    name="voice_name"
-                                    rules={[{ required: true, message: t('storyForm.voiceNameMissMsg') }]}
-                                >
-                                    <Select
-                                        showSearch
-                                        placeholder="Select voice"
-                                        disabled={nowVoiceList.length === 0}
-                                        optionFilterProp="children"
-                                        optionLabelProp="label"
-                                        style={{ width: '100%' }}
-                                        dropdownStyle={{ maxHeight: 300, overflowY: 'auto' }}
-                                        filterOption={(input, option) => {
-                                            const labelString = typeof option?.label === 'string' ? option.label : String(option?.label || '');
-                                            const valueString = typeof option?.value === 'string' ? option.value : String(option?.value || '');
-                                            const inputLower = input.toLowerCase();
-                                            return labelString.toLowerCase().includes(inputLower) || valueString.toLowerCase().includes(inputLower);
-                                        }}
-                                    >
-                                        {
-                                            nowVoiceList.map((voice) => (
-                                                <Option
-                                                    key={voice.name}
-                                                    value={voice.name}
-                                                    label={`${voice.displayName} (${voice.gender})`}
-                                                >
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                        <span>{voice.displayName}</span>
-                                                        <span style={{
-                                                            color: voice.gender === 'Male' ? '#1677ff' : '#ff4d94',
-                                                            backgroundColor: voice.gender === 'Male' ? 'rgba(22, 119, 255, 0.1)' : 'rgba(255, 77, 148, 0.1)',
-                                                            padding: '2px 8px',
-                                                            borderRadius: '10px',
-                                                            fontSize: '12px'
-                                                        }}>
-                                                            {voice.gender}
-                                                        </span>
-                                                    </div>
-                                                </Option>
-                                            ))
-                                        }
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} sm={12}>
-                                <Form.Item<FieldType>
-                                    label="Voice Rate (Speed)"
-                                    name="voice_rate"
-                                    rules={[{ required: true, message: 'Please set voice rate' }]}
-                                >
-                                    <InputNumber min={0.5} max={2.0} step={0.1} style={{ width: '100%' }} />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Card>
-
-                    <Card
-                        title={
-                            <span>
-                                <PictureOutlined /> Branding & Extras (Optional)
-                            </span>
-                        }
-                        className={styles.sectionCard}
-                        style={{ marginBottom: 24, borderRadius: '8px' }}
-                    >
-                        <Row gutter={16}>
-                            <Col xs={24} md={24}>
-                                <Form.Item
-                                    label="Logo (Image)"
-                                    help={logoUrl ? <a href={logoUrl} target="_blank" rel="noopener noreferrer">View Uploaded Logo</a> : "Upload a logo image (e.g., PNG, JPG)"}
-                                >
-                                    <Upload
-                                        name="logo"
-                                        customRequest={({ file }) => handleFileUpload(file as File, 'logo')}
-                                        showUploadList={false}
-                                        accept="image/*"
-                                        disabled={uploadingLogo || isGenerating}
-                                    >
-                                        <Button icon={<UploadOutlined />} loading={uploadingLogo} disabled={isGenerating}>
-                                            {logoUrl ? 'Change Logo' : 'Upload Logo'}
-                                        </Button>
-                                    </Upload>
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={24}>
-                                <Form.Item
-                                    label="Intro Video"
-                                    help={introVideoUrl ? <a href={introVideoUrl} target="_blank" rel="noopener noreferrer">View Uploaded Intro</a> : "Upload an intro video (e.g., MP4)"}
-                                >
-                                    <Upload
-                                        name="introVideo"
-                                        customRequest={({ file }) => handleFileUpload(file as File, 'intro')}
-                                        showUploadList={false}
-                                        accept="video/*"
-                                        disabled={uploadingIntro || isGenerating}
-                                    >
-                                        <Button icon={<VideoCameraAddOutlined />} loading={uploadingIntro} disabled={isGenerating}>
-                                            {introVideoUrl ? 'Change Intro' : 'Upload Intro'}
-                                        </Button>
-                                    </Upload>
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={24}>
-                                <Form.Item
-                                    label="Outro Video"
-                                    help={outroVideoUrl ? <a href={outroVideoUrl} target="_blank" rel="noopener noreferrer">View Uploaded Outro</a> : "Upload an outro video (e.g., MP4)"}
-                                >
-                                    <Upload
-                                        name="outroVideo"
-                                        customRequest={({ file }) => handleFileUpload(file as File, 'outro')}
-                                        showUploadList={false}
-                                        accept="video/*"
-                                        disabled={uploadingOutro || isGenerating}
-                                    >
-                                        <Button icon={<VideoCameraAddOutlined />} loading={uploadingOutro} disabled={isGenerating}>
-                                            {outroVideoUrl ? 'Change Outro' : 'Upload Outro'}
-                                        </Button>
-                                    </Upload>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Card>
-
-                    <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'center', marginTop: 32 }}>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            loading={isGenerating}
-                            disabled={isGenerating || uploadingLogo || uploadingIntro || uploadingOutro}
-                            icon={<PlaySquareOutlined />}
-                            size="large"
-                            style={{ minWidth: '200px', height: '50px' }}
-                        >
-                            {isGenerating ? 'Generating Video...' : 'Generate Video'}
-                        </Button>
-                    </Form.Item>
+                            </Button>
+                            
+                            {/* Enhanced Info Text */}
+                            <p className="text-center text-sm text-muted-foreground mt-4 leading-relaxed">
+                                🚀 Your lesson will be generated using advanced AI technology. 
+                                <br />
+                                <span className="font-medium text-foreground">Estimated time: 2-5 minutes</span>
+                            </p>
+                        </div>
+                    </form>
                 </Form>
-            </Card>
+            </div>
         </div>
     );
 };

@@ -4,10 +4,13 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '../locales'; // Initialize i18n
-import { Layout } from 'antd';
 import AppHeader from '../components/AppHeader';
+import Footer from '../components/Footer';
 import { useAuthStore } from '@/stores';
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { Toaster } from "sonner";
+import { ThemeProvider } from '../contexts/theme-provider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,36 +22,53 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const { Content, Footer } = Layout;
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { token, fetchCurrentUser } = useAuthStore();
+  const { token, fetchCurrentUser, isAuthenticated } = useAuthStore();
+  const pathname = usePathname();
+
+  // Define public pages that should always show the footer
+  const publicPages = [
+    '/',
+    '/pricing',
+    '/contact',
+    '/terms-conditions',
+    '/privacy-policy',
+    '/login',
+    '/register'
+  ];
+
+  const isPublicPage = publicPages.includes(pathname);
 
   useEffect(() => {
-    // If user has a token, fetch their data
-    if (token) {
+    // If user has a token and we're on the client side, fetch their data
+    if (typeof window !== 'undefined' && token) {
       fetchCurrentUser();
     }
   }, [token, fetchCurrentUser]);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Layout style={{ minHeight: '100vh', width: "100vw" }}>
-          <AppHeader />
-          <Content style={{ padding: '0 50px', marginTop: 20 }}>
-            {children}
-          </Content>
-          <Footer style={{ textAlign: 'center', background: '#f0f0f0' }}>
-            AI Lesson Maker ©{new Date().getFullYear()} Created with BootcampsHub
-          </Footer>
-        </Layout>
+        <ThemeProvider
+          defaultTheme="light"
+          storageKey="ai-lesson-maker-theme"
+        >
+          <div className="min-h-screen w-full bg-background text-foreground flex flex-col">
+            <AppHeader />
+            <main className="flex-1">
+              {children}
+            </main>
+            {/* Show footer on public pages OR for non-authenticated users */}
+            {(isPublicPage || !isAuthenticated) && <Footer />}
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

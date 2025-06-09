@@ -1,14 +1,16 @@
 "use client"
 
-
 import React, { useState, useEffect } from 'react';
-import { Card, Typography, Button, Result, Spin, Form, Input, message } from 'antd';
 import { useAuthStore } from '@/stores';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CheckCircleOutlined, SafetyOutlined } from '@ant-design/icons';
-
-const { Title, Text } = Typography;
+import { CheckCircle, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { toast } from 'sonner';
 
 const VerifyEmail: React.FC = () => {
   const { verifyEmail } = useAuthStore();
@@ -16,7 +18,7 @@ const VerifyEmail: React.FC = () => {
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [form] = Form.useForm();
+  const [verificationCode, setVerificationCode] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -27,23 +29,24 @@ const VerifyEmail: React.FC = () => {
       
       // If no email in storage, check if we need to show a message
       if (!unverifiedEmail) {
-        message.info('Please enter the verification code sent to your email');
+        toast.info('Please enter the verification code sent to your email');
       }
     }
   }, []);
 
-  const handleVerify = async (values: { verificationCode: string }) => {
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
     setVerifying(true);
     setError(null);
     
     try {
       // Use the verification code entered by the user
-      await verifyEmail(values.verificationCode);
+      await verifyEmail(verificationCode);
       setVerified(true);
       
       // Show success message
-      message.success('Email verified successfully!');
-        // Clear unverified email from storage
+      toast.success('Email verified successfully!');
+      // Clear unverified email from storage
       if (typeof window !== 'undefined') {
         localStorage.removeItem('unverifiedEmail');
       }
@@ -58,102 +61,91 @@ const VerifyEmail: React.FC = () => {
       setVerifying(false);
     }
   };
+
   if (verifying) {
     return (
-      <Card style={{ maxWidth: 500, margin: '0 auto', marginTop: 50, textAlign: 'center' }}>
-        <Spin size="large" />
-        <Title level={3} style={{ marginTop: 20 }}>Verifying your email...</Title>
+      <Card className="max-w-md mx-auto mt-12 text-center">
+        <CardContent className="pt-6">
+          <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <h3 className="text-lg font-semibold">Verifying your email...</h3>
+        </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card style={{ maxWidth: 500, margin: '0 auto', marginTop: 50 }}>
-      {verified ? (
-        <Result
-          status="success"
-          icon={<CheckCircleOutlined />}
-          title="Email Verified Successfully!"
-          subTitle="Your email has been verified. You can now login to your account."
-          extra={[
-            <Link href="/login" key="login">
-              <Button type="primary">
-                Go to Login
-              </Button>
+    <Card className="max-w-md mx-auto mt-12">
+      <CardContent className="pt-6">
+        {verified ? (
+          <div className="text-center space-y-4">
+            <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
+            <h3 className="text-xl font-semibold text-green-600">Email Verified Successfully!</h3>
+            <p className="text-gray-600">Your email has been verified. You can now login to your account.</p>
+            <Link href="/login">
+              <Button className="w-full">Go to Login</Button>
             </Link>
-          ]}
-        />
-      ) : (
-        <div style={{ padding: '20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <SafetyOutlined style={{ fontSize: 48, color: '#1890ff', marginBottom: 16 }} />            <Title level={3}>Verify Your Email</Title>
-            <Text>
-              Enter the 6-digit verification code sent to {email ? <strong>{email}</strong> : 'your email address'}.
-            </Text>
           </div>
-          
-          {error && (
-            <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>
-              {error}
+        ) : (
+          <div className="space-y-6">
+            <div className="text-center">
+              <Shield className="h-12 w-12 text-blue-500 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Verify Your Email</h3>
+              <p className="text-gray-600">
+                Enter the 6-digit verification code sent to {email ? <strong>{email}</strong> : 'your email address'}.
+              </p>
             </div>
-          )}
-          
-          <Form
-            form={form}
-            onFinish={handleVerify}
-            layout="vertical"
-          >
-            <Form.Item
-              name="verificationCode"
-              rules={[
-                { required: true, message: 'Please enter your verification code!' },
-                { len: 6, message: 'Verification code must be 6 digits!' },
-                { pattern: /^[0-9]+$/, message: 'Verification code must contain only numbers!' }
-              ]}
-            >              <Input 
-                placeholder="Enter 6-digit code" 
-                size="large"
-                maxLength={6}
-                style={{ 
-                  textAlign: 'center', 
-                  letterSpacing: '8px', 
-                  fontWeight: 'bold',
-                  fontSize: '24px',
-                  height: '60px'
-                }}
-              />
-            </Form.Item>
             
-            <Form.Item>
+            {error && (
+              <Alert>
+                <AlertDescription className="text-red-600">
+                  {error}
+                </AlertDescription>
+              </Alert>
+            )}
+            
+            <form onSubmit={handleVerify} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="verificationCode">Verification Code</Label>
+                <Input 
+                  id="verificationCode"
+                  placeholder="Enter 6-digit code" 
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  maxLength={6}
+                  className="text-center text-xl font-bold tracking-widest"
+                  required
+                />
+              </div>
+              
               <Button 
-                type="primary" 
-                htmlType="submit" 
-                style={{ width: '100%' }} 
-                size="large"
-                loading={verifying}
+                type="submit" 
+                className="w-full" 
+                disabled={verifying}
               >
-                Verify Email
+                {verifying ? 'Verifying...' : 'Verify Email'}
               </Button>
-            </Form.Item>          </Form>
-          
-          <div style={{ textAlign: 'center', marginTop: 16 }}>
-            <Text type="secondary">Didn't receive the code? </Text>
-            <Button 
-              type="link" 
-              onClick={() => {
-                if (email) {
-                  useAuthStore.getState().resendVerification(email);
-                  message.success('Verification code resent to your email');
-                } else {
-                  message.error('No email address found. Please try to register again.');
-                }
-              }}
-            >
-              Resend Code
-            </Button>
+            </form>
+            
+            <div className="text-center text-sm">
+              <span className="text-gray-600">Didn't receive the code? </span>
+              <Button 
+                variant="link" 
+                className="p-0 h-auto text-blue-600"
+                onClick={() => {
+                  if (email) {
+                    useAuthStore.getState().resendVerification(email);
+                    toast.success('Verification code resent to your email');
+                  } else {
+                    toast.error('No email address found. Please try to register again.');
+                  }
+                }}
+              >
+                Resend Code
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </CardContent>
     </Card>
   );
 };

@@ -1,39 +1,49 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, Typography, message, Modal } from 'antd';
 import { useAuthStore } from '../../stores';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
-
-const { Title, Text } = Typography;
+import { User, Lock, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
 
 const LoginForm: React.FC = () => {
-  const [form] = Form.useForm();
   const router = useRouter();
   const { isLoading, error, needsVerification, login, resendVerification, resetNeedsVerification, unverifiedEmail } = useAuthStore();
   const [emailForResend, setEmailForResend] = useState(unverifiedEmail || '');
   const [resendModalVisible, setResendModalVisible] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
-  const onFinish = async (values: any) => {
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       await login({
-        email: values.email,
-        password: values.password
-      });      // If no error and authentication successful
+        email: formData.email,
+        password: formData.password
+      });
+      // If no error and authentication successful
       if (useAuthStore.getState().isAuthenticated) {
-        message.success('Login successful!');
+        toast.success('Login successful!');
         router.push('/dashboard');
       } else if (useAuthStore.getState().needsVerification) {
-        setEmailForResend(values.email);
+        setEmailForResend(formData.email);
         // Store the email for the verification page
-        localStorage.setItem('unverifiedEmail', values.email);
+        localStorage.setItem('unverifiedEmail', formData.email);
         // Redirect to verification page immediately
-        message.info('Please verify your email before logging in');
+        toast.info('Please verify your email before logging in');
         router.push('/verify-email');
       }
     } catch (err: any) {
-      message.error('Login failed. Please check your credentials.');
+      toast.error('Login failed. Please check your credentials.');
     }
   };
 
@@ -41,11 +51,11 @@ const LoginForm: React.FC = () => {
     setResendLoading(true);
     try {
       await resendVerification(emailForResend);
-      message.success('Verification email sent successfully');
+      toast.success('Verification email sent successfully');
       setResendModalVisible(false);
       resetNeedsVerification();
     } catch (err) {
-      message.error('Failed to resend verification email');
+      toast.error('Failed to resend verification email');
     } finally {
       setResendLoading(false);
     }
@@ -53,97 +63,95 @@ const LoginForm: React.FC = () => {
 
   return (
     <>
-      <Card style={{ maxWidth: 500, margin: '0 auto', marginTop: 50, boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <Title level={2}>
-            <UserOutlined /> Login
-          </Title>
-          <Text type="secondary">Sign in to your account</Text>
-        </div>
+      <Card className="max-w-md mx-auto mt-12 shadow-lg">
+        <CardHeader className="text-center">
+          <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+            <User className="h-6 w-6" /> Login
+          </CardTitle>
+          <CardDescription>Sign in to your account</CardDescription>
+        </CardHeader>
 
-        <Form
-          form={form}
-          name="login_form"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          layout="vertical"
-        >
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Please input your email!' },
-              { type: 'email', message: 'Please enter a valid email!' }
-            ]}
-          >
-            <Input 
-              prefix={<MailOutlined />} 
-              placeholder="Email" 
-              size="large"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password 
-              prefix={<LockOutlined />} 
-              placeholder="Password" 
-              size="large"
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
-              style={{ width: '100%' }} 
-              size="large"
-              loading={isLoading}
-            >
-              Login
-            </Button>
-          </Form.Item>
-
-          {error && !needsVerification && (
-            <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>
-              {error}
+        <CardContent>
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
             </div>
-          )}          <div style={{ textAlign: 'center' }}>
-            Don't have an account? <Link href="/register">Register</Link>
-          </div>
-        </Form>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isLoading}
+            >
+              {isLoading ? 'Logging in...' : 'Login'}
+            </Button>
+
+            {error && !needsVerification && (
+              <Alert className="mt-4">
+                <AlertDescription className="text-red-600">
+                  {error}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="text-center text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link href="/register" className="text-blue-600 hover:underline">
+                Register
+              </Link>
+            </div>
+          </form>
+        </CardContent>
       </Card>
 
-      <Modal
-        title="Email Verification Required"
-        open={resendModalVisible}
-        onCancel={() => {
-          setResendModalVisible(false);
-          resetNeedsVerification();
-        }}
-        footer={[
-          <Button 
-            key="back" 
-            onClick={() => {
+      <AlertDialog open={resendModalVisible} onOpenChange={setResendModalVisible}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Email Verification Required</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your email address hasn't been verified yet. Please check your inbox for the verification email or click the button below to resend it.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => {
               setResendModalVisible(false);
               resetNeedsVerification();
-            }}
-          >
-            Cancel
-          </Button>,
-          <Button 
-            key="submit" 
-            type="primary" 
-            loading={resendLoading} 
-            onClick={handleResendVerification}
-          >
-            Resend Verification Email
-          </Button>
-        ]}
-      >
-        <p>Your email address hasn't been verified yet. Please check your inbox for the verification email or click the button below to resend it.</p>
-      </Modal>
+            }}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleResendVerification} disabled={resendLoading}>
+              {resendLoading ? 'Sending...' : 'Resend Verification Email'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

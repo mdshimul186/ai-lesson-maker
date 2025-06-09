@@ -1,25 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    Card, 
-    Form, 
-    Input, 
-    Select, 
-    Button, 
-    Typography, 
-    Space, 
-    Row, 
-    Col,
-    Steps,
-    Divider,
-    message
-} from 'antd';
-import { 
-    BookOutlined, 
-    TranslationOutlined, 
-    AudioOutlined,    PlaySquareOutlined,
-    SettingOutlined,
-    ReloadOutlined
-} from '@ant-design/icons';
+    BookOpen, 
+    Languages, 
+    Volume2,
+    Play,
+    Settings,
+    RotateCcw,
+    ChevronLeft,
+    ChevronRight
+} from 'lucide-react';
 import { 
     getVoiceList, 
     generateCourseStructure, 
@@ -27,11 +16,18 @@ import {
 } from '../../services/index';
 import CourseStructureDisplay from '../CourseMaker/CourseStructureDisplay';
 import CourseGeneration from '../CourseMaker/CourseGeneration';
-import styles from '../CourseMaker/index.module.css';
 
-const { Title, Paragraph } = Typography;
-const { Option } = Select;
-const { TextArea } = Input;
+// shadcn/ui components
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Label } from '../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Separator } from '../ui/separator';
+import { Badge } from '../ui/badge';
+import { Progress } from '../ui/progress';
+import { toast } from 'sonner';
 
 interface VoiceOption {
     displayName: string;
@@ -73,14 +69,19 @@ interface CourseFormData {
 }
 
 const CreateCourse: React.FC = () => {
-    const [form] = Form.useForm();
-    // const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
     const [isGenerating, setIsGenerating] = useState(false);
     const [allVoiceList, setAllVoiceList] = useState<VoiceOption[]>([]);
     const [filteredVoiceList, setFilteredVoiceList] = useState<VoiceOption[]>([]);
     const [courseStructure, setCourseStructure] = useState<CourseStructure | null>(null);
-    const [formData, setFormData] = useState<CourseFormData | null>(null);
+    const [formData, setFormData] = useState<CourseFormData>({
+        prompt: '',
+        language: 'en',
+        voice: '',
+        chapters: 5,
+        lessonsPerChapter: 3,
+        difficultyLevel: 'intermediate'
+    });
 
     // Load voices when component mounts
     useEffect(() => {
@@ -97,15 +98,16 @@ const CreateCourse: React.FC = () => {
                 if (initialLanguage) {
                     const filtered = (response.voices as VoiceOption[]).filter(v => v.language === initialLanguage);
                     setFilteredVoiceList(filtered);
-                    form.setFieldsValue({
+                    setFormData(prev => ({
+                        ...prev,
                         language: initialLanguage,
                         voice: filtered[0]?.name || ''
-                    });
+                    }));
                 }
             }
         } catch (error) {
             console.error('Failed to fetch voices:', error);
-            message.error('Failed to load voice options');
+            toast.error('Failed to load voice options');
         }
     };
 
@@ -117,24 +119,34 @@ const CreateCourse: React.FC = () => {
     const handleLanguageChange = (language: string) => {
         const filtered = allVoiceList.filter(v => v.language === language);
         setFilteredVoiceList(filtered);
-        form.setFieldsValue({ voice: filtered[0]?.name || '' });
+        setFormData(prev => ({
+            ...prev,
+            language,
+            voice: filtered[0]?.name || ''
+        }));
     };
 
-    const handleFormSubmit = async (values: CourseFormData) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!formData.prompt || formData.prompt.length < 10) {
+            toast.error('Please provide more details about your course topic (minimum 10 characters)');
+            return;
+        }
+
         setIsGenerating(true);
-        setFormData(values);
 
         try {
-            message.loading('Generating course structure...', 0);
+            toast.loading('Generating course structure...');
             
             const request: CourseGenerateRequest = {
-                prompt: values.prompt,
-                language: values.language,
-                voice_id: values.voice,
-                max_chapters: values.chapters,
-                max_lessons_per_chapter: values.lessonsPerChapter || 3,
-                target_audience: values.targetAudience || '',
-                difficulty_level: values.difficultyLevel || 'intermediate'
+                prompt: formData.prompt,
+                language: formData.language,
+                voice_id: formData.voice,
+                max_chapters: formData.chapters,
+                max_lessons_per_chapter: formData.lessonsPerChapter || 3,
+                target_audience: formData.targetAudience || '',
+                difficulty_level: formData.difficultyLevel || 'intermediate'
             };
 
             const response = await generateCourseStructure(request);
@@ -142,15 +154,15 @@ const CreateCourse: React.FC = () => {
             if (response && response.chapters) {
                 setCourseStructure(response);
                 setCurrentStep(1);
-                message.destroy();
-                message.success('Course structure generated successfully!');
+                toast.dismiss();
+                toast.success('Course structure generated successfully!');
             } else {
                 throw new Error('Invalid response format');
             }
         } catch (error) {
             console.error('Error generating course structure:', error);
-            message.destroy();
-            message.error('Failed to generate course structure. Please try again.');
+            toast.dismiss();
+            toast.error('Failed to generate course structure. Please try again.');
         } finally {
             setIsGenerating(false);
         }
@@ -169,203 +181,270 @@ const CreateCourse: React.FC = () => {
         setCurrentStep(1);
     };
 
+    const handleReset = () => {
+        setFormData({
+            prompt: '',
+            language: 'en',
+            voice: '',
+            chapters: 5,
+            lessonsPerChapter: 3,
+            difficultyLevel: 'intermediate'
+        });
+    };
+
     const steps = [
         {
             title: 'Configuration',
             description: 'Set up course parameters',
-            icon: <SettingOutlined />
+            icon: Settings
         },
         {
             title: 'Structure',
             description: 'Review course outline',
-            icon: <BookOutlined />
+            icon: BookOpen
         },
         {
             title: 'Generation',
             description: 'Generate lesson content',
-            icon: <PlaySquareOutlined />
+            icon: Play
         }
     ];
 
     return (
-        <div>
-            <Title level={2}>Create New Course</Title>
-            <Paragraph>
-                Create an engaging educational course with AI-generated content. Configure your course parameters, 
-                review the structure, and generate comprehensive lessons with videos.
-            </Paragraph>
+        <div className="max-w-6xl mx-auto space-y-8">
+            {/* Header */}
+            <div className="text-center space-y-4">
+                <h1 className="text-4xl font-bold text-foreground">Create New Course</h1>
+                <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                    Create an engaging educational course with AI-generated content. Configure your course parameters, 
+                    review the structure, and generate comprehensive lessons with videos.
+                </p>
+            </div>
 
-            <Steps current={currentStep} items={steps} style={{ marginBottom: '32px' }} />
+            {/* Progress Steps */}
+            <div className="w-full">
+                <div className="flex items-center justify-between mb-8">
+                    {steps.map((step, index) => {
+                        const IconComponent = step.icon;
+                        const isActive = index === currentStep;
+                        const isCompleted = index < currentStep;
+                        
+                        return (
+                            <div key={index} className="flex items-center">
+                                <div className="flex flex-col items-center">
+                                    <div className={`
+                                        w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-200
+                                        ${isActive 
+                                            ? 'bg-primary border-primary text-primary-foreground' 
+                                            : isCompleted 
+                                                ? 'bg-green-600 border-green-600 text-white dark:bg-green-500 dark:border-green-500'
+                                                : 'bg-muted border-border text-muted-foreground'
+                                        }
+                                    `}>
+                                        <IconComponent className="w-5 h-5" />
+                                    </div>
+                                    <div className="mt-3 text-center">
+                                        <p className={`text-sm font-medium ${isActive || isCompleted ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                            {step.title}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">{step.description}</p>
+                                    </div>
+                                </div>
+                                {index < steps.length - 1 && (
+                                    <div className={`
+                                        flex-1 h-0.5 mx-4 transition-all duration-200
+                                        ${index < currentStep ? 'bg-green-600 dark:bg-green-500' : 'bg-border'}
+                                    `} />
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+                <Progress value={(currentStep / (steps.length - 1)) * 100} className="h-2" />
+            </div>
 
+            {/* Step Content */}
             {currentStep === 0 && (
-                <Card title="Course Configuration" className={styles.stepCard}>
-                    <Form
-                        form={form}
-                        layout="vertical"
-                        onFinish={handleFormSubmit}
-                        initialValues={{
-                            language: 'en',
-                            chapters: 5
-                        }}
-                    >
-                        <Row gutter={24}>
-                            <Col xs={24}>
-                                <Form.Item
-                                    name="prompt"
-                                    label="Course Topic"
-                                    rules={[
-                                        { required: true, message: 'Please enter the course topic' },
-                                        { min: 10, message: 'Please provide more details about your course topic' }
-                                    ]}
-                                >
-                                    <TextArea
-                                        rows={4}
-                                        placeholder="Describe what you want to teach in this course. Be specific about the topics, target audience, and learning objectives..."
-                                        showCount
-                                        maxLength={1000}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Settings className="w-5 h-5 text-primary" />
+                            Course Configuration
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleFormSubmit} className="space-y-6">
+                            {/* Course Topic */}
+                            <div className="space-y-2">
+                                <Label htmlFor="prompt" className="text-base font-medium">
+                                    Course Topic *
+                                </Label>
+                                <Textarea
+                                    id="prompt"
+                                    value={formData.prompt}
+                                    onChange={(e) => setFormData(prev => ({ ...prev, prompt: e.target.value }))}
+                                    placeholder="Describe what you want to teach in this course. Be specific about the topics, target audience, and learning objectives..."
+                                    rows={4}
+                                    className="resize-none"
+                                    required
+                                />
+                                <p className="text-sm text-muted-foreground">
+                                    {formData.prompt.length}/1000 characters (minimum 10 required)
+                                </p>
+                            </div>
 
-                        <Row gutter={24}>
-                            <Col xs={24} md={12}>
-                                <Form.Item
-                                    name="language"
-                                    label={
-                                        <Space>
-                                            <TranslationOutlined />
-                                            Language
-                                        </Space>
-                                    }
-                                    rules={[{ required: true, message: 'Please select a language' }]}
-                                >
+                            {/* Language and Voice */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label className="text-base font-medium flex items-center gap-2">
+                                        <Languages className="w-4 h-4" />
+                                        Language *
+                                    </Label>
                                     <Select 
-                                        placeholder="Select language"
-                                        onChange={handleLanguageChange}
-                                        showSearch
-                                        filterOption={(input, option) =>
-                                            (option?.children?.toString()?.toLowerCase() ?? '').indexOf(input.toLowerCase()) >= 0
-                                        }
+                                        value={formData.language} 
+                                        onValueChange={handleLanguageChange}
                                     >
-                                        {getUniqueLanguageList(allVoiceList).map(language => (
-                                            <Option key={language} value={language}>
-                                                {language}
-                                            </Option>
-                                        ))}
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select language" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {getUniqueLanguageList(allVoiceList).map(language => (
+                                                <SelectItem key={language} value={language}>
+                                                    {language}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
-                                </Form.Item>
-                            </Col>
+                                </div>
 
-                            <Col xs={24} md={12}>
-                                <Form.Item
-                                    name="voice"
-                                    label={
-                                        <Space>
-                                            <AudioOutlined />
-                                            Voice
-                                        </Space>
-                                    }
-                                    rules={[{ required: true, message: 'Please select a voice' }]}
-                                >
+                                <div className="space-y-2">
+                                    <Label className="text-base font-medium flex items-center gap-2">
+                                        <Volume2 className="w-4 h-4" />
+                                        Voice *
+                                    </Label>
                                     <Select 
-                                        placeholder="Select voice"
-                                        showSearch
-                                        filterOption={(input, option) =>
-                                            !!option?.children && option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
+                                        value={formData.voice} 
+                                        onValueChange={(value) => setFormData(prev => ({ ...prev, voice: value }))}
                                     >
-                                        {filteredVoiceList.map(voice => (
-                                            <Option key={voice.name} value={voice.name}>
-                                                {voice.displayName} ({voice.gender})
-                                            </Option>
-                                        ))}
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select voice" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {filteredVoiceList.map(voice => (
+                                                <SelectItem key={voice.name} value={voice.name}>
+                                                    <div className="flex items-center gap-2">
+                                                        {voice.displayName}
+                                                        <Badge variant="secondary" className="text-xs">
+                                                            {voice.gender}
+                                                        </Badge>
+                                                    </div>
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                                </div>
+                            </div>
 
-                        <Row gutter={24}>
-                            <Col xs={24} md={8}>
-                                <Form.Item
-                                    name="chapters"
-                                    label="Number of Chapters"
-                                    rules={[{ required: true, message: 'Please select number of chapters' }]}
-                                >
-                                    <Select placeholder="Select chapters">
-                                        {[3, 4, 5, 6, 7, 8].map(num => (
-                                            <Option key={num} value={num}>{num} chapters</Option>
-                                        ))}
+                            {/* Course Structure Settings */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="space-y-2">
+                                    <Label className="text-base font-medium">
+                                        Number of Chapters *
+                                    </Label>
+                                    <Select 
+                                        value={formData.chapters.toString()} 
+                                        onValueChange={(value) => setFormData(prev => ({ ...prev, chapters: parseInt(value) }))}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {[3, 4, 5, 6, 7, 8].map(num => (
+                                                <SelectItem key={num} value={num.toString()}>
+                                                    {num} chapters
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
-                                </Form.Item>
-                            </Col>
+                                </div>
 
-                            <Col xs={24} md={8}>
-                                <Form.Item
-                                    name="lessonsPerChapter"
-                                    label="Lessons per Chapter"
-                                    initialValue={3}
-                                >
-                                    <Select placeholder="Select lessons per chapter">
-                                        {[2, 3, 4, 5].map(num => (
-                                            <Option key={num} value={num}>{num} lessons</Option>
-                                        ))}
+                                <div className="space-y-2">
+                                    <Label className="text-base font-medium">
+                                        Lessons per Chapter
+                                    </Label>
+                                    <Select 
+                                        value={formData.lessonsPerChapter?.toString() || '3'} 
+                                        onValueChange={(value) => setFormData(prev => ({ ...prev, lessonsPerChapter: parseInt(value) }))}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {[2, 3, 4, 5].map(num => (
+                                                <SelectItem key={num} value={num.toString()}>
+                                                    {num} lessons
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
-                                </Form.Item>
-                            </Col>
+                                </div>
 
-                            <Col xs={24} md={8}>
-                                <Form.Item
-                                    name="difficultyLevel"
-                                    label="Difficulty Level"
-                                    initialValue="intermediate"
-                                >
-                                    <Select placeholder="Select difficulty">
-                                        <Option value="beginner">Beginner</Option>
-                                        <Option value="intermediate">Intermediate</Option>
-                                        <Option value="advanced">Advanced</Option>
+                                <div className="space-y-2">
+                                    <Label className="text-base font-medium">
+                                        Difficulty Level
+                                    </Label>
+                                    <Select 
+                                        value={formData.difficultyLevel || 'intermediate'} 
+                                        onValueChange={(value) => setFormData(prev => ({ ...prev, difficultyLevel: value }))}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="beginner">Beginner</SelectItem>
+                                            <SelectItem value="intermediate">Intermediate</SelectItem>
+                                            <SelectItem value="advanced">Advanced</SelectItem>
+                                        </SelectContent>
                                     </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                                </div>
+                            </div>
 
-                        {/* <Row gutter={24}>
-                            <Col xs={24}>
-                                <Form.Item
-                                    name="targetAudience"
-                                    label="Target Audience (Optional)"
+                            <Separator />
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-4">
+                                <Button 
+                                    type="submit" 
+                                    size="lg"
+                                    disabled={isGenerating}
+                                    className="flex items-center gap-2"
                                 >
-                                    <Input 
-                                        placeholder="e.g., High school students, Working professionals, Beginners..."
-                                        maxLength={200}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row> */}
-
-                        <Divider />
-
-                        <Space>
-                            <Button 
-                                type="primary" 
-                                htmlType="submit" 
-                                size="large"
-                                loading={isGenerating}
-                                disabled={isGenerating}
-                            >
-                                <BookOutlined />
-                                Generate Course Structure
-                            </Button>
-                            
-                            <Button 
-                                icon={<ReloadOutlined />}
-                                onClick={() => form.resetFields()}
-                                disabled={isGenerating}
-                            >
-                                Reset Form
-                            </Button>
-                        </Space>
-                    </Form>
+                                    {isGenerating ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                                            Generating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <BookOpen className="w-4 h-4" />
+                                            Generate Course Structure
+                                        </>
+                                    )}
+                                </Button>
+                                
+                                <Button 
+                                    type="button"
+                                    variant="outline"
+                                    onClick={handleReset}
+                                    disabled={isGenerating}
+                                    className="flex items-center gap-2"
+                                >
+                                    <RotateCcw className="w-4 h-4" />
+                                    Reset Form
+                                </Button>
+                            </div>
+                        </form>
+                    </CardContent>
                 </Card>
             )}
 

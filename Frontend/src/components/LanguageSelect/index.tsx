@@ -1,25 +1,37 @@
-import { Select } from 'antd';
+'use client';
+
 import { useTranslation } from 'react-i18next';
-import styles from './index.module.css';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+
 export default function LanguageSelect() {
     const { t, i18n } = useTranslation();
+    
     const changeLang = (lang: string) => {
-        i18n.changeLanguage(lang)
-        localStorage.setItem('lang', lang)
-    }
+        i18n.changeLanguage(lang);
+        localStorage.setItem('lang', lang);
+    };
+
+    const currentLang = typeof window !== 'undefined' ? localStorage.getItem('lang') || 'en' : 'en';
+    
     return (
-        <div className={styles.languageCon}>
-            <div className={styles.changeText}>{t('language.switchText')}</div>
-            <Select
-                defaultValue={localStorage.getItem('lang') || 'en'}
-                style={{ width: 120 }}
-                options={[
-                    { value: 'zh', label: '中文' },
-                    { value: 'en', label: 'English' },
-                    { value: 'bn', label: 'Bangla' },
-                ]}
-                onChange={changeLang}
-            />
+        <div className="flex items-center space-x-3">
+            <div className="text-sm text-gray-600">{t('language.switchText')}</div>
+            <Select value={currentLang} onValueChange={changeLang}>
+                <SelectTrigger className="w-32">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="zh">中文</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="bn">Bangla</SelectItem>
+                </SelectContent>
+            </Select>
         </div>
     );
 }

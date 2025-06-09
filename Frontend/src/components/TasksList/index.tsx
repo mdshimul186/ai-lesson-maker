@@ -1,26 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
-    Table, 
-    Tag, 
-    Button, 
-    Space, 
-    Card, 
-    Input, 
-    DatePicker, 
-    Select, 
-    Row, 
-    Col, 
-    Badge, 
-    Modal, 
-    List, 
-    Progress, 
-    Typography,
-    Drawer,
-    Timeline,
-    Alert,
-    Popconfirm,
-    message
-} from 'antd';
+    Search, 
+    RefreshCw, 
+    CheckCircle2, 
+    XCircle, 
+    Clock, 
+    Loader2, 
+    AlertTriangle,
+    ExternalLink,
+    Play,
+    Image,
+    FileText,
+    File,
+    Info,
+    StopCircle,
+    ChevronDown,
+    ChevronUp,
+    Calendar,
+    Filter
+} from 'lucide-react';
 import { 
     TaskEvent, 
     getAllTasks, 
@@ -28,733 +26,838 @@ import {
     getQueueStatus, 
     getTaskStatus
 } from '../../services/index';
-import { 
-    SearchOutlined, 
-    ReloadOutlined, 
-    CheckCircleOutlined, 
-    CloseCircleOutlined, 
-    ClockCircleOutlined, 
-    SyncOutlined, 
-    WarningOutlined,
-    LinkOutlined,
-    PlayCircleOutlined,
-    FileImageOutlined,
-    FileTextOutlined,
-    FileOutlined,
-    InfoCircleOutlined,
-    StopOutlined
-} from '@ant-design/icons';
 import styles from './index.module.css';
 import { useAccountStore } from '../../stores';
 import { clearApiCachePattern } from '../../utils/apiUtils';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Badge } from '../ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
+import { Progress } from '../ui/progress';
+import { Alert, AlertDescription } from '../ui/alert';
+import { toast } from 'sonner';
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../ui/pagination';
 
-const { Title } = Typography;
-const { Option } = Select;
-const { RangePicker } = DatePicker;
+// Types
+interface Task {
+    task_id: string;
+    status: string;
+    progress: number;
+    created_at: string;
+    updated_at: string;
+    queue_position?: number;
+    story_prompt?: string;
+    segments?: number;
+    language?: string;
+    resolution?: string;
+    result_url?: string;
+    error_message?: string;
+    error_details?: any;
+    events?: TaskEvent[];
+    task_folder_content?: Record<string, string>;
+}
+
+interface QueueStatus {
+    queue_length: number;
+    running_tasks: number;
+    pending_tasks: number;
+}
+
+
 
 const TasksList: React.FC = () => {
-    // State for tasks and pagination
-    const [tasks, setTasks] = useState<TaskEvent[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
+    const [selectedTaskDetails, setSelectedTaskDetails] = useState<Task | null>(null);
+    const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
     });
-      // State for filters
-  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  // Date range state is used in the RangePicker UI but not yet implemented in filtering
-  // TODO: Implement date range filtering in the backend and use dateRange variable
-  const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
+    const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
-  console.log(dateRange);
-
-    // State for polling queue status
-    const [pollingInterval, setPollingInterval] = useState<any>(null);
-
-    // Get current account from store
     const { currentAccount } = useAccountStore();
 
-    // State for task details drawer
-    const [selectedTask, setSelectedTask] = useState<TaskEvent | null>(null);
-    const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
-      // Function to fetch tasks
-    const fetchTasks = async (page = 1, pageSize = 10, status?: string) => {
-        // If we're already loading, don't start another request
-        if (loading) {
-            console.log('Already loading tasks, skipping duplicate request');
-            return;
-        }
+    // Auto-refresh interval for active tasks
+    const AUTO_REFRESH_INTERVAL = 10000; // 10 seconds
 
+    const formatTime = (timeString: string) => {
+        if (!timeString) return 'N/A';
+        try {
+            const date = new Date(timeString);
+            return date.toLocaleString();
+        } catch (error) {
+            return timeString;
+        }
+    };
+
+    const getFileIcon = (fileName: string) => {
+        if (fileName.endsWith('.mp4')) {
+            return <Play className="h-4 w-4 text-blue-500" />;
+        } else if (fileName.endsWith('.jpg') || fileName.endsWith('.png')) {
+            return <Image className="h-4 w-4 text-green-500" />;
+        } else if (fileName.endsWith('.json')) {
+            return <FileText className="h-4 w-4 text-yellow-500" />;
+        } else {
+            return <File className="h-4 w-4 text-gray-500" />;
+        }
+    };
+
+    const getStatusBadge = (status: string) => {
+        const statusConfig = {
+            COMPLETED: { 
+                icon: <CheckCircle2 className="h-3.5 w-3.5" />, 
+                className: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800"
+            },
+            FAILED: { 
+                icon: <XCircle className="h-3.5 w-3.5" />, 
+                className: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800"
+            },
+            PENDING: { 
+                icon: <Clock className="h-3.5 w-3.5" />, 
+                className: "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800"
+            },
+            PROCESSING: { 
+                icon: <Loader2 className="h-3.5 w-3.5 animate-spin" />, 
+                className: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800"
+            },
+            CANCELLED: { 
+                icon: <StopCircle className="h-3.5 w-3.5" />, 
+                className: "bg-gray-100 dark:bg-gray-800/60 text-gray-700 dark:text-gray-400 border-gray-200 dark:border-gray-700"
+            },
+        };
+
+        const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.PENDING;
+        
+        return (
+            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.className}`}>
+                {config.icon}
+                {status}
+            </div>
+        );
+    };
+
+    const taskNeedsUpdate = (task: Task) => {
+        return task.status === 'PENDING' || task.status === 'PROCESSING';
+    };
+
+    const fetchTasks = async (page = 1, pageSize = 10, status = 'all') => {
         setLoading(true);
         try {
             const skip = (page - 1) * pageSize;
-            const response = await getAllTasks({
-                limit: pageSize,
-                skip,
-                status
+            const filters = status !== 'all' ? { status } : {};
+            
+            const response = await getAllTasks({ 
+                skip, 
+                limit: pageSize, 
+                ...filters 
             });
             
             if (Array.isArray(response)) {
-                // Store active task IDs before update for comparison
-                const previousActiveTasks = tasks
-                    .filter(taskNeedsQueuePositionUpdate)
-                    .map(t => t.task_id);
-                
-                // Update tasks state
                 setTasks(response);
-                
-                // Update pagination based on response
                 setPagination({
                     ...pagination,
                     current: page,
-                    total: response.length + skip // This is an estimate; backend should ideally return total count
+                    total: response.length + skip
                 });
-                
-                // Check if we need to start/stop polling based on active tasks
-                const currentActiveTasks = response
-                    .filter(taskNeedsQueuePositionUpdate)
-                    .map(t => t.task_id);
-                
-                // Log changes in active tasks for debugging
-                if (previousActiveTasks.length !== currentActiveTasks.length) {
-                    console.log(`Active tasks changed: ${previousActiveTasks.length} -> ${currentActiveTasks.length}`);
-                }
             } else {
-                // Handle case where response is not an array
                 console.error('Expected array of tasks but got:', response);
                 setTasks([]);
             }
         } catch (error) {
             console.error('Failed to fetch tasks:', error);
             setTasks([]);
+            toast.error('Failed to fetch tasks');
         } finally {
             setLoading(false);
         }
     };
-      // Effect to load tasks on component mount and pagination/filter changes
-    useEffect(() => {
-        // Only fetch tasks when pagination or filters change, not when tasks array changes
-        fetchTasks(pagination.current, pagination.pageSize, statusFilter);
-        
-        // No need for auto-refresh here, we'll use individual task updates instead
-    }, [pagination.current, pagination.pageSize, statusFilter]);    // Refresh tasks when account changes
-    useEffect(() => {
-        if (currentAccount) {
-            console.log('Account changed in TasksList, refreshing tasks...');
-            
-            // Clear API cache for tasks to ensure fresh data
-            clearApiCachePattern(/^tasks_/);
-            
-            // Reset pagination and filters when account changes
-            setPagination({
-                current: 1,
-                pageSize: 10,
-                total: 0
-            });
-            setTasks([]); // Clear existing tasks
-            setStatusFilter(undefined); // Reset status filter
-            fetchTasks(1, 10, undefined);
+
+    const fetchQueueStatus = async () => {
+        try {
+            const response = await getQueueStatus();
+            if (response && typeof response === 'object') {
+                // Check if response has data property or is direct queue status
+                const queueData = response.data || response;
+                setQueueStatus({
+                    queue_length: queueData.queue_length || 0,
+                    running_tasks: queueData.running_tasks || 0,
+                    pending_tasks: queueData.pending_tasks || 0
+                });
+            }
+        } catch (error) {
+            console.error('Failed to fetch queue status:', error);
         }
-    }, [currentAccount?.id]);
-    
-    // Function to handle table change (pagination, filters, sorter)
-    const handleTableChange = (paginationParams: any) => {
-        fetchTasks(paginationParams.current, paginationParams.pageSize, statusFilter);
     };
-      // Function to apply filters with debouncing
-    const applyFilters = useCallback(() => {
-        fetchTasks(1, pagination.pageSize, statusFilter);
-    }, [pagination.pageSize, statusFilter]);
-    
-    // Function to reset filters
-    const resetFilters = useCallback(() => {
-        setStatusFilter(undefined);
-        setSearchTerm('');
-        setDateRange(null);
-        fetchTasks(1, pagination.pageSize);
-    }, [pagination.pageSize]);
-    
-    // Function to show task details in drawer
-    const showTaskDetails = (task: TaskEvent) => {
-        setSelectedTask(task);
-        setDrawerVisible(true);
-    };
-    
-    // Function to close task details drawer
-    const closeTaskDetails = () => {
-        setDrawerVisible(false);
-        setSelectedTask(null);
-    };
-    
-    // Function to show task folder content in a modal
-    const showTaskFolderContent = (taskFolderContent: Record<string, any>) => {
-        Modal.info({
-            title: 'Task Folder Contents',
-            width: 800,
-            content: (
-                <div style={{ maxHeight: '60vh', overflow: 'auto' }}>
-                    <List
-                        bordered
-                        dataSource={Object.entries(taskFolderContent)}
-                        renderItem={([key, url]) => (
-                            <List.Item
-                                actions={[
-                                    <a href={url as string} target="_blank" rel="noopener noreferrer">
-                                        <Button type="link" icon={<LinkOutlined />}>Open</Button>
-                                    </a>
-                                ]}
-                            >
-                                <List.Item.Meta
-                                    avatar={
-                                        key.endsWith('.mp4') ? <PlayCircleOutlined style={{ fontSize: '24px', color: '#1890ff' }} /> :
-                                        key.endsWith('.jpg') || key.endsWith('.png') ? <FileImageOutlined style={{ fontSize: '24px', color: '#52c41a' }} /> :
-                                        key.endsWith('.json') ? <FileTextOutlined style={{ fontSize: '24px', color: '#faad14' }} /> :
-                                        <FileOutlined style={{ fontSize: '24px' }} />
-                                    }
-                                    title={key.split('/').pop()}
-                                    description={key}
-                                />
-                            </List.Item>
-                        )}
-                    />
-                </div>
-            ),
-            okText: 'Close'
-        });
-    };
-    
-    // Helper function to format date
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleString();
-    };
-    
-    // Table columns definition
-    const columns = [
-        {
-            title: 'Task ID',
-            dataIndex: 'task_id',
-            key: 'task_id',
-            render: (text: string, record: TaskEvent) => <a onClick={() => showTaskDetails(record)}>{text.substring(0, 8)}...</a>,
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status: string, record: TaskEvent) => (
-                <Space direction="vertical" size="small">
-                    <Tag color={
-                        status === 'COMPLETED' ? 'success' :
-                        status === 'FAILED' ? 'error' :
-                        status === 'PENDING' ? 'default' :
-                        status === 'QUEUED' ? 'processing' :
-                        status === 'PROCESSING' ? 'processing' :
-                        status === 'CANCELLED' ? 'default' :
-                        'warning'
-                    } icon={
-                        status === 'COMPLETED' ? <CheckCircleOutlined /> :
-                        status === 'FAILED' ? <CloseCircleOutlined /> :
-                        status === 'PENDING' ? <ClockCircleOutlined /> :
-                        status === 'QUEUED' ? <ClockCircleOutlined /> :
-                        status === 'PROCESSING' ? <SyncOutlined spin /> :
-                        status === 'CANCELLED' ? <StopOutlined /> :
-                        <WarningOutlined />                    }>
-                        {status}
-                    </Tag>
-                    {record.queue_position !== undefined && (status === 'PENDING' || status === 'QUEUED') && (
-                        <Tag color="blue" className={styles.queuePositionTag}>Queue Position: {record.queue_position}</Tag>
-                    )}
-                </Space>
-            ),
-        },
-        {
-            title: 'Progress',
-            dataIndex: 'progress',
-            key: 'progress',
-            render: (progress: number, record: TaskEvent) => (
-                <Progress 
-                    percent={progress} 
-                    size="small" 
-                    status={
-                        record.status === 'FAILED' ? 'exception' :
-                        record.status === 'COMPLETED' ? 'success' :
-                        'active'
-                    }
-                />
-            ),
-            sorter: (a: TaskEvent, b: TaskEvent) => a.progress - b.progress,
-        },
-        {
-            title: 'Created At',
-            dataIndex: 'created_at',
-            key: 'created_at',
-            render: (date: string) => formatDate(date),
-            sorter: (a: TaskEvent, b: TaskEvent) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-        },
-        {
-            title: 'Updated At',
-            dataIndex: 'updated_at',
-            key: 'updated_at',
-            render: (date: string) => formatDate(date),
-            sorter: (a: TaskEvent, b: TaskEvent) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime(),
-        },
-        {
-            title: 'Files',
-            key: 'files',
-            render: (_: any, record: TaskEvent) => (
-                record.task_folder_content ? (
-                    <Button 
-                        type="link"
-                        onClick={() => showTaskFolderContent(record.task_folder_content!)}
-                    >
-                        <Badge count={Object.keys(record.task_folder_content).length} />
-                    </Button>
-                ) : (
-                    <span>None</span>
-                )
-            ),
-        },
-        {
-            title: 'Actions',
-            key: 'actions',
-            render: (_: any, record: TaskEvent) => (
-                <Space size="small">
-                    <Button 
-                        type="primary" 
-                        size="small" 
-                        onClick={() => showTaskDetails(record)}
-                        icon={<InfoCircleOutlined />}
-                    >
-                        Details
-                    </Button>                    {record.result_url && (
-                        <Button 
-                            type="link" 
-                            size="small" 
-                            href={record.result_url} 
-                            target="_blank"
-                        >
-                            View Result
-                        </Button>
-                    )}
-                    {(record.status === 'PENDING' || record.status === 'QUEUED' || record.status === 'PROCESSING') && (
-                        <Popconfirm
-                            title="Are you sure you want to cancel this task?"
-                            onConfirm={() => handleCancelTask(record.task_id)}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button 
-                                type="primary" 
-                                danger 
-                                size="small" 
-                                icon={<StopOutlined />}
-                            >
-                                Cancel
-                            </Button>
-                        </Popconfirm>
-                    )}
-                </Space>
-            ),
-        },
-    ];
-      // Function to handle task cancellation
+
     const handleCancelTask = async (taskId: string) => {
         try {
-            const response = await cancelTask(taskId);
-            if (response.success) {
-                message.success('Task cancellation requested successfully');
-                
-                // Update just this task instead of refetching all tasks
-                setTasks(prevTasks => 
-                    prevTasks.map(task => 
-                        task.task_id === taskId 
-                            ? { ...task, status: 'CANCELLED' } 
-                            : task
-                    )
-                );
-                
-                // After a brief delay, get the actual updated task to ensure we have accurate data
-                setTimeout(async () => {
-                    await updateTaskStatus(taskId);
-                }, 1000);
-            } else {
-                message.error(response.message || 'Failed to cancel task');
-            }
+            await cancelTask(taskId);
+            toast.success('Task cancellation requested');
+            fetchTasks(pagination.current, pagination.pageSize, statusFilter);
         } catch (error) {
-            console.error('Error cancelling task:', error);
-            message.error('An error occurred while trying to cancel the task');
+            console.error('Failed to cancel task:', error);
+            toast.error('Failed to cancel task');
         }
-    };// Function to fetch queue position for pending/queued tasks
-    const fetchQueuePositions = async () => {
-        try {
-            // Only check status for tasks that are still active
-            const activeTasks = tasks.filter(taskNeedsQueuePositionUpdate);
-            
-            if (activeTasks.length === 0) {
-                // No active tasks, clear polling interval
-                if (pollingInterval) {
-                    clearInterval(pollingInterval);
-                    setPollingInterval(null);
-                }
-                return;
-            }
-            
-            // Process active tasks in batches to reduce API calls
-            const batchSize = 3; // Process 3 tasks at a time
-            const taskBatches = [];
-            
-            // Create batches of tasks
-            for (let i = 0; i < activeTasks.length; i += batchSize) {
-                taskBatches.push(activeTasks.slice(i, i + batchSize));
-            }
-            
-            // Process each batch sequentially
-            for (const batch of taskBatches) {
-                await Promise.all(batch.map(async (task) => {
-                    try {
-                        // First update the task status
-                        const updatedTask = await updateTaskStatus(task.task_id);
-                        
-                        // If task is no longer active, don't fetch queue position
-                        if (!updatedTask || !taskNeedsQueuePositionUpdate(updatedTask)) {
-                            return;
-                        }
-                        
-                        // Only fetch queue position for tasks that are still active
-                        const queueStatus = await getQueueStatus(task.task_id);
-                        if (queueStatus.success && queueStatus.data) {
-                            const { queue_position } = queueStatus.data;
-                            
-                            if (queue_position !== undefined) {
-                                // Update the task with queue position
-                                setTasks(prevTasks => 
-                                    prevTasks.map(t => 
-                                        t.task_id === task.task_id 
-                                            ? { ...t, queue_position } 
-                                            : t
-                                    )
-                                );
-                            }
-                        }
-                    } catch (error) {
-                        console.error(`Error processing task ${task.task_id}:`, error);
-                    }
-                }));
-                
-                // Add a small delay between batches to avoid overwhelming the server
-                if (taskBatches.length > 1) {
-                    await new Promise(resolve => setTimeout(resolve, 300));
-                }
-            }
-        } catch (error) {
-            console.error('Error in fetchQueuePositions:', error);
+    };
+
+    const handleRefresh = () => {
+        fetchTasks(pagination.current, pagination.pageSize, statusFilter);
+        fetchQueueStatus();
+    };
+
+    const showTaskDetails = (task: Task) => {
+        setSelectedTaskDetails(task);
+        setIsDetailsModalVisible(true);
+    };
+
+    const toggleRowExpansion = (taskId: string) => {
+        const newExpanded = new Set(expandedRows);
+        if (newExpanded.has(taskId)) {
+            newExpanded.delete(taskId);
+        } else {
+            newExpanded.add(taskId);
         }
-    };    // Function to check if a task needs queue position updates
-    const taskNeedsQueuePositionUpdate = (task: TaskEvent): boolean => {
+        setExpandedRows(newExpanded);
+    };
+
+    // Filter tasks based on search text
+    const filteredTasks = tasks.filter(task => {
+        if (!searchText) return true;
+        const searchLower = searchText.toLowerCase();
         return (
-            task.status === 'PENDING' || 
-            task.status === 'QUEUED' || 
-            task.status === 'PROCESSING'
+            task.task_id.toLowerCase().includes(searchLower) ||
+            task.story_prompt?.toLowerCase().includes(searchLower) ||
+            task.status.toLowerCase().includes(searchLower)
         );
-    };
-    
-    // Optimize polling for queue positions of active tasks
+    });
+
     useEffect(() => {
-        // Only poll for active tasks and if we're not already loading
-        const activeTasks = tasks.filter(taskNeedsQueuePositionUpdate);
-        const hasActiveTasks = activeTasks.length > 0;
-        
-        console.log(`Active tasks count: ${activeTasks.length}`);
-        
-        // Clear existing interval if it exists
-        if (pollingInterval) {
-            clearInterval(pollingInterval);
-            setPollingInterval(null);
+        if (typeof window !== 'undefined') {
+            fetchTasks(pagination.current, pagination.pageSize, statusFilter);
+            fetchQueueStatus();
         }
-        
-        // If there are active tasks, start polling with an adaptive interval
-        if (hasActiveTasks && !loading) {
-            // Calculate an adaptive polling interval based on the number of active tasks
-            // More tasks = longer interval to reduce server load
-            const baseInterval = 15000; // 15 seconds base
-            const adaptiveInterval = Math.min(
-                baseInterval + (activeTasks.length * 1000), // Add 1s per active task
-                30000 // Cap at 30 seconds max
-            );
-            
-            console.log(`Setting up polling with ${adaptiveInterval}ms interval`);
-            
-            // Initial poll after a short delay
-            const initialPoll = setTimeout(() => {
-                fetchQueuePositions();
-            }, 1000);
-            
-            // Then set up the regular interval
-            const interval = setInterval(() => {
-                if (!loading) {
-                    fetchQueuePositions();
-                }
-            }, adaptiveInterval);
-            
-            setPollingInterval(interval);
-            
-            // Cleanup function
-            return () => {
-                clearTimeout(initialPoll);
-                clearInterval(interval);
-            };
+    }, [pagination.current, pagination.pageSize, statusFilter]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && currentAccount) {
+            clearApiCachePattern(/^tasks_/);
+            setPagination(prev => ({ ...prev, current: 1 }));
+            fetchTasks(1, pagination.pageSize, statusFilter);
         }
-        
-        // No cleanup needed if we didn't set up polling
-    }, [
-        // Only re-run when these dependencies change
-        tasks.filter(taskNeedsQueuePositionUpdate).length, // Number of active tasks
-        loading
-    ]);
-      // Function to update individual task status
-    const updateTaskStatus = async (taskId: string) => {
-        try {
-            const taskResponse = await getTaskStatus(taskId);
-            // Only update the specific task in the tasks array
-            setTasks(prevTasks => 
-                prevTasks.map(task => 
-                    task.task_id === taskId ? { ...task, ...taskResponse } : task
-                )
-            );
-            return taskResponse;
-        } catch (error) {
-            console.error(`Error updating task ${taskId}:`, error);
-            return null;
-        }
-    };
-    
-    return (
-        <div className={styles.tasksListContainer}>
-            <Card title={<Title level={2}>All Tasks</Title>} className={styles.tasksCard}>
-                {/* Filter section */}
-                <div className={styles.filtersSection}>
-                    <Row gutter={16} align="middle">
-                        <Col xs={24} sm={8} md={6} lg={5} xl={4}>
-                            <Select
-                                placeholder="Filter by status"
-                                allowClear
-                                style={{ width: '100%' }}
-                                onChange={(value) => setStatusFilter(value)}
-                                value={statusFilter}
-                            >
-                                <Option value="PENDING">Pending</Option>
-                                <Option value="PROCESSING">Processing</Option>
-                                <Option value="COMPLETED">Completed</Option>
-                                <Option value="FAILED">Failed</Option>
-                            </Select>
-                        </Col>
-                        <Col xs={24} sm={8} md={6} lg={5} xl={4}>
-                            <Input
-                                placeholder="Search by Task ID"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                prefix={<SearchOutlined />}
-                            />
-                        </Col>
-                        <Col xs={24} sm={8} md={12} lg={10} xl={8}>
-                            <RangePicker 
-                                onChange={(dates) => {
-                                    if (dates) {
-                                        setDateRange([dates[0]?.toDate()!, dates[1]?.toDate()!]);
-                                    } else {
-                                        setDateRange(null);
-                                    }
-                                }}
-                                style={{ width: '100%' }}
-                            />
-                        </Col>
-                        <Col xs={12} sm={6} md={6} lg={2} xl={4}>
-                            <Button 
-                                type="primary" 
-                                onClick={applyFilters}
-                                icon={<SearchOutlined />}
-                            >
-                                Apply
-                            </Button>
-                        </Col>
-                        <Col xs={12} sm={6} md={6} lg={2} xl={4}>
-                            <Button 
-                                onClick={resetFilters}
-                                icon={<ReloadOutlined />}
-                            >
-                                Reset
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
-                
-                {/* Tasks table */}
-                <Table
-                    columns={columns}
-                    dataSource={tasks}
-                    rowKey="task_id"
-                    pagination={pagination}
-                    loading={loading}
-                    onChange={handleTableChange}
-                    className={styles.tasksTable}
-                />
-            </Card>
-              {/* Task details drawer */}
-            <Drawer
-                title={`Task Details: ${selectedTask?.task_id}`}
-                placement="right"
-                width={600}
-                onClose={closeTaskDetails}
-                open={drawerVisible && !!selectedTask}
-            >
-                {selectedTask && (
-                    <div>
-                        <div className={styles.taskDetailHeader}>                            <div>
-                                <strong>Status:</strong>{' '}
-                                <Tag color={
-                                    selectedTask.status === 'COMPLETED' ? 'success' :
-                                    selectedTask.status === 'FAILED' ? 'error' :
-                                    selectedTask.status === 'PENDING' ? 'default' :
-                                    selectedTask.status === 'QUEUED' ? 'processing' :
-                                    selectedTask.status === 'PROCESSING' ? 'processing' :
-                                    selectedTask.status === 'CANCELLED' ? 'default' :
-                                    'warning'
-                                } icon={
-                                    selectedTask.status === 'COMPLETED' ? <CheckCircleOutlined /> :
-                                    selectedTask.status === 'FAILED' ? <CloseCircleOutlined /> :
-                                    selectedTask.status === 'PENDING' ? <ClockCircleOutlined /> :
-                                    selectedTask.status === 'QUEUED' ? <ClockCircleOutlined /> :
-                                    selectedTask.status === 'PROCESSING' ? <SyncOutlined spin /> :
-                                    selectedTask.status === 'CANCELLED' ? <StopOutlined /> :
-                                    <WarningOutlined />
-                                }>
-                                    {selectedTask.status}
-                                </Tag>                                
-                                {selectedTask.queue_position !== undefined && 
-                                 (selectedTask.status === 'PENDING' || selectedTask.status === 'QUEUED') && (
-                                    <Tag color="blue" className={styles.queuePositionTag}>
-                                        Queue Position: {selectedTask.queue_position}
-                                    </Tag>
-                                )}
+    }, [currentAccount]);
+
+    // Auto-refresh for active tasks
+    useEffect(() => {
+        const hasActiveTasks = tasks.some(taskNeedsUpdate);
+        if (!hasActiveTasks) return;
+
+        const interval = setInterval(() => {
+            fetchTasks(pagination.current, pagination.pageSize, statusFilter);
+        }, AUTO_REFRESH_INTERVAL);
+
+        return () => clearInterval(interval);
+    }, [tasks, pagination.current, pagination.pageSize, statusFilter]);
+
+    const TaskDetailsModal = () => {
+        if (!selectedTaskDetails) return null;
+
+        return (
+            <Dialog open={isDetailsModalVisible} onOpenChange={setIsDetailsModalVisible}>
+                <DialogContent className="max-w-5xl max-h-[80vh] overflow-hidden">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-xl">
+                            <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                                <Info className="h-4 w-4 text-white" />
                             </div>
-                            <div>
-                                <strong>Progress:</strong>{' '}
-                                <Progress 
-                                    percent={selectedTask.progress || 0} 
-                                    status={
-                                        selectedTask.status === 'FAILED' ? 'exception' :
-                                        selectedTask.status === 'COMPLETED' ? 'success' :
-                                        'active'
-                                    }
-                                />
-                            </div>
-                            <div>
-                                <strong>Created:</strong> {formatDate(selectedTask.created_at)}
-                            </div>
-                            <div>
-                                <strong>Last Updated:</strong> {formatDate(selectedTask.updated_at)}
-                            </div>
-                            
-                            {selectedTask.result_url && (
-                                <div className={styles.resultSection}>
-                                    <strong>Result:</strong>{' '}
-                                    <a href={selectedTask.result_url} target="_blank" rel="noopener noreferrer">
-                                        <Button type="primary">View Result</Button>
-                                    </a>
-                                </div>
-                            )}
-                            
-                            {selectedTask.task_folder_content && Object.keys(selectedTask.task_folder_content).length > 0 && (
-                                <div className={styles.folderContentSection}>
-                                    <strong>Files:</strong>{' '}
-                                    <Badge 
-                                        count={Object.keys(selectedTask.task_folder_content).length} 
-                                        style={{ backgroundColor: '#52c41a' }}
-                                    />
-                                    <Button 
-                                        type="link" 
-                                        onClick={() => showTaskFolderContent(selectedTask.task_folder_content!)}
-                                    >
-                                        View All Files
-                                    </Button>
-                                </div>
-                            )}
-                            
-                            {selectedTask.error_message && (
-                                <Alert
-                                    message="Error"
-                                    description={selectedTask.error_message}
-                                    type="error"
-                                    showIcon
-                                    style={{ marginTop: 16 }}
-                                />
-                            )}
+                            Task Details
+                        </DialogTitle>
+                        <DialogDescription>
+                            Detailed information about task <span className="font-mono text-xs bg-muted/70 dark:bg-card/70 rounded px-1.5 py-0.5">{selectedTaskDetails.task_id}</span>
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-5 overflow-y-auto max-h-[calc(80vh-10rem)] pr-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <Card className="border border-border bg-background/95 dark:bg-card/95">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-base">Status Information</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-muted-foreground">Status:</span>
+                                        {getStatusBadge(selectedTaskDetails.status)}
+                                    </div>
+                                    <div className="space-y-1">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-muted-foreground">Progress:</span>
+                                            <span className="font-medium">{selectedTaskDetails.progress || 0}%</span>
+                                        </div>
+                                        <div className="w-full bg-muted dark:bg-muted/50 rounded-full h-2.5 overflow-hidden">
+                                            <div 
+                                                className={`h-full rounded-full ${
+                                                    selectedTaskDetails.status === 'FAILED' ? 'bg-red-500' :
+                                                    selectedTaskDetails.status === 'COMPLETED' ? 'bg-green-500' :
+                                                    selectedTaskDetails.status === 'PROCESSING' ? 'bg-blue-500 animate-pulse' :
+                                                    'bg-amber-500'
+                                                }`}
+                                                style={{ width: `${selectedTaskDetails.progress || 0}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-muted-foreground">Created:</span>
+                                        <span>{formatTime(selectedTaskDetails.created_at)}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-muted-foreground">Last Updated:</span>
+                                        <span>{formatTime(selectedTaskDetails.updated_at)}</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border border-border bg-background/95 dark:bg-card/95">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-base">Configuration</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-muted-foreground">Language:</span>
+                                        <span className="font-medium">{selectedTaskDetails.language || 'N/A'}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-muted-foreground">Resolution:</span>
+                                        <span className="font-medium">{selectedTaskDetails.resolution || 'N/A'}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-muted-foreground">Segments:</span>
+                                        <span className="font-medium">{selectedTaskDetails.segments || 'N/A'}</span>
+                                    </div>
+                                    {selectedTaskDetails.queue_position !== undefined && (
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-muted-foreground">Queue Position:</span>
+                                            <Badge variant="outline" className="font-medium">
+                                                {selectedTaskDetails.queue_position}
+                                            </Badge>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
                         </div>
-                        
-                        {selectedTask.events && selectedTask.events.length > 0 && (
-                            <div className={styles.eventsSection}>
-                                <Title level={4}>Event Log:</Title>
-                                <div className={styles.timelineContainer}>
-                                    <Timeline mode="left">
-                                        {selectedTask.events.map((event: TaskEvent, index:number) => {
-                                            // Determine color based on event message content
-                                            let color = 'blue';
-                                            if (event.message.toLowerCase().includes('error') || event.message.toLowerCase().includes('fail')) {
-                                                color = 'red';
-                                            } else if (event.message.toLowerCase().includes('complet') || event.message.toLowerCase().includes('success')) {
-                                                color = 'green';
-                                            } else if (event.message.toLowerCase().includes('warn')) {
-                                                color = 'orange';
-                                            } else if (index === selectedTask.events.length - 1) {
-                                                color = 'blue'; // Most recent event
-                                            } else {
-                                                color = 'gray';
-                                            }
-                                            
-                                            return (
-                                                <Timeline.Item 
-                                                    key={index} 
-                                                    color={color}
-                                                    label={<span>{formatDate(event.timestamp)}</span>}
-                                                >
-                                                    <p className={styles.eventMessage}>{event.message}</p>
-                                                    {event.details && (
-                                                        <pre className={styles.eventDetails}>
-                                                            {typeof event.details === 'object' 
-                                                                ? JSON.stringify(event.details, null, 2) 
-                                                                : event.details}
-                                                        </pre>
-                                                    )}
-                                                </Timeline.Item>
-                                            );
-                                        })}
-                                    </Timeline>
-                                </div>
-                            </div>
+
+                        {selectedTaskDetails.story_prompt && (
+                            <Card className="border border-border bg-background/95 dark:bg-card/95">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-base">Prompt</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="p-3 bg-muted/50 dark:bg-card/50 rounded-lg text-sm">
+                                        {selectedTaskDetails.story_prompt}
+                                    </div>
+                                </CardContent>
+                            </Card>
                         )}
-                        {(selectedTask.status === 'PENDING' || selectedTask.status === 'QUEUED' || selectedTask.status === 'PROCESSING') && (
-                            <div className={styles.actionSection} style={{ marginTop: '16px' }}>
-                                <Popconfirm
-                                    title="Cancel Task"
-                                    description="Are you sure you want to cancel this task?"
-                                    onConfirm={() => {
-                                        handleCancelTask(selectedTask.task_id);
-                                        closeTaskDetails();
-                                    }}
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <Button type="primary" danger icon={<StopOutlined />}>
-                                        Cancel Task
-                                    </Button>
-                                </Popconfirm>
-                            </div>
+
+                        {selectedTaskDetails.error_message && (
+                            <Alert variant="destructive" className="border border-red-300 dark:border-red-900">
+                                <AlertTriangle className="h-4 w-4" />
+                                <AlertDescription>
+                                    <div className="font-medium mb-1">Error Message:</div>
+                                    <div className="text-sm">{selectedTaskDetails.error_message}</div>
+                                    {selectedTaskDetails.error_details && (
+                                        <div className="mt-2">
+                                            <div className="font-medium mb-1">Error Details:</div>
+                                            <pre className="text-xs overflow-x-auto bg-background/80 dark:bg-card/80 p-2 rounded border border-red-200 dark:border-red-900 max-h-32 overflow-y-auto">
+                                                {typeof selectedTaskDetails.error_details === 'object' 
+                                                    ? JSON.stringify(selectedTaskDetails.error_details, null, 2)
+                                                    : selectedTaskDetails.error_details
+                                                }
+                                            </pre>
+                                        </div>
+                                    )}
+                                </AlertDescription>
+                            </Alert>
+                        )}
+
+                        {selectedTaskDetails.task_folder_content && Object.keys(selectedTaskDetails.task_folder_content).length > 0 && (
+                            <Card className="border border-border bg-background/95 dark:bg-card/95">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-base">Generated Files</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {Object.entries(selectedTaskDetails.task_folder_content).map(([key, url]) => (
+                                            <div key={key} className="flex items-center justify-between p-3 bg-muted/50 dark:bg-card/50 rounded-lg border border-border hover:border-blue-300 hover:bg-blue-50/20 dark:hover:bg-blue-950/20 transition-all duration-200">
+                                                <div className="flex items-center gap-2 overflow-hidden">
+                                                    {getFileIcon(key)}
+                                                    <span className="text-sm truncate max-w-[180px]">{key.split('/').pop()}</span>
+                                                </div>
+                                                <Button variant="outline" size="sm" asChild className="h-8 border-border hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:text-blue-600 dark:hover:text-blue-400">
+                                                    <a href={url as string} target="_blank" rel="noopener noreferrer">
+                                                        <ExternalLink className="h-3.5 w-3.5 mr-1" />
+                                                        Open
+                                                    </a>
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
+
+                        {selectedTaskDetails.events && selectedTaskDetails.events.length > 0 && (
+                            <Card className="border border-border bg-background/95 dark:bg-card/95">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-base">Events Timeline</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="max-h-60 overflow-y-auto space-y-3 pr-2">
+                                        {selectedTaskDetails.events.slice().reverse().map((event: TaskEvent, index: number) => (
+                                            <div 
+                                                key={`${event.timestamp}-${index}`} 
+                                                className="border-l-2 border-blue-300 dark:border-blue-800 pl-4 py-2 bg-muted/30 dark:bg-card/30 rounded-r-lg"
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <Badge variant="outline" className="h-5 text-xs font-normal bg-muted/70 dark:bg-card/70">
+                                                        {new Date(event.timestamp).toLocaleTimeString()}
+                                                    </Badge>
+                                                    <p className="text-sm font-medium">{event.message}</p>
+                                                </div>
+                                                {event.details && (
+                                                    <pre className="text-xs bg-muted/50 dark:bg-card/50 p-2 rounded mt-2 overflow-x-auto max-h-32 overflow-y-auto">
+                                                        {typeof event.details === 'object' 
+                                                            ? JSON.stringify(event.details, null, 2)
+                                                            : event.details
+                                                        }
+                                                    </pre>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </CardContent>
+                            </Card>
                         )}
                     </div>
+                </DialogContent>
+            </Dialog>
+        );
+    };
+
+    return (
+        <div className="p-4 md:p-6 max-w-7xl mx-auto">
+            <div className="mb-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                            Tasks Dashboard
+                        </h1>
+                        <p className="text-muted-foreground mt-1">Monitor and manage your AI video generation tasks</p>
+                    </div>
+                    <Button 
+                        onClick={handleRefresh} 
+                        variant="outline" 
+                        className="flex items-center gap-2 border border-border hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200"
+                    >
+                        <RefreshCw className="h-4 w-4" />
+                        Refresh Data
+                    </Button>
+                </div>
+
+                {/* Queue Status */}
+                {queueStatus && (
+                    <Card className="mb-6 border border-border bg-background/95 dark:bg-card/95 hover:shadow-sm transition-all duration-300 overflow-hidden">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="flex items-center gap-2 text-foreground">
+                                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                                    <Clock className="h-4 w-4 text-white" />
+                                </div>
+                                <span className="text-lg">Task Processing Status</span>
+                            </CardTitle>
+                            <CardDescription>Current server processing information</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="relative flex flex-col items-center justify-center p-5 rounded-lg border border-border overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-600/10"></div>
+                                    <div className="relative z-10">
+                                        <div className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
+                                            {queueStatus.queue_length}
+                                        </div>
+                                        <div className="text-sm text-muted-foreground mt-1 flex items-center justify-center gap-1.5">
+                                            <Calendar className="h-3.5 w-3.5" />
+                                            Total in Queue
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="relative flex flex-col items-center justify-center p-5 rounded-lg border border-border overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-600/10"></div>
+                                    <div className="relative z-10">
+                                        <div className="text-3xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent flex items-center gap-2">
+                                            {queueStatus.running_tasks}
+                                            {queueStatus.running_tasks > 0 && (
+                                                <div className="relative h-2 w-2">
+                                                    <div className="absolute h-full w-full rounded-full bg-green-500 animate-ping opacity-75"></div>
+                                                    <div className="relative h-full w-full rounded-full bg-green-500"></div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="text-sm text-muted-foreground mt-1 flex items-center justify-center gap-1.5">
+                                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                            Currently Running
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="relative flex flex-col items-center justify-center p-5 rounded-lg border border-border overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-yellow-600/10"></div>
+                                    <div className="relative z-10">
+                                        <div className="text-3xl font-bold bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">
+                                            {queueStatus.pending_tasks}
+                                        </div>
+                                        <div className="text-sm text-muted-foreground mt-1 flex items-center justify-center gap-1.5">
+                                            <Clock className="h-3.5 w-3.5" />
+                                            Pending Tasks
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
                 )}
-            </Drawer>
+
+                <div className="flex flex-col md:flex-row justify-between items-stretch gap-4 mb-6">
+                    <div className="flex-1">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                placeholder="Search tasks by ID or prompt..."
+                                value={searchText}
+                                onChange={(e) => setSearchText(e.target.value)}
+                                className="pl-9 bg-background/80 dark:bg-card/80 border-border"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2">
+                            <Filter className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm font-medium hidden md:inline">Status:</span>
+                        </div>
+                        <Select value={statusFilter} onValueChange={setStatusFilter}>
+                            <SelectTrigger className="w-full md:w-40 bg-background/80 dark:bg-card/80 border-border">
+                                <SelectValue placeholder="Filter by status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All Status</SelectItem>
+                                <SelectItem value="PENDING">Pending</SelectItem>
+                                <SelectItem value="PROCESSING">Processing</SelectItem>
+                                <SelectItem value="COMPLETED">Completed</SelectItem>
+                                <SelectItem value="FAILED">Failed</SelectItem>
+                                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            </div>
+
+            {/* Tasks Table */}
+            <Card className="border border-border bg-background/95 dark:bg-card/95 hover:shadow-sm transition-all duration-300">
+                <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                        <div className="p-2 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg">
+                            <FileText className="h-4 w-4 text-white" />
+                        </div>
+                        <span className="text-lg">Your Tasks</span>
+                    </CardTitle>
+                    <CardDescription>Manage your video generation tasks</CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="bg-muted/50 dark:bg-card/50 hover:bg-muted/70 dark:hover:bg-card/70">
+                                    <TableHead className="w-12"></TableHead>
+                                    <TableHead className="font-medium">Task ID</TableHead>
+                                    <TableHead className="font-medium">Status</TableHead>
+                                    <TableHead className="font-medium">Progress</TableHead>
+                                    <TableHead className="font-medium">
+                                        <div className="flex items-center gap-1">
+                                            <Calendar className="h-3.5 w-3.5" />
+                                            Created
+                                        </div>
+                                    </TableHead>
+                                    <TableHead className="font-medium">Prompt</TableHead>
+                                    <TableHead className="font-medium text-right">Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {loading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="h-64 text-center">
+                                            <div className="flex flex-col items-center justify-center gap-4">
+                                                <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+                                                <p className="text-muted-foreground">Loading your tasks...</p>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : filteredTasks.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="h-64 text-center">
+                                            <div className="flex flex-col items-center justify-center gap-3">
+                                                <div className="p-3 bg-muted rounded-full">
+                                                    <FileText className="h-8 w-8 text-muted-foreground" />
+                                                </div>
+                                                <p className="text-muted-foreground">No tasks found</p>
+                                                {searchText && (
+                                                    <Button variant="outline" size="sm" onClick={() => setSearchText('')}>
+                                                        Clear search
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    filteredTasks.map((task) => (
+                                        <React.Fragment key={task.task_id}>
+                                            <TableRow className="cursor-pointer hover:bg-muted/50 dark:hover:bg-card/50 transition-colors">
+                                                <TableCell>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => toggleRowExpansion(task.task_id)}
+                                                        className="h-8 w-8 p-0 rounded-full"
+                                                    >
+                                                        {expandedRows.has(task.task_id) ? 
+                                                            <ChevronUp className="h-4 w-4" /> : 
+                                                            <ChevronDown className="h-4 w-4" />
+                                                        }
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell className="font-mono text-sm">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="bg-muted dark:bg-card/90 px-2 py-1 rounded text-xs">
+                                                            {task.task_id.substring(0, 8)}
+                                                        </span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="w-[120px]">
+                                                        {getStatusBadge(task.status)}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-20 bg-muted dark:bg-muted/50 rounded-full h-2.5 overflow-hidden">
+                                                            <div 
+                                                                className={`h-full rounded-full ${
+                                                                    task.status === 'FAILED' ? 'bg-red-500' :
+                                                                    task.status === 'COMPLETED' ? 'bg-green-500' :
+                                                                    task.status === 'PROCESSING' ? 'bg-blue-500 animate-pulse' :
+                                                                    'bg-amber-500'
+                                                                }`}
+                                                                style={{ width: `${task.progress || 0}%` }}
+                                                            ></div>
+                                                        </div>
+                                                        <span className="text-xs font-medium">{task.progress || 0}%</span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <div className="text-xs bg-muted/70 dark:bg-card/70 rounded-full px-2 py-0.5">
+                                                            {new Date(task.created_at).toLocaleDateString()}
+                                                        </div>
+                                                        <div className="text-xs text-muted-foreground">
+                                                            {new Date(task.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="max-w-xs">
+                                                    <div className="truncate text-sm">
+                                                        {task.story_prompt || 'N/A'}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex gap-2 justify-end">
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => showTaskDetails(task)}
+                                                            className="h-8 border-border hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:text-blue-600 dark:hover:text-blue-400"
+                                                        >
+                                                            <Info className="h-3.5 w-3.5 mr-1" />
+                                                            Details
+                                                        </Button>
+                                                        {(task.status === 'PENDING' || task.status === 'PROCESSING') && (
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => {
+                                                                    if (confirm('Are you sure you want to cancel this task?')) {
+                                                                        handleCancelTask(task.task_id);
+                                                                    }
+                                                                }}
+                                                                className="h-8 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-900 dark:hover:bg-red-950/30"
+                                                            >
+                                                                <StopCircle className="h-3.5 w-3.5 mr-1" />
+                                                                Cancel
+                                                            </Button>
+                                                        )}
+                                                        {task.result_url && (
+                                                            <Button
+                                                                variant="default"
+                                                                size="sm"
+                                                                asChild
+                                                                className="h-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                                                            >
+                                                                <a href={task.result_url} target="_blank" rel="noopener noreferrer">
+                                                                    <Play className="h-3.5 w-3.5 mr-1" />
+                                                                    View
+                                                                </a>
+                                                            </Button>
+                                                        )}
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        {expandedRows.has(task.task_id) && (
+                                            <TableRow>
+                                                <TableCell colSpan={7} className="bg-muted/30 dark:bg-card/30 p-4">
+                                                    <div className="space-y-4 rounded-lg border border-border p-4 bg-background/80 dark:bg-card/80 shadow-sm">
+                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                                            <div className="space-y-1">
+                                                                <div className="text-xs text-muted-foreground">Task ID</div>
+                                                                <div className="font-mono bg-muted/50 dark:bg-card/50 p-1.5 rounded text-xs overflow-auto">
+                                                                    {task.task_id}
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <div className="text-xs text-muted-foreground">Last Updated</div>
+                                                                <div className="font-medium">{formatTime(task.updated_at)}</div>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <div className="text-xs text-muted-foreground">Resolution</div>
+                                                                <div className="font-medium">{task.resolution || 'N/A'}</div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                                            <div className="space-y-1">
+                                                                <div className="text-xs text-muted-foreground">Language</div>
+                                                                <div className="font-medium">{task.language || 'N/A'}</div>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <div className="text-xs text-muted-foreground">Segments</div>
+                                                                <div className="font-medium">{task.segments || 'N/A'}</div>
+                                                            </div>
+                                                            {task.queue_position && (
+                                                                <div className="space-y-1">
+                                                                    <div className="text-xs text-muted-foreground">Queue Position</div>
+                                                                    <div className="font-medium">{task.queue_position}</div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        
+                                                        {task.error_message && (
+                                                            <Alert variant="destructive" className="mt-4">
+                                                                <AlertTriangle className="h-4 w-4" />
+                                                                <AlertDescription className="text-sm">
+                                                                    <span className="font-medium">Error:</span> {task.error_message}
+                                                                </AlertDescription>
+                                                            </Alert>
+                                                        )}
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </React.Fragment>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                    </div>
+                </CardContent>
+                <div className="p-4 border-t border-border flex justify-center">
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                <PaginationPrevious 
+                                    onClick={() => setPagination({...pagination, current: Math.max(1, pagination.current - 1)})}
+                                    className={pagination.current === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                                />
+                            </PaginationItem>
+                            
+                            {pagination.current > 2 && (
+                                <PaginationItem>
+                                    <PaginationLink onClick={() => setPagination({...pagination, current: 1})}>
+                                        1
+                                    </PaginationLink>
+                                </PaginationItem>
+                            )}
+                            
+                            {pagination.current > 3 && (
+                                <PaginationItem>
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                            )}
+                            
+                            {pagination.current > 1 && (
+                                <PaginationItem>
+                                    <PaginationLink onClick={() => setPagination({...pagination, current: pagination.current - 1})}>
+                                        {pagination.current - 1}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            )}
+                            
+                            <PaginationItem>
+                                <PaginationLink isActive>
+                                    {pagination.current}
+                                </PaginationLink>
+                            </PaginationItem>
+                            
+                            {(pagination.current * pagination.pageSize) < pagination.total && (
+                                <PaginationItem>
+                                    <PaginationLink onClick={() => setPagination({...pagination, current: pagination.current + 1})}>
+                                        {pagination.current + 1}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            )}
+                            
+                            {(pagination.current + 2) * pagination.pageSize < pagination.total && (
+                                <PaginationItem>
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                            )}
+                            
+                            {(pagination.current + 3) * pagination.pageSize < pagination.total && (
+                                <PaginationItem>
+                                    <PaginationLink onClick={() => setPagination({...pagination, current: Math.ceil(pagination.total / pagination.pageSize)})}>
+                                        {Math.ceil(pagination.total / pagination.pageSize)}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            )}
+                            
+                            <PaginationItem>
+                                <PaginationNext 
+                                    onClick={() => setPagination({
+                                        ...pagination, 
+                                        current: (pagination.current * pagination.pageSize) < pagination.total 
+                                            ? pagination.current + 1 
+                                            : pagination.current
+                                    })}
+                                    className={(pagination.current * pagination.pageSize) >= pagination.total ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                                />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                </div>
+            </Card>
+
+            <TaskDetailsModal />
         </div>
     );
 };

@@ -1,11 +1,18 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
-import { Button, Card, Progress, Typography, Space, Select, Slider } from 'antd';
-import { PlayCircleOutlined, PauseCircleOutlined, StepForwardOutlined, StepBackwardOutlined, SettingOutlined } from '@ant-design/icons';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { 
+  Play, 
+  Pause, 
+  SkipForward, 
+  SkipBack, 
+  Settings,
+  Loader2
+} from 'lucide-react';
 import mermaid from 'mermaid';
-import styles from './index.module.css';
-
-const { Text } = Typography;
-const { Option } = Select;
 
 interface Section {
     heading: string;
@@ -641,12 +648,19 @@ const CanvasLessonRenderer: React.FC<CanvasLessonRendererProps> = ({ taskResult,
 
     if (isLoading) {
         return (
-            <div className={styles.container}>
-                <Card title="Generating Animated Lesson...">
-                    <div className={styles.loadingState}>
-                        <Progress type="circle" percent={25} />
-                        <Text>Creating your animated lesson content...</Text>
-                    </div>
+            <div className="w-full h-full p-5">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Generating Animated Lesson...</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-col items-center gap-5 py-15 text-center">
+                            <div className="relative">
+                                <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+                            </div>
+                            <span className="text-gray-600">Creating your animated lesson content...</span>
+                        </div>
+                    </CardContent>
                 </Card>
             </div>
         );
@@ -654,110 +668,132 @@ const CanvasLessonRenderer: React.FC<CanvasLessonRendererProps> = ({ taskResult,
 
     if (!sections.length) {
         return (
-            <div className={styles.container}>
-                <Card title="Canvas Lesson Renderer">
-                    <div className={styles.emptyState}>
-                        <Text>No lesson content available. Generate a lesson to see the animation preview.</Text>
-                    </div>
+            <div className="w-full h-full p-5">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Canvas Lesson Renderer</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex justify-center items-center py-15 text-center">
+                            <span className="text-gray-500">No lesson content available. Generate a lesson to see the animation preview.</span>
+                        </div>
+                    </CardContent>
                 </Card>
             </div>
         );
     }
 
     return (
-        <div className={styles.container}>
-            <Card 
-                title={`Canvas Lesson Renderer - Section ${currentSection + 1} of ${sections.length}`}
-                extra={
-                    <Space>
-                        <Select value={theme} onChange={setTheme} style={{ width: 100 }}>
-                            <Option value="light">Light</Option>
-                            <Option value="dark">Dark</Option>
-                            <Option value="colorful">Colorful</Option>
-                            <Option value="minimal">Minimal</Option>
+        <div className="w-full h-full p-5">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Canvas Lesson Renderer - Section {currentSection + 1} of {sections.length}</CardTitle>
+                    <div className="flex items-center gap-2">
+                        <Select value={theme} onValueChange={setTheme}>
+                            <SelectTrigger className="w-24">
+                                <SelectValue placeholder="Theme" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="light">Light</SelectItem>
+                                <SelectItem value="dark">Dark</SelectItem>
+                                <SelectItem value="colorful">Colorful</SelectItem>
+                                <SelectItem value="minimal">Minimal</SelectItem>
+                            </SelectContent>
                         </Select>
-                        <SettingOutlined />
-                    </Space>
-                }
-            >                <div className={styles.canvasContainer}>
-                    <canvas 
-                        ref={canvasRef}
-                        className={styles.canvas}
-                    />
-                </div>
-                
-                <div className={styles.controls}>
-                    <Space size="large">
-                        <Space>
-                            <Button 
-                                icon={<StepBackwardOutlined />} 
-                                onClick={handlePrevious}
-                                disabled={currentSection === 0}
-                            />
-                            <Button 
-                                type="primary"
-                                icon={isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
-                                onClick={isPlaying ? handlePause : handlePlay}
-                            >
-                                {isPlaying ? 'Pause' : 'Play'}
-                            </Button>
-                            <Button 
-                                icon={<StepForwardOutlined />} 
-                                onClick={handleNext}
-                                disabled={currentSection === sections.length - 1}
-                            />
-                        </Space>
-                        
-                        <div className={styles.progressContainer}>
-                            <Text>Progress:</Text>
-                            <Progress 
-                                percent={animationProgress} 
-                                size="small" 
-                                style={{ width: 200 }}
-                                strokeColor={theme === 'dark' ? '#40a9ff' : '#1890ff'}
-                            />
-                        </div>
-                    </Space>
-                </div>
-                
-                <div className={styles.settings}>
-                    <Space size="large">
-                        <Space>
-                            <Text>Font Size:</Text>
-                            <Slider 
-                                min={12} 
-                                max={32} 
-                                value={fontSize} 
-                                onChange={setFontSize}
-                                style={{ width: 100 }}
-                            />
-                        </Space>
-                        <Space>
-                            <Text>Speed:</Text>
-                            <Slider 
-                                min={0.5} 
-                                max={3} 
-                                step={0.1}
-                                value={animationSpeed} 
-                                onChange={setAnimationSpeed}
-                                style={{ width: 100 }}
-                            />
-                        </Space>
-                    </Space>
-                </div>
-
-                {sections[currentSection] && (
-                    <div className={styles.sectionInfo}>
-                        <Space direction="vertical" style={{ width: '100%' }}>
-                            <Text strong>{sections[currentSection].heading}</Text>
-                            <Text type="secondary">
-                                Animation: {sections[currentSection].animation_type || 'default'} | 
-                                Type: {sections[currentSection].content_type || 'text'} |
-                                Mode: {sections[currentSection].render_mode || 'mixed'}
-                            </Text>
-                        </Space>
+                        <Settings className="h-4 w-4 text-gray-500" />
                     </div>
-                )}
+                </CardHeader>
+                <CardContent>
+                    <div className="mb-5 flex justify-center items-center w-full max-w-5xl mx-auto">
+                        <canvas 
+                            ref={canvasRef}
+                            className="w-full h-auto aspect-video max-w-full shadow-lg bg-background dark:bg-card rounded-lg border-2 border-border"
+                        />
+                    </div>
+                    
+                    <div className="flex justify-center items-center p-5 border-t border-b border-gray-100">
+                        <div className="flex items-center gap-8">
+                            <div className="flex items-center gap-2">
+                                <Button 
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handlePrevious}
+                                    disabled={currentSection === 0}
+                                >
+                                    <SkipBack className="h-4 w-4" />
+                                </Button>
+                                <Button 
+                                    onClick={isPlaying ? handlePause : handlePlay}
+                                    size="sm"
+                                >
+                                    {isPlaying ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
+                                    {isPlaying ? 'Pause' : 'Play'}
+                                </Button>
+                                <Button 
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleNext}
+                                    disabled={currentSection === sections.length - 1}
+                                >
+                                    <SkipForward className="h-4 w-4" />
+                                </Button>
+                            </div>
+                            
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-600">Progress:</span>
+                                <div className="w-48">
+                                    <Progress 
+                                        value={animationProgress}
+                                        className="h-2"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="flex justify-center items-center p-4 bg-muted dark:bg-card rounded-md mt-4">
+                        <div className="flex items-center gap-8">
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-600">Font Size:</span>
+                                <div className="w-24">
+                                    <Slider 
+                                        min={12} 
+                                        max={32} 
+                                        value={[fontSize]} 
+                                        onValueChange={(values) => setFontSize(values[0])}
+                                        className="w-24"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-600">Speed:</span>
+                                <div className="w-24">
+                                    <Slider 
+                                        min={0.5} 
+                                        max={3} 
+                                        step={0.1}
+                                        value={[animationSpeed]} 
+                                        onValueChange={(values) => setAnimationSpeed(values[0])}
+                                        className="w-24"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {sections[currentSection] && (
+                        <div className="mt-5 p-4 bg-blue-50 rounded-md border-l-4 border-blue-500">
+                            <div className="space-y-2">
+                                <h3 className="font-semibold text-foreground">{sections[currentSection].heading}</h3>
+                                <p className="text-sm text-gray-600">
+                                    Animation: {sections[currentSection].animation_type || 'default'} | 
+                                    Type: {sections[currentSection].content_type || 'text'} |
+                                    Mode: {sections[currentSection].render_mode || 'mixed'}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                </CardContent>
             </Card>
         </div>
     );

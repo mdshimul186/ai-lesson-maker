@@ -1,21 +1,23 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Button, Typography, Statistic, Divider, Tooltip } from 'antd';
 import { useRouter } from 'next/navigation';
 import { 
-    VideoCameraOutlined, 
-    BookOutlined, 
-    HistoryOutlined,
-    PlayCircleOutlined,
-    CreditCardOutlined,
-    ClockCircleOutlined,
-    ReloadOutlined
-} from '@ant-design/icons';
+    Video, 
+    Book, 
+    History,
+    PlayCircle,
+    CreditCard,
+    Clock,
+    RefreshCw
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useAccountStore } from '../../stores';
 import { getAllTasks } from '../../services';
-
-const { Title, Paragraph } = Typography;
 
 export default function DashboardPage() {
     const router = useRouter();
@@ -33,7 +35,7 @@ export default function DashboardPage() {
             id: 'lesson-maker',
             title: 'AI Lesson Maker',
             description: 'Create engaging video lessons with AI. Convert your text into professional educational videos.',
-            icon: <VideoCameraOutlined style={{ fontSize: '36px', color: '#1890ff' }} />,
+            icon: <Video className="w-9 h-9 text-blue-500" />,
             path: '/lesson-maker',
             available: true
         },
@@ -41,7 +43,7 @@ export default function DashboardPage() {
             id: 'animated-lesson-maker',
             title: 'AI Animated Lesson Maker',
             description: 'Create animated lessons with typing effects, drawing, and other animations right in your browser.',
-            icon: <PlayCircleOutlined style={{ fontSize: '36px', color: '#fa8c16' }} />,
+            icon: <PlayCircle className="w-9 h-9 text-orange-500" />,
             path: '/animated-lesson',
             available: true
         },
@@ -49,7 +51,7 @@ export default function DashboardPage() {
             id: 'course-maker',
             title: 'AI Course Maker',
             description: 'Build complete courses with multiple lessons and structured learning paths.',
-            icon: <BookOutlined style={{ fontSize: '36px', color: '#52c41a' }} />,
+            icon: <Book className="w-9 h-9 text-green-500" />,
             path: '/courses',
             available: true
         },
@@ -57,7 +59,7 @@ export default function DashboardPage() {
             id: 'tasks',
             title: 'Recent Tasks',
             description: 'View and manage your recent content generation tasks.',
-            icon: <HistoryOutlined style={{ fontSize: '36px', color: '#722ed1' }} />,
+            icon: <History className="w-9 h-9 text-purple-500" />,
             path: '/tasks',
             available: true
         }
@@ -141,104 +143,113 @@ export default function DashboardPage() {
     };
 
     return (
-        <div style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <div>
-                    <Title level={2} style={{ margin: 0 }}>Dashboard</Title>
-                    <Paragraph>Welcome to AI Lesson Maker. Select a tool to get started.</Paragraph>
+        <div className="min-h-screen bg-background">
+            <div className="container mx-auto px-6 py-8 max-w-7xl">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+                        <p className="text-muted-foreground">Welcome to AI Lesson Maker. Select a tool to get started.</p>
                 </div>
-                <Tooltip title="Refresh statistics">
-                    <Button 
-                        icon={<ReloadOutlined />} 
-                        onClick={refreshStats} 
-                        loading={stats.loading}
-                    >
-                        Refresh
-                    </Button>
-                </Tooltip>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button 
+                                variant="outline"
+                                size="sm"
+                                onClick={refreshStats} 
+                                disabled={stats.loading}
+                                className="gap-2"
+                            >
+                                <RefreshCw className={`h-4 w-4 ${stats.loading ? 'animate-spin' : ''}`} />
+                                Refresh
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Refresh statistics</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </div>
             
             {/* Analytics Cards */}
-            <Row gutter={[24, 24]} style={{ marginTop: '24px', marginBottom: '32px' }}>
-                <Col xs={24} sm={8}>
-                    <Card>
-                        <Statistic 
-                            title="Total Videos" 
-                            value={stats.totalVideos} 
-                            prefix={<PlayCircleOutlined />} 
-                            loading={stats.loading} 
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={8}>
-                    <Card>
-                        <Statistic 
-                            title="Pending Videos" 
-                            value={stats.pendingVideos} 
-                            prefix={<ClockCircleOutlined />} 
-                            loading={stats.loading} 
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={8}>
-                    <Card>
-                        <Statistic 
-                            title="Available Credits" 
-                            value={stats.availableCredits} 
-                            prefix={<CreditCardOutlined />} 
-                            loading={stats.loading} 
-                        />
-                    </Card>
-                </Col>
-            </Row>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 mb-8">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Total Videos</CardTitle>
+                        <PlayCircle className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        {stats.loading ? (
+                            <Skeleton className="h-8 w-20" />
+                        ) : (
+                            <div className="text-2xl font-bold">{stats.totalVideos}</div>
+                        )}
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Pending Videos</CardTitle>
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        {stats.loading ? (
+                            <Skeleton className="h-8 w-20" />
+                        ) : (
+                            <div className="text-2xl font-bold">{stats.pendingVideos}</div>
+                        )}
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Available Credits</CardTitle>
+                        <CreditCard className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        {stats.loading ? (
+                            <Skeleton className="h-8 w-20" />
+                        ) : (
+                            <div className="text-2xl font-bold">{stats.availableCredits}</div>
+                        )}
+                    </CardContent>
+                </Card>
+            </div>
             
-            <Divider orientation="left">Tools</Divider>
+            <div className="flex items-center mb-6">
+                <h2 className="text-xl font-semibold">Tools</h2>
+                <Separator className="ml-4 flex-1" />
+            </div>
             
-            <Row gutter={[24, 24]} style={{ marginTop: '24px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tools.map(tool => (
-                    <Col xs={24} sm={12} md={8} key={tool.id}>
-                        <Card 
-                            hoverable 
-                            style={{ 
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                borderRadius: '8px',
-                                overflow: 'hidden',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                            }}
-                        >
-                            <div style={{ 
-                                display: 'flex', 
-                                flexDirection: 'column', 
-                                alignItems: 'center',
-                                textAlign: 'center',
-                                height: '100%'
-                            }}>
-                                <div style={{ margin: '16px 0' }}>
-                                    {tool.icon}
-                                </div>
-                                <Title level={4}>{tool.title}</Title>
-                                <Paragraph style={{ flexGrow: 1 }}>
-                                    {tool.description}
-                                </Paragraph>
-                                <Button 
-                                    type="primary" 
-                                    size="large"
-                                    style={{ width: '100%' }}
-                                    onClick={() => router.push(tool.path)}
-                                    disabled={!tool.available}
-                                >
-                                    {tool.available ? 'Launch' : 'Coming Soon'}
-                                </Button>
+                    <Card 
+                        key={tool.id}
+                        className="group hover:shadow-lg transition-all duration-200 cursor-pointer border-border hover:border-primary/20"
+                    >
+                        <CardHeader className="text-center">
+                            <div className="flex justify-center mb-4">
+                                {tool.icon}
                             </div>
-                        </Card>
-                    </Col>
+                            <CardTitle className="text-lg">{tool.title}</CardTitle>
+                            <CardDescription className="text-sm">
+                                {tool.description}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Button 
+                                className="w-full" 
+                                onClick={() => router.push(tool.path)}
+                                disabled={!tool.available}
+                                variant={tool.available ? "default" : "secondary"}
+                            >
+                                {tool.available ? 'Launch' : 'Coming Soon'}
+                            </Button>
+                        </CardContent>
+                    </Card>
                 ))}
-            </Row>
-            <Button onClick={refreshStats} style={{ marginTop: '20px' }}>
-                Refresh Stats
-            </Button>
+            </div>
+            </div>
         </div>
     );
 }
