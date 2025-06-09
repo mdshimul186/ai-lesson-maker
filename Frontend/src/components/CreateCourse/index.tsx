@@ -7,7 +7,10 @@ import {
     Settings,
     RotateCcw,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    ChevronDown,
+    Check,
+    Loader2
 } from 'lucide-react';
 import { 
     getVoiceList, 
@@ -27,6 +30,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { toast } from 'sonner';
 
 interface VoiceOption {
@@ -71,9 +76,12 @@ interface CourseFormData {
 const CreateCourse: React.FC = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isLoadingVoices, setIsLoadingVoices] = useState(true);
     const [allVoiceList, setAllVoiceList] = useState<VoiceOption[]>([]);
     const [filteredVoiceList, setFilteredVoiceList] = useState<VoiceOption[]>([]);
     const [courseStructure, setCourseStructure] = useState<CourseStructure | null>(null);
+    const [languageOpen, setLanguageOpen] = useState(false);
+    const [voiceOpen, setVoiceOpen] = useState(false);
     const [formData, setFormData] = useState<CourseFormData>({
         prompt: '',
         language: 'en',
@@ -89,6 +97,7 @@ const CreateCourse: React.FC = () => {
     }, []);
 
     const fetchVoices = async () => {
+        setIsLoadingVoices(true);
         try {
             const response = await getVoiceList({ area: [] });
             if (response?.voices?.length > 0) {
@@ -108,6 +117,8 @@ const CreateCourse: React.FC = () => {
         } catch (error) {
             console.error('Failed to fetch voices:', error);
             toast.error('Failed to load voice options');
+        } finally {
+            setIsLoadingVoices(false);
         }
     };
 
@@ -211,19 +222,10 @@ const CreateCourse: React.FC = () => {
     ];
 
     return (
-        <div className="max-w-6xl mx-auto space-y-8">
-            {/* Header */}
-            <div className="text-center space-y-4">
-                <h1 className="text-4xl font-bold text-foreground">Create New Course</h1>
-                <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                    Create an engaging educational course with AI-generated content. Configure your course parameters, 
-                    review the structure, and generate comprehensive lessons with videos.
-                </p>
-            </div>
-
+        <div className="max-w-6xl mx-auto space-y-6">
             {/* Progress Steps */}
             <div className="w-full">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center justify-between mb-6">
                     {steps.map((step, index) => {
                         const IconComponent = step.icon;
                         const isActive = index === currentStep;
@@ -265,18 +267,23 @@ const CreateCourse: React.FC = () => {
 
             {/* Step Content */}
             {currentStep === 0 && (
-                <Card className="w-full">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Settings className="w-5 h-5 text-primary" />
+                <Card className="w-full backdrop-blur-sm bg-background/95 border-border/50 shadow-xl">
+                    <CardHeader className="pb-6">
+                        <CardTitle className="flex items-center gap-3 text-xl">
+                            <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-sm">
+                                <Settings className="w-5 h-5 text-white" />
+                            </div>
                             Course Configuration
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <form onSubmit={handleFormSubmit} className="space-y-6">
+                        <form onSubmit={handleFormSubmit} className="space-y-8">
                             {/* Course Topic */}
-                            <div className="space-y-2">
-                                <Label htmlFor="prompt" className="text-base font-medium">
+                            <div className="space-y-3">
+                                <Label htmlFor="prompt" className="text-base font-semibold flex items-center gap-2">
+                                    <div className="p-1 bg-gradient-to-br from-green-500 to-emerald-600 rounded">
+                                        <BookOpen className="w-3 h-3 text-white" />
+                                    </div>
                                     Course Topic *
                                 </Label>
                                 <Textarea
@@ -285,143 +292,235 @@ const CreateCourse: React.FC = () => {
                                     onChange={(e) => setFormData(prev => ({ ...prev, prompt: e.target.value }))}
                                     placeholder="Describe what you want to teach in this course. Be specific about the topics, target audience, and learning objectives..."
                                     rows={4}
-                                    className="resize-none"
+                                    className="resize-none bg-background/50 border-border/70 focus:border-primary/50 transition-all duration-200"
                                     required
                                 />
-                                <p className="text-sm text-muted-foreground">
-                                    {formData.prompt.length}/1000 characters (minimum 10 required)
-                                </p>
+                                <div className="flex justify-between items-center">
+                                    <p className="text-sm text-muted-foreground">
+                                        {formData.prompt.length}/1000 characters (minimum 10 required)
+                                    </p>
+                                    {formData.prompt.length >= 10 && (
+                                        <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                                            ✓ Valid
+                                        </Badge>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Language and Voice */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <Label className="text-base font-medium flex items-center gap-2">
-                                        <Languages className="w-4 h-4" />
-                                        Language *
-                                    </Label>
-                                    <Select 
-                                        value={formData.language} 
-                                        onValueChange={handleLanguageChange}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select language" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {getUniqueLanguageList(allVoiceList).map(language => (
-                                                <SelectItem key={language} value={language}>
-                                                    {language}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-semibold flex items-center gap-2">
+                                    <div className="p-1 bg-gradient-to-br from-purple-500 to-pink-600 rounded">
+                                        <Languages className="w-3 h-3 text-white" />
+                                    </div>
+                                    Language & Voice Settings
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Language Combobox */}
+                                    <div className="space-y-3">
+                                        <Label className="text-base font-medium flex items-center gap-2">
+                                            <Languages className="w-4 h-4 text-blue-600" />
+                                            Language *
+                                        </Label>
+                                        {isLoadingVoices ? (
+                                            <div className="h-10 px-3 py-2 border border-border rounded-md bg-background/80 flex items-center gap-2 text-muted-foreground">
+                                                <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+                                                Loading languages...
+                                            </div>
+                                        ) : (
+                                            <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        aria-expanded={languageOpen}
+                                                        className="w-full justify-between bg-background/80 dark:bg-card/80 border-border/70 text-left font-normal h-11 hover:border-primary/50 transition-all duration-200"
+                                                    >
+                                                        {formData.language ? formData.language : "Select language..."}
+                                                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                                                    <Command className="rounded-lg border border-border">
+                                                        <CommandInput placeholder="Search languages..." className="h-9" />
+                                                        <CommandList>
+                                                            <CommandEmpty>No language found.</CommandEmpty>
+                                                            <CommandGroup className="max-h-[200px] overflow-auto">
+                                                                {getUniqueLanguageList(allVoiceList).map((language) => (
+                                                                    <CommandItem
+                                                                        key={language}
+                                                                        value={language}
+                                                                        onSelect={(currentValue) => {
+                                                                            handleLanguageChange(currentValue);
+                                                                            setLanguageOpen(false);
+                                                                        }}
+                                                                    >
+                                                                        <Check
+                                                                            className={`mr-2 h-4 w-4 ${
+                                                                                formData.language === language ? "opacity-100" : "opacity-0"
+                                                                            }`}
+                                                                        />
+                                                                        {language}
+                                                                    </CommandItem>
+                                                                ))}
+                                                            </CommandGroup>
+                                                        </CommandList>
+                                                    </Command>
+                                                </PopoverContent>
+                                            </Popover>
+                                        )}
+                                    </div>
 
-                                <div className="space-y-2">
-                                    <Label className="text-base font-medium flex items-center gap-2">
-                                        <Volume2 className="w-4 h-4" />
-                                        Voice *
-                                    </Label>
-                                    <Select 
-                                        value={formData.voice} 
-                                        onValueChange={(value) => setFormData(prev => ({ ...prev, voice: value }))}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select voice" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {filteredVoiceList.map(voice => (
-                                                <SelectItem key={voice.name} value={voice.name}>
-                                                    <div className="flex items-center gap-2">
-                                                        {voice.displayName}
-                                                        <Badge variant="secondary" className="text-xs">
-                                                            {voice.gender}
-                                                        </Badge>
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    {/* Voice Combobox */}
+                                    <div className="space-y-3">
+                                        <Label className="text-base font-medium flex items-center gap-2">
+                                            <Volume2 className="w-4 h-4 text-indigo-600" />
+                                            Voice *
+                                        </Label>
+                                        {isLoadingVoices ? (
+                                            <div className="h-10 px-3 py-2 border border-border rounded-md bg-background/80 flex items-center gap-2 text-muted-foreground">
+                                                <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
+                                                Loading voices...
+                                            </div>
+                                        ) : (
+                                            <Popover open={voiceOpen} onOpenChange={setVoiceOpen}>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        aria-expanded={voiceOpen}
+                                                        className="w-full justify-between bg-background/80 dark:bg-card/80 border-border/70 text-left font-normal h-11 hover:border-primary/50 transition-all duration-200"
+                                                        disabled={!formData.language}
+                                                    >
+                                                        {formData.voice ? filteredVoiceList.find((voice) => voice.name === formData.voice)?.displayName : "Select voice..."}
+                                                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                                                    <Command className="rounded-lg border border-border">
+                                                        <CommandInput placeholder="Search voices..." className="h-9" />
+                                                        <CommandList>
+                                                            <CommandEmpty>
+                                                                {filteredVoiceList.length === 0 ? "Select a language first." : "No voice found."}
+                                                            </CommandEmpty>
+                                                            <CommandGroup className="max-h-[200px] overflow-auto">
+                                                                {filteredVoiceList.map((voice) => (
+                                                                    <CommandItem
+                                                                        key={voice.name}
+                                                                        value={`${voice.displayName} ${voice.gender}`}
+                                                                        onSelect={() => {
+                                                                            setFormData(prev => ({ ...prev, voice: voice.name }));
+                                                                            setVoiceOpen(false);
+                                                                        }}
+                                                                    >
+                                                                        <Check
+                                                                            className={`mr-2 h-4 w-4 ${
+                                                                                formData.voice === voice.name ? "opacity-100" : "opacity-0"
+                                                                            }`}
+                                                                        />
+                                                                        <div className="flex items-center gap-2">
+                                                                            <Badge variant="secondary" className="text-xs bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 dark:from-blue-900 dark:to-indigo-900 dark:text-blue-300">
+                                                                                {voice.gender}
+                                                                            </Badge>
+                                                                            <span className="truncate">{voice.displayName}</span>
+                                                                        </div>
+                                                                    </CommandItem>
+                                                                ))}
+                                                            </CommandGroup>
+                                                        </CommandList>
+                                                    </Command>
+                                                </PopoverContent>
+                                            </Popover>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
                             {/* Course Structure Settings */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div className="space-y-2">
-                                    <Label className="text-base font-medium">
-                                        Number of Chapters *
-                                    </Label>
-                                    <Select 
-                                        value={formData.chapters.toString()} 
-                                        onValueChange={(value) => setFormData(prev => ({ ...prev, chapters: parseInt(value) }))}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {[3, 4, 5, 6, 7, 8].map(num => (
-                                                <SelectItem key={num} value={num.toString()}>
-                                                    {num} chapters
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-semibold flex items-center gap-2">
+                                    <div className="p-1 bg-gradient-to-br from-orange-500 to-red-600 rounded">
+                                        <Settings className="w-3 h-3 text-white" />
+                                    </div>
+                                    Course Structure
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="space-y-3">
+                                        <Label className="text-base font-medium">
+                                            Number of Chapters *
+                                        </Label>
+                                        <Select 
+                                            value={formData.chapters.toString()} 
+                                            onValueChange={(value) => setFormData(prev => ({ ...prev, chapters: parseInt(value) }))}
+                                        >
+                                            <SelectTrigger className="bg-background/80 border-border/70 hover:border-primary/50 transition-all duration-200">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {[3, 4, 5, 6, 7, 8].map(num => (
+                                                    <SelectItem key={num} value={num.toString()}>
+                                                        {num} chapters
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
 
-                                <div className="space-y-2">
-                                    <Label className="text-base font-medium">
-                                        Lessons per Chapter
-                                    </Label>
-                                    <Select 
-                                        value={formData.lessonsPerChapter?.toString() || '3'} 
-                                        onValueChange={(value) => setFormData(prev => ({ ...prev, lessonsPerChapter: parseInt(value) }))}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {[2, 3, 4, 5].map(num => (
-                                                <SelectItem key={num} value={num.toString()}>
-                                                    {num} lessons
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                    <div className="space-y-3">
+                                        <Label className="text-base font-medium">
+                                            Lessons per Chapter
+                                        </Label>
+                                        <Select 
+                                            value={formData.lessonsPerChapter?.toString() || '3'} 
+                                            onValueChange={(value) => setFormData(prev => ({ ...prev, lessonsPerChapter: parseInt(value) }))}
+                                        >
+                                            <SelectTrigger className="bg-background/80 border-border/70 hover:border-primary/50 transition-all duration-200">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {[2, 3, 4, 5].map(num => (
+                                                    <SelectItem key={num} value={num.toString()}>
+                                                        {num} lessons
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
 
-                                <div className="space-y-2">
-                                    <Label className="text-base font-medium">
-                                        Difficulty Level
-                                    </Label>
-                                    <Select 
-                                        value={formData.difficultyLevel || 'intermediate'} 
-                                        onValueChange={(value) => setFormData(prev => ({ ...prev, difficultyLevel: value }))}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="beginner">Beginner</SelectItem>
-                                            <SelectItem value="intermediate">Intermediate</SelectItem>
-                                            <SelectItem value="advanced">Advanced</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <div className="space-y-3">
+                                        <Label className="text-base font-medium">
+                                            Difficulty Level
+                                        </Label>
+                                        <Select 
+                                            value={formData.difficultyLevel || 'intermediate'} 
+                                            onValueChange={(value) => setFormData(prev => ({ ...prev, difficultyLevel: value }))}
+                                        >
+                                            <SelectTrigger className="bg-background/80 border-border/70 hover:border-primary/50 transition-all duration-200">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="beginner">Beginner</SelectItem>
+                                                <SelectItem value="intermediate">Intermediate</SelectItem>
+                                                <SelectItem value="advanced">Advanced</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                 </div>
                             </div>
 
-                            <Separator />
+                            <Separator className="bg-gradient-to-r from-transparent via-border to-transparent" />
 
                             {/* Action Buttons */}
-                            <div className="flex gap-4">
+                            <div className="flex gap-4 pt-4">
                                 <Button 
                                     type="submit" 
                                     size="lg"
-                                    disabled={isGenerating}
-                                    className="flex items-center gap-2"
+                                    disabled={isGenerating || !formData.prompt || formData.prompt.length < 10 || !formData.language || !formData.voice}
+                                    className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[200px]"
                                 >
                                     {isGenerating ? (
                                         <>
-                                            <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                                            <Loader2 className="w-4 h-4 animate-spin" />
                                             Generating...
                                         </>
                                     ) : (
@@ -437,7 +536,7 @@ const CreateCourse: React.FC = () => {
                                     variant="outline"
                                     onClick={handleReset}
                                     disabled={isGenerating}
-                                    className="flex items-center gap-2"
+                                    className="flex items-center gap-2 backdrop-blur-sm bg-background/80 border-border/50 hover:bg-background/90 transition-all duration-200"
                                 >
                                     <RotateCcw className="w-4 h-4" />
                                     Reset Form
