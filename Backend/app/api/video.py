@@ -21,7 +21,13 @@ async def generate_video_endpoint(
     current_user: User = Depends(get_current_active_user),
     account_id: str = Depends(get_valid_account_id)
 ):
-    """Add video generation task to queue for processing"""    # Deduct credits before starting generation
+    """Add video generation task to queue for processing"""
+    print(f"🎬🎬🎬 VIDEO API CALLED!")
+    print(f"🎬 Full request: {request.model_dump()}")
+    print(f"🎬 Theme: {getattr(request, 'theme', 'MISSING')}")
+    print(f"🎬 Custom Colors: {getattr(request, 'custom_colors', 'MISSING')}")
+    logger.info(f"🎬 VIDEO API CALLED! Theme: {getattr(request, 'theme', 'None')}, Custom Colors: {getattr(request, 'custom_colors', 'None')}")
+    # Deduct credits before starting generation
     try:
         video_info = request.story_prompt[:50] + "..." if request.story_prompt else "Untitled Video"
         await deduct_credits_for_video(

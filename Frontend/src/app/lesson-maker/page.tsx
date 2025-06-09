@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import StoryForm from '../../components/LessonForm';
+import LessonForm from '../../components/LessonForm';
 import VideoResult from '../../components/VideoResult';
 import { Button } from '../../components/ui/button';
 import { List, ArrowLeft, Sparkles, Video, Wand2, PlayCircle, Stars, Zap } from 'lucide-react';
@@ -12,7 +12,7 @@ export default function LessonFormPage() {
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-background to-blue-50 dark:from-background dark:via-background dark:to-background relative overflow-hidden">
      
 
-            {/* Enhanced fixed sidebar for StoryForm */}
+            {/* Enhanced fixed sidebar for LessonForm */}
             <div className="fixed left-0 top-16 w-[580px] bg-background/95 dark:bg-card/95 backdrop-blur-3xl border-r border-border shadow-2xl z-10 h-[calc(100vh-64px)] overflow-hidden">
          
                 
@@ -21,7 +21,7 @@ export default function LessonFormPage() {
                 <div className="absolute bottom-20 left-8 w-16 h-16 bg-gradient-to-br from-purple-400/10 to-pink-500/10 rounded-full blur-xl animate-pulse delay-1000"></div>
                 
                 <div className="relative z-10 h-full">
-                    <StoryForm />
+                    <LessonForm />
                 </div>
             </div>
             

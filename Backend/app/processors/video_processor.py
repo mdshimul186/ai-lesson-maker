@@ -17,10 +17,29 @@ class VideoProcessor(BaseTaskProcessor):
     
     def validate_request_data(self, request_data: Dict[str, Any]) -> VideoGenerateRequest:
         """Validate and parse video generation request data"""
-        return VideoGenerateRequest(**request_data)
+        self.logger.info(f"Validating request data with theme: {request_data.get('theme', 'MISSING')}")
+        self.logger.info(f"Validating request data with custom_colors: {request_data.get('custom_colors', 'MISSING')}")
+        
+        try:
+            request = VideoGenerateRequest(**request_data)
+            
+            # Verify theme and custom_colors were preserved
+            self.logger.info(f"Validated request theme: {getattr(request, 'theme', 'MISSING')}")
+            self.logger.info(f"Validated request custom_colors: {getattr(request, 'custom_colors', 'MISSING')}")
+            
+            return request
+        except Exception as e:
+            self.logger.error(f"Failed to validate request data: {e}")
+            self.logger.error(f"Request data keys: {list(request_data.keys())}")
+            raise
     
     async def execute_task(self, task_id: str, request: VideoGenerateRequest, queue_item: Dict[str, Any]) -> Dict[str, Any]:
         """Execute video generation"""
+        print(f"🎬🎬🎬 VIDEO PROCESSOR: Starting video generation for task {task_id}")
+        print(f"🎬 VIDEO PROCESSOR Theme: {getattr(request, 'theme', 'MISSING')}")
+        print(f"🎬 VIDEO PROCESSOR Custom Colors: {getattr(request, 'custom_colors', 'MISSING')}")
+        self.logger.info(f"🎬 VIDEO PROCESSOR: Starting video generation for task {task_id} with theme: {getattr(request, 'theme', 'None')}, custom_colors: {getattr(request, 'custom_colors', 'None')}")
+        
         # Generate the video
         video_file_path = await generate_video(request, task_id)
         local_task_dir = os.path.join(".", "tasks", task_id)

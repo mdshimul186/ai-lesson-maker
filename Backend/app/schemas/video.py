@@ -292,6 +292,14 @@ class BgmUploadResponse(BaseResponse):
 
 from app.models.const import StoryType, ImageStyle
 
+class CustomColors(BaseModel):
+    """Custom theme colors"""
+    primary: str = Field(description="Primary color (hex code)")
+    secondary: str = Field(description="Secondary color (hex code)")  
+    accent: Optional[str] = Field(default=None, description="Accent color (hex code)")
+    background: str = Field(description="Background color (hex code)")
+    text: Optional[str] = Field(default=None, description="Text color (hex code)")
+
 class StoryScene(BaseModel):
     """Story Scene"""
     text: str = Field(description="Scene text")
@@ -314,6 +322,10 @@ class VideoGenerateRequest(VideoParams):
     logo_url: Optional[str] = Field(default=None, description="Logo URL")
     intro_video_url: Optional[str] = Field(default=None, description="Intro video URL")
     outro_video_url: Optional[str] = Field(default=None, description="Outro video URL")
+    theme: Optional[str] = Field(default="modern", description="Visual theme")
+    custom_colors: Optional[CustomColors] = Field(default=None, description="Custom theme colors (only used when theme is 'custom')")
+    video_language: Optional[str] = Field(default=None, description="Video language")
+    subtitle_enabled: Optional[bool] = Field(default=False, description="Enable subtitles")
 
 class VideoGenerateData(BaseModel):
     task_id: str

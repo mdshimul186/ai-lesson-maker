@@ -9,7 +9,7 @@ import logging
 from typing import List, Dict, Optional, Tuple
 from app.schemas.llm import StoryGenerationRequest
 from app.models.const import StoryType, ImageStyle
-from app.schemas.video import VideoGenerateRequest, StoryScene
+from app.schemas.video import VideoGenerateRequest, StoryScene, CustomColors
 from app.services.llm import llm_service
 from app.services.voice import generate_voice
 from app.services import task_service
@@ -189,7 +189,9 @@ async def create_video_with_scenes(
     resolution: str = "1920x1080",
     logo_url: Optional[str] = None,
     intro_video_url: Optional[str] = None,
-    outro_video_url: Optional[str] = None
+    outro_video_url: Optional[str] = None,
+    theme: str = "modern",
+    custom_colors: Optional[Dict[str, str]] = None
 ) -> str:
     scenes_concatenated_file = os.path.join(task_dir, "scenes_concatenated.mp4")
     main_video_with_logo_file = os.path.join(task_dir, "main_with_logo.mp4")
@@ -297,9 +299,14 @@ async def create_video_with_scenes(
             if target_width > 1280: font_size = 50
             elif target_width > 640: font_size = 30
 
+            # Apply theme-based styling
+            logger.info(f"Applying theme: {theme} with custom_colors: {custom_colors}")
+            background_color = _get_theme_background_color(theme, custom_colors)
+            logger.info(f"Generated background color: {background_color}")
+            
             filter_chain = (
                 f"[0:v]scale={resize_width}:{resize_height},"
-                f"pad={target_width}:{target_height}:(ow-iw)/2:(oh-ih)/2:color=white"
+                f"pad={target_width}:{target_height}:(ow-iw)/2:(oh-ih)/2:color={background_color}"
             )
             if os.path.exists(subtitle_file) and include_subtitles:
                 logger.warning(
@@ -307,8 +314,12 @@ async def create_video_with_scenes(
                     f"Subtitles in '{os.path.basename(subtitle_file)}' may be out of sync by {silence_duration_s}s. "
                     "Manual adjustment of SRT timings might be needed if precise synchronization is critical."
                 )
-                sub_filename = os.path.basename(subtitle_file).replace("'", "\\\\'") 
-                filter_chain += f",subtitles='{sub_filename}':force_style='Fontname=MicrosoftYaHeiBold,FontSize={font_size}'"
+                sub_filename = os.path.basename(subtitle_file).replace("'", "\\\\'")
+                
+                # Apply theme-based subtitle styling
+                subtitle_style = _get_theme_subtitle_style(theme, custom_colors, font_size)
+                logger.info(f"Generated subtitle style: {subtitle_style}")
+                filter_chain += f",subtitles='{sub_filename}':force_style='{subtitle_style}'"
             filter_chain += "[v]"
             
             command = [
@@ -550,6 +561,11 @@ async def create_video_with_scenes(
     return final_output_file
 
 async def generate_video(request: VideoGenerateRequest, task_id: str):
+    print(f"🎬🎬🎬 GENERATE_VIDEO: Starting video generation for task {task_id}")
+    print(f"🎬 GENERATE_VIDEO Theme: {getattr(request, 'theme', 'MISSING')}")
+    print(f"🎬 GENERATE_VIDEO Custom Colors: {getattr(request, 'custom_colors', 'MISSING')}")
+    logger.info(f"🎬 GENERATE_VIDEO: Starting video generation for task {task_id} with theme: {getattr(request, 'theme', 'None')}, custom_colors: {getattr(request, 'custom_colors', 'None')}")
+    
     task_dir = utils.task_dir(task_id) 
     os.makedirs(task_dir, exist_ok=True)
     await task_service.add_task_event(task_id=task_id, message=f"Task directory created: {task_dir}", progress=6)
@@ -557,6 +573,28 @@ async def generate_video(request: VideoGenerateRequest, task_id: str):
     try:
         scenes: List[StoryScene]
         base_progress_cvws = 10
+
+        # Extract custom colors safely with better error handling
+        custom_colors_dict = None
+        if hasattr(request, 'custom_colors') and request.custom_colors:
+            try:
+                if isinstance(request.custom_colors, dict):
+                    custom_colors_dict = request.custom_colors
+                elif hasattr(request.custom_colors, 'model_dump'): # Check for Pydantic model
+                    custom_colors_dict = request.custom_colors.model_dump()
+                elif hasattr(request.custom_colors, 'dict'): # Older Pydantic
+                    custom_colors_dict = request.custom_colors.dict()
+                else:
+                    logger.warning(f"Unknown custom_colors type: {type(request.custom_colors)}")
+                
+                # Filter out None values and validate the colors
+                if custom_colors_dict:
+                    custom_colors_dict = {k: v for k, v in custom_colors_dict.items() if v is not None}
+                    logger.info(f"Processed custom_colors: {custom_colors_dict}")
+            except Exception as e:
+                logger.error(f"Error processing custom_colors: {e}")
+                custom_colors_dict = None
+
 
         if request.test_mode:
             await task_service.add_task_event(task_id=task_id, message="Running in test mode. Loading story from story.json.", progress=7)
@@ -567,9 +605,24 @@ async def generate_video(request: VideoGenerateRequest, task_id: str):
                 raise FileNotFoundError(error_msg)
             with open(sf, "r", encoding="utf-8") as f:
                 data = json.load(f)
+            
+            # Preserve theme and custom_colors from original request
+            original_theme = getattr(request, 'theme', 'modern')
+            original_custom_colors = custom_colors_dict
+            
             request = VideoGenerateRequest(**data)
             request.test_mode = True
             request.include_subtitles = False
+            
+            # Restore theme and custom_colors if they were in the original request
+            if original_theme != 'modern' or original_custom_colors:
+                request.theme = original_theme
+                if original_custom_colors:
+                    # Convert back to CustomColors object if needed
+                    from app.schemas.video import CustomColors
+                    request.custom_colors = CustomColors(**original_custom_colors)
+                    custom_colors_dict = original_custom_colors  # Keep dict for later use
+            
             scenes = [StoryScene(**s) for s in data.get("scenes", [])]
             await task_service.add_task_event(task_id=task_id, message="Test mode: Story loaded.", progress=base_progress_cvws)
         else:
@@ -580,7 +633,11 @@ async def generate_video(request: VideoGenerateRequest, task_id: str):
                 segments=request.segments,
                 include_subtitles=request.include_subtitles,
                 visual_content_in_language=request.visual_content_in_language,
+                theme=getattr(request, 'theme', 'modern'),
+                custom_colors=custom_colors_dict # Use the processed dict
             )
+            
+            logger.info(f"LLM Story Generation Request - theme: {req.theme}, custom_colors: {req.custom_colors}")
 
             await task_service.add_task_event(task_id=task_id, message="Generating story and image prompts via LLM.", progress=7)
             logger.info(f"Generating story with request: {req}")
@@ -590,6 +647,16 @@ async def generate_video(request: VideoGenerateRequest, task_id: str):
             scenes = [StoryScene(text=s["text"], image_prompt=s["image_prompt"], url=s["url"]) for s in story_list]
             data = request.model_dump()
             data["scenes"] = [sc.model_dump() for sc in scenes]
+            
+            # Ensure theme and custom_colors are properly preserved in the story.json
+            theme_value = getattr(request, 'theme', 'modern')
+            data["theme"] = theme_value
+            if custom_colors_dict:
+                data["custom_colors"] = custom_colors_dict
+            else:
+                data["custom_colors"] = None
+            
+            logger.info(f"Saving story.json with theme: {data['theme']}, custom_colors: {data.get('custom_colors')}")
             
             for i, sc_data in enumerate(story_list, 1):
                 if sc_data.get("url"):
@@ -609,6 +676,23 @@ async def generate_video(request: VideoGenerateRequest, task_id: str):
         if not getattr(request, 'task_id', None):
             request.task_id = task_id
 
+        # Extract custom colors properly - This was already done above, ensure it's used consistently
+        # custom_colors_dict = None # This line is redundant due to earlier processing
+        # if hasattr(request, 'custom_colors') and request.custom_colors:
+        #     if hasattr(request.custom_colors, 'dict'):
+        #         custom_colors_dict = request.custom_colors.dict()
+        #     elif isinstance(request.custom_colors, dict):
+        #         custom_colors_dict = request.custom_colors
+        
+        # Debug logging for theme - ensure we have valid values
+        theme_value = getattr(request, 'theme', 'modern')
+        if not theme_value or theme_value == 'None':
+            theme_value = 'modern'
+            logger.warning(f"Theme was invalid, defaulting to 'modern'")
+        
+        logger.info(f"Video generation theme: {theme_value}, custom_colors: {custom_colors_dict}")
+        logger.info(f"Request has theme attr: {hasattr(request, 'theme')}, theme value: {theme_value}")
+        
         return await create_video_with_scenes(
             task_id=task_id, 
             task_dir=task_dir, 
@@ -620,7 +704,9 @@ async def generate_video(request: VideoGenerateRequest, task_id: str):
             resolution=request.resolution,
             logo_url=request.logo_url,
             intro_video_url=request.intro_video_url,
-            outro_video_url=request.outro_video_url
+            outro_video_url=request.outro_video_url,
+            theme=theme_value,
+            custom_colors=custom_colors_dict # Use the processed dict
         )
     except Exception as e:
         logger.error(f"Failed to generate video for task {task_id}: {e}")
@@ -629,3 +715,154 @@ async def generate_video(request: VideoGenerateRequest, task_id: str):
             error_details_dict["stderr"] = e.stderr.decode() if isinstance(e.stderr, bytes) else e.stderr
         await task_service.set_task_failed(task_id, f"Video generation failed: {str(e)}", error_details=error_details_dict)
         raise e
+
+def _get_theme_colors(theme: str, custom_colors: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+    """Get theme color configuration"""
+    logger.info(f"_get_theme_colors called with theme: {theme}, custom_colors: {custom_colors}")
+    
+    # Predefined theme configurations
+    themes = {
+        "modern": {
+            "primary": "#3B82F6",
+            "secondary": "#E5E7EB", 
+            "accent": "#F59E0B",
+            "background": "#FFFFFF"
+        },
+        "professional": {
+            "primary": "#1E40AF",
+            "secondary": "#F8FAFC",
+            "accent": "#059669", 
+            "background": "#FFFFFF"
+        },
+        "creative": {
+            "primary": "#7C3AED",
+            "secondary": "#FEF3C7",
+            "accent": "#F59E0B",
+            "background": "#FEFEFE"
+        },
+        "education": {
+            "primary": "#059669",
+            "secondary": "#DBEAFE",
+            "accent": "#DC2626",
+            "background": "#FFFFFF"
+        },
+        "tech": {
+            "primary": "#6366F1",
+            "secondary": "#111827",
+            "accent": "#10B981",
+            "background": "#000000"
+        },
+        "warm": {
+            "primary": "#DC2626",
+            "secondary": "#FEF2F2", 
+            "accent": "#F59E0B",
+            "background": "#FFFBEB"
+        },
+        "geometric": {
+            "primary": "#2563EB",
+            "secondary": "#F1F5F9",
+            "accent": "#EF4444",
+            "background": "#FFFFFF"
+        },
+        "nature": {
+            "primary": "#16A34A",
+            "secondary": "#F0FDF4",
+            "accent": "#CA8A04",
+            "background": "#FEFFFE"
+        },
+        "cyberpunk": {
+            "primary": "#FF0080",
+            "secondary": "#0A0A0A",
+            "accent": "#00FFFF",
+            "background": "#000000"
+        },
+        "monochrome": {
+            "primary": "#000000",
+            "secondary": "#F8F9FA",
+            "accent": "#6B7280",
+            "background": "#FFFFFF"
+        },
+        "sunset": {
+            "primary": "#F97316",
+            "secondary": "#FFF7ED",
+            "accent": "#DC2626",
+            "background": "#FFFBEB"
+        },
+        "ocean": {
+            "primary": "#0EA5E9",
+            "secondary": "#F0F9FF",
+            "accent": "#06B6D4",
+            "background": "#FFFFFF"
+        }
+    }
+    
+    # Handle custom theme
+    if theme == "custom" and custom_colors:
+        result = {
+            "primary": custom_colors.get("primary", "#3B82F6"),
+            "secondary": custom_colors.get("secondary", "#E5E7EB"),
+            "accent": custom_colors.get("accent", "#F59E0B"),
+            "background": custom_colors.get("background", "#FFFFFF")
+        }
+        logger.info(f"Using custom theme colors: {result}")
+        return result
+    
+    # Use predefined theme
+    if theme in themes:
+        result = themes[theme]
+        logger.info(f"Using predefined theme '{theme}': {result}")
+        return result
+    
+    # Fallback to modern theme
+    logger.warning(f"Unknown theme '{theme}', falling back to 'modern'")
+    result = themes["modern"]
+    logger.info(f"Fallback theme colors: {result}")
+    return result
+
+def _hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
+    """Convert hex color to RGB tuple"""
+    hex_color = hex_color.lstrip('#')
+    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+def _get_theme_background_color(theme: str, custom_colors: Optional[Dict[str, str]] = None) -> str:
+    """Get background color for theme"""
+    colors = _get_theme_colors(theme, custom_colors)
+    background = colors.get("background", "#FFFFFF")
+    
+    logger.info(f"Theme background color for '{theme}': {background}")
+    
+    # Return hex color format for FFmpeg (it accepts #RRGGBB format)
+    return background
+
+def _get_theme_subtitle_style(theme: str, custom_colors: Optional[Dict[str, str]] = None, font_size: int = 30) -> str:
+    """Get subtitle style configuration for FFmpeg"""
+    colors = _get_theme_colors(theme, custom_colors)
+    
+    # Use primary color for text, with appropriate outline/shadow
+    primary_color = colors.get("primary", "#FFFFFF")
+    background_color = colors.get("background", "#000000")
+    
+    # Convert hex colors to RGB for FFmpeg
+    primary_rgb = _hex_to_rgb(primary_color)
+    
+    # Determine if we need light or dark outline based on background
+    bg_rgb = _hex_to_rgb(background_color)
+    bg_brightness = sum(bg_rgb) / 3
+    
+    # Use dark outline on light backgrounds, light outline on dark backgrounds
+    outline_color = "0x000000" if bg_brightness > 127 else "0xFFFFFF"
+    
+    # Build style string for FFmpeg subtitles filter
+    style_parts = [
+        f"Fontname=MicrosoftYaHeiBold",
+        f"FontSize={font_size}",
+        f"PrimaryColour=0x{primary_color[1:]}",  # Remove # and add 0x prefix
+        f"OutlineColour={outline_color}",
+        f"BorderStyle=3",  # Outline + shadow
+        f"Outline=2",      # Outline width
+        f"Shadow=1",       # Shadow depth
+        f"Alignment=2",    # Bottom center
+        f"MarginV=50"      # Vertical margin from bottom
+    ]
+    
+    return ",".join(style_parts)

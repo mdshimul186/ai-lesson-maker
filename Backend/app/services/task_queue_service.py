@@ -178,15 +178,20 @@ class TaskQueueService:
     
     async def start_processing(self) -> None:
         """Start the queue processing loop"""
+        print("📋📋📋 START_PROCESSING CALLED!")
         if self._processing:
+            print("📋 Queue processing already running")
             logger.info("Queue processing already running")
             return
         
+        print("📋 Starting task queue processing...")
         logger.info("Starting task queue processing")
         self._processing = True
         
         # Start the processing loop as a background task
+        print("📋 Creating background task...")
         self._queue_task = asyncio.create_task(self._process_queue_loop())
+        print("📋 Background task created!")
     
     async def stop_processing(self) -> None:
         """Stop the queue processing loop"""
@@ -203,16 +208,21 @@ class TaskQueueService:
     
     async def _process_queue_loop(self) -> None:
         """Main queue processing loop"""
+        print("📋📋📋 QUEUE LOOP STARTED!")
+        logger.info("📋 Queue processing loop started")
         try:
             while self._processing:
                 try:
+                    print("📋 Checking for next task...")
                     # Get next task from queue (priority-based)
                     next_task = await self._get_next_task()
                     
                     if next_task:
+                        print(f"📋 Found task to process: {next_task.get('task_id', 'UNKNOWN')}")
                         await self._process_task(next_task)
                     else:
                         # No tasks in queue, wait before checking again
+                        print("📋 No tasks in queue, waiting 5 seconds...")
                         await asyncio.sleep(5)
                         
                 except Exception as e:

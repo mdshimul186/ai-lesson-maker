@@ -19,10 +19,25 @@ interface VideoGenerateReq {
     story_prompt?: string; // 故事提示词，测试模式不需要，非测试模式必填
     image_style?: string; // 图片风格，测试模式不需要，非测试模式必填
     voice_name: string; // 语音名称，需要和语言匹配
-    voice_rate: number; // 语音速率，默认写1
+    voice_rate?: number; // 语音速率，默认写1
+    // Additional fields used in the current implementation
+    resolution?: string; // Video resolution
+    theme?: string; // Visual theme
+    custom_colors?: {
+        primary: string;
+        secondary: string;
+        accent: string;
+        background: string;
+    }; // Custom theme colors
+    logo_url?: string; // Logo URL
+    intro_video_url?: string; // Intro video URL
+    outro_video_url?: string; // Outro video URL
+    video_language?: string; // Video language
+    subtitle_enabled?: boolean; // Include subtitles
+    visual_content_in_language?: boolean; // Visual content in language
     // Add account_id and user_id for credit deduction
-    account_id: string;
-    user_id: string; 
+    account_id?: string;
+    user_id?: string; 
 }
 
 // 假设 Language 和 ImageStyle 是其他接口或枚举

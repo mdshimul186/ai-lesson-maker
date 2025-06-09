@@ -39,7 +39,7 @@ class LLMService:
         # self.text_llm_model = settings.text_llm_model
         # self.image_llm_model = settings.image_llm_model
 
-    async def markdown_to_image(self, markdown_content: str, output_path: str, width: int = 1200, height: int = 800) -> None:
+    async def markdown_to_image(self, markdown_content: str, output_path: str, width: int = 1200, height: int = 800, theme: str = "tech", custom_colors: dict = None) -> None:
         """
         Convert any markdown content to a PNG image using a headless browser.
         
@@ -48,8 +48,15 @@ class LLMService:
             output_path: Path to save the PNG image.
             width: Width of the image in pixels.
             height: Height of the image in pixels.
+            theme: Theme name for styling.
+            custom_colors: Custom color configuration if theme is "custom".
         """
-        # HTML template with markdown rendering capabilities
+        # Get theme colors
+        theme_colors = self._get_theme_colors(theme, custom_colors)
+
+        logger.info(f"🎨 THEME DEBUG: Generating image with theme '{theme}' and colors: {theme_colors}")
+        
+        # HTML template with markdown rendering capabilities and theme support
         html_template = """
         <!DOCTYPE html>
         <html>
@@ -62,61 +69,93 @@ class LLMService:
             <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
             <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.css" rel="stylesheet" />
             <style>
+                :root {
+                    --primary-color: {primary_color};
+                    --secondary-color: {secondary_color};
+                    --accent-color: {accent_color};
+                    --background-color: {background_color};
+                    --text-color: {text_color};
+                    --border-color: {border_color};
+                }
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
                     line-height: 1.6;
                     padding: 40px;
-                    background-color: white;
-                    color: #333;
+                    background-color: var(--background-color);
+                    color: var(--text-color);
                     max-width: 100%;
                     font-size: 1.4em;
                 }
                 h1, h2, h3, h4, h5, h6 {
                     margin-top: 0.5em;
                     margin-bottom: 0.5em;
+                    color: var(--primary-color);
                 }
-                h1 { font-size: 32px; }
-                h2 { font-size: 28px; }
+                h1 { 
+                    font-size: 32px; 
+                    border-bottom: 3px solid var(--accent-color);
+                    padding-bottom: 10px;
+                }
+                h2 { 
+                    font-size: 28px;
+                    border-bottom: 2px solid var(--secondary-color);
+                    padding-bottom: 8px;
+                }
                 h3 { font-size: 24px; }
                 h4 { font-size: 20px; }
                 table {
                     border-collapse: collapse;
                     margin: 15px 0;
                     width: 100%;
+                    border: 2px solid var(--border-color);
                 }
                 th, td {
-                    border: 1px solid #ddd;
-                    padding: 8px 12px;
+                    border: 1px solid var(--border-color);
+                    padding: 12px 16px;
                     text-align: left;
                 }
                 th {
-                    background-color: #f5f5f5;
+                    background-color: var(--primary-color);
+                    color: var(--background-color);
                     font-weight: bold;
                 }
                 tr:nth-child(even) {
-                    background-color: #f9f9f9;
+                    background-color: var(--secondary-color);
+                }
+                tr:hover {
+                    background-color: {hover_color};
                 }
                 code {
-                    background-color: #f5f5f5;
+                    background-color: var(--secondary-color);
                     padding: 2px 5px;
                     border-radius: 3px;
                     font-family: monospace;
+                    color: var(--primary-color);
                 }
                 pre {
-                    background-color: #2d2d2d;
+                    background-color: var(--primary-color);
+                    color: var(--background-color);
                     border-radius: 5px;
                     padding: 15px;
                     overflow-x: auto;
+                    border-left: 4px solid var(--accent-color);
                 }
                 blockquote {
-                    border-left: 4px solid #ddd;
+                    border-left: 4px solid var(--accent-color);
                     margin: 0;
                     padding-left: 20px;
-                    color: #666;
+                    color: var(--primary-color);
+                    background-color: var(--secondary-color);
+                    padding: 15px 20px;
+                    border-radius: 0 8px 8px 0;
                 }
                 .mermaid {
                     text-align: center;
                     margin: 20px 0;
+                    padding: 20px;
+                    background-color: var(--secondary-color);
+                    border-radius: 8px;
+                    border: 1px solid var(--border-color);
                 }
                 ul, ol {
                     padding-left: 30px;
@@ -124,9 +163,41 @@ class LLMService:
                 li {
                     margin-bottom: 0.5em;
                 }
+                a {
+                    color: var(--accent-color);
+                    text-decoration: none;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+                strong {
+                    color: var(--primary-color);
+                }
+                em {
+                    color: var(--accent-color);
+                    font-style: italic;
+                }
+                /* Theme-specific patterns */
+                .theme-geometric body::before {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 8px;
+                    background: linear-gradient(45deg, var(--primary-color) 25%, var(--accent-color) 25%, var(--accent-color) 50%, var(--primary-color) 50%, var(--primary-color) 75%, var(--accent-color) 75%);
+                    background-size: 40px 40px;
+                    z-index: 1000;
+                }
+                .theme-cyberpunk {
+                    text-shadow: 0 0 5px var(--accent-color);
+                }
+                .theme-cyberpunk h1, .theme-cyberpunk h2 {
+                    text-shadow: 0 0 10px var(--accent-color);
+                }
             </style>
         </head>
-        <body>
+        <body class="theme-{theme_class}">
             <div id="content"></div>
             <script>
                 // Initialize markdown-it
@@ -135,7 +206,7 @@ class LLMService:
                 // Original markdown content with mermaid fences
                 const markdownContent = `{markdown_content}`;
                 // Preprocess code fences: convert mermaid blocks to HTML divs
-                const processed = markdownContent.replace(/```mermaid([\s\S]*?)```/g, (match, code) => {
+                const processed = markdownContent.replace(/```mermaid([\\s\\S]*?)```/g, (match, code) => {
                     return `<div class=\"mermaid\">${code.trim()}</div>`;
                 });
                 // Render HTML from markdown
@@ -143,8 +214,21 @@ class LLMService:
                 // Insert into page
                 document.getElementById('content').innerHTML = html;
                 
-                // Initialize mermaid and render diagrams
-                mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'loose' });
+                // Initialize mermaid with theme colors
+                const mermaidTheme = '{mermaid_theme}';
+                mermaid.initialize({ 
+                    startOnLoad: false, 
+                    theme: mermaidTheme, 
+                    securityLevel: 'loose',
+                    themeVariables: {
+                        primaryColor: '{primary_color}',
+                        secondaryColor: '{secondary_color}',
+                        tertiaryColor: '{accent_color}',
+                        background: '{background_color}',
+                        primaryTextColor: '{text_color}',
+                        primaryBorderColor: '{border_color}'
+                    }
+                });
                 mermaid.init(undefined, document.querySelectorAll('.mermaid'));
                 
                 // Apply syntax highlighting
@@ -157,9 +241,21 @@ class LLMService:
         </html>
         """
         
-        # Escape the markdown content for JavaScript
-        escaped_content = markdown_content.replace('`', '\\`').replace('$', '\\$')
-        html_content = html_template.replace('{markdown_content}', escaped_content)
+        # Apply theme colors to the template
+        theme_class = theme.replace('_', '-')
+        mermaid_theme = self._get_mermaid_theme(theme)
+        hover_color = self._lighten_color(theme_colors['secondary'])
+        
+        html_content = html_template.replace('{primary_color}', theme_colors['primary'])
+        html_content = html_content.replace('{secondary_color}', theme_colors['secondary'])
+        html_content = html_content.replace('{accent_color}', theme_colors['accent'])
+        html_content = html_content.replace('{background_color}', theme_colors['background'])
+        html_content = html_content.replace('{text_color}', theme_colors['text'])
+        html_content = html_content.replace('{border_color}', theme_colors['border'])
+        html_content = html_content.replace('{theme_class}', theme_class)
+        html_content = html_content.replace('{mermaid_theme}', mermaid_theme)
+        html_content = html_content.replace('{hover_color}', hover_color)
+        html_content = html_content.replace('{markdown_content}', markdown_content.replace('`', '\\`').replace('$', '\\$'))
         
         # Create temporary HTML file
         with tempfile.NamedTemporaryFile('w', suffix='.html', delete=False, encoding='utf-8') as f:
@@ -216,7 +312,7 @@ class LLMService:
         else:
             raise TypeError("Input must be a dict or list of dicts")
             
-    async def generate_image(self, *, prompt: str, image_llm_provider: str = None, image_llm_model: str = None, resolution: str = "1280*720") -> str:
+    async def generate_image(self, *, prompt: str, image_llm_provider: str = None, image_llm_model: str = None, resolution: str = "1280*720", theme: str = "modern", custom_colors: dict = None) -> str:
         """Generate image from markdown content"""
         image_llm_provider = image_llm_provider or settings.image_provider
         image_llm_model = image_llm_model or settings.image_llm_model
@@ -231,8 +327,8 @@ class LLMService:
 
                 logger.info(f"Generated temporary file: {local_file_path}")
                 width, height = map(int, resolution.split("*"))
-                # Use the headless browser markdown renderer
-                await self.markdown_to_image(prompt, local_file_path, width, height)
+                # Use the headless browser markdown renderer with theme support
+                await self.markdown_to_image(prompt, local_file_path, width, height, theme, custom_colors)
 
                 logger.info(f"Generated image file: {local_file_path}")
                 
@@ -258,7 +354,9 @@ class LLMService:
                     prompt=segment["image_prompt"], 
                     resolution=request.resolution, 
                     image_llm_provider=request.image_llm_provider, 
-                    image_llm_model=request.image_llm_model
+                    image_llm_model=request.image_llm_model,
+                    theme=getattr(request, 'theme', 'modern'),
+                    custom_colors=getattr(request, 'custom_colors', None)
                 )
                 segment["url"] = image_url
             except Exception as e:
@@ -462,5 +560,181 @@ class LLMService:
         """
 
 
-# Initialize the LLMService instance
+    def _get_theme_colors(self, theme: str, custom_colors: dict = None) -> dict:
+        """Get theme color configuration"""
+        # Predefined theme configurations
+        themes = {
+            "modern": {
+                "primary": "#3B82F6",
+                "secondary": "#E5E7EB", 
+                "accent": "#F59E0B",
+                "background": "#FFFFFF",
+                "text": "#1F2937",
+                "border": "#D1D5DB"
+            },
+            "professional": {
+                "primary": "#1E40AF",
+                "secondary": "#F8FAFC",
+                "accent": "#059669", 
+                "background": "#FFFFFF",
+                "text": "#374151",
+                "border": "#9CA3AF"
+            },
+            "creative": {
+                "primary": "#7C3AED",
+                "secondary": "#FEF3C7",
+                "accent": "#F59E0B",
+                "background": "#FEFEFE", 
+                "text": "#581C87",
+                "border": "#A855F7"
+            },
+            "education": {
+                "primary": "#059669",
+                "secondary": "#DBEAFE",
+                "accent": "#DC2626",
+                "background": "#FFFFFF",
+                "text": "#047857",
+                "border": "#10B981"
+            },
+            "vibrant": {
+                "primary": "#FF6B6B",
+                "secondary": "#4ECDC4",
+                "accent": "#FFE66D",
+                "background": "#FFE66D",
+                "text": "#2C3E50",
+                "border": "#FF6B6B"
+            },
+            "tech": {
+                "primary": "#6366F1",
+                "secondary": "#111827",
+                "accent": "#10B981",
+                "background": "#000000",
+                "text": "#F9FAFB",
+                "border": "#4B5563"
+            },
+            "warm": {
+                "primary": "#DC2626",
+                "secondary": "#FEF2F2", 
+                "accent": "#F59E0B",
+                "background": "#FFFBEB",
+                "text": "#7F1D1D",
+                "border": "#FCA5A5"
+            },
+            "geometric": {
+                "primary": "#2563EB",
+                "secondary": "#F1F5F9",
+                "accent": "#EF4444",
+                "background": "#FFFFFF",
+                "text": "#1E40AF",
+                "border": "#3B82F6"
+            },
+            "nature": {
+                "primary": "#16A34A",
+                "secondary": "#F0FDF4",
+                "accent": "#CA8A04",
+                "background": "#FEFFFE",
+                "text": "#15803D",
+                "border": "#22C55E"
+            },
+            "cyberpunk": {
+                "primary": "#FF0080",
+                "secondary": "#0A0A0A",
+                "accent": "#00FFFF",
+                "background": "#000000",
+                "text": "#FF0080",
+                "border": "#00FFFF"
+            },
+            "monochrome": {
+                "primary": "#000000",
+                "secondary": "#F8F9FA",
+                "accent": "#6B7280",
+                "background": "#FFFFFF",
+                "text": "#374151",
+                "border": "#9CA3AF"
+            },
+            "sunset": {
+                "primary": "#F97316",
+                "secondary": "#FFF7ED",
+                "accent": "#DC2626",
+                "background": "#FFFBEB",
+                "text": "#EA580C",
+                "border": "#FB923C"
+            },
+            "ocean": {
+                "primary": "#0EA5E9",
+                "secondary": "#F0F9FF",
+                "accent": "#06B6D4",
+                "background": "#FFFFFF",
+                "text": "#0C4A6E",
+                "border": "#38BDF8"
+            }
+        }
+        
+        if custom_colors:
+            # Use custom colors regardless of theme, falling back to theme defaults
+            base_theme = themes.get(theme, themes["modern"])
+            return {
+                "primary": custom_colors.get("primary", base_theme["primary"]),
+                "secondary": custom_colors.get("secondary", base_theme["secondary"]),
+                "accent": custom_colors.get("accent", base_theme["accent"]),
+                "background": custom_colors.get("background", base_theme["background"]),
+                "text": custom_colors.get("text") or self._get_text_color(custom_colors.get("background", base_theme["background"])),
+                "border": self._get_border_color(custom_colors.get("primary", base_theme["primary"]))
+            }
+        
+        return themes.get(theme, themes["modern"])
+    
+    def _get_text_color(self, background_color: str) -> str:
+        """Determine appropriate text color based on background"""
+        # Simple heuristic: if background is light, use dark text, otherwise light text
+        bg_hex = background_color.lstrip('#')
+        if len(bg_hex) == 6:
+            r = int(bg_hex[0:2], 16)
+            g = int(bg_hex[2:4], 16)
+            b = int(bg_hex[4:6], 16)
+            brightness = (r * 299 + g * 587 + b * 114) / 1000
+            return "#1F2937" if brightness > 127 else "#F9FAFB"
+        return "#1F2937"
+    
+    def _get_border_color(self, primary_color: str) -> str:
+        """Generate border color based on primary color"""
+        # Lighten the primary color for border
+        return self._lighten_color(primary_color, 0.3)
+    
+    def _lighten_color(self, hex_color: str, factor: float = 0.2) -> str:
+        """Lighten a hex color by a factor"""
+        hex_color = hex_color.lstrip('#')
+        if len(hex_color) != 6:
+            return hex_color
+        
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+        
+        r = min(255, int(r + (255 - r) * factor))
+        g = min(255, int(g + (255 - g) * factor))
+        b = min(255, int(b + (255 - b) * factor))
+        
+        return f"#{r:02x}{g:02x}{b:02x}"
+    
+    def _get_mermaid_theme(self, theme: str) -> str:
+        """Get appropriate mermaid theme based on our theme"""
+        theme_mapping = {
+            "modern": "default",
+            "professional": "neutral",
+            "creative": "base",
+            "education": "forest",
+            "tech": "dark",
+            "warm": "base",
+            "geometric": "neutral",
+            "nature": "forest",
+            "cyberpunk": "dark",
+            "monochrome": "neutral",
+            "sunset": "base",
+            "ocean": "neutral",
+            "custom": "neutral"
+        }
+        return theme_mapping.get(theme, "neutral")
+
+# Instantiate the service
 llm_service = LLMService()

@@ -32,6 +32,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
+    print("🚀🚀🚀 STARTUP EVENT CALLED!")
     await connect_to_mongo()
     
     # Create database indexes for better performance
@@ -39,7 +40,9 @@ async def startup_event():
     await create_indexes()
     
     # Resume task queue processing after server restart
+    print("🚀 Starting task queue processing...")
     await task_queue_service.start_processing()
+    print("🚀 Task queue processing started!")
 
 @app.on_event("shutdown")
 async def shutdown_event():

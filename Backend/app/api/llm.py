@@ -22,7 +22,7 @@ class LLMType(str, Enum):
 async def generate_story(request: StoryGenerationRequest) -> StoryGenerationResponse:
     """生成故事"""
     try:
-        segments = llm_service.generate_story(
+        segments = await llm_service.generate_story(
             request
         )
         return StoryGenerationResponse(segments=segments)
@@ -35,7 +35,14 @@ async def generate_story(request: StoryGenerationRequest) -> StoryGenerationResp
 async def generate_image(request: ImageGenerationRequest) -> ImageGenerationResponse:
     """生成图片"""
     try:
-        image_url = llm_service.generate_image(prompt=request.prompt, image_llm_provider=request.image_llm_provider, image_llm_model=request.image_llm_model, resolution=request.resolution)
+        image_url = await llm_service.generate_image(
+            prompt=request.prompt, 
+            image_llm_provider=request.image_llm_provider, 
+            image_llm_model=request.image_llm_model, 
+            resolution=request.resolution,
+            theme=getattr(request, 'theme', 'modern'),
+            custom_colors=getattr(request, 'custom_colors', None)
+        )
         return ImageGenerationResponse(image_url=image_url)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -45,11 +52,7 @@ async def generate_image(request: ImageGenerationRequest) -> ImageGenerationResp
 async def generate_story_with_images(request: StoryGenerationRequest) -> StoryGenerationResponse:
     """生成故事和配图"""
     try:
-        segments = llm_service.generate_story_with_images(
-            segments=request.segments,
-            story_prompt=request.story_prompt,
-            language=request.language
-        )
+        segments = await llm_service.generate_story_with_images(request)
         return StoryGenerationResponse(segments=segments)
     except Exception as e:
         logger.error(f"Failed to generate story with images: {e}")

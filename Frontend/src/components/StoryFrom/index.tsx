@@ -25,6 +25,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { getVoiceList, generateVideo, uploadFile, getTaskStatus, VideoGenerateReq, TaskEvent } from '../../services/index';
 import { v4 as uuidv4 } from 'uuid';
+import styles from './index.module.css';
 import { useVideoStore, useAccountStore } from "../../stores/index";
 import { Task } from '../../interfaces';
 import { Button } from '../ui/button';
@@ -49,7 +50,7 @@ const formSchema = z.object({
     resolution: z.string().optional(),
     segments: z.number().min(1).max(50),
     language: z.string().min(1, "Language is required"),
-    story_prompt: z.string().min(1, "Lesson prompt is required"),
+    story_prompt: z.string().min(1, "Story prompt is required"),
     voice_name: z.string().min(1, "Voice name is required"),
     include_subtitles: z.boolean(),
     visual_content_in_language: z.boolean(),
@@ -119,8 +120,7 @@ const themeOptions = [
             accent: '#F59E0B',
             background: '#FFFFFF'
         },
-        preview: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 50%, #1E40AF 100%)',
-        pattern: 'solid'
+        preview: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 50%, #1E40AF 100%)'
     },
     {
         id: 'professional',
@@ -132,8 +132,7 @@ const themeOptions = [
             accent: '#059669',
             background: '#FFFFFF'
         },
-        preview: 'linear-gradient(135deg, #1E40AF 0%, #1E3A8A 50%, #312E81 100%)',
-        pattern: 'gradient'
+        preview: 'linear-gradient(135deg, #1E40AF 0%, #1E3A8A 50%, #312E81 100%)'
     },
     {
         id: 'creative',
@@ -145,8 +144,7 @@ const themeOptions = [
             accent: '#F59E0B',
             background: '#FEFEFE'
         },
-        preview: 'linear-gradient(135deg, #7C3AED 0%, #C026D3 50%, #EC4899 100%)',
-        pattern: 'vibrant'
+        preview: 'linear-gradient(135deg, #7C3AED 0%, #C026D3 50%, #EC4899 100%)'
     },
     {
         id: 'education',
@@ -158,8 +156,7 @@ const themeOptions = [
             accent: '#DC2626',
             background: '#FFFFFF'
         },
-        preview: 'linear-gradient(135deg, #059669 0%, #047857 50%, #065F46 100%)',
-        pattern: 'friendly'
+        preview: 'linear-gradient(135deg, #059669 0%, #047857 50%, #065F46 100%)'
     },
     {
         id: 'tech',
@@ -171,8 +168,7 @@ const themeOptions = [
             accent: '#10B981',
             background: '#000000'
         },
-        preview: 'linear-gradient(135deg, #111827 0%, #374151 50%, #6366F1 100%)',
-        pattern: 'tech'
+        preview: 'linear-gradient(135deg, #111827 0%, #374151 50%, #6366F1 100%)'
     },
     {
         id: 'warm',
@@ -184,103 +180,11 @@ const themeOptions = [
             accent: '#F59E0B',
             background: '#FFFBEB'
         },
-        preview: 'linear-gradient(135deg, #DC2626 0%, #EA580C 50%, #F59E0B 100%)',
-        pattern: 'warm'
-    },
-    {
-        id: 'geometric',
-        name: 'Geometric',
-        description: 'Bold geometric patterns with structured layouts',
-        colors: {
-            primary: '#2563EB',
-            secondary: '#F1F5F9',
-            accent: '#EF4444',
-            background: '#FFFFFF'
-        },
-        preview: `conic-gradient(from 45deg, #2563EB 0deg, #1D4ED8 90deg, #EF4444 180deg, #DC2626 270deg, #2563EB 360deg)`,
-        pattern: 'geometric'
-    },
-    {
-        id: 'nature',
-        name: 'Nature',
-        description: 'Earth tones inspired by natural landscapes',
-        colors: {
-            primary: '#16A34A',
-            secondary: '#F0FDF4',
-            accent: '#CA8A04',
-            background: '#FEFFFE'
-        },
-        preview: 'linear-gradient(135deg, #16A34A 0%, #15803D 25%, #CA8A04 50%, #A16207 75%, #166534 100%)',
-        pattern: 'organic'
-    },
-    {
-        id: 'cyberpunk',
-        name: 'Cyberpunk',
-        description: 'Neon colors with high-contrast futuristic aesthetics',
-        colors: {
-            primary: '#FF0080',
-            secondary: '#0A0A0A',
-            accent: '#00FFFF',
-            background: '#000000'
-        },
-        preview: 'linear-gradient(45deg, #FF0080 0%, #7C3AED 25%, #00FFFF 50%, #10B981 75%, #FF0080 100%)',
-        pattern: 'neon'
-    },
-    {
-        id: 'monochrome',
-        name: 'Monochrome',
-        description: 'Elegant black and white with subtle gray accents',
-        colors: {
-            primary: '#000000',
-            secondary: '#F8F9FA',
-            accent: '#6B7280',
-            background: '#FFFFFF'
-        },
-        preview: 'linear-gradient(135deg, #000000 0%, #374151 25%, #9CA3AF 50%, #E5E7EB 75%, #F9FAFB 100%)',
-        pattern: 'minimal'
-    },
-    {
-        id: 'sunset',
-        name: 'Sunset',
-        description: 'Warm sunset colors with golden hour vibes',
-        colors: {
-            primary: '#F97316',
-            secondary: '#FFF7ED',
-            accent: '#DC2626',
-            background: '#FFFBEB'
-        },
-        preview: 'linear-gradient(135deg, #F59E0B 0%, #F97316 25%, #EF4444 50%, #DC2626 75%, #B91C1C 100%)',
-        pattern: 'sunset'
-    },
-    {
-        id: 'ocean',
-        name: 'Ocean',
-        description: 'Deep blues and aqua tones reminiscent of ocean depths',
-        colors: {
-            primary: '#0EA5E9',
-            secondary: '#F0F9FF',
-            accent: '#06B6D4',
-            background: '#FFFFFF'
-        },
-        preview: 'linear-gradient(135deg, #0C4A6E 0%, #0369A1 25%, #0EA5E9 50%, #06B6D4 75%, #67E8F9 100%)',
-        pattern: 'wave'
-    },
-    {
-        id: 'custom',
-        name: 'Custom',
-        description: 'Create your own unique theme with custom colors',
-        colors: {
-            primary: '#3B82F6',
-            secondary: '#F1F5F9',
-            accent: '#F59E0B',
-            background: '#FFFFFF'
-        },
-        preview: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 50%, #F59E0B 100%)',
-        pattern: 'custom'
+        preview: 'linear-gradient(135deg, #DC2626 0%, #EA580C 50%, #F59E0B 100%)'
     }
 ];
 
-const LessonForm: React.FC = () => {
+const App: React.FC = () => {
     const { setVideoUrl, setLoading, setError, videoUrl, setTaskStatus, taskStatus } = useVideoStore();
     const { refreshAccountData } = useAccountStore();
     const { t } = useTranslation();
@@ -307,12 +211,6 @@ const LessonForm: React.FC = () => {
     const [resolutionType, setResolutionType] = useState('landscape');
     const [selectedResolution, setSelectedResolution] = useState('1280*720');
     const [selectedTheme, setSelectedTheme] = useState('modern');
-    const [customColors, setCustomColors] = useState({
-        primary: '#3B82F6',
-        secondary: '#F1F5F9',
-        accent: '#F59E0B',
-        background: '#FFFFFF'
-    });
     const [logoUrl, setLogoUrl] = useState<string | undefined>(undefined);
     const [introVideoUrl, setIntroVideoUrl] = useState<string | undefined>(undefined);
     const [outroVideoUrl, setOutroVideoUrl] = useState<string | undefined>(undefined);
@@ -448,7 +346,6 @@ const LessonForm: React.FC = () => {
             task_id: taskId,
             resolution: selectedResolution,
             theme: selectedTheme,
-            custom_colors: selectedTheme === 'custom' ? customColors : undefined,
             logo_url: logoUrl,
             intro_video_url: introVideoUrl,
             outro_video_url: outroVideoUrl,
@@ -830,20 +727,12 @@ const LessonForm: React.FC = () => {
                                             <div className="relative bg-background border border-border rounded-lg p-3 overflow-hidden">
                                                 <div 
                                                     className="absolute top-0 left-0 right-0 h-1"
-                                                    style={{ 
-                                                        background: selectedTheme === 'custom' 
-                                                            ? `linear-gradient(135deg, ${customColors.primary} 0%, ${customColors.accent} 100%)`
-                                                            : themeOptions.find(t => t.id === selectedTheme)?.preview 
-                                                    }}
+                                                    style={{ background: themeOptions.find(t => t.id === selectedTheme)?.preview }}
                                                 />
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <div 
                                                         className="w-3 h-3 rounded"
-                                                        style={{ 
-                                                            backgroundColor: selectedTheme === 'custom' 
-                                                                ? customColors.primary 
-                                                                : themeOptions.find(t => t.id === selectedTheme)?.colors.primary 
-                                                        }}
+                                                        style={{ backgroundColor: themeOptions.find(t => t.id === selectedTheme)?.colors.primary }}
                                                     />
                                                     <div className="text-xs font-medium text-foreground">Lesson Title</div>
                                                 </div>
@@ -851,178 +740,12 @@ const LessonForm: React.FC = () => {
                                                 <div className="flex gap-1">
                                                     <div 
                                                         className="w-2 h-2 rounded"
-                                                        style={{ 
-                                                            backgroundColor: selectedTheme === 'custom' 
-                                                                ? customColors.accent 
-                                                                : themeOptions.find(t => t.id === selectedTheme)?.colors.accent 
-                                                        }}
+                                                        style={{ backgroundColor: themeOptions.find(t => t.id === selectedTheme)?.colors.accent }}
                                                     />
                                                     <div 
                                                         className="w-2 h-2 rounded"
-                                                        style={{ 
-                                                            backgroundColor: selectedTheme === 'custom' 
-                                                                ? customColors.secondary 
-                                                                : themeOptions.find(t => t.id === selectedTheme)?.colors.secondary 
-                                                        }}
+                                                        style={{ backgroundColor: themeOptions.find(t => t.id === selectedTheme)?.colors.secondary }}
                                                     />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                
-                                {/* Custom Theme Color Pickers */}
-                                {selectedTheme === 'custom' && (
-                                    <div className="mt-6 p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-800">
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <Palette className="h-5 w-5 text-purple-600" />
-                                            <span className="text-lg font-semibold text-foreground">Custom Colors</span>
-                                            <span className="text-sm text-muted-foreground">Create your unique theme</span>
-                                        </div>
-                                        
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                            {/* Primary Color */}
-                                            <div className="space-y-2">
-                                                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
-                                                    <div 
-                                                        className="w-3 h-3 rounded-full border border-border" 
-                                                        style={{ backgroundColor: customColors.primary }}
-                                                    />
-                                                    Primary
-                                                </Label>
-                                                <div className="relative">
-                                                    <Input
-                                                        type="color"
-                                                        value={customColors.primary}
-                                                        onChange={(e) => setCustomColors({...customColors, primary: e.target.value})}
-                                                        className="w-full h-12 p-1 border border-border rounded-lg cursor-pointer"
-                                                    />
-                                                    <Input
-                                                        type="text"
-                                                        value={customColors.primary}
-                                                        onChange={(e) => setCustomColors({...customColors, primary: e.target.value})}
-                                                        className="mt-1 h-8 text-xs font-mono"
-                                                        placeholder="#3B82F6"
-                                                    />
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Accent Color */}
-                                            <div className="space-y-2">
-                                                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
-                                                    <div 
-                                                        className="w-3 h-3 rounded-full border border-border" 
-                                                        style={{ backgroundColor: customColors.accent }}
-                                                    />
-                                                    Accent
-                                                </Label>
-                                                <div className="relative">
-                                                    <Input
-                                                        type="color"
-                                                        value={customColors.accent}
-                                                        onChange={(e) => setCustomColors({...customColors, accent: e.target.value})}
-                                                        className="w-full h-12 p-1 border border-border rounded-lg cursor-pointer"
-                                                    />
-                                                    <Input
-                                                        type="text"
-                                                        value={customColors.accent}
-                                                        onChange={(e) => setCustomColors({...customColors, accent: e.target.value})}
-                                                        className="mt-1 h-8 text-xs font-mono"
-                                                        placeholder="#F59E0B"
-                                                    />
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Secondary Color */}
-                                            <div className="space-y-2">
-                                                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
-                                                    <div 
-                                                        className="w-3 h-3 rounded-full border border-border" 
-                                                        style={{ backgroundColor: customColors.secondary }}
-                                                    />
-                                                    Secondary
-                                                </Label>
-                                                <div className="relative">
-                                                    <Input
-                                                        type="color"
-                                                        value={customColors.secondary}
-                                                        onChange={(e) => setCustomColors({...customColors, secondary: e.target.value})}
-                                                        className="w-full h-12 p-1 border border-border rounded-lg cursor-pointer"
-                                                    />
-                                                    <Input
-                                                        type="text"
-                                                        value={customColors.secondary}
-                                                        onChange={(e) => setCustomColors({...customColors, secondary: e.target.value})}
-                                                        className="mt-1 h-8 text-xs font-mono"
-                                                        placeholder="#F1F5F9"
-                                                    />
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Background Color */}
-                                            <div className="space-y-2">
-                                                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
-                                                    <div 
-                                                        className="w-3 h-3 rounded-full border border-border" 
-                                                        style={{ backgroundColor: customColors.background }}
-                                                    />
-                                                    Background
-                                                </Label>
-                                                <div className="relative">
-                                                    <Input
-                                                        type="color"
-                                                        value={customColors.background}
-                                                        onChange={(e) => setCustomColors({...customColors, background: e.target.value})}
-                                                        className="w-full h-12 p-1 border border-border rounded-lg cursor-pointer"
-                                                    />
-                                                    <Input
-                                                        type="text"
-                                                        value={customColors.background}
-                                                        onChange={(e) => setCustomColors({...customColors, background: e.target.value})}
-                                                        className="mt-1 h-8 text-xs font-mono"
-                                                        placeholder="#FFFFFF"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Live Preview with Custom Colors */}
-                                        <div className="mt-6 p-4 bg-background border border-border rounded-lg">
-                                            <div className="text-sm font-medium text-foreground mb-3">Live Preview</div>
-                                            <div className="relative overflow-hidden rounded-lg p-4" style={{ backgroundColor: customColors.background }}>
-                                                <div 
-                                                    className="absolute top-0 left-0 right-0 h-1"
-                                                    style={{ background: `linear-gradient(135deg, ${customColors.primary} 0%, ${customColors.accent} 100%)` }}
-                                                />
-                                                <div className="flex items-center gap-3 mb-3">
-                                                    <div 
-                                                        className="w-4 h-4 rounded"
-                                                        style={{ backgroundColor: customColors.primary }}
-                                                    />
-                                                    <div className="text-base font-semibold" style={{ color: customColors.primary }}>Custom Lesson Title</div>
-                                                </div>
-                                                <div className="text-sm mb-3" style={{ color: customColors.primary }}>
-                                                    This is how your lesson content will look with custom colors
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <div 
-                                                        className="px-3 py-1 rounded text-xs font-medium"
-                                                        style={{ 
-                                                            backgroundColor: customColors.accent, 
-                                                            color: customColors.background 
-                                                        }}
-                                                    >
-                                                        Accent Element
-                                                    </div>
-                                                    <div 
-                                                        className="px-3 py-1 rounded text-xs"
-                                                        style={{ 
-                                                            backgroundColor: customColors.secondary, 
-                                                            color: customColors.primary 
-                                                        }}
-                                                    >
-                                                        Secondary Element
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1457,4 +1180,4 @@ const LessonForm: React.FC = () => {
     );
 };
 
-export default LessonForm;
+export default App;

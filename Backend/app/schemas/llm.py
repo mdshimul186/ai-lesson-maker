@@ -13,6 +13,9 @@ class StoryGenerationRequest(BaseModel):
     story_prompt: str = Field(..., min_length=1, max_length=4000, description="Theme or topic of the story")
     language: str = Field(default="English", description="Story language")
     visual_content_in_language: Optional[bool] = Field(default=False, description="Whether to generate visual content in the specified language")
+    include_subtitles: Optional[bool] = Field(default=False, description="Whether to include subtitles")
+    theme: Optional[str] = Field(default="modern", description="Visual theme")
+    custom_colors: Optional[Dict[str, str]] = Field(default=None, description="Custom theme colors (only used when theme is 'custom')")
 
 
 class StorySegment(BaseModel):
@@ -30,6 +33,8 @@ class ImageGenerationRequest(BaseModel):
     image_llm_provider: Optional[str] = Field(default=None, description="Image LLM provider")
     image_llm_model: Optional[str] = Field(default=None, description="Image LLM model")
     resolution: Optional[str] = Field(default="1024*1024", description="Image resolution")
+    theme: Optional[str] = Field(default="modern", description="Visual theme")
+    custom_colors: Optional[Dict[str, str]] = Field(default=None, description="Custom theme colors (only used when theme is 'custom')")
 
 
 class ImageGenerationResponse(BaseModel):
