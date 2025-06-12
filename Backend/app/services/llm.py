@@ -24,7 +24,6 @@ import os
 import time
 from playwright.sync_api import sync_playwright
 from app.services.upload_service import upload_file_to_s3, generate_unique_object_name
-from PIL import Image
 
 settings = get_settings()
 
@@ -36,9 +35,10 @@ if settings.openai_api_key:
 
 class LLMService:
     def __init__(self):
-        self.openai_client = openai_client        # self.text_llm_model = settings.text_llm_model
+        self.openai_client = openai_client
+        # self.text_llm_model = settings.text_llm_model
         # self.image_llm_model = settings.image_llm_model
-        
+
     async def markdown_to_image(self, markdown_content: str, output_path: str, width: int = 1200, height: int = 800, theme: str = "tech", custom_colors: dict = None) -> None:
         """
         Convert any markdown content to a PNG image using a headless browser.
@@ -50,78 +50,18 @@ class LLMService:
             height: Height of the image in pixels.
             theme: Theme name for styling.
             custom_colors: Custom color configuration if theme is "custom".
-        """        
-        print("🔥🔥🔥 MARKDOWN_TO_IMAGE METHOD CALLED - IF YOU SEE THIS, THE METHOD IS WORKING! 🔥🔥🔥")
-        print(f"🔥 Parameters: width={width}, height={height}, theme={theme}, custom_colors={custom_colors}")
-        
+        """
         # Get theme colors
-        logger.info(f"🚀 markdown_to_image called: width={width}, height={height}, theme={theme}")
-
         theme_colors = self._get_theme_colors(theme, custom_colors)
 
-        # Ensure diagram node background (secondary) and background are not too similar
-        def _color_distance(hex1, hex2):
-            h1 = hex1.lstrip('#')
-            h2 = hex2.lstrip('#')
-            if len(h1) != 6 or len(h2) != 6:
-                return 999
-            r1, g1, b1 = int(h1[0:2], 16), int(h1[2:4], 16), int(h1[4:6], 16)
-            r2, g2, b2 = int(h2[0:2], 16), int(h2[2:4], 16), int(h2[4:6], 16)
-            return ((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2) ** 0.5
-
-        secondary = theme_colors['secondary']
-        background = theme_colors['background']
-        # If too close, adjust secondary for better contrast
-        if _color_distance(secondary, background) < 40:
-            # If background is light, darken secondary; if dark, lighten it
-            def _is_light(hex_color):
-                c = hex_color.lstrip('#')
-                r, g, b = int(c[0:2], 16), int(c[2:4], 16), int(c[4:6], 16)
-                return (r*299 + g*587 + b*114) / 1000 > 127
-            if _is_light(background):
-                # Darken secondary
-                def _darken(hex_color, factor=0.2):
-                    c = hex_color.lstrip('#')
-                    r, g, b = int(c[0:2], 16), int(c[2:4], 16), int(c[4:6], 16)
-                    r = max(0, int(r * (1 - factor)))
-                    g = max(0, int(g * (1 - factor)))
-                    b = max(0, int(b * (1 - factor)))
-                    return f"#{r:02x}{g:02x}{b:02x}"
-                theme_colors['secondary'] = _darken(secondary)
-            else:
-                # Lighten secondary
-                theme_colors['secondary'] = self._lighten_color(secondary, 0.2)
-        # Now theme_colors['secondary'] is guaranteed to contrast with background
-
-        logger.info(f"🎨 THEME DEBUG: Generating image with theme '{theme}' and colors: {theme_colors}")        # Smart scaling system: maintain readability across all resolutions
-        base_width = 1280
-        base_height = 720
+        logger.info(f"🎨 THEME DEBUG: Generating image with theme '{theme}' and colors: {theme_colors}")
         
-        # Calculate resolution scale factor
-        resolution_scale = min(width / base_width, height / base_height)
-        
-        # Scale text and elements proportionally to resolution
-        # This ensures text is readable at all resolutions
-        base_font_size = max(1.0, 0.8 + (resolution_scale * 0.4))  # Scale font with resolution
-        heading_multiplier = 1.2  # Keep consistent ratios
-        padding = int(20 + (resolution_scale * 15))  # Scale padding with resolution
-        line_height = 1.6  # Keep consistent line height
-        mermaid_font_size = int(12 + (resolution_scale * 6))  # Scale diagram text
-        
-        # Use native resolution rendering instead of upscaling
-        render_width = width
-        render_height = height
-        
-        logger.info(f"🎯 SMART SCALING: Resolution {width}x{height}, Scale factor: {resolution_scale:.2f}x, Font size: {base_font_size}em, Mermaid font: {mermaid_font_size}px")
-        logger.info(f"🔧 SCALING DETAILS: base_width={base_width}, base_height={base_height}, render_width={render_width}, render_height={render_height}")
-        logger.info(f"📏 FONT SCALING: base={base_font_size}em, padding={padding}px, mermaid={mermaid_font_size}px, line_height={line_height}")
-        
-        # HTML template with improved responsive layout and theme support
-        html_template = f"""        <!DOCTYPE html>
+        # HTML template with markdown rendering capabilities and theme support
+        html_template = """
+        <!DOCTYPE html>
         <html>
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width={width}, height={height}, initial-scale=1.0, user-scalable=no">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.2/markdown-it.min.js"></script>
             <!-- Load Mermaid as a UMD script to define global `mermaid` -->
             <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
@@ -129,221 +69,116 @@ class LLMService:
             <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
             <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.css" rel="stylesheet" />
             <style>
-                :root {{
-                    --primary-color: {{primary_color}};
-                    --secondary-color: {{secondary_color}};
-                    --accent-color: {{accent_color}};
-                    --background-color: {{background_color}};
-                    --text-color: {{text_color}};
-                    --border-color: {{border_color}};
-                    --base-font-size: {base_font_size}em;
-                    --padding: {padding}px;
-                    --line-height: {line_height};
-                }}
-                
-    
-                /* Flexible container for side-by-side layout */
-                .content-container {{
-                    display: flex;
-                    flex-direction: column;
-                    gap: calc(var(--padding) / 2);
-                }}
-                
-                .content-row {{
-                    display: flex;
-                    gap: calc(var(--padding) / 2);
-                    align-items: flex-start;
-                    flex-wrap: wrap;
-                }}
-                
-                .content-column {{
-                    flex: 1;
-                    min-width: 300px;
-                }}
-                
-                /* For wide content, allow side-by-side layout */
-                .mermaid-table-container {{
-                    display: flex;
-                    gap: calc(var(--padding) / 2);
-                    align-items: flex-start;
-                    flex-wrap: wrap;
-                }}
-                
-                .mermaid-table-container > * {{
-                    flex: 1;
-                    min-width: 400px;
-                }}
-                
-                h1, h2, h3, h4, h5, h6 {{
+                :root {
+                    --primary-color: {primary_color};
+                    --secondary-color: {secondary_color};
+                    --accent-color: {accent_color};
+                    --background-color: {background_color};
+                    --text-color: {text_color};
+                    --border-color: {border_color};
+                }
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                    line-height: 1.6;
+                    padding: 40px;
+                    background-color: var(--background-color);
+                    color: var(--text-color);
+                    max-width: 100%;
+                    font-size: 1.4em;
+                }
+                h1, h2, h3, h4, h5, h6 {
                     margin-top: 0.5em;
                     margin-bottom: 0.5em;
                     color: var(--primary-color);
-                    word-wrap: break-word;
-                }}
-                
-                h1 {{ 
-                    font-size: calc(var(--base-font-size) * {heading_multiplier * 2.3}); 
+                }
+                h1 { 
+                    font-size: 32px; 
                     border-bottom: 3px solid var(--accent-color);
-                    padding-bottom: calc(var(--padding) / 4);
-                }}
-                
-                h2 {{ 
-                    font-size: calc(var(--base-font-size) * {heading_multiplier * 2});
+                    padding-bottom: 10px;
+                }
+                h2 { 
+                    font-size: 28px;
                     border-bottom: 2px solid var(--secondary-color);
-                    padding-bottom: calc(var(--padding) / 5);
-                }}
-                
-                h3 {{ font-size: calc(var(--base-font-size) * {heading_multiplier * 1.7}); }}
-                h4 {{ font-size: calc(var(--base-font-size) * {heading_multiplier * 1.4}); }}
-                h5 {{ font-size: calc(var(--base-font-size) * {heading_multiplier * 1.2}); }}
-                h6 {{ font-size: calc(var(--base-font-size) * {heading_multiplier}); }}
-                
-                /* Improved table styling with responsive design */                table {{
+                    padding-bottom: 8px;
+                }
+                h3 { font-size: 24px; }
+                h4 { font-size: 20px; }
+                table {
                     border-collapse: collapse;
-                    margin: calc(var(--padding) / 3) 0;
+                    margin: 15px 0;
                     width: 100%;
                     border: 2px solid var(--border-color);
-                    font-size: {base_font_size * 0.9}em;
-                    overflow: hidden;
-                    border-radius: 8px;
-                }}
-                
-                th, td {{
+                }
+                th, td {
                     border: 1px solid var(--border-color);
-                    padding: calc(var(--padding) / 3) calc(var(--padding) / 2);
+                    padding: 12px 16px;
                     text-align: left;
-                    vertical-align: top;
-                    word-wrap: break-word;
-                    max-width: 300px;
-                }}
-                  th {{
+                }
+                th {
                     background-color: var(--primary-color);
                     color: var(--background-color);
                     font-weight: bold;
-                    font-size: {base_font_size * 0.95}em;
-                }}
-                
-                tr:nth-child(even) {{
+                }
+                tr:nth-child(even) {
                     background-color: var(--secondary-color);
-                }}
-                
-                tr:hover {{
-                    background-color: {{hover_color}};
-                }}
-                
-                /* Improved mermaid styling with flexible layout */
-                .mermaid {{
-                    text-align: center;
-                    margin: calc(var(--padding) / 2) 0;
-                    padding: calc(var(--padding) / 2);
+                }
+                tr:hover {
+                    background-color: {hover_color};
+                }
+                code {
                     background-color: var(--secondary-color);
-                    border-radius: 8px;
-                    border: 1px solid var(--border-color);
-                    overflow: visible;
-                    min-height: 200px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }}    
-                .mermaid svg {{
-                    max-width: 100%;
-                    height: auto;
-                    font-size: {mermaid_font_size}px !important;
-                }}
-                  /* Basic mermaid container styling - let theme variables handle colors */
-                .mermaid svg {{
-                    font-family: inherit;
-                }}
-                
-                /* Ensure font size is applied consistently */
-                .mermaid svg text,
-                .mermaid svg .nodeLabel,
-                .mermaid svg .edgeLabel text,
-                .mermaid svg .label,
-                .mermaid svg tspan {{
-                    font-size: {mermaid_font_size}px !important;
-                    font-weight: 500;
-                    color: #fff !important;  /* Use contrast text color for better visibility */
-                }}
-                .mermaid {{
-                    color: #fff !important;
-                }}
-
-                
-                
-                
-                
-                /* Better code styling */                code {{
-                    background-color: var(--secondary-color);
-                    padding: calc(var(--padding) / 8) calc(var(--padding) / 6);
+                    padding: 2px 5px;
                     border-radius: 3px;
-                    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+                    font-family: monospace;
                     color: var(--primary-color);
-                    font-size: {base_font_size * 0.85}em;
-                }}
-                  pre {{
+                }
+                pre {
                     background-color: var(--primary-color);
                     color: var(--background-color);
                     border-radius: 5px;
-                    padding: calc(var(--padding) / 2);
+                    padding: 15px;
                     overflow-x: auto;
                     border-left: 4px solid var(--accent-color);
-                    font-size: {base_font_size * 0.8}em;
-                }}
-                
-                pre code {{
-                    background: none;
-                    padding: 0;
-                    color: inherit;
-                }}
-                
-                blockquote {{
+                }
+                blockquote {
                     border-left: 4px solid var(--accent-color);
                     margin: 0;
-                    padding-left: calc(var(--padding) / 2);
+                    padding-left: 20px;
                     color: var(--primary-color);
                     background-color: var(--secondary-color);
-                    padding: calc(var(--padding) / 2) calc(var(--padding) / 2);
+                    padding: 15px 20px;
                     border-radius: 0 8px 8px 0;
-                    font-style: italic;
-                }}
-                
-                ul, ol {{
-                    padding-left: calc(var(--padding) * 0.75);
-                    margin: calc(var(--padding) / 4) 0;
-                }}
-                
-                li {{
-                    margin-bottom: calc(var(--padding) / 8);
-                    line-height: var(--line-height);
-                }}
-                
-                p {{
-                    margin: calc(var(--padding) / 4) 0;
-                    word-wrap: break-word;
-                }}
-                
-                a {{
+                }
+                .mermaid {
+                    text-align: center;
+                    margin: 20px 0;
+                    padding: 20px;
+                    background-color: var(--secondary-color);
+                    border-radius: 8px;
+                    border: 1px solid var(--border-color);
+                }
+                ul, ol {
+                    padding-left: 30px;
+                }
+                li {
+                    margin-bottom: 0.5em;
+                }
+                a {
                     color: var(--accent-color);
                     text-decoration: none;
-                }}
-                
-                a:hover {{
+                }
+                a:hover {
                     text-decoration: underline;
-                }}
-                
-                strong {{
+                }
+                strong {
                     color: var(--primary-color);
-                    font-weight: 600;
-                }}
-                
-                em {{
+                }
+                em {
                     color: var(--accent-color);
                     font-style: italic;
-                }}
-                
+                }
                 /* Theme-specific patterns */
-                .theme-geometric body::before {{
+                .theme-geometric body::before {
                     content: '';
                     position: fixed;
                     top: 0;
@@ -353,138 +188,75 @@ class LLMService:
                     background: linear-gradient(45deg, var(--primary-color) 25%, var(--accent-color) 25%, var(--accent-color) 50%, var(--primary-color) 50%, var(--primary-color) 75%, var(--accent-color) 75%);
                     background-size: 40px 40px;
                     z-index: 1000;
-                }}
-                
-                .theme-cyberpunk {{
+                }
+                .theme-cyberpunk {
                     text-shadow: 0 0 5px var(--accent-color);
-                }}
-                
-                .theme-cyberpunk h1, .theme-cyberpunk h2 {{
+                }
+                .theme-cyberpunk h1, .theme-cyberpunk h2 {
                     text-shadow: 0 0 10px var(--accent-color);
-                }}
-                
-                /* Responsive adjustments for different screen sizes */
-                @media (max-width: 1200px) {{
-                    .content-row {{
-                        flex-direction: column;
-                    }}
-                    
-                    .mermaid-table-container {{
-                        flex-direction: column;
-                    }}
-                }}
+                }
             </style>
         </head>
-        <body class="theme-{{theme_class}}">
-            <div class="content-container" id="content"></div>
+        <body class="theme-{theme_class}">
+            <div id="content"></div>
             <script>
                 // Initialize markdown-it
-                const md = markdownit({{ html: true, breaks: true, linkify: true }});
+                const md = markdownit({ html: true, breaks: true, linkify: true });
                 
                 // Original markdown content with mermaid fences
-                const markdownContent = `{{markdown_content}}`;
-                
-                // Enhanced preprocessing for better layout
-                let processed = markdownContent;
-                
-                // Convert mermaid blocks to HTML divs with better structure
-                processed = processed.replace(/```mermaid([\\s\\S]*?)```/g, (match, code) => {{
-                    return `<div class="mermaid">${{code.trim()}}</div>`;
-                }});
-                
-                // Detect mermaid + table combinations for side-by-side layout
-                const hasMermaidAndTable = processed.includes('<div class="mermaid">') && processed.includes('|');
-                
+                const markdownContent = `{markdown_content}`;
+                // Preprocess code fences: convert mermaid blocks to HTML divs
+                const processed = markdownContent.replace(/```mermaid([\\s\\S]*?)```/g, (match, code) => {
+                    return `<div class=\"mermaid\">${code.trim()}</div>`;
+                });
                 // Render HTML from markdown
-                let html = md.render(processed);
-                
-                // Post-process for better layout if we have both mermaid and tables
-                if (hasMermaidAndTable) {{
-                    // Wrap consecutive mermaid and table elements in containers
-                    html = html.replace(/<div class="mermaid">([\\s\\S]*?)<\\/div>\\s*<table>/g, 
-                        '<div class="mermaid-table-container"><div class="mermaid">$1</div><table class="adjacent-table">');
-                    html = html.replace(/<\\/table>(?=\\s*<div class="mermaid">)/g, '</table></div>');
-                    html = html.replace(/<\\/table>(?!\\s*<)/g, '</table></div>');
-                }}
-                
+                const html = md.render(processed);
                 // Insert into page
-                document.getElementById('content').innerHTML = html;                // Initialize mermaid with resolution-aware font sizes for optimal readability
-                const mermaidTheme = '{{mermaid_theme}}';
-                const resolutionScale = {{resolution_scale}};
-                  mermaid.initialize({{ 
-                    startOnLoad: false, 
-                    theme: 'base',  // Use base theme for customization as per official docs
-                    securityLevel: 'loose',
-                    flowchart: {{
-                        useMaxWidth: true,
-                        htmlLabels: true,
-                        fontSize: {{mermaid_font_size}},  // Scaled for resolution
-                        curve: 'basis'
-                    }},
-                    sequence: {{
-                        useMaxWidth: true,
-                        fontSize: {{mermaid_font_size}}  // Scaled for resolution
-                    }},
-                    gantt: {{
-                        useMaxWidth: true,
-                        fontSize: {{mermaid_font_size}}  // Scaled for resolution
-                    }},                    mindmap: {{
-                        useMaxWidth: true,
-                        fontSize: {{mermaid_font_size}}  // Scaled for resolution
-                    }},                    
-                    themeVariables: {{
-                        // Core theme variables following official documentation
-                        'primaryColor': '#BB2528',
-                        'primaryTextColor': '#fff',
-                        'primaryBorderColor': '#7C0000',
-                        'lineColor': '#F8B229',
-                        'secondaryColor': '#006100',
-                        'tertiaryColor': '#fff',      
-          
-                    }}
-                }});
+                document.getElementById('content').innerHTML = html;
                 
+                // Initialize mermaid with theme colors
+                const mermaidTheme = '{mermaid_theme}';
+                mermaid.initialize({ 
+                    startOnLoad: false, 
+                    theme: mermaidTheme, 
+                    securityLevel: 'loose',
+                    themeVariables: {
+                        primaryColor: '{primary_color}',
+                        secondaryColor: '{secondary_color}',
+                        tertiaryColor: '{accent_color}',
+                        background: '{background_color}',
+                        primaryTextColor: '{text_color}',
+                        primaryBorderColor: '{border_color}',
+                        primaryTextColor: '#fff',
+                    }
+                });
                 mermaid.init(undefined, document.querySelectorAll('.mermaid'));
                 
                 // Apply syntax highlighting
                 Prism.highlightAll();
-                  // Signal when rendering is complete
+                
+                // Signal when rendering is complete
                 window.renderingComplete = true;
             </script>
         </body>
         </html>
-        """          # Apply theme colors to the template
+        """
+        
+        # Apply theme colors to the template
         theme_class = theme.replace('_', '-')
         mermaid_theme = self._get_mermaid_theme(theme)
         hover_color = self._lighten_color(theme_colors['secondary'])
-          # Calculate contrast text color for nodes
-        contrast_text_color = self._get_contrast_color(theme_colors['secondary'])  # Use secondary as node background
         
-        # Determine if this is a dark theme for mermaid's darkMode flag
-        is_dark_theme = self._is_dark_theme(theme_colors['background'])
-        
-        logger.info(f"🎨 MERMAID THEME DEBUG:")
-        logger.info(f"   Theme: {theme}")
-        logger.info(f"   Primary: {theme_colors['primary']}")
-        logger.info(f"   Secondary (node bg): {theme_colors['secondary']}")
-        logger.info(f"   Text: {theme_colors['text']}")
-        logger.info(f"   Contrast text: {contrast_text_color}")
-        logger.info(f"   Dark mode: {is_dark_theme}")
-        
-        html_content = html_template.replace('{{primary_color}}', theme_colors['primary'])
-        html_content = html_content.replace('{{secondary_color}}', theme_colors['secondary'])
-        html_content = html_content.replace('{{accent_color}}', theme_colors['accent'])
-        html_content = html_content.replace('{{background_color}}', theme_colors['background'])
-        html_content = html_content.replace('{{text_color}}', theme_colors['text'])
-        html_content = html_content.replace('{{border_color}}', theme_colors['border'])
-        html_content = html_content.replace('{{contrast_text_color}}', contrast_text_color)
-        html_content = html_content.replace('{{dark_mode}}', 'true' if is_dark_theme else 'false')
-        html_content = html_content.replace('{{theme_class}}', theme_class)
-        html_content = html_content.replace('{{mermaid_theme}}', mermaid_theme)
-        html_content = html_content.replace('{{hover_color}}', hover_color)
-        html_content = html_content.replace('{{resolution_scale}}', str(resolution_scale))
-        html_content = html_content.replace('{{mermaid_font_size}}', str(mermaid_font_size))
-        html_content = html_content.replace('{{markdown_content}}', markdown_content.replace('`', '\\`').replace('$', '\\$'))
+        html_content = html_template.replace('{primary_color}', theme_colors['primary'])
+        html_content = html_content.replace('{secondary_color}', theme_colors['secondary'])
+        html_content = html_content.replace('{accent_color}', theme_colors['accent'])
+        html_content = html_content.replace('{background_color}', theme_colors['background'])
+        html_content = html_content.replace('{text_color}', theme_colors['text'])
+        html_content = html_content.replace('{border_color}', theme_colors['border'])
+        html_content = html_content.replace('{theme_class}', theme_class)
+        html_content = html_content.replace('{mermaid_theme}', mermaid_theme)
+        html_content = html_content.replace('{hover_color}', hover_color)
+        html_content = html_content.replace('{markdown_content}', markdown_content.replace('`', '\\`').replace('$', '\\$'))
         
         # Create temporary HTML file
         with tempfile.NamedTemporaryFile('w', suffix='.html', delete=False, encoding='utf-8') as f:
@@ -492,40 +264,17 @@ class LLMService:
             temp_html_path = f.name
         
         try:
-            # Use synchronous Playwright in a thread to render mermaid with improved quality
+            # Use synchronous Playwright in a thread to render mermaid
             def _render():
                 with sync_playwright() as p:
                     browser = p.chromium.launch(headless=True)
-                    page = browser.new_page()                    # SMART RESOLUTION: Render at native resolution for optimal quality
-                    # Text scales appropriately with resolution for readability
-                    
-                    # Set viewport to target resolution
-                    page.set_viewport_size({"width": render_width, "height": render_height})
-                    
+                    page = browser.new_page()
+                    page.set_viewport_size({"width": width, "height": height})
                     # Navigate and wait until network is idle (all scripts loaded)
                     page.goto(f"file://{temp_html_path}", wait_until="networkidle")
-                    
                     # Give extra time for mermaid diagrams and syntax highlighting to complete
-                    page.wait_for_timeout(2000)
-                    
-                    # Wait for rendering completion signal
-                    page.wait_for_function("window.renderingComplete === true", timeout=10000)
-                    
-                    # Take screenshot at native resolution for best quality
-                    screenshot_options = {
-                        "path": output_path,
-                        "full_page": True,
-                        "type": "png",
-                        "clip": {
-                            "x": 0,
-                            "y": 0,
-                            "width": render_width,
-                            "height": render_height
-                        }
-                    }
-                    
-                    # Direct screenshot at target resolution
-                    page.screenshot(**screenshot_options)
+                    page.wait_for_timeout(1000)
+                    page.screenshot(path=output_path, full_page=True)
                     browser.close()
 
             loop = asyncio.get_event_loop()
@@ -560,8 +309,7 @@ class LLMService:
                 elif len(other_keys) > 1:
                     raise ValueError(f"Unexpected extra keys: {other_keys}. Only one non-'text' key is allowed.")
             return data
-        elif isinstance(data, list):            
-            return [self.normalize_keys(item) for item in data]
+        elif isinstance(data, list):            return [self.normalize_keys(item) for item in data]
         else:
             raise TypeError("Input must be a dict or list of dicts")
             
@@ -570,16 +318,8 @@ class LLMService:
         image_llm_provider = image_llm_provider or settings.image_provider
         image_llm_model = image_llm_model or settings.image_llm_model
 
-        print(f"🔥🔥🔥 GENERATE_IMAGE CALLED! 🔥🔥🔥")
-        print(f"🔥 Provider: {image_llm_provider}")
-        print(f"🔥 OpenAI API Key configured: {'YES' if settings.openai_api_key else 'NO (EMPTY)'}")
-        print(f"🔥 Will call markdown_to_image: {'YES' if image_llm_provider == 'openai' else 'NO'}")
-        
-        logger.info(f"🖼️ GENERATE_IMAGE CALLED: provider={image_llm_provider}, model={image_llm_model}, theme={theme}, custom_colors={custom_colors}")
-        logger.info(f"🖼️ GENERATE_IMAGE: resolution={resolution}, prompt_length={len(prompt)}")
-
         try:
-                logger.info(f"🖼️ USING OPENAI PROVIDER - Will call markdown_to_image")
+            if image_llm_provider == "openai":
                 # Generate a temporary local file
                 object_name = generate_unique_object_name("image.png")
                 local_file = tempfile.NamedTemporaryFile(suffix=os.path.splitext(object_name)[1], delete=False)
@@ -589,7 +329,6 @@ class LLMService:
                 logger.info(f"Generated temporary file: {local_file_path}")
                 width, height = map(int, resolution.split("*"))
                 # Use the headless browser markdown renderer with theme support
-                logger.info(f"🖼️ CALLING MARKDOWN_TO_IMAGE: width={width}, height={height}, theme={theme}")
                 await self.markdown_to_image(prompt, local_file_path, width, height, theme, custom_colors)
 
                 logger.info(f"Generated image file: {local_file_path}")
@@ -822,54 +561,6 @@ class LLMService:
         """
 
 
-    def _get_contrast_color(self, background_hex: str) -> str:
-        """Get high contrast text color for a given background color"""
-        # Remove # if present
-        hex_color = background_hex.lstrip('#')
-        if len(hex_color) != 6:
-            return "#000000"  # Default to black if invalid hex
-        
-        # Convert to RGB
-        r = int(hex_color[0:2], 16)
-        g = int(hex_color[2:4], 16)
-        b = int(hex_color[4:6], 16)
-        
-        # Calculate relative luminance using the standard formula
-        # https://www.w3.org/TR/WCAG20/#relativeluminancedef
-        def get_relative_luminance(color_value):
-            color_value = color_value / 255.0
-            if color_value <= 0.03928:
-                return color_value / 12.92
-            else:
-                return pow((color_value + 0.055) / 1.055, 2.4)
-        
-        red_luminance = get_relative_luminance(r)
-        green_luminance = get_relative_luminance(g)
-        blue_luminance = get_relative_luminance(b)
-        
-        luminance = 0.2126 * red_luminance + 0.7152 * green_luminance + 0.0722 * blue_luminance
-        
-        # Use WCAG contrast ratio guidelines: if background is light, use dark text; if dark, use light text
-        return "#FFFFFF" if luminance < 0.5 else "#000000"
-    
-    def _is_dark_theme(self, background_color: str) -> bool:
-        """Determine if this is a dark theme based on background brightness"""
-        # Remove # if present
-        hex_color = background_color.lstrip('#')
-        if len(hex_color) != 6:
-            return False  # Default to light theme if invalid hex
-        
-        # Convert to RGB
-        r = int(hex_color[0:2], 16)
-        g = int(hex_color[2:4], 16)
-        b = int(hex_color[4:6], 16)
-        
-        # Calculate brightness using a simple formula
-        brightness = (r * 299 + g * 587 + b * 114) / 1000
-        
-        # Return True if dark (brightness < 127.5)
-        return brightness < 127.5
-
     def _get_theme_colors(self, theme: str, custom_colors: dict = None) -> dict:
         """Get theme color configuration"""
         # Predefined theme configurations
@@ -989,7 +680,8 @@ class LLMService:
                 "accent": custom_colors.get("accent", base_theme["accent"]),
                 "background": custom_colors.get("background", base_theme["background"]),
                 "text": custom_colors.get("text") or self._get_text_color(custom_colors.get("background", base_theme["background"])),
-                "border": self._get_border_color(custom_colors.get("primary", base_theme["primary"]))            }
+                "border": self._get_border_color(custom_colors.get("primary", base_theme["primary"]))
+            }
         
         return themes.get(theme, themes["modern"])
     
@@ -1029,21 +721,21 @@ class LLMService:
     def _get_mermaid_theme(self, theme: str) -> str:
         """Get appropriate mermaid theme based on our theme"""
         theme_mapping = {
-            "modern": "base",
-            "professional": "neutral", 
+            "modern": "default",
+            "professional": "neutral",
             "creative": "base",
-            "education": "base",
-            "tech": "base",
+            "education": "forest",
+            "tech": "dark",
             "warm": "base",
             "geometric": "neutral",
             "nature": "forest",
             "cyberpunk": "dark",
             "monochrome": "neutral",
             "sunset": "base",
-            "ocean": "base",
-            "custom": "base"
+            "ocean": "neutral",
+            "custom": "neutral"
         }
-        return theme_mapping.get(theme, "base")
+        return theme_mapping.get(theme, "neutral")
 
 # Instantiate the service
 llm_service = LLMService()

@@ -1,0 +1,20 @@
+1
+00:00:00,100 --> 00:00:06,675
+Docker is a platform that uses OS-level virtualization to deliver software in packages called containers
+
+2
+00:00:07,800 --> 00:00:12,125
+Containers are isolated from one another and come bundled with all their dependencies
+
+3
+00:00:12,525 --> 00:00:16,275
+allowing them to run on any machine that includes the Docker engine
+
+4
+00:00:16,562 --> 00:00:19,387
+regardless of the underlying operating environment
+
+5
+00:00:20,400 --> 00:00:28,663
+This simplifies the deployment of applications across various infrastructures by ensuring that code remains consistent from development through production
+

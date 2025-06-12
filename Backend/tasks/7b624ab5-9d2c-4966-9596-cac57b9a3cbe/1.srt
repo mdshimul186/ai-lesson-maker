@@ -1,0 +1,44 @@
+1
+00:00:00,100 --> 00:00:02,225
+Docker is a platform used for developing
+
+2
+00:00:02,438 --> 00:00:03,013
+shipping
+
+3
+00:00:03,312 --> 00:00:05,463
+and running applications in containers
+
+4
+00:00:06,537 --> 00:00:10,775
+Containers allow a developer to package an application with all parts it needs
+
+5
+00:00:11,075 --> 00:00:13,425
+such as libraries and other dependencies
+
+6
+00:00:13,650 --> 00:00:15,938
+and ship it all out as one package
+
+7
+00:00:17,125 --> 00:00:22,200
+Docker ensures that applications can be shipped and executed in any environment consistently
+
+8
+00:00:23,238 --> 00:00:26,700
+This portability is achieved through containerization technology
+
+9
+00:00:26,988 --> 00:00:29,988
+which provides a lightweight virtualized environment
+
+10
+00:00:30,988 --> 00:00:34,525
+Docker also integrates with popular CI/CD tools
+
+11
+00:00:34,900 --> 00:00:38,163
+allowing seamless and automated deployment processes
+
