@@ -22,6 +22,7 @@ wheels/
 *.egg
 
 .env
+Backend-Node
 
 # Virtual Environment
 # venv/

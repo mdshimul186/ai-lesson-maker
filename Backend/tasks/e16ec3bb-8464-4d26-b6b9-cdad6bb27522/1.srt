@@ -1,0 +1,36 @@
+1
+00:00:00,100 --> 00:00:05,925
+Docker is a platform that enables developers to easily deploy applications inside containers
+
+2
+00:00:07,025 --> 00:00:08,175
+Containers are lightweight
+
+3
+00:00:08,350 --> 00:00:09,162
+standalone
+
+4
+00:00:09,512 --> 00:00:13,550
+executable packages that contain all the required components such as code
+
+5
+00:00:13,787 --> 00:00:14,425
+runtime
+
+6
+00:00:14,637 --> 00:00:15,762
+system tools
+
+7
+00:00:15,988 --> 00:00:16,525
+libraries
+
+8
+00:00:16,700 --> 00:00:21,512
+and settings for an application to run consistently across different computing environments
+
+9
+00:00:22,650 --> 00:00:31,812
+This consistency makes Docker highly valuable in mitigating the classic issue of software working on one system but not another due to environmental differences
+

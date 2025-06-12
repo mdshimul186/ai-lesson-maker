@@ -25,7 +25,7 @@ services:
           cpus: '1'
     container_name: frontend
     ports:
-      - "4001:4001"
+      - "4005:4005"
     volumes:
       - ./Frontend:/app       # 挂载源代码
       - /app/node_modules     # 防止覆盖容器内的 node_modules

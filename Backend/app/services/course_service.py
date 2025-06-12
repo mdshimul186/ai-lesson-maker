@@ -465,7 +465,7 @@ Generate the course structure now.
                     script=lesson.content,
                     voice_name=course.voice_id,
                     story_prompt=lesson.title,  # Using lesson title as the story prompt as a fallback
-                    resolution="1280*720"  # Set default resolution to 1280x720
+                    resolution="1920*1080"  # Set default resolution to Full HD for better quality
                 )
                 
                 # Create a task for video generation
@@ -580,14 +580,13 @@ Generate the course structure now.
                 logger.error(f"Error checking existing task status: {e}")
                 # Continue with regeneration even if we can't cancel the old task
                 pass
-                
-        # Create a video generation request for the lesson
+                  # Create a video generation request for the lesson
         video_request = VideoGenerateRequest(
             title=lesson.title,
             script=lesson.content,
             voice_name=course.voice_id,
             story_prompt=lesson.title,
-            resolution="1280*720"  # Set default resolution to 1280x720
+            resolution="1920*1080"  # Set default resolution to Full HD for better quality
         )
         
         # Create a task for video generation

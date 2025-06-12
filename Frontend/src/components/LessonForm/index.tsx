@@ -20,7 +20,8 @@ import {
     Check,
     Palette,
     Sparkles,
-    Eye
+    Eye,
+    Star
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getVoiceList, generateVideo, uploadFile, getTaskStatus, VideoGenerateReq, TaskEvent } from '../../services/index';
@@ -86,6 +87,8 @@ const resolutionOptions = [
         options: [
             { value: '1280*720', label: 'HD (1280×720)', quality: 'HD' },
             { value: '1920*1080', label: 'Full HD (1920×1080)', quality: 'FHD' },
+            { value: '2560*1440', label: '2K QHD (2560×1440)', quality: '2K' },
+            { value: '3840*2160', label: '4K UHD (3840×2160)', quality: '4K' },
         ]
     },
     {
@@ -95,6 +98,8 @@ const resolutionOptions = [
         options: [
             { value: '720*1280', label: 'HD (720×1280)', quality: 'HD' },
             { value: '1080*1920', label: 'Full HD (1080×1920)', quality: 'FHD' },
+            { value: '1440*2560', label: '2K QHD (1440×2560)', quality: '2K' },
+            { value: '2160*3840', label: '4K UHD (2160×3840)', quality: '4K' },
         ]
     },
     {
@@ -103,7 +108,9 @@ const resolutionOptions = [
         label: 'Square',
         options: [
             { value: '720*720', label: 'HD (720×720)', quality: 'HD' },
-            { value: '1080*1080', label: 'HD (1080×1080)', quality: 'HD' },
+            { value: '1080*1080', label: 'Full HD (1080×1080)', quality: 'FHD' },
+            { value: '1440*1440', label: '2K (1440×1440)', quality: '2K' },
+            { value: '2160*2160', label: '4K (2160×2160)', quality: '4K' },
         ]
     }
 ];
@@ -287,7 +294,7 @@ const LessonForm: React.FC = () => {
     const form = useForm<FieldType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            resolution: '1280*720',
+            resolution: '1920*1080',
             segments: 5,
             language: '',
             story_prompt: '',
@@ -305,7 +312,7 @@ const LessonForm: React.FC = () => {
     const [nowVoiceList, setNowVoiceList] = useState<voiceList[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [resolutionType, setResolutionType] = useState('landscape');
-    const [selectedResolution, setSelectedResolution] = useState('1280*720');
+    const [selectedResolution, setSelectedResolution] = useState('1920*1080');
     const [selectedTheme, setSelectedTheme] = useState('modern');
     const [customColors, setCustomColors] = useState({
         primary: '#3B82F6',
@@ -708,20 +715,41 @@ const LessonForm: React.FC = () => {
                                         <SelectTrigger className="bg-background/80 dark:bg-card/80 border-border h-12 rounded-xl text-base">
                                             <SelectValue placeholder="Select resolution" />
                                         </SelectTrigger>
-                                        <SelectContent>
-                                            {resolutionOptions
+                                        <SelectContent>                                            {resolutionOptions
                                                 .find(opt => opt.type === resolutionType)
                                                 ?.options.map((res) => (
                                                     <SelectItem key={res.value} value={res.value}>
                                                         <div className="flex items-center gap-2">
                                                             <span>{res.label}</span>
-                                                            <Badge variant="outline" className="text-xs">{res.quality}</Badge>
+                                                            <Badge 
+                                                                variant={res.quality === '4K' ? "default" : "outline"} 
+                                                                className={`text-xs ${
+                                                                    res.quality === '4K' 
+                                                                        ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-semibold animate-pulse' 
+                                                                        : ''
+                                                                }`}
+                                                            >
+                                                                {res.quality}
+                                                                {res.quality === '4K' && ' ✨'}
+                                                            </Badge>
                                                         </div>
                                                     </SelectItem>
                                                 ))
-                                            }
-                                        </SelectContent>
+                                            }                                        </SelectContent>
                                     </Select>
+                                    
+                                    {/* 4K Quality Info */}
+                                    {selectedResolution.includes('3840') || selectedResolution.includes('2160') ? (
+                                        <div className="mt-3 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/30 dark:to-orange-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <Star className="h-4 w-4 text-yellow-600" />
+                                                <span className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">4K Ultra HD Selected!</span>
+                                            </div>
+                                            <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                                                You've selected 4K resolution for crystal-clear video quality with enhanced text readability and superior diagram details.
+                                            </p>
+                                        </div>
+                                    ) : null}
                                 </div>
                             </CardContent>
                         </Card>

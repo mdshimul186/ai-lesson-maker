@@ -1,0 +1,56 @@
+1
+00:00:00,100 --> 00:00:05,888
+Docker is a platform that allows developers to automate the deployment of applications inside lightweight
+
+2
+00:00:06,138 --> 00:00:07,188
+portable containers
+
+3
+00:00:08,300 --> 00:00:10,475
+These containers can run virtually anywhere
+
+4
+00:00:10,775 --> 00:00:12,637
+whether on a developer's local machine
+
+5
+00:00:12,988 --> 00:00:13,800
+a data center
+
+6
+00:00:14,075 --> 00:00:14,963
+or in the cloud
+
+7
+00:00:15,950 --> 00:00:19,525
+Docker containers package an application with all its dependencies
+
+8
+00:00:19,788 --> 00:00:22,837
+ensuring consistency across various environments
+
+9
+00:00:23,988 --> 00:00:29,400
+This encapsulation simplifies software delivery by isolating applications from infrastructure
+
+10
+00:00:29,650 --> 00:00:32,850
+which addresses the common issue of 'works on my machine'
+
+11
+00:00:33,825 --> 00:00:37,087
+Docker's architecture includes a daemon that manages containers
+
+12
+00:00:37,250 --> 00:00:37,750
+images
+
+13
+00:00:37,987 --> 00:00:38,737
+and networks
+
+14
+00:00:39,237 --> 00:00:42,100
+alongside a client utility to issue commands
+

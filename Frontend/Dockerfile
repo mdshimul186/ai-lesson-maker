@@ -14,7 +14,7 @@ RUN npm ci
 COPY . .
 
 # Expose the port
-EXPOSE 4001
+EXPOSE 4005
 
 # Start the frontend development server
 CMD ["npm", "run", "dev"]

@@ -1,0 +1,24 @@
+1
+00:00:00,100 --> 00:00:01,288
+An introduction to Docker
+
+2
+00:00:01,525 --> 00:00:08,463
+a powerful platform that enables developers to automate the deployment of applications inside lightweight containers
+
+3
+00:00:09,625 --> 00:00:14,475
+These containers are portable environments that contain everything needed to run an application
+
+4
+00:00:14,750 --> 00:00:19,025
+ensuring consistency across multiple development and deployment cycles
+
+5
+00:00:20,163 --> 00:00:23,925
+Docker has transformed the way applications are developed and deployed
+
+6
+00:00:24,238 --> 00:00:30,312
+allowing for faster and more reliable software delivery through the use of immutable infrastructure components
+
