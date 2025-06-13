@@ -1,5 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.config import get_settings
+import os
 
 class DataBase:
     client: AsyncIOMotorClient = None
@@ -22,11 +23,33 @@ async def get_database(): # Add this function
 
 async def connect_to_mongo():
     settings = get_settings()
-    db.client = AsyncIOMotorClient(settings.db_url)
-    # You might want to add a check here to ensure the connection is successful
-    # For example, by trying to list collections or getting server info:
-    # await db.client.admin.command('ping') 
-    # logger.info("Successfully connected to MongoDB.")
+    
+    # Configure SSL options if CA certificate is provided
+    client_kwargs = {}
+    
+    if settings.db_use_ssl and settings.db_ca_cert_path:
+        # Get the absolute path to the CA certificate
+        ca_cert_path = settings.db_ca_cert_path
+        if not os.path.isabs(ca_cert_path):
+            # If path is relative, make it relative to the Backend directory
+            backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+            ca_cert_path = os.path.join(backend_dir, ca_cert_path)
+        
+        if os.path.exists(ca_cert_path):
+            # Use MongoDB-specific SSL parameters
+            client_kwargs.update({
+                'tls': True,
+                'tlsCAFile': ca_cert_path,
+                'tlsAllowInvalidHostnames': False,
+                'tlsAllowInvalidCertificates': False
+            })
+            print(f"Using CA certificate: {ca_cert_path}")
+        else:
+            print(f"Warning: CA certificate not found at {ca_cert_path}")
+    
+    # Create MongoDB client with SSL options if configured
+    db.client = AsyncIOMotorClient(settings.db_url, **client_kwargs)
+    
     print("Attempting to connect to MongoDB...")
     try:
         # The ismaster command is cheap and does not require auth.

@@ -28,14 +28,17 @@ class Settings(BaseSettings):
 
     text_llm_model: str = "gpt-4o"
     image_llm_model: str = "dall-e-3"
-    
-    # S3/Storage Configuration
+      # S3/Storage Configuration
     s3_access_key_id: str = ""
     s3_secret_key: str = ""
     s3_origin_endpoint: str = ""
     bucket_name: str = "mermaid-images"
     
+    # Database Configuration
     db_url: str = ""
+    db_ca_cert_path: str = "ca-certificate.crt"
+    db_use_ssl: bool = True
+    
     sendgrid_api_key: str= ""
     sendgrid_sender_email: str = ""
 

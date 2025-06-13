@@ -15,8 +15,8 @@ from app.services.task_queue_service import task_queue_service
 import os
 
 app = FastAPI(
-    title="StoryFlicks Backend API",
-    description="Backend API for StoryFlicks application",
+    title="AI Lesson Backend API",
+    description="Backend API for AI Lesson application",
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -60,7 +60,7 @@ app.include_router(api_router)
 @app.get("/")
 async def root():
     return {
-        "app_name": "StoryFlicks Backend API",
+        "app_name": "AI Lesson Backend API",
         "docs_url": "/docs"
     }
 
