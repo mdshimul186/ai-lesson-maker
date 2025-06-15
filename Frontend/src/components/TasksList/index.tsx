@@ -42,6 +42,7 @@ import { Alert, AlertDescription } from '../ui/alert';
 import { toast } from 'sonner';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../ui/pagination';
 import { Task, TaskEvent } from '../../interfaces/index';
+import QuizModal from '../QuizModal';
 
 // Types
 
@@ -199,6 +200,35 @@ const TasksList = forwardRef<TasksListRef, TasksListProps>((props, ref) => {
             <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.className}`}>
                 {config.icon}
                 {status}
+            </div>
+        );    };
+
+    const getTaskTypeBadge = (taskType: string) => {
+        const typeConfig = {
+            video: { 
+                icon: <Play className="h-3.5 w-3.5" />, 
+                className: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800"
+            },
+            quiz: { 
+                icon: <FileText className="h-3.5 w-3.5" />, 
+                className: "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-800"
+            },
+            animated_lesson: { 
+                icon: <Image className="h-3.5 w-3.5" />, 
+                className: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800"
+            },
+            documentation: { 
+                icon: <File className="h-3.5 w-3.5" />, 
+                className: "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800"
+            },
+        };
+
+        const config = typeConfig[taskType as keyof typeof typeConfig] || typeConfig.video;
+        
+        return (
+            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.className}`}>
+                {config.icon}
+                {taskType === 'animated_lesson' ? 'Animation' : taskType}
             </div>
         );
     };
@@ -583,9 +613,9 @@ const TasksList = forwardRef<TasksListRef, TasksListProps>((props, ref) => {
                                 <Table className="w-full">
                                 <TableHeader>
                                     <TableRow className="bg-muted/50 dark:bg-card/50 hover:bg-muted/70 dark:hover:bg-card/70">
-                                        <TableHead className="w-12 min-w-[48px]"></TableHead>
-                                        <TableHead className="font-medium min-w-[120px]">Task ID</TableHead>
+                                        <TableHead className="w-12 min-w-[48px]"></TableHead>                                        <TableHead className="font-medium min-w-[120px]">Task ID</TableHead>
                                         <TableHead className="font-medium min-w-[140px]">Status</TableHead>
+                                        <TableHead className="font-medium min-w-[100px]">Type</TableHead>
                                         <TableHead className="font-medium min-w-[120px]">Progress</TableHead>
                                         <TableHead className="font-medium min-w-[140px]">
                                             <div className="flex items-center gap-1">
@@ -610,9 +640,11 @@ const TasksList = forwardRef<TasksListRef, TasksListProps>((props, ref) => {
                                                     <div className="flex items-center gap-2">
                                                         <div className="h-6 w-20 bg-muted/60 rounded" style={{animationDelay: `${index * 0.1 + 0.05}s`}}></div>
                                                     </div>
-                                                </TableCell>
-                                                <TableCell className="min-w-[140px]">
+                                                </TableCell>                                                <TableCell className="min-w-[140px]">
                                                     <div className="h-6 w-24 bg-muted/60 rounded-full" style={{animationDelay: `${index * 0.1 + 0.1}s`}}></div>
+                                                </TableCell>
+                                                <TableCell className="min-w-[100px]">
+                                                    <div className="h-6 w-16 bg-muted/60 rounded-full" style={{animationDelay: `${index * 0.1 + 0.12}s`}}></div>
                                                 </TableCell>
                                                 <TableCell className="min-w-[120px]">
                                                     <div className="flex items-center gap-2">
@@ -643,7 +675,7 @@ const TasksList = forwardRef<TasksListRef, TasksListProps>((props, ref) => {
                                     </>
                                 ) : filteredTasks.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="h-64 text-center">
+                                        <TableCell colSpan={8} className="h-64 text-center">
                                             <div className="flex flex-col items-center justify-center gap-3">
                                                 <div className="p-3 bg-muted rounded-full">
                                                     <FileText className="h-8 w-8 text-muted-foreground" />
@@ -680,10 +712,14 @@ const TasksList = forwardRef<TasksListRef, TasksListProps>((props, ref) => {
                                                             {task.task_id.substring(0, 8)}
                                                         </span>
                                                     </div>
-                                                </TableCell>
-                                                <TableCell className="min-w-[140px]">
+                                                </TableCell>                                                <TableCell className="min-w-[140px]">
                                                     <div className="w-full max-w-[140px]">
                                                         {getStatusBadge(task.status)}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="min-w-[100px]">
+                                                    <div className="w-full max-w-[100px]">
+                                                        {getTaskTypeBadge(task.task_type || 'video')}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="min-w-[120px]">
@@ -742,26 +778,40 @@ const TasksList = forwardRef<TasksListRef, TasksListProps>((props, ref) => {
                                                                 <StopCircle className="h-3.5 w-3.5 md:mr-1" />
                                                                 <span className="hidden md:inline">Cancel</span>
                                                             </Button>
-                                                        )}
-                                                        {task.result_url && (
-                                                            <Button
-                                                                variant="default"
-                                                                size="sm"
-                                                                asChild
-                                                                className="h-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-xs"
-                                                            >
-                                                                <a href={task.result_url} target="_blank" rel="noopener noreferrer">
-                                                                    <Play className="h-3.5 w-3.5 md:mr-1" />
-                                                                    <span className="hidden md:inline">View</span>
-                                                                </a>
-                                                            </Button>
+                                                        )}                                                        {task.result_url && (
+                                                            <>
+                                                                {task.task_type === 'quiz' ? (
+                                                                    <QuizModal task={task}>
+                                                                        <Button
+                                                                            variant="default"
+                                                                            size="sm"
+                                                                            className="h-8 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-xs"
+                                                                        >
+                                                                            <Play className="h-3.5 w-3.5 md:mr-1" />
+                                                                            <span className="hidden md:inline">View Quiz</span>
+                                                                        </Button>
+                                                                    </QuizModal>
+                                                                ) : (
+                                                                    <Button
+                                                                        variant="default"
+                                                                        size="sm"
+                                                                        asChild
+                                                                        className="h-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-xs"
+                                                                    >
+                                                                        <a href={task.result_url} target="_blank" rel="noopener noreferrer">
+                                                                            <Play className="h-3.5 w-3.5 md:mr-1" />
+                                                                            <span className="hidden md:inline">View</span>
+                                                                        </a>
+                                                                    </Button>
+                                                                )}
+                                                            </>
                                                         )}
                                                     </div>
                                                 </TableCell>
                                             </TableRow>
                                         {expandedRows.has(task.task_id) && (
                                             <TableRow>
-                                                <TableCell colSpan={7} className="bg-muted/30 dark:bg-card/30 p-4">
+                                                <TableCell colSpan={8} className="bg-muted/30 dark:bg-card/30 p-4">
                                                     <div className="space-y-4 rounded-lg border border-border p-4 bg-background/80 dark:bg-card/80 shadow-sm">
                                                         {/* Task Details Grid */}
                                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -1069,19 +1119,33 @@ const TasksList = forwardRef<TasksListRef, TasksListProps>((props, ref) => {
                                                 <StopCircle className="h-3.5 w-3.5 mr-1" />
                                                 Cancel
                                             </Button>
-                                        )}
-                                        {task.result_url && (
-                                            <Button
-                                                variant="default"
-                                                size="sm"
-                                                asChild
-                                                className="h-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-xs flex-1"
-                                            >
-                                                <a href={task.result_url} target="_blank" rel="noopener noreferrer">
-                                                    <Play className="h-3.5 w-3.5 mr-1" />
-                                                    View
-                                                </a>
-                                            </Button>
+                                        )}                                        {task.result_url && (
+                                            <>
+                                                {task.task_type === 'quiz' ? (
+                                                    <QuizModal task={task}>
+                                                        <Button
+                                                            variant="default"
+                                                            size="sm"
+                                                            className="h-8 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-xs flex-1"
+                                                        >
+                                                            <Play className="h-3.5 w-3.5 mr-1" />
+                                                            View Quiz
+                                                        </Button>
+                                                    </QuizModal>
+                                                ) : (
+                                                    <Button
+                                                        variant="default"
+                                                        size="sm"
+                                                        asChild
+                                                        className="h-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-xs flex-1"
+                                                    >
+                                                        <a href={task.result_url} target="_blank" rel="noopener noreferrer">
+                                                            <Play className="h-3.5 w-3.5 mr-1" />
+                                                            View
+                                                        </a>
+                                                    </Button>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                 </CardContent>

@@ -1,0 +1,16 @@
+1
+00:00:00,100 --> 00:00:07,263
+Building and testing Docker images in a GitHub Actions workflow is achieved by specifying steps in YAML to build Docker
+
+2
+00:00:07,612 --> 00:00:09,537
+run tests inside the container
+
+3
+00:00:09,800 --> 00:00:12,662
+and ensure the image operates as expected
+
+4
+00:00:13,613 --> 00:00:18,050
+This guarantees consistent builds and accurate testing across different environments
+

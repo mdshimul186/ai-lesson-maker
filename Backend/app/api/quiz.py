@@ -5,7 +5,7 @@ from app.services.task_queue_service import task_queue_service
 from app.services import task_service
 from app.api.users import get_current_active_user
 from app.schemas.user import UserInDB as User
-from app.api.dependencies import get_valid_account_id
+from app.api.dependencies import get_valid_account_id, get_valid_account_id_unified
 from app.models.task_types import TaskType
 import uuid
 import logging
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 class QuizRequest(BaseModel):
-    topic: str = Field(..., description="Topic for the quiz")
+    story_prompt: str = Field(..., description="Story prompt for the quiz")
     question_count: int = Field(..., ge=1, le=50, description="Number of questions (1-50)")
     difficulty: str = Field(..., description="Difficulty level (easy, medium, hard)")
     quiz_type: str = Field(default="multiple_choice", description="Type of quiz questions")
@@ -115,3 +115,28 @@ async def get_quiz_types():
             {"value": "zh", "label": "Chinese"}
         ]
     }
+
+# Example of unified authentication usage
+# This shows how any API endpoint can support both Bearer token and API key authentication
+
+# Old import (Bearer token only):
+# from app.api.dependencies import get_valid_account_id
+
+# New import (supports both Bearer token and API key):
+# from app.api.dependencies import get_valid_account_id_unified
+
+# Example updated endpoint with unified authentication:
+"""
+@router.post("/generate-unified", response_model=QuizResponse)
+async def generate_quiz_unified(
+    request: QuizRequest,
+    account_id: str = Depends(get_valid_account_id_unified)  # Supports both auth methods
+):
+    # This endpoint now works with:
+    # 1. Bearer token + X-Account-ID header (existing method)
+    # 2. X-API-Key header only (new method - account_id extracted from API key)
+    
+    # The account_id will be available regardless of authentication method
+    # and the rest of the logic remains the same
+    pass
+"""

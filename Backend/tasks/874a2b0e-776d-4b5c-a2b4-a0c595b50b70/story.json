@@ -1,0 +1,60 @@
+{
+  "video_subject": null,
+  "video_script": null,
+  "video_terms": null,
+  "video_aspect": "9:16",
+  "video_concat_mode": "random",
+  "video_clip_duration": 5,
+  "video_count": 1,
+  "video_source": "pexels",
+  "video_materials": null,
+  "video_language": null,
+  "voice_name": "en-AU-NatashaNeural",
+  "voice_volume": 1.0,
+  "voice_rate": 1.0,
+  "bgm_type": "random",
+  "bgm_file": "",
+  "bgm_volume": 0.2,
+  "subtitle_enabled": false,
+  "subtitle_position": "bottom",
+  "custom_position": 70.0,
+  "font_name": "STHeitiMedium.ttc",
+  "text_fore_color": "#FFFFFF",
+  "text_background_color": true,
+  "font_size": 60,
+  "stroke_color": "#000000",
+  "stroke_width": 1.5,
+  "n_threads": 2,
+  "paragraph_number": 1,
+  "task_id": null,
+  "test_mode": false,
+  "segments": 3,
+  "language": "English",
+  "story_prompt": "Create a walkthrough that sets up a GitHub Actions workflow to build, test, and push Docker images.",
+  "image_style": "realistic",
+  "resolution": "1920*1080",
+  "include_subtitles": false,
+  "visual_content_in_language": false,
+  "logo_url": null,
+  "intro_video_url": null,
+  "outro_video_url": null,
+  "theme": "modern",
+  "custom_colors": null,
+  "scenes": [
+    {
+      "text": "Setting up a GitHub Actions workflow involves creating a YAML file within your repository. This file defines triggers such as events (e.g., push, pull request) and specifies the steps to run within the workflow. Understanding the syntax and available options in the YAML file is crucial for configuring a GitHub Actions workflow effectively.",
+      "image_prompt": "# GitHub Actions Workflow Setup\n\n```yaml\nname: CI\n\non:\n  push:\n    branches:\n      - main\n  pull_request:\n    branches:\n      - main\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n```\n\n### Key Points:\n- **name:** The name of the workflow.\n- **on:** Specifies the events that trigger the workflow (push or pull request).\n- **jobs:** Defines tasks such as build that run on specified conditions.",
+      "url": "https://ai-video-maker.nyc3.digitaloceanspaces.com/3f3d705f-048a-4985-bd0a-6cef5c7b27d3.png"
+    },
+    {
+      "text": "Building and testing Docker images in a GitHub Actions workflow is achieved by specifying steps in YAML to build Docker, run tests inside the container, and ensure the image operates as expected. This guarantees consistent builds and accurate testing across different environments.",
+      "image_prompt": "# Building and Testing Docker\n\n```yaml\nsteps:\n  - name: Checkout\n    uses: actions/checkout@v2\n\n  - name: Build the Docker image\n    run: docker build -t my-image .\n\n  - name: Run tests\n    run: docker run my-image pytest tests/\n```\n\n### Workflow Steps:\n- **Checkout Code:** Fetches the repository's code.\n- **Build Image:** Constructs the Docker image using Dockerfile.\n- **Run Tests:** Executes tests using pytest inside the Docker container.",
+      "url": "https://ai-video-maker.nyc3.digitaloceanspaces.com/a7d60044-fdc9-4d71-b8cf-0531e335196a.png"
+    },
+    {
+      "text": "The final step in a Docker-based GitHub Actions workflow is pushing the Docker image to a container registry like Docker Hub. This involves logging into the registry, tagging the image appropriately, and pushing it to the specified repository location, enabling easy deployment and sharing.",
+      "image_prompt": "# Pushing Docker Image\n\n```yaml\n  - name: Log in to Docker Hub\n    uses: docker/login-action@v1\n    with:\n      username: ${{ secrets.DOCKER_USERNAME }}\n      password: ${{ secrets.DOCKER_PASSWORD }}\n\n  - name: Tag Docker image\n    run: docker tag my-image my-repo/my-image:latest\n\n  - name: Push Docker image\n    run: docker push my-repo/my-image:latest\n```\n\n### Deployment Steps:\n- **Login:** Authenticate with Docker Hub using secrets.\n- **Tag Image:** Assign a tag indicating the image's version.\n- **Push Image:** Upload the image to the specified Docker repository.",
+      "url": "https://ai-video-maker.nyc3.digitaloceanspaces.com/e7fc0289-b2be-4662-bd54-47239f7c7465.png"
+    }
+  ]
+}

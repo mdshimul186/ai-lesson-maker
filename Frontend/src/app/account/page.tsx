@@ -11,7 +11,8 @@ import {
   Settings, 
   User, 
   History, 
-  HelpCircle 
+  HelpCircle,
+  Key 
 } from 'lucide-react';
 import { useAccountStore } from '../../stores';
 import { toast } from 'sonner';
@@ -20,6 +21,7 @@ import TeamManagement from '../../components/TeamManagement';
 import AccountSettings from '../../components/AccountSettings';
 import AccountFAQ from '../../components/FAQ';
 import TransactionHistory from '../../components/TransactionHistory';
+import APIKeyManagement from '../../components/APIKeyManagement';
 
 export default function AccountPage() {
   const { fetchAccounts, currentAccount, error } = useAccountStore();
@@ -36,57 +38,58 @@ export default function AccountPage() {
       toast.error(error);
     }
   }, [error]);
-  
-  if (!currentAccount) {
+    if (!currentAccount) {
     return (
-      <div className="p-6 bg-background dark:bg-background">
-        <Card className="p-6 border border-border bg-background dark:bg-card/95 shadow-sm">
-          <div className="flex justify-center items-center h-48 space-x-4">
-            <Skeleton className="h-8 w-8 rounded-full bg-muted/70 dark:bg-muted/30" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-32 bg-muted/70 dark:bg-muted/30" />
-              <Skeleton className="h-4 w-24 bg-muted/70 dark:bg-muted/30" />
+      <div className="min-h-screen bg-background dark:bg-background">
+        <div className="container mx-auto px-4 py-6 max-w-7xl">
+          <Card className="p-6 border border-border bg-background dark:bg-card/95 shadow-sm">
+            <div className="flex justify-center items-center h-48 space-x-4">
+              <Skeleton className="h-8 w-8 rounded-full bg-muted/70 dark:bg-muted/30" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-32 bg-muted/70 dark:bg-muted/30" />
+                <Skeleton className="h-4 w-24 bg-muted/70 dark:bg-muted/30" />
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
       </div>
     );
   }
-  
-  return (
-    <div className="p-4 md:p-6 space-y-6 bg-background dark:bg-background">
-      {/* Account Header Card */}
-      <Card className="p-6 bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-700 dark:to-cyan-700 text-white shadow-md">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Avatar className="h-16 w-16 bg-white/90 dark:bg-gray-900/90 ring-2 ring-white/50 dark:ring-white/20">
-              <AvatarFallback className="text-blue-600 dark:text-blue-400">
-                <User className="h-8 w-8" />
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h3 className="text-2xl font-bold text-white">
-                {currentAccount.name}
-              </h3>
-              <p className="text-blue-100 dark:text-blue-200">
-                {currentAccount.type.charAt(0).toUpperCase() + currentAccount.type.slice(1)} Account
-              </p>
+    return (
+    <div className="min-h-screen bg-background dark:bg-background">
+      <div className="container mx-auto px-4 py-6 max-w-7xl space-y-6">
+        {/* Account Header Card */}
+        <Card className="p-6 bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-700 dark:to-cyan-700 text-white shadow-md">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Avatar className="h-16 w-16 bg-white/90 dark:bg-gray-900/90 ring-2 ring-white/50 dark:ring-white/20">
+                <AvatarFallback className="text-blue-600 dark:text-blue-400">
+                  <User className="h-8 w-8" />
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="text-2xl font-bold text-white">
+                  {currentAccount.name}
+                </h3>
+                <p className="text-blue-100 dark:text-blue-200">
+                  {currentAccount.type.charAt(0).toUpperCase() + currentAccount.type.slice(1)} Account
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-blue-100 dark:text-blue-200">Available Credits</div>
+              <div className="text-3xl font-bold text-white">
+                {currentAccount.credits}
+              </div>
+              <div className="text-sm text-blue-100 dark:text-blue-200">credits</div>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-sm text-blue-100 dark:text-blue-200">Available Credits</div>
-            <div className="text-3xl font-bold text-white">
-              {currentAccount.credits}
-            </div>
-            <div className="text-sm text-blue-100 dark:text-blue-200">credits</div>
-          </div>
-        </div>
-      </Card>
-      
-      {/* Tabs Section */}
-      <Card className="p-6 border border-border bg-background dark:bg-card/95 shadow-sm">
-        <Tabs defaultValue="credits" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-5 bg-muted/60 dark:bg-muted/20 dark:text-muted-foreground">
+        </Card>
+        
+        {/* Tabs Section */}
+        <Card className="p-6 border border-border bg-background dark:bg-card/95 shadow-sm">
+          <Tabs defaultValue="credits" className="w-full">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6 bg-muted/60 dark:bg-muted/20 dark:text-muted-foreground">
             <TabsTrigger value="credits" className="flex items-center space-x-2 data-[state=active]:bg-background dark:data-[state=active]:bg-card/90 dark:data-[state=active]:text-foreground">
               <Wallet className="h-4 w-4" />
               <span className="hidden sm:inline">Credits</span>
@@ -102,13 +105,16 @@ export default function AccountPage() {
             <TabsTrigger value="faq" className="flex items-center space-x-2 data-[state=active]:bg-background dark:data-[state=active]:bg-card/90 dark:data-[state=active]:text-foreground">
               <HelpCircle className="h-4 w-4" />
               <span className="hidden sm:inline">FAQ</span>
-            </TabsTrigger>
-            {currentAccount.type === 'team' && (
+            </TabsTrigger>            {currentAccount.type === 'team' && (
               <TabsTrigger value="team" className="flex items-center space-x-2 data-[state=active]:bg-background dark:data-[state=active]:bg-card/90 dark:data-[state=active]:text-foreground">
                 <Users className="h-4 w-4" />
                 <span className="hidden sm:inline">Team</span>
               </TabsTrigger>
             )}
+            <TabsTrigger value="api-keys" className="flex items-center space-x-2 data-[state=active]:bg-background dark:data-[state=active]:bg-card/90 dark:data-[state=active]:text-foreground">
+              <Key className="h-4 w-4" />
+              <span className="hidden sm:inline">API Keys</span>
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="credits" className="mt-6">
@@ -126,14 +132,17 @@ export default function AccountPage() {
           <TabsContent value="faq" className="mt-6">
             <AccountFAQ />
           </TabsContent>
-          
-          {currentAccount.type === 'team' && (
+            {currentAccount.type === 'team' && (
             <TabsContent value="team" className="mt-6">
               <TeamManagement />
             </TabsContent>
           )}
+            <TabsContent value="api-keys" className="mt-6">
+            <APIKeyManagement />
+          </TabsContent>
         </Tabs>
       </Card>
+      </div>
     </div>
   );
 }

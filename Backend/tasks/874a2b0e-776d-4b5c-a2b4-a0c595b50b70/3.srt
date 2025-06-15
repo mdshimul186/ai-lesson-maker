@@ -1,0 +1,20 @@
+1
+00:00:00,100 --> 00:00:07,000
+The final step in a Docker-based GitHub Actions workflow is pushing the Docker image to a container registry like Docker Hub
+
+2
+00:00:07,987 --> 00:00:09,938
+This involves logging into the registry
+
+3
+00:00:10,162 --> 00:00:11,838
+tagging the image appropriately
+
+4
+00:00:12,225 --> 00:00:14,963
+and pushing it to the specified repository location
+
+5
+00:00:15,225 --> 00:00:17,500
+enabling easy deployment and sharing
+

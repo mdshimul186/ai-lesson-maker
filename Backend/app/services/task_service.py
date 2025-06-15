@@ -10,12 +10,15 @@ TASKS_COLLECTION = "tasks"
 
 async def create_task(
     task_id: str, 
-    user_id: str, 
+    user_id: Optional[str], 
     account_id: str, 
     initial_status: str = "PENDING", 
     request_data: Optional[Dict[str, Any]] = None,
     task_type: str = "video",
-    priority: str = "normal"
+    priority: str = "normal",
+    task_source_name: Optional[str] = None,
+    task_source_id: Optional[str] = None,
+    task_source_group_id: Optional[str] = None
 ) -> Task:
     """
     Create a new task or return existing one if task_id already exists.
@@ -27,9 +30,12 @@ async def create_task(
         # Return existing task for idempotency
         return Task(**existing_task)
 
+    # Use a special user_id for API key authentication
+    effective_user_id = user_id if user_id else f"api_key_user_{account_id}"
+
     task_data = Task(
         task_id=task_id,
-        user_id=user_id,
+        user_id=effective_user_id,
         account_id=account_id,
         task_type=task_type,
         priority=priority,
@@ -38,7 +44,9 @@ async def create_task(
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow(),
         request_data=request_data,  # Store the complete request body for video generation
-
+        task_source_name=task_source_name,
+        task_source_id=task_source_id,
+        task_source_group_id=task_source_group_id,
         events=[TaskEvent(message=f"Task {initial_status.lower()}")]
     )
     
@@ -203,11 +211,13 @@ async def set_task_failed(
         raise HTTPException(status_code=500, detail=f"Failed to mark task as failed: {str(e)}")
 
 async def get_all_tasks(
-    user_id: str, 
     account_id: Optional[str] = None, 
     limit: int = 100, 
     skip: int = 0, 
-    status_filter: Optional[str] = None
+    status_filter: Optional[str] = None,
+    task_source_group_id: Optional[str] = None,
+    task_source_ids: Optional[List[str]] = None,
+    task_ids: Optional[List[str]] = None
 ) -> List[Task]:
     """
     Retrieve all tasks for a given user and optionally account, with pagination and status filtering.
@@ -218,6 +228,9 @@ async def get_all_tasks(
         limit: Maximum number of tasks to return
         skip: Number of tasks to skip (for pagination)
         status_filter: Optional filter to only return tasks with a specific status
+        task_source_group_id: Optional filter to only return tasks with a specific group ID
+        task_source_ids: Optional list of source IDs to filter tasks by
+        task_ids: Optional list of specific task IDs to retrieve
         
     Returns:
         List of Task objects
@@ -226,11 +239,17 @@ async def get_all_tasks(
         collection = await get_collection(TASKS_COLLECTION)
         
         # Build the query based on filters
-        query = {"user_id": user_id}  # Always filter by user_id
+        query = {}  # Always filter by user_id
         if account_id:
             query["account_id"] = account_id
         if status_filter:
             query["status"] = status_filter
+        if task_source_group_id:
+            query["task_source_group_id"] = task_source_group_id
+        if task_source_ids:
+            query["task_source_id"] = {"$in": task_source_ids}
+        if task_ids:
+            query["task_id"] = {"$in": task_ids}
         
         # Execute the query with pagination
         cursor = collection.find(query).sort("updated_at", -1).skip(skip).limit(limit)
@@ -262,7 +281,7 @@ async def delete_task(task_id: str, user_id: str) -> bool:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to delete task: {str(e)}")
 
-async def get_task_count(user_id: str, account_id: Optional[str] = None, status_filter: Optional[str] = None) -> int:
+async def get_task_count(account_id: Optional[str] = None, status_filter: Optional[str] = None, task_source_group_id: Optional[str] = None, task_source_ids: Optional[List[str]] = None, task_ids: Optional[List[str]] = None) -> int:
     """
     Get the total count of tasks for a user with optional filters.
     
@@ -270,18 +289,27 @@ async def get_task_count(user_id: str, account_id: Optional[str] = None, status_
         user_id: The ID of the user whose tasks to count
         account_id: Optional account filter
         status_filter: Optional status filter
+        task_source_group_id: Optional group filter
+        task_source_ids: Optional list of source IDs to filter tasks by
+        task_ids: Optional list of specific task IDs to count
         
     Returns:
         Total count of matching tasks
     """
     try:
         collection = await get_collection(TASKS_COLLECTION)
-        
-        query = {"user_id": user_id}
+
+        query = {}
         if account_id:
             query["account_id"] = account_id
         if status_filter:
             query["status"] = status_filter
+        if task_source_group_id:
+            query["task_source_group_id"] = task_source_group_id
+        if task_source_ids:
+            query["task_source_id"] = {"$in": task_source_ids}
+        if task_ids:
+            query["task_id"] = {"$in": task_ids}
             
         return await collection.count_documents(query)
     except Exception as e:
@@ -292,11 +320,11 @@ class TaskService:
     """
     Task service class for compatibility with existing imports.
     Wraps the async functions for use in other services.
-    """
+    """    
     @staticmethod
-    async def create_task(task_id: str, user_id: str, account_id: str, initial_status: str = "PENDING", request_data: Optional[Dict[str, Any]] = None) -> Task:
+    async def create_task(task_id: str, user_id: Optional[str], account_id: str, initial_status: str = "PENDING", request_data: Optional[Dict[str, Any]] = None) -> Task:
         return await create_task(task_id, user_id, account_id, initial_status, request_data)
-
+    
     @staticmethod
     async def get_task(task_id: str) -> Optional[Task]:
         return await get_task(task_id)
@@ -318,8 +346,7 @@ class TaskService:
     async def set_task_completed(task_id: str, result_url: str, 
                                task_folder_content: Optional[Dict[str, Any]] = None, 
                                final_message: str = "Task completed successfully") -> Optional[Task]:
-        return await set_task_completed(task_id, result_url, task_folder_content, final_message)
-    
+        return await set_task_completed(task_id, result_url, task_folder_content, final_message)    
     @staticmethod
     async def set_task_failed(task_id: str, error_message: str, 
                             error_details: Optional[Dict[str, Any]] = None, 
@@ -328,16 +355,81 @@ class TaskService:
         return await set_task_failed(task_id, error_message, error_details, task_folder_content, final_message)
     
     @staticmethod
-    async def get_all_tasks(user_id: str, account_id: Optional[str] = None, 
+    async def get_all_tasks(account_id: Optional[str] = None, 
                           limit: int = 100, skip: int = 0, 
-                          status_filter: Optional[str] = None) -> List[Task]:
-        return await get_all_tasks(user_id, account_id, limit, skip, status_filter)
-    
+                          status_filter: Optional[str] = None, 
+                          task_source_group_id: Optional[str] = None,
+                          task_source_ids: Optional[List[str]] = None,
+                          task_ids: Optional[List[str]] = None) -> List[Task]:
+        return await get_all_tasks(account_id, limit, skip, status_filter, task_source_group_id, task_source_ids, task_ids)
+
     @staticmethod
     async def delete_task(task_id: str, user_id: str) -> bool:
         return await delete_task(task_id, user_id)
     
     @staticmethod
-    async def get_task_count(user_id: str, account_id: Optional[str] = None, 
-                           status_filter: Optional[str] = None) -> int:
-        return await get_task_count(user_id, account_id, status_filter)
+    async def get_task_count(account_id: Optional[str] = None, 
+                           status_filter: Optional[str] = None,
+                           task_source_group_id: Optional[str] = None,
+                           task_source_ids: Optional[List[str]] = None,
+                           task_ids: Optional[List[str]] = None) -> int:
+        return await get_task_count(account_id, status_filter, task_source_group_id, task_source_ids, task_ids)
+
+    @staticmethod
+    async def create_bulk_tasks(
+        tasks_data: List[Dict[str, Any]], 
+        user_id: Optional[str], 
+        account_id: str
+    ) -> List[Task]:
+        return await create_bulk_tasks_impl(tasks_data, user_id, account_id)
+
+
+async def create_bulk_tasks_impl(
+    tasks_data: List[Dict[str, Any]], 
+    user_id: Optional[str], 
+    account_id: str
+) -> List[Task]:
+    """
+    Create multiple tasks in bulk.
+    """
+    collection = await get_collection(TASKS_COLLECTION)
+    created_tasks = []
+    
+    # Use a special user_id for API key authentication
+    effective_user_id = user_id if user_id else f"api_key_user_{account_id}"
+    
+    try:
+        for task_data in tasks_data:
+            # Check if task already exists
+            existing_task = await collection.find_one({"task_id": task_data["task_id"]})
+            
+            if existing_task:
+                # Add existing task to results for idempotency
+                created_tasks.append(Task(**existing_task))
+                continue
+            
+            # Create new task
+            task = Task(
+                task_id=task_data["task_id"],
+                user_id=effective_user_id,
+                account_id=account_id,
+                task_type=task_data.get("task_type", "video"),
+                priority=task_data.get("priority", "normal"),
+                status="PENDING",
+                progress=0.0,
+                created_at=datetime.utcnow(),
+                updated_at=datetime.utcnow(),
+                request_data=task_data.get("request_data"),
+                task_source_name=task_data.get("task_source_name"),
+                task_source_id=task_data.get("task_source_id"),
+                task_source_group_id=task_data.get("task_source_group_id"),
+                events=[TaskEvent(message="Task pending")]
+            )
+            
+            # Insert the task
+            await collection.insert_one(task.model_dump(by_alias=True))
+            created_tasks.append(task)
+        
+        return created_tasks
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create bulk tasks: {str(e)}")

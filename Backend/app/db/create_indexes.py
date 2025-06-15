@@ -22,6 +22,17 @@ async def create_indexes():
     await db.tasks.create_index("task_id", unique=True)
     await db.tasks.create_index([("account_id", 1), ("status", 1)])
     await db.tasks.create_index([("user_id", 1), ("status", 1)])
+    await db.tasks.create_index([("user_id", 1), ("task_source_group_id", 1)])
+    await db.tasks.create_index([("account_id", 1), ("task_source_group_id", 1)])
+    await db.tasks.create_index([("task_source_group_id", 1), ("status", 1)])
+    await db.tasks.create_index([("user_id", 1), ("account_id", 1), ("task_source_group_id", 1)])
+    
+    # API Keys collection indexes
+    logger.info("Creating indexes for api_keys collection...")
+    await db.api_keys.create_index("key_hash", unique=True)
+    await db.api_keys.create_index([("account_id", 1), ("is_active", 1)])
+    await db.api_keys.create_index([("account_id", 1), ("created_at", -1)])
+    await db.api_keys.create_index([("expires_at", 1)])  # For cleanup of expired keys
     
     logger.info("All indexes created successfully.")
 

@@ -30,6 +30,9 @@ class Task(BaseModel):
     error_details: Optional[Dict[str, Any]] = None
     request_data: Optional[Dict[str, Any]] = None # Store the complete request body for video generation
     estimated_completion: Optional[datetime] = None # Estimated completion time
+    task_source_name: Optional[str] = Field(default=None, description="Name of the source that created the task")
+    task_source_id: Optional[str] = Field(default=None, description="Identifier of the source that created the task")
+    task_source_group_id: Optional[str] = Field(default=None, description="Group identifier for related tasks")
 
     model_config = {
         "populate_by_name": True,
@@ -37,7 +40,16 @@ class Task(BaseModel):
     }
 
 class TaskCreate(BaseModel):
-    task_id: str
+    task_id: Optional[str] = Field(default=None, description="Unique identifier for the task. If not provided, will be auto-generated.")
+    task_type: Optional[str] = Field(default="video", description="Type of task")
+    priority: Optional[str] = Field(default="normal", description="Task priority")
+    request_data: Optional[Dict[str, Any]] = None
+    task_source_name: Optional[str] = None
+    task_source_id: Optional[str] = None
+    task_source_group_id: Optional[str] = None
+
+class TaskBulkCreate(BaseModel):
+    tasks: List[TaskCreate] = Field(..., description="List of tasks to create")
 
 class TaskUpdate(BaseModel):
     status: Optional[str] = None

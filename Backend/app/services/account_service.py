@@ -111,6 +111,34 @@ class AccountService:
 
         return await self._map_account_doc_to_response(account_doc, current_user_id)
     
+    async def get_account_by_id_direct(self, account_id: str) -> Optional[AccountResponse]:
+        """Get account by ID without user access validation (for API key auth)"""
+        accounts_collection = await get_collection("accounts")
+        account_doc = await accounts_collection.find_one({"id": account_id})
+        
+        if not account_doc:
+            return None
+        
+        # For API key auth, we create a response without user-specific access checks
+        account = Account(**account_doc)
+        members_response = []
+        if account.members:
+            for member_data in account.members:
+                member_dict = member_data if isinstance(member_data, dict) else member_data.dict()
+                members_response.append(TeamMemberResponse(**member_dict))
+        
+        return AccountResponse(
+            id=account.id,
+            name=account.name,
+            type=account.type,
+            credits=account.credits,
+            description=account.description,
+            created_at=account.created_at,
+            is_owner=False,  # API key doesn't have owner context
+            owner_id=account.owner_id,
+            members=members_response
+        )
+
     async def get_user_accounts(self, user_id: str) -> List[AccountResponse]:
         """Get all accounts a user belongs to (owner or accepted member)"""
         accounts_collection = await get_collection("accounts")
