@@ -210,6 +210,50 @@ async def set_task_failed(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to mark task as failed: {str(e)}")
 
+async def set_task_cancelled(
+    task_id: str, 
+    cancellation_reason: str, 
+    cancellation_details: Optional[Dict[str, Any]] = None, 
+    task_folder_content: Optional[Dict[str, Any]] = None, 
+    final_message: Optional[str] = None
+) -> Optional[Task]:
+    """
+    Mark a task as cancelled with cancellation details and optional folder content.
+    """
+    try:
+        collection = await get_collection(TASKS_COLLECTION)
+        
+        if not final_message:
+            final_message = f"Task cancelled: {cancellation_reason}"
+            
+        event = TaskEvent(message=final_message, details=cancellation_details)
+        
+        update = {
+            '$set': {
+                'status': "CANCELLED",
+                'error_message': cancellation_reason,
+                'error_details': cancellation_details,
+                'updated_at': datetime.utcnow()
+            },
+            '$push': {'events': event.model_dump(by_alias=True)}
+        }
+        
+        # Add task_folder_content to update if provided
+        if task_folder_content:
+            update['$set']['task_folder_content'] = task_folder_content
+        
+        result = await collection.find_one_and_update(
+            {'task_id': task_id},
+            update,
+            return_document=ReturnDocument.AFTER
+        )
+        
+        if result:
+            return Task(**result)
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to mark task as cancelled: {str(e)}")
+
 async def get_all_tasks(
     account_id: Optional[str] = None, 
     limit: int = 100, 
@@ -353,6 +397,13 @@ class TaskService:
                             task_folder_content: Optional[Dict[str, Any]] = None, 
                             final_message: Optional[str] = None) -> Optional[Task]:
         return await set_task_failed(task_id, error_message, error_details, task_folder_content, final_message)
+    
+    @staticmethod
+    async def set_task_cancelled(task_id: str, cancellation_reason: str, 
+                               cancellation_details: Optional[Dict[str, Any]] = None, 
+                               task_folder_content: Optional[Dict[str, Any]] = None, 
+                               final_message: Optional[str] = None) -> Optional[Task]:
+        return await set_task_cancelled(task_id, cancellation_reason, cancellation_details, task_folder_content, final_message)
     
     @staticmethod
     async def get_all_tasks(account_id: Optional[str] = None, 

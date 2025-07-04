@@ -50,6 +50,10 @@ class TaskCreate(BaseModel):
 
 class TaskBulkCreate(BaseModel):
     tasks: List[TaskCreate] = Field(..., description="List of tasks to create")
+    # Optional shared settings for video tasks (like /video/generate API)
+    logo_url: Optional[str] = Field(default=None, description="Logo URL to apply to all video tasks")
+    intro_video_url: Optional[str] = Field(default=None, description="Intro video URL to apply to all video tasks")
+    outro_video_url: Optional[str] = Field(default=None, description="Outro video URL to apply to all video tasks")
 
 class TaskUpdate(BaseModel):
     status: Optional[str] = None
@@ -81,3 +85,16 @@ class QueueItem(BaseModel):
     updated_at: datetime
     attempts: int = 0
     last_error: Optional[str] = None
+
+class TaskBulkRegenerate(BaseModel):
+    task_ids: List[str] = Field(..., description="List of task IDs to regenerate")
+    reset_to_pending: bool = Field(default=True, description="Whether to reset tasks to PENDING status before regenerating")
+    force: bool = Field(default=False, description="Force regeneration even if tasks are currently processing")
+    # Optional intro/outro/logo overrides for video tasks (like /video/generate API)
+    logo_url: Optional[str] = Field(default=None, description="Override logo URL for video tasks")
+    intro_video_url: Optional[str] = Field(default=None, description="Override intro video URL for video tasks")
+    outro_video_url: Optional[str] = Field(default=None, description="Override outro video URL for video tasks")
+
+class TaskBulkCancel(BaseModel):
+    task_ids: List[str] = Field(..., description="List of task IDs to cancel")
+    reason: Optional[str] = Field(default="Bulk cancellation requested", description="Reason for cancellation")

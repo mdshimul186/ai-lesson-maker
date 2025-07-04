@@ -2,8 +2,10 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List, Optional
 import asyncio
 import uuid
+from datetime import datetime
+from datetime import datetime
 
-from app.schemas.task import Task as TaskSchema, TaskCreate, TaskBulkCreate
+from app.schemas.task import Task as TaskSchema, TaskCreate, TaskBulkCreate, TaskBulkRegenerate, TaskBulkCancel
 from app.services import task_service
 from app.services.task_queue_service import task_queue_service  # Updated import
 from app.api.users import get_current_active_user  # Import dependency
@@ -310,57 +312,91 @@ async def update_task_progress_api(
     
     return updated_task
 
-@router.get("/queue/status")
+@router.get("/queue/status", response_model=dict)
 async def get_queue_status_api(
-    task_id: Optional[str] = Query(None, description="Optional task ID to get specific task status"),
     account_id: str = Depends(get_valid_account_id_unified),
     auth_context: tuple = Depends(get_auth_context)
 ):
     """
-    Get current queue status or specific task status.
+    Get the current status of the task queue.
+    
+    Returns:
+        Current queue status including processing state and task counts
     """
     try:
-        status = await task_queue_service.get_queue_status(task_id)
-        return {"success": True, "data": status}
+        # Get overall queue status
+        queue_status = await task_queue_service.get_queue_status()
+        
+        # Check if queue processing is active
+        is_processing = task_queue_service._processing
+        current_task = task_queue_service._current_task_id
+        
+        # Get tasks by status for this account
+        pending_tasks = await task_service.get_all_tasks(
+            account_id=account_id, 
+            status_filter="PENDING", 
+            limit=100
+        )
+        
+        queued_tasks = await task_service.get_all_tasks(
+            account_id=account_id, 
+            status_filter="QUEUED", 
+            limit=100
+        )
+        
+        processing_tasks = await task_service.get_all_tasks(
+            account_id=account_id, 
+            status_filter="PROCESSING", 
+            limit=100
+        )
+        
+        return {
+            "success": True,
+            "queue_processing_active": is_processing,
+            "current_processing_task": current_task,
+            "overall_queue_status": queue_status,
+            "account_task_counts": {
+                "pending": len(pending_tasks),
+                "queued": len(queued_tasks), 
+                "processing": len(processing_tasks)
+            },
+            "pending_task_ids": [t.task_id for t in pending_tasks[:10]],  # First 10
+            "queued_task_ids": [t.task_id for t in queued_tasks[:10]],    # First 10
+        }
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get queue status: {str(e)}")
 
-@router.post("/queue/start")
-async def start_queue_processing_api(
+@router.post("/queue/restart", response_model=dict)
+async def restart_queue_processing_api(
     account_id: str = Depends(get_valid_account_id_unified),
     auth_context: tuple = Depends(get_auth_context)
 ):
     """
-    Manually start queue processing (for debugging).
+    Manually restart queue processing if it's stopped.
+    
+    Returns:
+        Result of the restart operation
     """
     try:
+        # Check current status
+        was_processing = task_queue_service._processing
+        
+        # Stop and restart processing
+        if was_processing:
+            await task_queue_service.stop_processing()
+        
         await task_queue_service.start_processing()
-        return {"success": True, "message": "Queue processing started"}
+        
+        return {
+            "success": True,
+            "message": f"Queue processing {'restarted' if was_processing else 'started'}",
+            "was_processing_before": was_processing,
+            "is_processing_now": task_queue_service._processing
+        }
+        
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to start queue processing: {str(e)}")
-
-@router.get("/queue/list")
-async def get_queue_list_api(
-    limit: int = Query(50, description="Maximum number of queue items to return"),
-    skip: int = Query(0, description="Number of queue items to skip"),
-    task_type: Optional[str] = Query(None, description="Filter by task type"),
-    status: Optional[str] = Query(None, description="Filter by status"),
-    account_id: str = Depends(get_valid_account_id_unified),
-    auth_context: tuple = Depends(get_auth_context)
-):
-    """
-    Get list of tasks in queue with filtering.
-    """
-    try:
-        queue_items = await task_queue_service.get_queue_list(
-            limit=limit,
-            skip=skip,
-            task_type=task_type,
-            status=status
-        )
-        return {"success": True, "data": queue_items}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get queue list: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to restart queue processing: {str(e)}")
 
 @router.get("/types")
 async def get_supported_task_types():
@@ -479,12 +515,25 @@ async def create_bulk_tasks_api(
     tasks_data = []
     for task in bulk_request.tasks:
         # Prepare request_data with any necessary transformations
-        request_data = task.request_data.copy() if task.request_data else None        # No field transformations needed - use original field names
+        request_data = task.request_data.copy() if task.request_data else {}
+        
+        # Apply shared intro/outro/logo settings for video tasks (like /video/generate API)
+        task_type = task.task_type or "video"
+        if task_type == "video":
+            # Apply bulk settings if not already specified in individual task
+            if bulk_request.logo_url is not None and "logo_url" not in request_data:
+                request_data["logo_url"] = bulk_request.logo_url
+            if bulk_request.intro_video_url is not None and "intro_video_url" not in request_data:
+                request_data["intro_video_url"] = bulk_request.intro_video_url
+            if bulk_request.outro_video_url is not None and "outro_video_url" not in request_data:
+                request_data["outro_video_url"] = bulk_request.outro_video_url
+        
+        # No field transformations needed - use original field names
         # Quiz processor will use: story_prompt, num_questions, difficulty
         
         task_data = {
             "task_id": task.task_id,
-            "task_type": task.task_type or "video",
+            "task_type": task_type,
             "priority": task.priority or "normal",
             "request_data": request_data,
             "task_source_name": task.task_source_name,
@@ -610,3 +659,401 @@ async def requeue_pending_tasks_api(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to requeue pending tasks: {str(e)}")
+
+@router.post("/bulk-regenerate", response_model=dict)
+async def bulk_regenerate_tasks_api(
+    bulk_regenerate: TaskBulkRegenerate,
+    account_id: str = Depends(get_valid_account_id_unified),
+    auth_context: tuple = Depends(get_auth_context)
+):
+    """
+    Bulk regenerate multiple tasks by their IDs.
+    This will reset the specified tasks and add them back to the processing queue.
+    
+    Args:
+        bulk_regenerate: Request body containing task IDs and regeneration options
+        account_id: Account ID from unified auth
+        auth_context: Authentication context
+        
+    Returns:
+        Summary of regeneration results including success/failure counts
+    """
+    try:
+        task_ids = bulk_regenerate.task_ids
+        reset_to_pending = bulk_regenerate.reset_to_pending
+        force = bulk_regenerate.force
+        
+        if not task_ids:
+            raise HTTPException(
+                status_code=400, 
+                detail="task_ids list cannot be empty"
+            )
+        
+        # Validate maximum number of tasks to prevent abuse
+        if len(task_ids) > 100:
+            raise HTTPException(
+                status_code=400, 
+                detail="Cannot regenerate more than 100 tasks at once"
+            )
+        
+        # Get all specified tasks
+        tasks = []
+        not_found_ids = []
+        
+        for task_id in task_ids:
+            task = await task_service.get_task(task_id)
+            if not task:
+                not_found_ids.append(task_id)
+                continue
+                
+            # Check if task belongs to the account
+            if task.account_id != account_id:
+                raise HTTPException(
+                    status_code=403, 
+                    detail=f"Task {task_id} does not belong to the specified account"
+                )
+            
+            tasks.append(task)
+        
+        if not tasks:
+            return {
+                "success": False,
+                "message": "No valid tasks found for regeneration",
+                "regenerated_count": 0,
+                "failed_count": len(task_ids),
+                "not_found_ids": not_found_ids,
+                "details": []
+            }
+        
+        regenerated_count = 0
+        failed_count = 0
+        details = []
+        
+        for task in tasks:
+            try:
+                # Check if task is currently processing and force flag is not set
+                if not force and task.status == "PROCESSING":
+                    details.append({
+                        "task_id": task.task_id,
+                        "status": "skipped",
+                        "reason": "Task is currently processing. Use force=true to override."
+                    })
+                    failed_count += 1
+                    continue
+                
+                # Check if task has request_data needed for regeneration
+                if not task.request_data:
+                    details.append({
+                        "task_id": task.task_id,
+                        "status": "failed",
+                        "reason": "Task has no request_data for regeneration"
+                    })
+                    failed_count += 1
+                    continue
+                  # Check if task is already in queue first
+                queue_status = await task_queue_service.get_queue_status(task.task_id)
+                if queue_status.get("status") not in ["NOT_FOUND", "COMPLETED", "FAILED", "CANCELLED"]:
+                    details.append({
+                        "task_id": task.task_id,
+                        "status": "skipped",
+                        "reason": f"Task already in queue with status: {queue_status.get('status')}"
+                    })
+                    failed_count += 1
+                    continue
+                
+                # Reset task status if requested (before queueing)
+                if reset_to_pending:
+                    await task_service.add_task_event(
+                        task_id=task.task_id,
+                        message="Task reset for regeneration",
+                        status="PENDING",
+                        progress=0
+                    )
+                  # Apply intro/outro/logo overrides if provided (for video tasks like /video/generate API)
+                modified_request_data = task.request_data.copy()
+                if task.task_type == "video":
+                    if bulk_regenerate.logo_url is not None:
+                        modified_request_data["logo_url"] = bulk_regenerate.logo_url
+                    if bulk_regenerate.intro_video_url is not None:
+                        modified_request_data["intro_video_url"] = bulk_regenerate.intro_video_url
+                    if bulk_regenerate.outro_video_url is not None:
+                        modified_request_data["outro_video_url"] = bulk_regenerate.outro_video_url
+                
+                # Add task to processing queue (this will set status to QUEUED)
+                await task_queue_service.add_to_queue(
+                    task_id=task.task_id,
+                    request_data=modified_request_data,
+                    user_id=task.user_id,
+                    account_id=task.account_id,
+                    task_type=task.task_type,
+                    priority=task.priority or "normal"
+                )
+                  # Add success event
+                await task_service.add_task_event(
+                    task_id=task.task_id,
+                    message="Task queued for regeneration"
+                )
+                
+                # Verify queue status after adding
+                final_queue_status = await task_queue_service.get_queue_status(task.task_id)
+                queue_info = f"Queue status: {final_queue_status.get('status', 'UNKNOWN')}"
+                if final_queue_status.get('position'):
+                    queue_info += f", Position: {final_queue_status['position']}"
+                
+                details.append({
+                    "task_id": task.task_id,
+                    "status": "regenerated",
+                    "reason": f"Successfully queued for regeneration. {queue_info}",
+                    "queue_status": final_queue_status.get('status', 'UNKNOWN')
+                })
+                regenerated_count += 1
+                
+            except Exception as e:
+                details.append({
+                    "task_id": task.task_id,
+                    "status": "failed",
+                    "reason": f"Error during regeneration: {str(e)}"
+                })
+                failed_count += 1
+        
+        return {
+            "success": regenerated_count > 0,
+            "message": f"Regenerated {regenerated_count} tasks, {failed_count} failures",
+            "regenerated_count": regenerated_count,
+            "failed_count": failed_count,
+            "not_found_count": len(not_found_ids),
+            "not_found_ids": not_found_ids,
+            "total_requested": len(task_ids),
+            "details": details
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to regenerate tasks: {str(e)}")
+
+@router.post("/bulk-cancel", response_model=dict)
+async def bulk_cancel_tasks_api(
+    bulk_cancel: TaskBulkCancel,
+    account_id: str = Depends(get_valid_account_id_unified),
+    auth_context: tuple = Depends(get_auth_context)
+):
+    """
+    Bulk cancel multiple tasks by their IDs.
+    This will cancel the specified tasks that are pending or processing.
+    
+    Args:
+        bulk_cancel: Request body containing task IDs and cancellation reason
+        account_id: Account ID from unified auth
+        auth_context: Authentication context
+        
+    Returns:
+        Summary of cancellation results including success/failure counts
+    """
+    try:
+        task_ids = bulk_cancel.task_ids
+        reason = bulk_cancel.reason or "Bulk cancellation requested"
+        
+        if not task_ids:
+            raise HTTPException(
+                status_code=400, 
+                detail="task_ids list cannot be empty"
+            )
+        
+        # Validate maximum number of tasks to prevent abuse
+        if len(task_ids) > 100:
+            raise HTTPException(
+                status_code=400, 
+                detail="Cannot cancel more than 100 tasks at once"
+            )
+        
+        # Get all specified tasks
+        tasks = []
+        not_found_ids = []
+        
+        for task_id in task_ids:
+            task = await task_service.get_task(task_id)
+            if not task:
+                not_found_ids.append(task_id)
+                continue
+                
+            # Check if task belongs to the account
+            if task.account_id != account_id:
+                raise HTTPException(
+                    status_code=403, 
+                    detail=f"Task {task_id} does not belong to the specified account"
+                )
+            
+            tasks.append(task)
+        
+        if not tasks:
+            return {
+                "success": False,
+                "message": "No valid tasks found for cancellation",
+                "cancelled_count": 0,
+                "failed_count": len(task_ids),
+                "not_found_ids": not_found_ids,
+                "details": []
+            }
+        
+        cancelled_count = 0
+        failed_count = 0
+        details = []
+        
+        for task in tasks:
+            try:
+                # Check if task can be cancelled
+                if task.status in ["COMPLETED", "FAILED", "CANCELLED"]:
+                    details.append({
+                        "task_id": task.task_id,
+                        "status": "skipped",
+                        "reason": f"Task already in final state: {task.status}"
+                    })
+                    failed_count += 1
+                    continue
+                
+                # Try to cancel the task in the queue first
+                queue_cancel_result = await task_queue_service.cancel_task(task.task_id)
+                
+                # Update task status to cancelled
+                await task_service.add_task_event(
+                    task_id=task.task_id,
+                    message=f"Task cancelled: {reason}",
+                    status="CANCELLED"
+                )
+                  # Set task as cancelled with cancellation details
+                await task_service.set_task_cancelled(
+                    task_id=task.task_id,
+                    cancellation_reason=f"Task cancelled by user: {reason}",
+                    cancellation_details={
+                        "cancellation_reason": reason,
+                        "cancelled_at": datetime.utcnow().isoformat(),
+                        "queue_cancel_result": queue_cancel_result
+                    },
+                    final_message=f"Task cancelled: {reason}"
+                )
+                
+                details.append({
+                    "task_id": task.task_id,
+                    "status": "cancelled",
+                    "reason": f"Successfully cancelled: {reason}",
+                    "queue_result": queue_cancel_result.get("message", "Queue cancellation attempted") if queue_cancel_result else "Not in queue"
+                })
+                cancelled_count += 1
+                
+            except Exception as e:
+                details.append({
+                    "task_id": task.task_id,
+                    "status": "failed",
+                    "reason": f"Error during cancellation: {str(e)}"
+                })
+                failed_count += 1
+        
+        return {
+            "success": cancelled_count > 0,
+            "message": f"Cancelled {cancelled_count} tasks, {failed_count} failures",
+            "cancelled_count": cancelled_count,
+            "failed_count": failed_count,
+            "not_found_count": len(not_found_ids),
+            "not_found_ids": not_found_ids,
+            "total_requested": len(task_ids),
+            "cancellation_reason": reason,
+            "details": details
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to cancel tasks: {str(e)}")
+
+@router.post("/queue/process-pending", response_model=dict)
+async def process_pending_tasks_api(
+    account_id: str = Depends(get_valid_account_id_unified),
+    auth_context: tuple = Depends(get_auth_context)
+):
+    """
+    Force queue all PENDING tasks for this account.
+    This can help if tasks got stuck in PENDING status after regeneration.
+    
+    Returns:
+        Summary of tasks that were queued
+    """
+    try:
+        # Get all PENDING tasks for this account
+        pending_tasks = await task_service.get_all_tasks(
+            account_id=account_id, 
+            status_filter="PENDING", 
+            limit=100
+        )
+        
+        if not pending_tasks:
+            return {
+                "success": True,
+                "message": "No pending tasks found",
+                "queued_count": 0,
+                "details": []
+            }
+        
+        queued_count = 0
+        failed_count = 0
+        details = []
+        
+        for task in pending_tasks:
+            try:
+                # Check if task has request_data
+                if not task.request_data:
+                    details.append({
+                        "task_id": task.task_id,
+                        "status": "skipped",
+                        "reason": "No request_data available for processing"
+                    })
+                    failed_count += 1
+                    continue
+                
+                # Check if already in queue
+                queue_status = await task_queue_service.get_queue_status(task.task_id)
+                if queue_status.get("status") not in ["NOT_FOUND", "COMPLETED", "FAILED", "CANCELLED"]:
+                    details.append({
+                        "task_id": task.task_id,
+                        "status": "skipped", 
+                        "reason": f"Already in queue with status: {queue_status.get('status')}"
+                    })
+                    failed_count += 1
+                    continue
+                
+                # Add to queue
+                await task_queue_service.add_to_queue(
+                    task_id=task.task_id,
+                    request_data=task.request_data,
+                    user_id=task.user_id,
+                    account_id=task.account_id,
+                    task_type=task.task_type,
+                    priority=task.priority or "normal"
+                )
+                
+                details.append({
+                    "task_id": task.task_id,
+                    "status": "queued",
+                    "reason": "Successfully added to processing queue"
+                })
+                queued_count += 1
+                
+            except Exception as e:
+                details.append({
+                    "task_id": task.task_id,
+                    "status": "failed",
+                    "reason": f"Error queueing task: {str(e)}"
+                })
+                failed_count += 1
+        
+        return {
+            "success": queued_count > 0,
+            "message": f"Queued {queued_count} tasks, {failed_count} failures",
+            "queued_count": queued_count,
+            "failed_count": failed_count,
+            "total_pending": len(pending_tasks),
+            "details": details
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to process pending tasks: {str(e)}")
