@@ -24,7 +24,7 @@ import {
     Star
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { getVoiceList, generateVideo, uploadFile, getTaskStatus, VideoGenerateReq, TaskEvent } from '../../services/index';
+import { getVoiceList, createVideoTask, uploadFile, getTaskStatus, VideoGenerateReq, TaskEvent } from '../../services/index';
 import { v4 as uuidv4 } from 'uuid';
 import { useVideoStore, useAccountStore } from "../../stores/index";
 import { Task } from '../../interfaces';
@@ -464,20 +464,20 @@ const LessonForm: React.FC = () => {
             visual_content_in_language: values.visual_content_in_language,
         } as VideoGenerateReq; 
         
-        generateVideo(payload).then(res => {
+        createVideoTask(payload).then(res => {
             toast.dismiss();
-            if (!res?.success || !res?.data?.task_id) {
+            if (!res?.task_id) {
                 resetGenerationState();
-                const errorMsg = res?.message || 'Failed to initiate video generation (Invalid response from server)';
+                const errorMsg = 'Failed to initiate video generation (Invalid response from server)';
                 setError(errorMsg);
                 toast.error(`Error: ${errorMsg}`);
                 return;
             }
-            console.log('Video generation initiated:', res);
+            console.log('Video generation task created:', res);
             refreshAccountData();
-            startPolling(res.data.task_id);
-            toast.success('Video generation has started in the background. You can track its progress below.');
-        }).catch(error => {
+            startPolling(res.task_id);
+            toast.success('Video generation task has been created and added to queue. You can track its progress below.');
+        }).catch((error: any) => {
             toast.dismiss();
             resetGenerationState();
             const errorMsg = error?.response?.data?.message || error?.message || 'Failed to initiate video generation';
@@ -1460,7 +1460,7 @@ const LessonForm: React.FC = () => {
                                     <div className="flex items-center gap-3">
                                         <Wand2 className="h-6 w-6" />
                                         <span className="bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                                            Create AI Lesson
+                                            ✨ Create AI Lesson
                                         </span>
                                         <div className="flex items-center gap-1">
                                             <div className="w-2 h-2 bg-background rounded-full animate-pulse"></div>
@@ -1473,7 +1473,7 @@ const LessonForm: React.FC = () => {
                             
                             {/* Enhanced Info Text */}
                             <p className="text-center text-sm text-muted-foreground mt-4 leading-relaxed">
-                                🚀 Your lesson will be generated using advanced AI technology. 
+                                🚀 Your lesson will be generated using advanced AI technology
                                 <br />
                                 <span className="font-medium text-foreground">Estimated time: 2-5 minutes</span>
                             </p>

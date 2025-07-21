@@ -128,22 +128,9 @@ export interface CreateTaskRequest {
 }
 
 export interface CreateTaskResponse {
+    success: boolean;
     task_id: string;
-    user_id: string;
-    account_id: string;
-    task_type?: string;
-    priority?: string;
-    status: string;
-    events: any[];
-    progress: number;
-    created_at: string;
-    updated_at: string;
-    result_url?: string;
-    task_folder_content?: Record<string, any>;
-    error_message?: string;
-    error_details?: any;
-    request_data?: Record<string, any>;
-    estimated_completion?: string;
+    message: string;
 }
 
 export async function createTask(data: CreateTaskRequest): Promise<CreateTaskResponse> {
@@ -371,14 +358,10 @@ export async function getAllTasks(params?: { limit?: number, skip?: number, stat
     );
 }
 
-export async function cancelTask(taskId: string, reason?: string): Promise<{ success: boolean; message: string; cancelled_count: number }> {
-    return request<{ success: boolean; message: string; cancelled_count: number }>({
-        url: "/api/tasks/bulk-cancel",
+export async function cancelTask(taskId: string): Promise<{ success: boolean, message: string }> {
+    return request<{ success: boolean, message: string }>({
+        url: `/api/tasks/${taskId}/cancel`,
         method: "post",
-        data: {
-            task_ids: [taskId],
-            reason: reason || "Task cancelled by user"
-        }
     });
 }
 
@@ -594,18 +577,6 @@ export async function getTaskCount(params?: { status?: string }): Promise<{ tota
     return request<{ total: number }>({
         url: `/api/tasks/count/total${queryString}`,
         method: "get",
-    });
-}
-
-// Bulk cancel multiple tasks
-export async function cancelTasks(taskIds: string[], reason?: string): Promise<{ success: boolean; message: string; cancelled_count: number }> {
-    return request<{ success: boolean; message: string; cancelled_count: number }>({
-        url: "/api/tasks/bulk-cancel",
-        method: "post",
-        data: {
-            task_ids: taskIds,
-            reason: reason || "Tasks cancelled by user"
-        }
     });
 }
 

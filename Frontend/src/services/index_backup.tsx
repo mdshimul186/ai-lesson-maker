@@ -14,7 +14,36 @@ import {
 export * from './account';  // Export account and payment services
 export * from './animated_lesson';  // Export animated lesson services
 
-export async function getVoiceList(data: {area: string[]}): Promise<any> {
+export async function getVoiceList(export async function getTaskCount(params?: { status?: string }): Promise<{ total: number }> {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+    if (params?.status) {
+        queryParams.append('status', params.status);
+    }
+    
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    
+    return request<{ total: number }>({
+        url: `/api/tasks/count/total${queryString}`,
+        method: "get",
+    });
+}
+
+// =============================================================================
+// LEGACY/DEPRECATED FUNCTIONS - TO BE REMOVED
+// =============================================================================
+// These functions are kept for backward compatibility but should not be used 
+// in new code. Use the task-based functions above instead.
+
+// DEPRECATED: Use createVideoTask instead
+export async function generateVideo(data: VideoGenerateReq): Promise<VideoGenerateRes> {
+    console.warn('DEPRECATED: generateVideo() is deprecated. Use createVideoTask() instead.');
+    return request<VideoGenerateRes>({
+        url: "/api/video/generate",
+        method: "post",
+        data,
+    });
+}tring[]}): Promise<any> {
     return request<any>({
         url: "/api/voice/voices",
         method: "post",
@@ -30,6 +59,8 @@ export async function getLLMProviders(): Promise<any> {
 }
 
 export type TaskEvent = any
+
+
 
 // Define the structure for the video generation request payload
 export interface VideoGenerateReq {
@@ -81,15 +112,6 @@ export interface VideoGenerateReq {
     intro_video_url?: string;
     outro_video_url?: string;
 
-    // Theme and customization
-    theme?: string;
-    custom_colors?: {
-        primary: string;
-        secondary: string;
-        accent: string;
-        background: string;
-    };
-
     // Allow additional properties as needed
     [key: string]: any;
 }
@@ -108,6 +130,16 @@ export interface VideoGenerateRes {
     success: boolean;
     data?: VideoGenerateDataFrontend;
     message?: string;
+    // code?: number; // If your API includes a status code
+}
+
+// DEPRECATED: Use createTaskFromVideoRequest instead
+export async function generateVideo(data: VideoGenerateReq): Promise<VideoGenerateRes> {
+    return request<VideoGenerateRes>({
+        url: "/api/video/generate",
+        method: "post",
+        data,
+    });
 }
 
 // =============================================================================
@@ -120,6 +152,8 @@ export interface VideoGenerateRes {
 // - Support for bulk operations
 // - Real-time status updates
 
+// New Task-based API Functions
+
 export interface CreateTaskRequest {
     task_id: string;
     task_type: string;
@@ -128,22 +162,9 @@ export interface CreateTaskRequest {
 }
 
 export interface CreateTaskResponse {
+    success: boolean;
     task_id: string;
-    user_id: string;
-    account_id: string;
-    task_type?: string;
-    priority?: string;
-    status: string;
-    events: any[];
-    progress: number;
-    created_at: string;
-    updated_at: string;
-    result_url?: string;
-    task_folder_content?: Record<string, any>;
-    error_message?: string;
-    error_details?: any;
-    request_data?: Record<string, any>;
-    estimated_completion?: string;
+    message: string;
 }
 
 export async function createTask(data: CreateTaskRequest): Promise<CreateTaskResponse> {
@@ -337,7 +358,7 @@ export async function getTaskStatus(taskId: string): Promise<Task> {
 
 export async function uploadFile(formData: FormData): Promise<{ success: boolean, message?: string, url?: string }> {
     return request<{ success: boolean, message?: string, url?: string }>({
-        url: "/api/files/upload/",
+        url: "/api/files/upload/", // Matches the backend router prefix and endpoint
         method: "post",
         data: formData,
         headers: {
@@ -347,6 +368,7 @@ export async function uploadFile(formData: FormData): Promise<{ success: boolean
 }
 
 export async function getAllTasks(params?: { limit?: number, skip?: number, status?: string }): Promise<{ tasks: Task[], total: number, limit: number, skip: number }> {
+    // Build query parameters (accountId is now sent via X-Account-ID header automatically)
     const queryParams = new URLSearchParams();
     if (params?.limit) {
         queryParams.append('limit', params.limit.toString());
@@ -359,9 +381,13 @@ export async function getAllTasks(params?: { limit?: number, skip?: number, stat
     }
     
     const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    // Cache key includes current account to prevent cache collisions between accounts
     const currentAccount = useAccountStore.getState().currentAccount;
     const cacheKey = `tasks_list_${currentAccount?.id || 'no_account'}_${queryString}`;
     
+    // Use cached API call with a short cache duration of 2 seconds
+    // This prevents hammering the server with duplicate requests while
+    // still ensuring data is reasonably fresh
     return cachedApiCall(cacheKey, () => 
         request<{ tasks: Task[], total: number, limit: number, skip: number }>({
             url: `/api/tasks${queryString}`,
@@ -371,14 +397,10 @@ export async function getAllTasks(params?: { limit?: number, skip?: number, stat
     );
 }
 
-export async function cancelTask(taskId: string, reason?: string): Promise<{ success: boolean; message: string; cancelled_count: number }> {
-    return request<{ success: boolean; message: string; cancelled_count: number }>({
-        url: "/api/tasks/bulk-cancel",
+export async function cancelTask(taskId: string): Promise<{ success: boolean, message: string }> {
+    return request<{ success: boolean, message: string }>({
+        url: `/api/tasks/${taskId}/cancel`,
         method: "post",
-        data: {
-            task_ids: [taskId],
-            reason: reason || "Task cancelled by user"
-        }
     });
 }
 
@@ -387,6 +409,7 @@ export async function getQueueStatus(taskId?: string): Promise<{ success: boolea
         ? `/api/tasks/queue/status?task_id=${taskId}`
         : '/api/tasks/queue/status';
     
+    // Throttle queue status checks to prevent too many calls
     const result = await throttledApiCall(`queue_status_${taskId || 'all'}`, () =>
         request<{ success: boolean, data: any }>({
             url,
@@ -395,6 +418,7 @@ export async function getQueueStatus(taskId?: string): Promise<{ success: boolea
         1000 // Throttle to once per second per taskId
     );
     
+    // If throttled, return a default response
     if (result === null) {
         return { 
             success: true, 
@@ -548,6 +572,7 @@ export async function generateVoice(data: VoiceGenerationRequest): Promise<Voice
 }
 
 // Additional Queue Management Functions
+
 export async function getQueueList(params?: { 
     limit?: number; 
     skip?: number; 
@@ -584,6 +609,7 @@ export async function getSupportedTaskTypes(): Promise<{ success: boolean, data:
 }
 
 export async function getTaskCount(params?: { status?: string }): Promise<{ total: number }> {
+    // Build query parameters
     const queryParams = new URLSearchParams();
     if (params?.status) {
         queryParams.append('status', params.status);
@@ -594,33 +620,5 @@ export async function getTaskCount(params?: { status?: string }): Promise<{ tota
     return request<{ total: number }>({
         url: `/api/tasks/count/total${queryString}`,
         method: "get",
-    });
-}
-
-// Bulk cancel multiple tasks
-export async function cancelTasks(taskIds: string[], reason?: string): Promise<{ success: boolean; message: string; cancelled_count: number }> {
-    return request<{ success: boolean; message: string; cancelled_count: number }>({
-        url: "/api/tasks/bulk-cancel",
-        method: "post",
-        data: {
-            task_ids: taskIds,
-            reason: reason || "Tasks cancelled by user"
-        }
-    });
-}
-
-// =============================================================================
-// LEGACY/DEPRECATED FUNCTIONS - TO BE REMOVED
-// =============================================================================
-// These functions are kept for backward compatibility but should not be used 
-// in new code. Use the task-based functions above instead.
-
-// DEPRECATED: Use createVideoTask instead
-export async function generateVideo(data: VideoGenerateReq): Promise<VideoGenerateRes> {
-    console.warn('DEPRECATED: generateVideo() is deprecated. Use createVideoTask() instead.');
-    return request<VideoGenerateRes>({
-        url: "/api/video/generate",
-        method: "post",
-        data,
     });
 }

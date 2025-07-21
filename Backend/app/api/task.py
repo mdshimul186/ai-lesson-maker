@@ -166,6 +166,27 @@ async def create_new_task_api(
         task_source_group_id=task_create.task_source_group_id
     )
     
+    # Add the task to the processing queue
+    try:
+        await task_queue_service.add_to_queue(
+            task_id=task_create.task_id,
+            request_data=request_data,
+            user_id=user_id or f"api_key_user_{final_account_id}",
+            account_id=final_account_id,
+            task_type=task_create.task_type or "video",
+            priority=task_create.priority or "normal"
+        )
+        print(f"✅ Task {task_create.task_id} added to queue successfully")
+    except Exception as e:
+        print(f"❌ Failed to add task {task_create.task_id} to queue: {str(e)}")
+        # Update task status to failed
+        await task_service.add_task_event(
+            task_id=task_create.task_id,
+            message=f"Failed to add task to queue: {str(e)}",
+            status="FAILED"
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to queue task: {str(e)}")
+    
     return task
 
 @router.delete("/{task_id}", status_code=204)

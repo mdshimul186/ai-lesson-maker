@@ -14,7 +14,7 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 
 # Expose the port
-EXPOSE 4005
+EXPOSE 4006
 
-# Start the frontend development server
+# Start the frontend development server with proper host binding
 CMD ["npm", "run", "dev"]

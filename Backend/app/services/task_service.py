@@ -366,8 +366,8 @@ class TaskService:
     Wraps the async functions for use in other services.
     """    
     @staticmethod
-    async def create_task(task_id: str, user_id: Optional[str], account_id: str, initial_status: str = "PENDING", request_data: Optional[Dict[str, Any]] = None) -> Task:
-        return await create_task(task_id, user_id, account_id, initial_status, request_data)
+    async def create_task(task_id: str, user_id: Optional[str], account_id: str, initial_status: str = "PENDING", request_data: Optional[Dict[str, Any]] = None, task_type: str = "video", priority: str = "normal", task_source_name: Optional[str] = None, task_source_id: Optional[str] = None, task_source_group_id: Optional[str] = None) -> Task:
+        return await create_task(task_id, user_id, account_id, initial_status, request_data, task_type, priority, task_source_name, task_source_id, task_source_group_id)
     
     @staticmethod
     async def get_task(task_id: str) -> Optional[Task]:
