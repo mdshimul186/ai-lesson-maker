@@ -48,7 +48,7 @@ async def connect_to_mongo():
         if os.path.exists(ca_cert_path):
             # Use MongoDB-specific SSL parameters
             client_kwargs.update({
-                'tls': True,
+                'tls': False,
                 'tlsCAFile': ca_cert_path,
                 'tlsAllowInvalidHostnames': False,
                 'tlsAllowInvalidCertificates': False
