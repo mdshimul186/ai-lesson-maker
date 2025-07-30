@@ -7,12 +7,14 @@ WORKDIR /app
 # Copy the project's requirements.txt
 COPY requirements.txt /app/
 
-# Install ffmpeg and build tools (gcc for aeneas C extensions)
+# Install ffmpeg, build tools, and DNS utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     build-essential \
     gcc \
     libespeak-dev \
+    dnsutils \
+    iputils-ping \
   && rm -rf /var/lib/apt/lists/*
 
 # Configure pip to use Aliyun mirror, install numpy first (required by aeneas), then other dependencies

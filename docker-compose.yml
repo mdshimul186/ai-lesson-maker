@@ -14,6 +14,11 @@ services:
       - app-network
     depends_on:
       - frontend
+    # Add DNS resolvers to fix MongoDB SRV resolution issues
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
   frontend:
     build:
       context: ./Frontend

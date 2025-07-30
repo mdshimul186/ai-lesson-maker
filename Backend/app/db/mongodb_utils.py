@@ -22,10 +22,21 @@ async def get_database(): # Add this function
     return db.client[db_name]
 
 async def connect_to_mongo():
+    import asyncio
+    import time
+    
     settings = get_settings()
     
     # Configure SSL options if CA certificate is provided
-    client_kwargs = {}
+    client_kwargs = {
+        # Add DNS resolution settings for better SRV record handling
+        'serverSelectionTimeoutMS': 30000,  # 30 seconds
+        'connectTimeoutMS': 20000,          # 20 seconds
+        'socketTimeoutMS': 20000,           # 20 seconds
+        'maxPoolSize': 10,
+        'retryWrites': True,
+        'retryReads': True,
+    }
     
     if settings.db_use_ssl and settings.db_ca_cert_path:
         # Get the absolute path to the CA certificate
@@ -47,18 +58,37 @@ async def connect_to_mongo():
         else:
             print(f"Warning: CA certificate not found at {ca_cert_path}")
     
-    # Create MongoDB client with SSL options if configured
-    db.client = AsyncIOMotorClient(settings.db_url, **client_kwargs)
+    # Retry connection with backoff
+    max_retries = 5
+    retry_delay = 2
     
-    print("Attempting to connect to MongoDB...")
-    try:
-        # The ismaster command is cheap and does not require auth.
-        await db.client.admin.command('ismaster')
-        print("MongoDB connection successful.")
-    except Exception as e:
-        print(f"MongoDB connection failed: {e}")
-        # Depending on your application's needs, you might want to raise an error here
-        # or handle it in a way that allows the app to start if MongoDB is optional.
+    for attempt in range(max_retries):
+        try:
+            print(f"Attempting to connect to MongoDB (attempt {attempt + 1}/{max_retries})...")
+            
+            # Create MongoDB client with SSL options if configured
+            db.client = AsyncIOMotorClient(settings.db_url, **client_kwargs)
+            
+            # Test the connection with a timeout
+            await asyncio.wait_for(
+                db.client.admin.command('ismaster'),
+                timeout=30.0
+            )
+            print("MongoDB connection successful.")
+            return
+            
+        except asyncio.TimeoutError:
+            print(f"MongoDB connection timeout on attempt {attempt + 1}")
+        except Exception as e:
+            print(f"MongoDB connection failed on attempt {attempt + 1}: {e}")
+            
+        if attempt < max_retries - 1:
+            print(f"Retrying in {retry_delay} seconds...")
+            await asyncio.sleep(retry_delay)
+            retry_delay *= 2  # Exponential backoff
+        else:
+            print("All MongoDB connection attempts failed. Application may not function properly.")
+            # Don't raise exception to allow app to start - some features might still work
 
 async def close_mongo_connection():
     if db.client:
