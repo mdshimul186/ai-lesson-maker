@@ -27,6 +27,16 @@ async def connect_to_mongo():
     # Configure SSL options if CA certificate is provided
     client_kwargs = {}
     
+    # Add production-ready connection settings for DNS and timeout issues
+    client_kwargs.update({
+        'serverSelectionTimeoutMS': 30000,  # 30 second timeout for server selection
+        'connectTimeoutMS': 30000,          # 30 second connection timeout
+        'socketTimeoutMS': 30000,           # 30 second socket timeout
+        'maxPoolSize': 10,                  # Maximum connection pool size
+        'retryWrites': True,                # Enable retry writes
+        'retryReads': True,                 # Enable retry reads
+    })
+    
     if settings.db_use_ssl and settings.db_ca_cert_path:
         # Get the absolute path to the CA certificate
         ca_cert_path = settings.db_ca_cert_path
@@ -51,14 +61,25 @@ async def connect_to_mongo():
     db.client = AsyncIOMotorClient(settings.db_url, **client_kwargs)
     
     print("Attempting to connect to MongoDB...")
-    try:
-        # The ismaster command is cheap and does not require auth.
-        await db.client.admin.command('ismaster')
-        print("MongoDB connection successful.")
-    except Exception as e:
-        print(f"MongoDB connection failed: {e}")
-        # Depending on your application's needs, you might want to raise an error here
-        # or handle it in a way that allows the app to start if MongoDB is optional.
+    max_retries = 3
+    retry_delay = 5
+    
+    for attempt in range(max_retries):
+        try:
+            # The ismaster command is cheap and does not require auth.
+            await db.client.admin.command('ismaster')
+            print("MongoDB connection successful.")
+            return
+        except Exception as e:
+            print(f"MongoDB connection attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                print(f"Retrying in {retry_delay} seconds...")
+                import asyncio
+                await asyncio.sleep(retry_delay)
+            else:
+                print("All MongoDB connection attempts failed.")
+                # Depending on your application's needs, you might want to raise an error here
+                # or handle it in a way that allows the app to start if MongoDB is optional.
 
 async def close_mongo_connection():
     if db.client:
